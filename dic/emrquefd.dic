@@ -1,0 +1,228 @@
+
+=====================================================================
+TABLE DESCRIPTION  :  Queuing Emergency Visit Details Message File * 
+                      
+  
+TABLE NAME         :  emrqueaf
+=====================================================================
+DEMQUMES    char       20     1   Message Id  
+                                   EMRVISFD variables  
+EMVIADMN    char        8    21   Visit Number  
+EMVISTAT    decimal     1    29   Status  
+                                   1 = Current Patient  
+                                   2 = Discharged Incomplete  
+                                   3 = Discharged Complete  
+                                   4 = Cancelled  
+EMVIURNO    char        8    31   Patient U/R Number  
+EMVIDATE    char        8    39   Arrival Date (CCYYMMDD)  
+EMVITIME    char        8    47   Arrival Time (HH:MM:SS)  
+EMVITRIG    char        3    55   Triage Code (category AA)  
+EMVICOM1    char       50    58   Complaint Line 1  
+EMVICOM2    char       50   108   Complaint Line 2  
+EMVILOCN    char        3   158   Location (emrlocaf)  
+EMVIDOCT    char       10   161   Attending Doctor  
+EMVICOMP    char        3   171   Compensation Code (category CL)  
+EMVICLAS    char        3   174   Patient Classification (category A)  
+EMVIINSR    char        3   177   Insurance Status (category U1)  
+EMVISRCE    char        3   180   Source of Referal (category S)  
+EMVISITN    char        3   183   Situation (category ES)  
+EMVIMODE    char        3   186   Mode of Arrival (category EA)  
+EMVIADMT    decimal     1   189   Admitted to Hospital  
+                                   0 = No  
+                                   1 = Yes  
+EMVIDURN    decimal     4   191   Duration of Waiting (in minutes)  
+EMVIEMPL    char       20   194   Employer (Workcover)  
+EMVIWAIT    char        3   214   Completion Wait Code (category EW)  
+EMVIPREV    char        3   217   Previous A&E Attendance (cat. EP)  
+EMVIFUND    char        6   220   Health Fund  
+EMVITABL    char        8   226   Health Fund Table  
+EMVIREFG    char       10   234   Referring GP  
+EMVIREFD    char       10   244   Referring Doctor  
+EMVIPLIN    char        3   254   Place of Incident (category AP)  
+EMVIINIT    char        3   257   Initiator (category AI)  
+EMVIRTAS    char        3   260   RTA Seatbelt Details (category AR)  
+EMVIDDAT    char        8   263   Discharge Date (CCYYMMDD)  
+EMVIDTIM    char        8   271   Discharge Time (HH:MM:SS)  
+EMVIDSTA    char        3   279   Discharge Status (category ED)  
+EMVIOPR1    char       10   282   Web Operator - event (websecaf)  
+EMVIOPR2    char       10   292   Web Operator - discharge (websecaf)  
+EMVIUC01    char        3   302   User Defined Code 1 (category A1)  
+EMVIUC02    char        3   305   User Defined Code 2 (category A2)  
+EMVIUC03    char        3   308   User Defined Code 3 (category A3)  
+EMVIUC04    char        3   311   User Defined Code 4 (category A4)  
+EMVIUC05    char        3   314   User Defined Code 5 (category A5)  
+EMVIUC06    char        3   317   User Defined Code 6 (category A6)  
+EMVIUC07    char        3   320   User Defined Code 7 (category A7)  
+EMVIUC08    char        3   323   User Defined Code 8 (category A8)  
+EMVIUC09    char        3   326   Transport Mode (category ea)  
+EMVIUC10    char        3   329   Escort Source (category eb)  
+EMVIUC11    char        3   332   Referred to on Disch (category ec)  
+EMVIUC12    char        3   335   Reason for Transfer (category ed)  
+EMVIUC13    char        3   338   Type of Visit (category ee)  
+EMVIUC14    char        3   341   Human Intent (category ef)  
+EMVIUC15    char        3   344   Activity when Injured(category eg)  
+EMVIUC16    char        3   347   Nurse Code (category eh)  
+EMVIUC17    char        3   350   Injury Cause (category ei)  
+EMVIUC18    char        3   353   User Defined Code 18 (category ej)  
+EMVIUC19    char        3   356   User Defined Code 19 (category ek)  
+EMVIUC20    char        3   359   Presenting Complaint (category el)  
+EMVIUC21    char        3   362   User Defined Code 21 (category em)  
+EMVIUC22    char        3   365   User Defined Code 22 (category en)  
+EMVIUC23    char        3   368   User Defined Code 23 (category eo)  
+EMVIUC24    char        3   371   User Defined Code 24 (category ep)  
+EMVIUC25    char        3   374   User Defined Code 25 (category eq)  
+EMVIUC26    char        3   377   User Defined Code 26 (category er)  
+EMVIUC27    char        3   380   User Defined Code 27 (category es)  
+EMVIUC28    char        3   383   User Defined Code 28 (category et)  
+EMVIUC29    char        3   386   User Defined Code 20 (category eu)  
+EMVIUC30    char        3   389   User Defined Code 30 (category ev)  
+EMVIUD01    char        8   392   User Defined Date 1 (CCYYMMDD)  
+EMVIUD02    char        8   400   User Defined Date 2 (CCYYMMDD)  
+EMVIUD03    char        8   408   User Defined Date 3 (CCYYMMDD)  
+EMVIUD04    char        8   416   User Defined Date 4 (CCYYMMDD)  
+EMVIUD05    char        8   424   User Defined Date 5 (CCYYMMDD)  
+EMVIUD06    char        8   432   User Defined Date 6 (CCYYMMDD)  
+EMVIUD07    char        8   440   User Defined Date 7 (CCYYMMDD)  
+EMVIUD08    char        8   448   User Defined Date 8 (CCYYMMDD)  
+EMVIUD09    char        8   456   User Defined Date 9 (CCYYMMDD)  
+EMVIUD10    char        8   464   User Defined Date 10 (CCYYMMDD)  
+EMVIUT01    char        8   472   User Defined Time 1 (CCYYMMDD)  
+EMVIUT02    char        8   480   User Defined Time 2 (HH:MM:SS)  
+EMVIUT03    char        8   488   User Defined Time 3 (HH:MM:SS)  
+EMVIUT04    char        8   496   User Defined Time 4 (HH:MM:SS)  
+EMVIUT05    char        8   504   User Defined Time 5 (HH:MM:SS)  
+EMVIUT06    char        8   512   User Defined Time 6 (HH:MM:SS)  
+EMVIUT07    char        8   520   User Defined Time 7 (HH:MM:SS)  
+EMVIUT08    char        8   528   User Defined Time 8 (HH:MM:SS)  
+EMVIUT09    char        8   536   User Defined Time 9 (HH:MM:SS)  
+EMVIUT10    char        8   544   User Defined Time 10 (HH:MM:SS)  
+EMVIYN01    decimal     1   552   User Defined Y/N Field 1  
+                                   0 = No  
+                                   1 = Yes  
+EMVIYN02    decimal     1   554   User Defined Y/N Field 2  
+                                   0 = No  
+                                   1 = Yes  
+EMVIYN03    decimal     1   556   User Defined Y/N Field 3  
+                                   0 = No  
+                                   1 = Yes  
+EMVIYN04    decimal     1   558   User Defined Y/N Field 4  
+                                   0 = No  
+                                   1 = Yes  
+EMVIYN05    decimal     1   560   User Defined Y/N Field 5  
+                                   0 = No  
+                                   1 = Yes  
+EMVIYN06    decimal     1   562   User Defined Y/N Field 6  
+                                   0 = No  
+                                   1 = Yes  
+EMVIYN07    decimal     1   564   User Defined Y/N Field 7  
+                                   0 = No  
+                                   1 = Yes  
+EMVIYN08    decimal     1   566   User Defined Y/N Field 8  
+                                   0 = No  
+                                   1 = Yes  
+EMVIYN09    decimal     1   568   User Defined Y/N Field 9  
+                                   0 = No  
+                                   1 = Yes  
+EMVIYN10    decimal     1   570   Ongoing Care Communication  
+                                   0 = No  
+                                   1 = Yes  
+EMVITXT1    char       50   572   User Defined Text Field 1  
+EMVITXT2    char       50   622   User Defined Text Field 2  
+EMVITXT3    char       50   672   User Defined Text Field 3  
+EMVITXT4    char       50   722   User Defined Text Field 4  
+EMVITXT5    char       50   772   User Defined Text Field 5  
+EMVIUN01    decimal     6   822   User Defined Numeric Field 1  
+EMVIUN02    decimal     6   826   User Defined Numeric Field 2  
+EMVIUN03    decimal     6   830   User Defined Numeric Field 3  
+EMVIUN04    decimal     6   834   User Defined Numeric Field 4  
+EMVIUN05    decimal     6   838   User Defined Numeric Field 5  
+EMVIELAP    char        3   842   Elapsed Since Accident (cat. AE)  
+EMVINSDT    char        8   845   Date First Seen by Nurse (CCYYMMDD)  
+EMVINSTM    char        8   853   Time First Seen by Nurse (HH:MM:SS)  
+EMVIDRDT    char        8   861   Date First Seen by Doct. (CCYYMMDD)  
+EMVIDRTM    char        8   869   Time First Seen by Doct. (HH:MM:SS)  
+EMVIPATT    decimal     3   877   Number of Previous Attendences  
+EMVITSRC    char        5   880   Transfer Source Code  
+EMVIDEST    char        5   885   Discharge Destination Code  
+EMVIAMBL    char       15   890   Ambulance Case Number  
+EMVIREGN    char        2   905   Body Region  
+EMVISENT    char        1   907   Extract Sent  
+                                   0 = No  
+                                   1 = Yes  
+EMVIUR01    char        6   908   User Defined Doctor Field 1  
+EMVIUR02    char        6   914   User Defined Doctor Field 2  
+EMVIUR03    char        6   920   User Defined Doctor Field 3  
+EMVIUR04    char        6   926   User Defined Doctor Field 4  
+EMVIUR05    char        6   932   User Defined Doctor Field 5  
+EMVIPADM    char        8   938   Patient System Admission Number  
+                                   (if admitted to hospital)  
+EMVIEWRD    char        3   946   Expected Ward (Patient System)  
+EMVIEBED    char        3   949   Expected Bed (Patient System)  
+EMVIHFMN    char       19   952   Health Fund Member Number  
+EMVIACLS    char        3   971   Admission Class (category P)  
+EMVICCLS    char        3   974   Care Class (category CC)  
+EMVITRNS    char       10   977   Triage Nurse  
+EMVIDUM1    char        3   987   Dummy Field 1  
+EMVITRDT    char        8   990   Triage Date  
+EMVITRTM    char        8   998   Triage Time  
+EMVIATNS    char       10   1006   Attending Nurse  
+EMVIDUM2    char        3   1016   Dummy Field 2  
+EMVIEXLC    char        3   1019   External Location Code (emrlocaf)  
+EMVISITE    char        3   1022   Emergency Site Code  
+EMVIUNIT    char        3   1025   Unit (category AC)  
+EMVICOM3    char       50   1028   Complaint Line 3  
+EMVICOM4    char       50   1078   Complaint Line 4  
+EMVICOM5    char       50   1128   Complaint Line 5  
+EMVICOM6    char       50   1178   Complaint Line 6  
+EMVIINJ1    char       50   1228   Injury Description Line 1  
+EMVIINJ2    char       50   1278   Injury Description Line 2  
+EMVINATI    char        3   1328   Nature of Main Injury (category ex)  
+EMVIINJC    char        3   1331   Injury Cause (category ey)  
+EMVIHUMI    char        3   1334   Human Intent (category ez)  
+EMVIACTI    char        3   1337   Activity When Injured (category EY)  
+EMVILOCO    char       25   1340   Other Location Description  
+EMVIPRLO    char        3   1365   Previous Location (emrlocaf)  
+EMVIPRTM    char        8   1368   Time Left Previous Location (hh:mm:  
+EMVIDPDT    char        8   1376   Departure Date (CCYYMMDD)  
+EMVIDPTM    char        8   1384   Departure Time (HH:MM:SS)  
+EMVIEXRS    char        3   1392   Extended Visit Reason (Cat RX)  
+EMVIDLRS    char        3   1395   Departure Delay Reason (Cat RY)  
+EMVISPDT    char        8   1398   Speciality Date (CCYYMMDD)  
+EMVISPTM    char        8   1406   Speciality Time (HH:MM:SS)  
+EMVISADT    char        8   1414   Speciality Arrival Date (CCYYMMDD)  
+EMVISATM    char        8   1422   Speciality Arrival Time (HH:MM:SS)  
+EMVIMPRA    char       10   1430   Mental Health Practitioner (pmshcpa  
+EMVIMPDT    char        8   1440   Date First Seen by MH Prac.(CCYYMMD  
+EMVIMPTM    char        8   1448   Time First Seen by MH Prac.(HH:MM:S  
+EMVIAADT    char        8   1456   Ambulance Arrival Date (CCYYMMDD)  
+EMVIAATM    char        8   1464   Ambulance Arrival Time (HH:MM:SS)  
+EMVIAHDT    char        8   1472   Ambulance Handover Date (CCYYMMDD)  
+EMVIAHTM    char        8   1480   Ambulance Handover Time (HH:MM:SS)  
+EMVIDADT    char        8   1488   Decision to Admit Date (CCYYMMDD)  
+EMVIDATM    char        8   1496   Decision to Admit Time (HH:MM:SS)  
+EMVIPURC    char        3   1504   Health Purchaser (Cat HP)  
+EMVIMNCD    char       10   1507   Meet & Greet Assessment Nurse Code  
+EMVIMNDT    char        8   1517   Meet & Greet Ass. Nurse Date Seen  
+EMVIMNTM    char        8   1525   Meet & Greet Ass. Nurse Time Seen  
+EMVIMDCD    char       10   1533   Meet & Greet Ass. Doctor Code  
+EMVIMDDT    char        8   1543   Meet & Greet Ass. Doctor Date Seen  
+EMVIMDTM    char        8   1551   Meet & Greet Ass. Doctor Time Seen  
+EMVIUC31    char        3   1559   User Defined Code 31 (category YN)  
+EMVIUC32    char        3   1562   Call Attempt 2 Status (category YO)  
+EMVIUC33    char        3   1565   Call Attempt 3 Status (category YP)  
+EMVIUC34    char        3   1568   Patient Follow Up Outcome(categoryYQ)  
+EMVIUC35    char        3   1571   Call Attempt 1 Status (category YR)  
+EMVIREFP    char        3   1574   Referral Period (Category RF)  
+EMVIREPM    char        2   1577   Referring Period Month  
+                                   (1-98 months, right justified)  
+EMVIREDT    char        8   1579   Referral Date  
+EMVIBNAA    char        1   1587   Benefit Assignment Authorised  
+                                   0 or Blank - No  
+                                   1 - Yes  
+EMQUSPAR    char       59   1588   Spare Variables  
+lf          char        1        Spare Blank
+=====================================================================
+UNIQUE INDEX 1
+DEMQUMES
+  
+=====================================================================

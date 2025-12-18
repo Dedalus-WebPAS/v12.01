@@ -1,0 +1,87 @@
+
+=====================================================================
+TABLE DESCRIPTION  :  File Def'n Include for Booking
+                      Booking Table (UK) 
+  
+TABLE NAME         :  bokrc1af
+=====================================================================
+DBKREBOO    char        8     1   Booking/Admission No.  
+BKREURNO    char        8     9   U/R Number  
+BKRESNAM    char       20    17   Surname  
+BKRELOCK    char        2    37   Lock variable  
+BKREADOC    char        6    39   Attending Doctor  
+BKRESDOC    char        6    45   Referring Doctor  
+BKREEDAT    char        8    51   Expected due date (CCYYMMDD)  
+BKREATIM    char        8    59   Expected assessment time  
+BKREPDAT    char        8    67   Pre-assessment date  
+BKREPTIM    char        8    75   Pre-assessment time  
+BKREADAT    char        8    83   Procedure Date (Date booking was)  
+                                   made for)  
+BKRETYPE    char        3    91   Booking type (Cat "BK")  
+BKRECANC    char        3    94   Cancellation reason (Cat "BC")  
+BKRESTAT    decimal     1    97   Booking status  
+                                   0 = Booked  
+                                   1 = Pre-admitted  
+                                   2 = Cancelled  
+                                   3 = Admitted  
+                                   4 = Discharged  
+BKREOMEM    char        1    99   Benefit fund member (Y/N/U)  
+BKREPREV    char        1   100   Previous inpatient (Y/N/U)  
+BKREACCM    char        3   101   Preferred accommodation (Cat BP)  
+BKREPROC    char        9   104   Waiting list procedure code  
+DBKRECNT    char        2   113   Waiting list procedure count  
+BKREWARD    char        3   115   Expected ward  
+BKREADMN    char        8   118   Maternity admission number  
+BKREPREA    char        1   126   Deposit paid (Y/N) Matern only  
+BKREEBED    char        3   127   Expected bed  
+BKRECLSS    char        3   130   Patient Cat./Adm Class. (Cat P)  
+BKREATYP    char        3   133   Adm Type/Pat. Class (Cat A)  
+BKREDEPT    char        3   136   Department (Cat AC)  
+BKRETDOC    char        6   139   Associated Doctor  
+BKRECLMT    char        3   145   Claim type (Cat CL)  
+BKRERFGP    char       10   148   Referring GP  
+BKREGPPC    char        6   158   GP Practice code  
+BKREGPFA    char       20   164   GPFH Approval Number  
+BKRERESI    char        3   184   Resident Status (Cat T)  
+BKREEATY    char        3   187   Elective Admission Type (Cat CC)  
+BKREECRA    char       20   190   ECR Approval Number  
+BKREGPPT    char        2   210   GP Practice count  
+BKREDOFR    char        3   212   District of Residence (Cat DA)  
+BKREOPER    char        4   215   Operator who made I/P Booking  
+DBKREELO    char        3   219   Expected Length of Stay (Days)  
+BKREBKDT    char        8   222   System Date (Date the booking was  
+                                   actually made)  
+BKREINDC    char        1   230   Pre-admission movement indicator  
+BKRESPAR    char       47   231   Spare  
+lf          char        1        Spare Blank
+=====================================================================
+UNIQUE INDEX 1
+DBKREBOO
+  
+UNIQUE INDEX 2
+BKRESNAM
+DBKREBOO
+  
+UNIQUE INDEX 3
+BKREADOC
+BKREEDAT
+DBKREBOO
+  
+UNIQUE INDEX 4
+BKREEDAT
+DBKREBOO
+  
+UNIQUE INDEX 5
+BKREPDAT
+BKREPTIM
+DBKREBOO
+  
+UNIQUE INDEX 6
+BKREURNO
+DBKREBOO
+  
+UNIQUE INDEX 7
+BKREWARD
+BKREEDAT
+DBKREBOO
+=====================================================================

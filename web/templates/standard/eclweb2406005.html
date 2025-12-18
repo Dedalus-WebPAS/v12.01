@@ -1,0 +1,322 @@
+<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateHome" content="standard">
+<meta name="CrossBrowser" content="true">
+<meta name="HelpFileName" content="NoContextSet.html">
+<script type="text/javascript" src="../js/TableSort.js"> </script>
+<script type="text/javascript">
+function displayClaim(batchnum,admissno,urnumber,invoicen) {
+  document.cookie = "EclipseClaimPath=" + escape(location.href) + ";"
+  location.href="eclweb24.pbl?reportno=5" +
+                "&template=001" +
+                "&urnumber=" + urnumber +
+                "&admissno=" + admissno +
+                "&mavbatch=" + batchnum +
+                "&mavinvce=" + invoicen;  
+}
+function JSONPopupFrame(mavbatch,mavinvce,urnumber,admissno) {
+  DFrameStart()
+
+  linkurl="../cgi-bin/eclweb24.pbl?reportno=5&template=009"+
+          "&mavbatch=" + mavbatch +
+          "&mavinvce=" + mavinvce +
+          "&urnumber=" + urnumber +
+          "&admissno=" + admissno ;
+  Left=(document.body.clientWidth-1300)/2
+  DFrameLink(linkurl,0,Left,1300,1000)
+}
+function delWaitn(delcheckbox) {
+
+  if(!confirm("WARNING: Clicking OK will completely remove this claim from Eclipse. \Are you sure you want to continue ?")) {
+   FilterSubmit();
+   return;
+  }
+
+  document.SelectPeriod.updattyp.value="D";
+  document.SelectPeriod.mavbatch.value=delcheckbox.value.substring(0,8);
+  document.SelectPeriod.mavinvce.value=delcheckbox.value.substring(8,16);
+  FilterSubmit();
+}
+function reSubmit(rsbcheckbox) {
+  document.SelectPeriod.updattyp.value="R";
+  document.SelectPeriod.mavbatch.value=rsbcheckbox.value.substring(0,8);
+  document.SelectPeriod.mavinvce.value=rsbcheckbox.value.substring(8,16);
+  FilterSubmit();
+}
+function MarkAsViewed(mavcheckbox) {
+  document.SelectPeriod.updattyp.value="V";
+  document.SelectPeriod.mavbatch.value=mavcheckbox.value.substring(0,8);
+  document.SelectPeriod.mavinvce.value=mavcheckbox.value.substring(8,16);
+  FilterSubmit();
+}
+function resetStatus(rstcheckbox) {
+  document.SelectPeriod.updattyp.value="S";
+  document.SelectPeriod.mavbatch.value=rstcheckbox.value.substring(0,8);
+  document.SelectPeriod.mavinvce.value=rstcheckbox.value.substring(8,16);
+  FilterSubmit();
+}
+function ShowHLCTSpan() {
+  HealthFund.innerHTML="";
+  if (document.SelectPeriod.hlfdclty.value=="0") {
+    HealthFund.innerHTML=HlthFd.innerHTML;
+  }
+  if (document.SelectPeriod.hlfdclty.value=="1") {
+    HealthFund.innerHTML=ClmTyp.innerHTML;
+  }
+}
+function healthfundchange () {
+ if (document.SelectPeriod.healthfd!=undefined) {
+   document.SelectPeriod.hlthfund.value=document.SelectPeriod.healthfd.value;
+ } else {
+   if (document.SelectPeriod.claimtyp!=undefined) {
+     document.SelectPeriod.hlthfund.value=
+     document.SelectPeriod.claimtyp.value.substring(0,3);
+   } else {
+     document.SelectPeriod.hlthfund.value="      ";
+   }
+ }
+}
+function FilterSubmit() {
+  document.SelectPeriod.submit();
+}
+
+function valInvNo(InvoiceNo) {
+
+  if(!isWhitespace(InvoiceNo.value)){
+    var Url = "../cgi-bin/patweb80.pbl?reportno=51" +
+              "&valdcode="+InvoiceNo.value.replace(/ /g,"+") +
+              "&valdtype=1"
+    var returnValue = RSExecute(Url);
+    if (returnValue.status==0) {
+      ReturnValue=returnValue.return_value.split("|");
+      InvoiceNo.value=ReturnValue[0];
+      filturno.value=ReturnValue[2];
+      SelectPeriod.admissno.value = ReturnValue[1];
+      justifyRight(InvoiceNo);
+
+      FilterSubmit();
+      return true;
+    } else {
+      document.SelectPeriod.invnumbr.value="";
+      FilterSubmit();
+      return false;
+    }
+  } else {
+    FilterSubmit();
+    return false;
+  }
+}
+
+function validateIHC(){
+      var valdhlfn;
+      var fundtype = document.getElementById("hlfdclty").value;
+      if (fundtype==0){
+        valdhlfn = document.getElementById("healthfd").value;
+      } else if (fundtype==1) {
+        valdhlfn = document.getElementById("claimtyp").value.substr(0,3);
+      }
+      var InvoiceNo = document.SelectPeriod.invnumbr;
+      var validInvoice = false;
+      var Url = "../cgi-bin/comweb81.pbl?reportno=76" +
+                "&valdcode="+InvoiceNo.value.replace(/ /g,"+")+
+                "&admissno="+SelectPeriod.admissno.value.replace(/ /g,"+")+
+                "&valdhlfn="+valdhlfn.replace(/ /g,"+")+
+                "&fundtype="+fundtype.replace(/ /g,"");
+      var returnValue = RSExecute(Url);
+
+      if(returnValue.status == 0) {
+        validInvoice = true;
+      }
+      return validInvoice;
+}
+
+function AddInvoice() {
+  if(isWhitespace(document.SelectPeriod.invnumbr.value)){
+    alert("An invoice number is required");
+  } else if (document.getElementById("hlfdclty").value == 1 &&
+             document.getElementById("claimtyp").value[3] != "V" &&
+             document.getElementById("claimtyp").value[4] != "V" &&
+             document.getElementById("claimtyp").value[5] != "V" &&
+             document.getElementById("claimtyp").value[6] != "V" &&
+             document.getElementById("claimtyp").value[7] != "V") {
+    alert("Claim code not DVA related");
+  } else if (validateIHC()) {
+    genwbclm.keystr02.value =
+      parseInt(document.getElementById("hlfdclty").value)+1;
+
+    if (document.getElementById("hlfdclty").value==0) {
+       genwbclm.keystr03.value = document.getElementById("healthfd").value;
+    } else if (document.getElementById("hlfdclty").value==1) {
+       genwbclm.keystr03.value =
+         document.getElementById("claimtyp").value.substr(0,3);
+    }
+    genwbclm.keystr04.value = document.getElementById("invnumbr").value.trim();
+    document.genwbclm.submit();
+  }
+}
+
+//----------------------------------------------------------------------------
+// Create New Table Object
+// Border, Cellspacing, Cellpadding, Width, Align, Heading Height, Row Height
+//----------------------------------------------------------------------------
+// Add Columns in Order Required
+// Heading,Type,Display Column,Sort Column, Align, Icon, Link Column
+// Columns Available
+//---------------------------------------------------------------------------
+function InitTable(TableView) {
+document.title="WebServices IHCW Claims Repopulate";
+switch (TableView) {
+case 0: {
+ t = new Table(1,0,2,"100%","center");
+// t.addColumn("Batch #","ImageText",0,0,"left","InvoiceIcon","10",50,11)
+ t.addColumn("Batch&nbsp;#","String",17,17,"left","","",40)
+ t.addColumn("Adm Number","String",1,1,"left","","",40)
+ t.addColumn("User ID Created/Updated by","String",20,20,"left","","",80)
+ t.addColumn("Invoice Number","String",2,2,"left","","",40)
+ t.addColumn("Patient&nbsp;Details","ImageText",3,3,"left","PatientFolder","12",130,16)
+ t.addColumn("Health&nbsp;Fund<br>Claim&nbsp;Code","String",4,4,"left","","",60)
+ t.addColumn("Claimed Amt","String",5,5,"left","","",50)
+ t.addColumn("Claim Status","String",18,18,"left","","",50)
+ t.addColumn("Batch #<br>Previous","String",7,7,"left","","",50)
+ t.addColumn("Batch #<br>Next","String",8,8,"left","","",50)
+ t.addColumn("Mark as Viewed","String",13,13,"middle","","",50)
+ t.addColumn("Resubmit","String",14,14,"middle","","",40)
+ t.addColumn("Delete","String",15,15,"middle","","",30)
+ t.addColumn("Reset<br>Status","String",19,19,"middle","","",30)
+ AddTableRows()
+ TableOutput(0,1);    // Order Column,Asc Dsc
+ break; 
+  }
+ }
+}
+</script>
+</head>
+%START.OF.PAGE
+<body onload="PageLoad(event);InitTable(0);
+              document.SelectPeriod.allhflag.value=1;"
+      onunload="document.cookie = 'EclipseClaimPath=' + 
+                escape(location.href) + ';'">
+
+<div id=HeadingSection>
+<form name=SelectPeriod action=eclweb24.pbl method=get style="margin:0">
+  <input type=hidden name=reportno value=6>
+  <input type=hidden name=template value=5>
+  <input type=hidden name=ibcnmhos value="%ECLWEB24.06.002">
+  <input type=hidden name=allhflag value=0>
+  <input type=hidden name=hlthfund value="%ECLWEB24.06.016">
+  <input type=hidden name=dummy id=dummy>
+  <input type=hidden name=viewtype value="%ECLWEB24.06.014">
+  <input type=hidden name=exdtblnk value="%ECLWEB24.06.015">
+  <input type=hidden name=admissno value="%ECLWEB24.06.399.023">
+  <input type=hidden name=mavbatch value=" ">
+  <input type=hidden name=mavinvce value=" ">
+  <input type=hidden name=updattyp value=" ">
+  <input type=hidden name=nextpage value="6">
+  
+<table cellpadding=0 cellspacing=0 bgcolor=#CCCCCC border=0 width=100%>
+<tr><td></td><td><span id=HospitalID></span></td>
+    <td class=DataLabel>Health Fund / Claim Type</td>
+    <td><select id=hlfdclty name=hlfdclty title="Health Fund / Claim Type"
+         onchange="ShowHLCTSpan();healthfundchange();FilterSubmit();">
+    <option value="0">Health Fund</option>
+    <option value="1">Claim Type</option>
+    </select>
+    </td>
+    <td><span id=HealthFund></span></td>
+</tr>
+<tr><td></td><td></td>
+    <td class=DataLabel>Invoice Number</td>
+    <td><input type=text size=10 maxlength=8 name=invnumbr id=invnumbr
+               class="" title="Invoice #" value="%ECLWEB24.06.012"
+               onBlur="valInvNo(SelectPeriod.invnumbr)">
+        <img src="../images/erase.gif" alt="Clear" class="Icon"
+             onclick='invnumbr.value="";filturno.value="";FilterSubmit();'>
+    </td>
+    <td><table cellpadding=0 cellspacing=0 bgcolor=#CCCCCC border=0 width=100%>
+    <tr><td class=DataLabel width=20%>U/R Number</td>
+    <td><input type=text name=filturno id=filturno size=8 maxlength=8
+               class="JustifyLeft Readonly" value="%ECLWEB24.06.008" readonly>
+    </td>
+    </tr></table>
+  <td><input type=button class="button" value="OK" name=addinv 
+             onclick='AddInvoice();'>
+  </td>
+</tr>
+</table>
+</form>
+
+</div>
+<div id=TableLocation></div>
+<script type="text/javascript">
+function AddTableRows() {
+%ECLWEB24.06.026.patweb98.01.001
+}
+</script>
+
+<form name="genwbclm" method="post" action="rshweb02.pbl">
+  <input type="hidden" name="reportno" value="4">
+  <input type="hidden" name="updttype" value="A">
+  <input type="hidden" name="setdfprg" value="GENWBCLM">
+  <input type="hidden" name="setdfrep" value="01">
+  <input type="hidden" name="schdpgid" value="GENWBCLM">
+  <input type="hidden" name="schddesc" value="Manually generate webservices
+                                              claims">
+  <input type="hidden" name="nextpage" value="1">
+  <input type="hidden" name="redirect" value="eclweb24.pbl?reportno=6&template=1">
+  <input type=hidden name=schdprnt value="S  ">
+  <input type=hidden name=schddate value="%STANDARD.01.015">
+  <input type=hidden name=schdtime value="%STANDARD.01.016">
+  <input type=hidden name=keystr01 value="1">
+  <input type=hidden name=keystr02>
+  <input type=hidden name=keystr03>
+  <input type=hidden name=keystr04>
+  <input type=hidden name=keystr05 value="Y">
+  <input type=hidden name=keystr06 value="">
+  <input type=hidden name=keystr07 value="">
+  <input type=hidden name=keystr08 value="0">
+  <input type=hidden name=keystr09>
+  <input type=hidden name=keystr10>
+</form>
+<span id=HospID style="display:none;">
+<table width=100% align=center border=0 cellspacing=2 cellpadding=0>
+    <tr><td class=DataLabel>Hospital ID</td>
+    <td><select name=hospcode id=hospcode title="Hospital ID "
+                    onchange="FilterSubmit();">
+    %ECLWEB24.06.003
+    </select>
+    </td></tr>
+</table>
+</span>
+<span id=HlthFd style="display:none;">
+<table width=100% align=center border=0 cellspacing=2 cellpadding=1>
+    <tr><td class=DataLabel width=20%>Health Fund</td>
+    <td><select name=healthfd id=healthfd title="Health Fund"
+                onchange="healthfundchange();FilterSubmit();">
+    %ECLWEB24.06.004
+    </select>
+    </td></tr>
+</table>
+</span>
+
+<span id=ClmTyp style="display:none;">
+<table width=100% align=center border=0 cellspacing=2 cellpadding=1>
+    <tr><td class=DataLabel width=20%>Claim Type</td>
+    <td><select name=claimtyp id=claimtyp title="ClaimType"
+         onchange="healthfundchange();FilterSubmit();">
+    %ECLWEB24.06.006.2
+    </select>
+    </td></tr>
+</table>
+</span>
+<script type="text/javascript">
+if (document.SelectPeriod.ibcnmhos.value==1) {
+  HospitalID.innerHTML = HospID.innerHTML;
+}
+HealthFundClaimType="%ECLWEB24.06.005";
+for (var i =0 ; i < document.SelectPeriod.hlfdclty.length; i++) {
+  if (document.SelectPeriod.hlfdclty.options[i].value==HealthFundClaimType) {
+      document.SelectPeriod.hlfdclty.selectedIndex=i 
+  } 
+}
+ShowHLCTSpan();
+</script>
+

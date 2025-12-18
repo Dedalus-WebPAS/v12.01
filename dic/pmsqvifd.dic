@@ -1,0 +1,408 @@
+
+=====================================================================
+TABLE DESCRIPTION  :  Queuing Visit Details Message File * 
+                      
+  
+TABLE NAME         :  pmsqviaf
+=====================================================================
+DPMQVMES    char       20     1   Message Id  
+DPMQVTRN    char        2    21   Transaction Number  
+                                   PATMI1FD variables  
+AADMNO      char        8    23   PATIENT ADMISSION NO.  
+AURNO       char        8    31   PATIENT U.R NO.  
+ADATE       char        8    39   Admission Date (CCYYMMDD)  
+ATIME       char        8    47   PATIENT ADMISSION TIME  
+ASTAT       decimal     1    55   Admission Status  
+                                   1 = Pre-Admission  
+                                   2 = Current Admission  
+                                   3 = Discharged  
+                                   4 = On Leave  
+                                   5 = Cancelled  
+AINVPRT     decimal     3    57   NUMBER OF INVOICES PRINTED  
+ALACDTE     char        8    60   last accom date invd (CCYYMMDD)  
+ACANCEL     char        3    68   REASON PRE-ADMISS CANCELATION  
+ADOCTR      char        6    71   DOCTOR REFERRED BY.  
+ADOCTA      char        6    77   Attending Doctor (patdo1af)  
+ADOCTL      char       30    83   LOCAL DOCTOR  
+ASRCE       char        3   113   PATIENT ADMISSIONS SOURCE (CAT S )  
+ATYPE       char        3   116   Admission Type (Cat A)  
+ACLSS       char        3   119   PATIENT ADMISSIONS CLASS (CAT P )  
+ACARE       char        3   122   PATIENT CARE CLASS (CAT CC)  
+AFUNDH      char        6   125   PATIENT HEALTH FUND  
+AFNDTB      char        8   131   PATIENT FUND TABLE  
+AFNDMM      char       19   139   PATIENT FUND MEMBERSHIP NO  
+AELIG       decimal     1   158   PATIENT ELIGIBILITY FOR GOV'T  
+                                   REBATE. 1 = YES 2 = NO  
+                                   STH - DISCHARGE DIAG.PRINTED  
+AVISIT      decimal     1   160   PATIENT RELIGIOUS VISIT  
+                                   1 = YES, 2 = NO  
+AALERG      decimal     1   162   PATIENT ALLERGIES (Y/N)  
+                                   1 = YES, 2 = NO  
+AILLN       decimal     1   164   PRE-EXISTING ILLNESS  
+                                   1 = YES, 2 = NO  
+ADIAG1      char       80   166   PATIENTS ADMITTING DIAG 1  
+ADIAG2      char       80   246   " " " " " 2  
+ADISC       decimal    8,2  326   PATIENT DISCOUNT PERCENTAGE  
+ADOCTT      char        6   331   TREATING DOCTOR  
+ACLSSFT     char        3   337   Department (Cat AC)  
+AALLOW      char        2   340   PATIENT ALLOWANCE CODE  
+AMBS        char        9   342   ADMITTING MBS CODE  
+ACLAIM      char        3   351   CLAIM CODE (CAT CL)  
+ADIET       char        3   354   DIET CODE (CAT DC)  
+APLOCCR     char        3   357   PLACE OF OCCR (CATEGORY PO)  
+ASTAY       decimal     3   360   EXPECTED LENGTH OF STAY (DAYS)  
+ADYHOSP     decimal     4   363   No OF DAYS OF HOSPITALIZATION  
+AMEMB       decimal     1   366   DIAMOND VALLEY MEMBERSHIP  
+                                   1 = YES, 2 = NO  
+AMEMBNO     decimal     6   368   MEMBERSHIP NUMBER  
+ACOMM1      char       40   372   COMMENTS FIELD 1  
+ACOMM2      char       30   412   COMMENTS FIELD 2  
+APLUR       decimal     1   442   PLURATILY OF BABY (0=NORMAL)  
+APURGE      decimal     1   444   PURGE INDICATOR  
+                                   OTHER = NO PURGE  
+                                   1 = PARTIAL  
+                                   2 = FULLY  
+AUSR1       char        3   446   USER DEFINED FIELD 1 (CAT U1)  
+AUSR2       char        3   449   USER DEFINED FIELD 2 (CAT U2)  
+AUSR3       char        3   452   USER DEFINED FIELD 3 (CAT U3)  
+AUSR4       char        3   455   USER DEFINED FIELD 4 (CAT U4)  
+AUSR5       char        3   458   USER DEFINED FIELD 5 (CAT U5)  
+AUSR6       char        3   461   USER DEFINED FIELD 6 (CAT U6)  
+                                   - Clinic Unit No. for Publics  
+AUSR7       char        3   464   USER DEFINED FIELD 7 (CAT U7)  
+                                   - Coding status for Publics  
+ADSCHI      decimal     1   467   DISCHARGE INVOICE INDICATOR  
+                                   0 = Discharge inv not printed  
+                                   1 = Have printed discharge inv  
+ARDRNAM     char       22   469   FREE FORMAT REFERRING DOCTOR  
+AFNDYY      char        2   491   YRS OF FUND MEMBERSHIP (JR,DE)  
+AFNDCG      char        6   493   fund cover change (CCYYMM)  
+AOCCDTE     char        8   499   DATE OF OCCURRENCE (CCYYMMDD)  
+ACODDTE     char        8   507   DATE CODING COMPLETED  
+ARETDTE     char        8   515   EXPECTED RETURN DATE FROM LVE  
+AMUMADM     char        8   523   MOTHERS ADMSS NUMBER(IF BABY)  
+PTMIPVIS    decimal     3   531   No of prev. visits charged  
+ABWGHT      char        6   534   Baby's /Admission weight  
+PTMSRFGP    char        8   540   Referring GP.  
+PTMSGPPC    char        6   548   GP Practice Code  
+PTMSFHAN    char       20   554   eAdmission ID  
+PTMSECRA    char       20   574   ECR Approval Number  
+PTMSMGIN    char        3   594   Management Intent (CAT MI)  
+PTMIDDIG    decimal     1   597   Discharged diagnosis printed?  
+PTMIGPPT    char        2   599   GP Practice count  
+PTMIDOFR    char        3   601   District of Residence (Cat DA)  
+PTMIREFD    char        8   604   Date of Referral (EDI nz)  
+PTMIDFCN    char        8   612   Date of 1st consultation (EDI nz)  
+PTMIPHPU    char        3   620   Principal Health Service Purchaser  
+                                   (EDI nz) (CAT HP)  
+PTMIAGNC    char        3   623   Health Agency (EDI nz) (CAT HA)  
+PTMIESSF    char        1   626   Event Summary supress flag Y/N(EDI nz)  
+                                   "Y" = Suppress event summary  
+                                   "N" = Don't supress  
+PTMIUSR8    char        3   627   User defined field 8 (CAT U8)  
+PTMIUSR9    char        3   630   User defined field 9 (CAT U9)  
+PTMIUSR0    char        3   633   User defined field 0 (CAT U0)  
+PTMIPDRG    char        4   636   Provisional DRG  
+PTMIOPER    char        4   640   Operator who pre-admitted patient  
+PTMIXWRD    char        3   644   Expected Ward for Pre-Admission  
+PTMIADOC    char        6   647   Associated Doctor  
+PTMIREGS    char        6   653   Registrar  
+PTMIUYN1    decimal     1   659   User Defined Y/N Field (1=Yes, 0=No)  
+PTMIUYN2    decimal     1   661   User Defined Y/N Field (1=Yes, 0=No)  
+PTMIPANO    char        8   663   Previous admission number  
+PTMIPADT    char        8   671   Previous admission date (ccyymmdd)  
+PTMIPCMX    char        9   679   Casemix Code (Provisional MBS/DRG)  
+PTMIGSTA    char        1   688   Is GST applicable to this event  
+                                   Y=Yes, N/Space=No, U=Unknown  
+PTMICMXP    char        1   689   Casemix Payment (Y/N)  
+                                   NZ Billing - FFS has been charged(Y/N)  
+PTMIEBED    char        3   690   Expected Bed  
+PTMIDMOV    char        1   693   Pre-admission movement indicator  
+PTMIDFAS    char        8   694   Date Patient First Aware of Symptoms  
+PTMICRCD    char        1   702   Credit Card Details on File (1=Yes)  
+PTMIFINV    char        1   703   Follow-up for implant invoicing(1=Yes)  
+PTMICONB    char        1   704   Continuous Billing Event (1=Yes)  
+PTMIDATC    char        8   705   Date Created CCYYMMDD  
+PTMITIMC    char        8   713   Time Created hh:mm:ss  
+PTMIWEBC    char       10   721   Web user Id Created  
+PTMIDATU    char        8   731   Date Updated CCYYMMDD  
+PTMITIMU    char        8   739   Time Updated hh:mm:ss  
+PTMIWEBU    char       10   747   Web user Id Updated  
+PTMI3BDY    char        4   757   3B certificate days  
+PTMI3BAD    char        8   761   3B certificate admission date  
+PTMILSDN    char        8   769   Linked Statistical Discharge Number  
+PTMIOGNO    char        8   777   Original Admission Number  
+                                   PATTRNFD variables  
+TWARD       char        3   785   TRANSFER WARD NUMBER  
+TBED        char        3   788   TRANSFER BED NUMBER  
+TDATE       char        8   791   TRANSFER DATE (CCYYMMDD)  
+TTIME       char        8   799   TRANSFER TIME (HH:MM)  
+TURNO       char        8   807   PATIENT U/R NUMBER  
+TADMN       char        8   815   PATIENT ADMISSION NUMBER  
+TRATEF      decimal   14,2  823   PAT PORTION OF DAILY CHARGE  
+                                   Daily rate = TRATEF + TRATEH  
+                                   - TDISC - TALLW  
+                                   Accommodation Charge - Nursing Home  
+TRATEG      decimal   14,2  831   GOVERNMENT CHARGEABLE  
+TDISC       decimal   14,2  839   PAT DISC (SUB FROM TRATEF)  
+TALLW       decimal   14,2  847   PAT ALLOW (SUB FROM TRATEF)  
+TATYPE      char        3   855   ADMISSION TYPE  
+TADOCT      char        6   858   ATTENDING DOCTOR  
+TRATEH      decimal   14,2  864   H/FND PORTION OF DAILY CHARGE  
+TEXTRA      decimal   14,2  872   EXTRA CHGE PER DAY (PUB HOSP)  
+PTTRITFS    decimal   14,2  880   Nursing Home Income Tested fee  
+TRBTYP      char        3   888   E.F.R. BED TYPE FOR THIS BED  
+TRBEND      decimal     3   891   END DAY IN RNGE FOR THIS RATE  
+TCHSTAT     char        3   894   CHRGEABLE STATUS (USER DEF.2)  
+                                   (PUBLIC HOSPITAL ONLY)  
+TDEPT       char        3   897   DEPARTMENT CODE (CAT AC)  
+PTTRLTYP    char        3   900   Type of Patient leave (Cat TL)  
+PTTREPNO    decimal     2   903   Episode number  
+PTTREPSD    decimal     1   905   Manual Stepdown  
+                                   0 - Normal  
+                                   1 - Forced Stepdown  
+                                   2 - Bed Fee Update  
+PTTRLSPT    decimal   14,2  907   Patient portion of lumpsum  
+PTTRLSRB    decimal   14,2  915   Rebate portion of lumpsum  
+PTTRAEND    decimal     4   923   End day for additional rate  
+PTTRADPT    decimal   14,2  926   Additional daily rate - pat.  
+                                   Resident contribution - Nursing Home  
+PTTRADRB    decimal   14,2  934   Additional daily rate - rebate  
+PTTRNHAC    char        3   942   Nursing Home Account code (Catg NH)  
+PTTROPER    char        4   945   Operator Id  
+PTTRAUAT    char        1   949   Auto update of admission type  
+PTTRCDAT    char        8   950   Date Record Created (CCYYMMDD)  
+PTTRCTIM    char        8   958   Time Record Created (hh:mm:ss)  
+PTTRCUID    char        4   966   Passcode Created  
+PTTRLTSC    char        5   970   Leave Transfer Source  
+PTTRUCID    char       10   975   Web User Id who Created Record  
+PTTRUUID    char       10   985   Web User Id who Updated Record  
+PTTRCLTY    char        3   995   Claim Type (Cat CL)  
+PTTRTRTY    char        3   998   Transfer Type (Cat RB)  
+PTTRTEAM    char        5   1001   Team  
+PTTRRSTR    char       10   1006   Registrar  
+PTTRRESI    char       10   1016   Resident  
+PTTRFSRC    char        3   1026   Funding Source (Cat cx)  
+PTTRHFND    char        6   1029   Health Fund Code (patfn1af)  
+PTTRFTBL    char        8   1035   Health Fund Table (patfn1af)  
+PTTRHFMN    char       19   1043   Health Fund Membership Number  
+PTTRHFCN    char       40   1062   Health Fund Contributor Name  
+                                   PMSVX1FD variables  
+PMVXCSNR    char        1   1102   Consent release info (0=NO,1=YES)  
+PMVXPOST    char        8   1103   Post Code  
+PMVXPIND    char        3   1111   Privacy Indicator (Cat PV)  
+PMVXVLOC    char       40   1114   Valuables Location  
+PMVXCFSG    char        1   1154   Claim Form Signed (0=NO,1=YES)  
+PMVXINGP    char        1   1155   Inform Registered GP  
+                                   (0=NO,1=YES,2=Not Stated)  
+PMVXCPTH    char        3   1156   Critical Pathway (Cat PW)  
+PMVXHCP1    char        1   1159   Notify HCP1 (0=NO,1=YES)  
+PMVXHCP2    char        1   1160   Notify HCP2 (0=NO,1=YES)  
+PMVXHCP3    char        1   1161   Notify HCP3 (0=NO,1=YES)  
+PMVXHCP4    char        1   1162   Notify HCP4 (0=NO,1=YES)  
+PMVXRHC1    char       10   1163   Referring HCP 1 (pmshcpaf)  
+PMVXRH1G    char       10   1173   Referring HCP 1 Practice (pmshclaf)  
+PMVXRH1C    char        2   1183   Referring HCP 1 Grp Count (pmshcgaf  
+PMVXRHC2    char       10   1185   Referring HCP 2 (pmshcpaf)  
+PMVXRH2G    char       10   1195   Referring HCP 2 Practice (pmshclaf)  
+PMVXRH2C    char        2   1205   Referring HCP 2 Grp Count (pmshcgaf  
+PMVXRHC3    char       10   1207   Referring HCP 3 (pmshcpaf)  
+PMVXRH3G    char       10   1217   Referring HCP 3 Practice (pmshclaf)  
+PMVXRH3C    char        2   1227   Referring HCP 3 Grp Count (pmshcgaf  
+PMVXRHC4    char       10   1229   Referring HCP 4 (pmshcpaf)  
+PMVXRH4G    char       10   1239   Referring HCP 4 Practice (pmshclaf)  
+PMVXRH4C    char        2   1249   Referring HCP 4 Grp Count (pmshclaf  
+PMVXABRG    char        3   1251   Aboriginality (PRS/2) (Cat VA)  
+PMVXCADM    char        3   1254   Admission Criterion (PRS/2) (Cat VB  
+PMVXIRAD    char        3   1257   Intent to Readmit (PRS/2) (Cat VR)  
+PMVXIDUS    char        3   1260   Intend Stay Duration (PRS/2) Cat VI  
+PMVXCRAV    char        3   1263   Carer Availability (PRS/2) (Cat VK)  
+PMVXRCCT    char        3   1266   Crit. Care Xfer Reason (PRS/2) (VJ)  
+PMVXAPWD    char        3   1269   Admitting Point Ward (patwr1af)  
+PMVXAPBD    char        3   1272   Admitting Point Bed (patwr1af)  
+PMVXPOWD    char        3   1275   Post-Op Ward (patwr1af)  
+PMVXPOBD    char        3   1278   Post-Op Bed (patwr1af)  
+PMVXPSTY    char        1   1281   Parent Staying (0=NO,1=YES)  
+PMVXVALW    char        1   1282   Visitor Allowed (0=NO,1=YES)  
+PMVXPALW    char        1   1283   Phone Calls Allowed? (0=NO,1=YES)  
+PMVXINDC    char        1   1284   Intended Day Case (0=NO,1=YES)  
+PMVXMDAV    char        3   1285   Mode of Arrival (Cat VM)  
+PMVXFRMS    char        3   1288   Forms (Cat VF)  
+PMVXCSNG    char        3   1291   Coder Snags (Cat VN)  
+PMVXPWGT    decimal     6   1294   Patient Weight(Convert to FORM 4.2)  
+PMVXPHGT    decimal     6   1298   Patient Height  
+PMVXDHWR    char        8   1302   Date Height/Weight Record. ccyymmdd  
+PMVXEDC1    char       10   1310   Extra Doctor Code 1 (patdo1af)  
+PMVXEDC2    char       10   1320   Extra Doctor Code 2 (patdo1af)  
+PMVXEDC3    char       10   1330   Extra Doctor Code 3 (patdo1af)  
+PMVXHOME    char        1   1340   Homeless Person (0=NO,1=YES)  
+PMVXUDF1    char       50   1341   User Defined Free Format 1  
+PMVXUDF2    char       50   1391   User Defined Free Format 2  
+PMVXUDF3    char       50   1441   User Defined Free Format 3  
+PMVXUDF4    char       50   1491   User Defined Free Format 4  
+PMVXUDT1    char       13   1541   User Def. Date/Time 1 ccyymmddhh:mm  
+PMVXUDT2    char       13   1554   User Def. Date/Time 2 ccyymmddhh:mm  
+PMVXUDT3    char       13   1567   User Def. Date/Time 3 ccyymmddhh:mm  
+PMVXUDT4    char       13   1580   User Def. Date/Time 4 ccyymmddhh:mm  
+PMVXUDT5    char       13   1593   User Def. Date/Time 5 ccyymmddhh:mm  
+PMVXUDT6    char       13   1606   User Def. Date/time 6 ccyymmddhh:mm  
+PMVXCDTE    char        8   1619   Date record created (ccyymmdd)  
+PMVXCTIM    char        8   1627   Time record created (hh:mm:ss)  
+PMVXWEBC    char       10   1635   WEB User Id rec. creator (websecaf)  
+PMVXLUPD    char        8   1645   Last Update Date (ccyymmdd)  
+PMVXLUPT    char        8   1653   Last Update Time (hh:mm:ss)  
+PMVXWEBU    char       10   1661   WEB User Id rec. update (websecaf)  
+PMVXMHLS    char        3   1671   Mental Health Legal Status (LS)  
+PMVXPICD    char        9   1674   Provisional ICD10 Code  
+PMVXRMOR    char        3   1683   RMO Responsible Cat MO  
+PMVXASUT    char        3   1686   Admission Service Unit Type Cat KA  
+PMVXELPS    char        3   1689   Elective Patient Status Cat KC  
+PMVXEMPL    char        3   1692   Employment Status Cat KD  
+PMVXFINP    char        3   1695   Which Financial Program Cat KE  
+PMVXOCCP    char        3   1698   Occupation Cat KF  
+PMVXPALC    char        3   1701   Involvement in Palliat Care Cat KG  
+PMVXPPAL    char        3   1704   Prev Non-Admitt Palliat Care Cat KH  
+PMVXPPPT    char        3   1707   Public/Private Patients Cat KI  
+PMVXPSOS    char        3   1710   Pension Status on Separation Cat KJ  
+PMVXPYSP    char        3   1713   Payment Status on Separation Cat KK  
+PMVXQLDB    char        3   1716   Banding/Type of Episode for QLDHDP  
+PMVXREAD    char        3   1719   Re-Admission in 28 Days Cat KM  
+PMVXUDIN    char        3   1722   Discharge Intention Cat KN  
+PMVXUREA    char        3   1725   Unplanned Readmission Cat KO  
+PMVXUSAC    char        3   1728   Usual Accommodation Cat KP  
+PMVXUVTH    char        3   1731   Unplanned Visit to Theatre Cat KB  
+PMVXINTR    char        1   1734   Interpreter Required? (0=NO,1=YES)  
+PMVXLNG1    char        3   1735   Preferred Language 1 (Cat LA)  
+PMVXASGC    char        9   1738   ABS AGSC  
+PMVXMHOS    char        3   1747   Multi Hospital ID (pathspaf)  
+PMVXDSPD    char        8   1750   Disch Summary Produced (ccyymmdd)  
+PMVXDSIF    char        1   1758   Disch Summary (I)nterim / (F)inal  
+PMVXPRMI    char        1   1759   Participate/Receive Marketing Info  
+PMVXPRAI    char        1   1760   Participate/Receive Advertising Inf  
+PMVXPRES    char        1   1761   Participate in Research Projects  
+PMVXUITR    char        1   1762   Use Information for Training  
+PMVXRPOA    char        1   1763   Release to Enduring POA / IFC  
+PMVXRCN1    char        1   1764   Release to Contact 1 ptmxnrnm  
+PMVXRCN2    char        1   1765   Release to Contact 2 ptmxexnm  
+PMVXRHFU    char        1   1766   Release to Health Fund  
+PMVXRDVA    char        1   1767   Release to DVA  
+PMVXRSLO    char        1   1768   RSL Visit OK  
+PMVXMLOC    char        3   1769   Medical Record Location (Cat MV)  
+PMVXPACC    char        3   1772   Preferred Accommodation (Cat BP)  
+PMVXEDU1    char        3   1775   Extra Doctor Unit 1 (Cat AC)  
+PMVXEDU2    char        3   1778   Extra Doctor Unit 2 (Cat AC)  
+PMVXEDU3    char        3   1781   Extra Doctor Unit 3 (Cat AC)  
+PMVXPRGM    char        8   1784   Program Code  
+PMVXCONF    char        1   1792   Appointment Confirmed 0=No 1=Yes  
+PMVXEOCL    char        8   1793   EOC Link admission no.  
+PMVXSLOC    char        3   1801   Location SOR (Cat SG)  
+PMVXSCLI    char        3   1804   Clinical SOR (Cat SH)  
+PMVXSTRA    char        3   1807   Transport SOR (Cat.SI)  
+PMVXQASN    char       12   1810   QAS Number  
+PMVXATCP    char        1   1822   All theatre charges posted (1=yes)  
+PMVXATIM    char        8   1823   Arrival Time (hh:mm:ss)  
+PMVXITIM    char        8   1831   Interview Time (hh:mm:ss)  
+PMVXHFGN    char       40   1839   Health Fund First Given Name Alias  
+PMVXHFSN    char       40   1879   Health Fund Surname Alias  
+PMVXFUPI    char        2   1919   Health Fund UPI  
+PMVXPOEC    char        1   1921   Patient Online Eligibility Consent  
+PMVXPGID    char        3   1922   Program Identifier (Cat PK)  
+PMVXTICM    char        3   1925   Reason Theatre Incomplete Catg Rt  
+PMVXPILC    char        3   1928   Presenting Illness Code CAT (il)  
+PMVXFVIO    char        3   1931   Family Violence (Cat fv)  
+PMVXFNDM    char       19   1934   Health Fund Membership Number  
+PMVXUDF5    char        3   1953   User defined Category Code  
+PMVXUDF6    char        3   1956   User defined Category Code  
+PMVXUDF7    char        3   1959   User defined Category Code  
+PMVXUDF8    char        3   1962   User defined Category Code  
+PMVXUDF9    char        3   1965   User defined Category Code  
+PMVXUD10    char        3   1968   User defined Category Code  
+PMVXUD11    char        3   1971   User defined Category Code  
+PMVXUD12    char        3   1974   User defined Category Code  
+PMVXUD13    char        3   1977   User defined Category Code  
+PMVXUD14    char        3   1980   User defined Category Code  
+PMVXUD15    char        3   1983   User defined Category Code  
+PMVXTEAM    char        5   1986   Team  
+PMVXNWHC    char        3   1991   Non WA Hospital Contact (Cat cw)  
+PMVXEDDT    char        8   1994   Expected Delivery Date (ccyymmdd)  
+PMVXPHLD    char        3   2002   Property Held (Cat ps)  
+PMVXPLOC    char        3   2005   Property Location (Cat pt)  
+PMVXDTRT    char        8   2008   Date Returned (ccyymmdd)  
+PMVXDFLG    char        9   2016   Disaster Flag  
+PMVXFSRC    char        3   2025   Funding Source (Cat cx)  
+PMVXCONM    char       40   2028   Contributor Name  
+PMVXCPDD    char        8   2068   Care Plan Documented Date  
+PMVXPBMI    char        5   2076   Patient Body Mass Index  
+                                   PATDSCFD variables  
+DDATE       char        8   2081   PATIENT DIS. DATE (CCYYMMDD)  
+DTIME       char        8   2089   PATIENT DISCHARGE TIME  
+DSTAT       char        3   2097   DISCHARGE STATUS (CAT D )  
+DDEST       char        3   2100   DISCHARGE DESTINATION (CAT DD)  
+DDIAG       char       50   2103   DISCHARGE DIAGNOSIS  
+DDIAG2      char       50   2153   DISCHARGE DIAGNOSIS (PART 2)  
+DUSD1       char        3   2203   USER DEFINED FIELD 1 (CAT D1)  
+DUSD2       char        3   2206   USER DEFINED FIELD 2 (CAT D2)  
+DUSD3       char        3   2209   USER DEFINED FIELD 3 (CAT D3)  
+DUSD4       char        3   2212   USER DEFINED FIELD 4 (CAT D4)  
+DUSD5       char        3   2215   USER DEFINED FIELD 5 (CAT D5)  
+DFMBS       char        9   2218   DISCHARGE DIAGNOSIS CODE  
+PTDSDMDC    char        4   2227   MDC code  
+PTDSDDRG    char        4   2231   DRG code  
+DWLREASN    char        3   2235   Reason Discharged Patient was  
+                                   put back on Waiting List (RW)  
+PTDSSIDX    char        1   2238   DRG severity index  
+PTDSVOGU    char        3   2239   Vers grouper used when grouping  
+PTDSOPER    char        4   2242   Operator who discharged patie  
+PTDSUYN1    decimal     1   2246   User Defined Y/N Field 1  
+PTDSUYN2    decimal     1   2248   User Defined Y/N Field 2  
+PTDSUYN3    decimal     1   2250   User Defined Y/N Field 3  
+PTDSUYN4    decimal     1   2252   User Defined Y/N Field 4  
+PTDSDWRD    char        3   2254   Discharge Ward  
+PTDSDLOS    decimal     4   2257   Length of Stay  
+PTDSSREF    char        4   2260   Separation referral  
+PTDSPALD    char        3   2264   Palliative care days (PRS2)  
+PTDSDPMN    char        3   2267   Departure Means (Cat SI)  
+                                   MEHLERFD variables  
+MHLRCODE    char        3   2270   Leave end reason code (CAT LE)  
+                                   PATRE1FD variables  
+PKNAME      char       80   2273   PERSON RESP FOR A/C NAME  
+PKADD1      char       35   2353   P.R.A ADDRESS LINE 1  
+PKADD2      char       35   2388   P.R.A ADDRESS LINE 2  
+PKSUBR      char       35   2423   P.R.A SUBURB  
+PKADD4      char       35   2458   P.R.A ADDRESS LINE 2  
+PKPOST      char        8   2493   P.R.A POSTCODE  
+PKTELEP     char       20   2501   P.R.A PRIVATE TELEPHONE  
+PKTELEB     char       20   2521   P.R.A BUSINESS TELEPHONE  
+PKRELP      char       10   2541   P.R.A RELATIONSHIP  
+PTREMOBL    char       20   2551   P.R.A MOBILE TELEPHONE  
+PTRESNAM    char       40   2571   Surname or  
+                                   Contact Name for Insurance  
+PTREGNAM    char       40   2611   Given Name  
+                                   Other variables  
+WSTBY       char        8   2651   Standby Number  
+PMQVTDAT    char        8   2659   Transfer Date (for cancelled transfer)  
+                                   (ccyymmdd)  
+PMQVTTIM    char        8   2667   Transfer Date (for cancelled transfer)  
+                                   (hh:mm:ss)  
+OERDATE     char        8   2675   Expected Return Date (ccyymmdd)  
+OERTIME     char        8   2683   Expected Return Time (hh:mm:ss)  
+PMBRREQD    char        8   2691   Request Date (ccyymmdd)  
+PMBRREQT    char        8   2699   Request Time (hh:mm:ss)  
+PMVXCNID    char       10   2707   Visit Confirmed WEB User Id  
+                                   (websecaf)  
+PMVXCNDT    char       13   2717   Visit Confirmed Date and Time  
+                                   (ccyymmddhh:mm)  
+PMVXCASE    char       10   2730   Case Team (allcasaf)  
+PMVXEAFL    char        1   2740   Eclipse Adjustment Flag  
+                                   Blank or 0 = No  
+                                   1 = Yes  
+PTDSLSDN    char        8   2741   Linked Statistical Discharge No  
+PTDSCLGP    char       12   2749   Clinical Group  
+PMQVSPAR    char       28   2761   Spare Variable  
+lf          char        1        Spare Blank
+=====================================================================
+UNIQUE INDEX 1
+DPMQVMES
+DPMQVTRN
+  
+=====================================================================

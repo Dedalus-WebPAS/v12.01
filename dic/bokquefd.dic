@@ -1,0 +1,74 @@
+
+=====================================================================
+TABLE DESCRIPTION  :  Queuing Patient Booking Message File * 
+                      
+  
+TABLE NAME         :  bokqueaf
+=====================================================================
+DBKQUMES    char       20     1   Message Id  
+BKREBOOK    char        8    21   Booking/Admission No.  
+BKREURNO    char        8    29   U/R Number  
+BKREADOC    char        6    37   Attending Doctor  
+BKRESDOC    char        6    43   Referring Doctor  
+BKREEDAT    char        8    49   Expected due date (CCYYMMDD)  
+BKREATIM    char        8    57   Expected assessment time  
+BKREPDAT    char        8    65   Pre-assessment date  
+BKREPTIM    char        8    73   Pre-assessment time  
+BKREADAT    char        8    81   Date booking was made CCYYMMDD  
+BKRETYPE    char        3    89   Booking type (Cat "BK")  
+BKRECANC    char        3    92   Cancellation reason (Cat "BC")  
+BKREOMEM    char        1    95   Benefit fund member (Y/N/U)  
+BKREPREV    char        1    96   Previous inpatient (Y/N/U)  
+BKREACCM    char        3    97   Preferred accommodation (Cat BP)  
+BKREPROC    char        9   100   Waiting list procedure code  
+BKRECNT     decimal     2   109   Waiting list procedure count  
+BKREWARD    char        3   111   Expected ward  
+BKREADMN    char        8   114   Maternity admission number  
+BKREPREA    char        1   122   Deposit paid (Y/N) Matern only  
+BKREEBED    char        3   123   Expected bed  
+BKRECLSS    char        3   126   Patient Cat./Adm Class. (Cat P)  
+BKREATYP    char        3   129   Adm Type/Pat. Class (Cat A)  
+BKREDEPT    char        3   132   Department (Cat AC)  
+BKRETDOC    char        6   135   Associated Doctor  
+BKRECLMT    char        3   141   Claim type (Cat CL)  
+XXXXRFGP    char        8   144   Referring GP  
+BKREGPPC    char        6   152   GP Practice code  
+BKREGPFA    char       20   158   GPFH Approval Number  
+BKRERESI    char        3   178   Resident Status (Cat T)  
+BKREEATY    char        3   181   Elective Admission Type (Cat CC)  
+BKREECRA    char       20   184   ECR Approval Number  
+BKREGPPT    char        2   204   GP Practice count  
+BKREDOFR    char        3   206   District of Residence (Cat DA)  
+BKREOPER    char        4   209   Operator who made I/P Booking  
+BKREELOS    decimal     3   213   Expected Length of Stay (Days)  
+BKREBKDT    char        8   216   Booking date (ccyymmdd)  
+BKRXPOWD    char        3   224   Post-Op Ward (patwr1af)  
+BKRXADWD    char        3   227   Admitting Ward (patwr1af)  
+BKRXCDTE    char        8   230   Contact Date (ccyymmdd)  
+BKRXPSTY    char        1   238   Parent Staying (0=NO,1=YES)  
+BKRXCNDT    char        8   239   Confirmation Date (ccyymmdd)  
+BKRXUDF1    char        3   247   User Defined Field 1 (Cat BE)  
+BKRXUDF2    char        3   250   User Defined Field 2 (Cat BF)  
+BKRXUDF3    char        3   253   User Defined Field 3 (Cat BG)  
+BKRXUDF4    char        3   256   User Defined Field 4 (Cat BH)  
+BKRXUDF5    char        3   259   User Defined Field 5 (Cat BL)  
+BKRXUDD1    char        8   262   User Defined Date 1 (ccyymmdd)  
+BKRXUDD2    char        8   270   User Defined Date 2 (ccyymmdd)  
+BKRXUDD3    char        8   278   User Defined Date 3 (ccyymmdd)  
+BKRXUDD4    char        8   286   User Defined Date 4 (ccyymmdd)  
+BKRXUFF1    char       50   294   Procedure Description 1  
+BKRXUFF2    char       50   344   Procedure Description 2  
+BKRXUFF3    char       50   394   Procedure Description 3  
+BKRXUFF4    char       50   444   User Defined Free Format 4  
+BKRXEDC1    char       10   494   Extra Doctor Code 1 (pmshcpaf)  
+BKRXEDC2    char       10   504   Extra Doctor Code 2 (pmshcpaf)  
+BKRXEDC3    char       10   514   Extra Doctor Code 3 (pmshcpaf)  
+BKRXODTE    char        8   524   Operation Date (ccyymmdd)  
+BKRXOPRD    char        3   532   Operation Period (Cat SP)  
+BKQUSPAR    char       65   535   Spare Variable  
+lf          char        1        Spare Blank
+=====================================================================
+UNIQUE INDEX 1
+DBKQUMES
+  
+=====================================================================

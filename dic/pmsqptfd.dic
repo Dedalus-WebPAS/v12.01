@@ -1,0 +1,398 @@
+
+=====================================================================
+TABLE DESCRIPTION  :  Queuing Patient Details Message File * 
+                      
+  
+TABLE NAME         :  pmsqptaf
+=====================================================================
+DPMQPMES    char       20     1   Message Id  
+                                   PATMA1FD variables  
+PURNO       char        8    21   PATIENT U.R NO.  
+PMQPOURN    char        8    29   Old U/R Number (for CMR message)  
+CSALIAS     decimal     1    37   Alias Status  
+PTCGDATE    char        8    39   No Longer in use  
+PTITL       char        4    47   PATIENT TITLE  
+PHOSP       decimal     1    51   HOSPITAL LAST 12 MONTHS  
+                                   1-YES,2-NO  
+PLDAYS      decimal     3    53   NO DAYS LAST IN HOSPITAL  
+PBDEBT      decimal     1    56   BAD DEBTOR INDICATOR 0-NO 1-YES  
+PSNAME      char       20    58   PATIENT SURNAME  
+PGNAME      char       25    78   PATIENTS GIVEN NAMES  
+PPSNAME     char       19   103   PATIENTS PREVIOUS SURNAME /  
+                                   New UR number for merged URs  
+PADD1       char       35   122   PATIENT ADDRESS LINE 1  
+PADD2       char       35   157   PATIENT ADDRESS LINE 2  
+PSUBRB      char       35   192   PATIENT ADDRESS LINE 3  
+PADD4       char       35   227   PATIENT ADDRESS LINE 4  
+PPOST       char        8   262   PATIENT POSTCODE  
+PTELEP      char       20   270   TELEPHONE PRIVATE  
+PTELEB      char       20   290   TELEPHONE BUSINESS  
+PSEX        char        1   310   PATIENTS SEX  
+PMSTAT      char        3   311   PATIENTS MARTIAL STATUS (Cat M)  
+PBDATE      char        8   314   date of birth (ccyymmdd)  
+PSAGE       decimal     3   322   PATIENTS AGE  
+PCONT       char        3   325   COUNTRY OF BIRTH (Cat C)  
+PREG        char        3   328   PATIENTS RELIGION (Cat R)  
+PTYPE       char        3   331   PATIENTS TYPE (Cat T)  
+POCCUP      char       14   334   PATIENTS OCCUPATION  
+PLDDATE     char        8   348   last discharge date (ccyymmdd)  
+PMEDI       char       10   356   MEDICARE NUMBER  
+PPENNO      char       15   366   PENSION NUMBER  
+PPNDTE      char        6   381   pension no expiry date (ccyymm)  
+PREPAT      char       10   387   REPATRIATION NUMBER  
+PSMOK       decimal     1   397   PATIENT SMOKER  
+PSTAT       decimal     1   399   PATIENT STATUS  
+PMICRO      char       20   401   MICROFILM ADDRESS  
+                                   1 - 6 U.R. NO.  
+                                   7 - 10 ROLL NO.  
+                                   11 - 14 POSITION NO.  
+                                   15 - 16 YEAR  
+PCEASE      decimal     1   421   DECEASED INDICATOR  
+                                   0 = NO  
+                                   1 = YES  
+PCASE       decimal     1   423   CASE NOTES INDICATOR  
+PAUTOPY     decimal     1   425   AUTOPSY INDICATOR  
+                                   0 = NO  
+                                   1 = YES  
+PHIGH1      char        3   427   HIGHLIGHT CODE 1 (Cat H1)  
+PHIGH2      char        3   430   HIGHLIGHT CODE 2 (Cat H2)  
+PHIGH3      char        3   433   HIGHLIGHT CODE 3 (Cat H3)  
+PLOCDOC     char       30   436   LOCAL DOCTOR  
+PFUNDH      char        6   466   HEALTH FUND  
+PFNDTB      char        8   472   HEALTH FUND TABLE  
+PTMASPAR    char       10   480   Spare - was HF membership no  
+PUSR1       char        3   490   USER DEFINED FIELD 1 (Cat P1)  
+PUSR2       char        3   493   USER DEFINED FIELD 2 (Cat P2)  
+PUSR3       char        3   496   USER DEFINED FIELD 3 (Cat P3)  
+PUSR4       char        3   499   USER DEFINED FIELD 4 (Cat P4)  
+PUSR5       char        3   502   USER DEFINED FIELD 5 (Cat P5)  
+PUSR6       char        3   505   USER DEFINED FIELD 6 (Cat P6)  
+PUYN1       decimal     1   508   USER DEFINED Y/N FIELD 1  
+                                   (1=Y,0=N)  
+PUYN2       decimal     1   510   USER DEFINED Y/N FIELD 2  
+                                   (1=Y,0=N)  
+PUYN3       decimal     1   512   USER DEFINED Y/N FIELD 3  
+                                   (1=Y,0=N)  
+PYRRES      decimal     2   514   NUMBER OF YEARS RESIDENT  
+PNKNAME     char       20   516   NEXT OF KIN 1 NAME  
+PNKADD1     char       35   536   N.O.K 1 ADDRESS LINE 1  
+PNKADD2     char       35   571   N.O.K 1 ADDRESS LINE 2  
+PNKSUBR     char       35   606   N.O.K 1 ADDRESS LINE 3  
+PNKADD4     char       35   641   N.O.K 1 ADDRESS LINE 4  
+PNKPOST     char        8   676   N.O.K 1 POSTCODE  
+PNKTELP     char       20   684   N.O.K 1 PRIVATE TELEPHONE  
+PNKTELB     char       20   704   N.O.K 1 BUSINESS TELEPHONE  
+PNKRELP     char       10   724   N.O.K 1 RELATIONSHIP  
+PLSTINP     char        8   734   LAST INPATIENT  
+PLSTOUT     char        8   742   LAST OUTPATIENT VISIT NUMBER  
+PNXRAY      decimal     3   750   NUMBER OF PREVIOUS X-RAYS  
+PFNDYY      char        2   753   YRS OF FUND MEMBERSHIP (JR,DE)  
+PFNDCG      char        6   755   fund cover change (ccyymm)  
+PDECDTE     char        8   761   date of death (ccyymmdd)  
+PHCNOTES    char       20   769   CASE NOTES INDICATORS  
+PDIET       char        3   789   DEFAULT DIET CODE (Cat DC)  
+PINITHOS    char        2   792   HOSPITAL U/R INITIATED FROM  
+PHKADUNI    char       10   794   HONG KONG UNIQUE ADDRESS ID  
+PTMAEMPC    char        6   804   PATIENT EMPLOYER CODE  
+PTMANOKO    char       14   810   NEXT OF KIN OCCUPATION  
+PTMANOKE    char        6   824   NEXT OF KIN EMPLOYER CODE  
+PTMADCNO    char       10   830   DEATH CERTIFICATE NUMBER  
+PTMAUKDB    char        1   840   Unknown Date of Birth (Y/N)  
+PTMAUKDD    char        1   841   Unknown Date of Death (Y/N)  
+PFNDMM      char       19   842   Health Fund Membership no.  
+PTMADCDT    char        8   861   Demographics Conf Date CCYYMMDD  
+PTMAHCP1    char       10   869   HCP 1 (pmshcpaf)  
+PTMAHCL1    char       10   879   HCP 1 Practice (pmshclaf)  
+PTMAHCG1    char        2   889   HCP 1 Grp Count (pmshcgaf  
+PTMAHCP2    char       10   891   HCP 2 (pmshcpaf)  
+PTMAHCL2    char       10   901   HCP 2 Practice (pmshclaf)  
+PTMAHCG2    char        2   911   HCP 2 Grp Count (pmshcgaf  
+PTMAHCP3    char       10   913   HCP 3 (pmshcpaf)  
+PTMAHCL3    char       10   923   HCP 3 Practice (pmshclaf)  
+PTMAHCG3    char        2   933   HCP 3 Grp Count (pmshcgaf  
+PTMAHCP4    char       10   935   HCP 4 (pmshcpaf)  
+PTMAHCL4    char       10   945   HCP 4 Practice (pmshclaf)  
+PTMAHCG4    char        2   955   HCP 4 Grp Count (pmshcgaf  
+PTMAHCP5    char       10   957   HCP 5 (pmshcpaf)  
+PTMAHCL5    char       10   967   HCP 5 Practice (pmshclaf)  
+PTMAHCG5    char        2   977   HCP 5 Grp Count (pmshcgaf  
+PTMASNAM    char       40   979   Patient Surname  
+PTMADCUD    char        8   1019   Demog. Conf Upd Date (CCYYMMDD)  
+PTMADCUT    char        8   1027   Demog. Conf Upd Time (HH:MM:SS)  
+PTMADCUU    char       10   1035   Demog. Conf Upd User (websecaf)  
+PTMAUUID    char       10   1045   Web User Id who Last Updated  
+                                   Record (websecaf)  
+PTMAUTIM    char        8   1055   Time Record Last Updated  
+                                   (hh:mm:ss)  
+                                   PATMX1FD variables  
+PTMXRDAT    char        8   1063   Registration Date  
+PTMXMEAL    char       30   1071   Special Meal Requirements  
+PTMXLGA     char        4   1101   LGA Code  
+PTMXLS      char        3   1105   Current Legal status (Cat LS)  
+PTMXLSDT    char        8   1108   Date of legal status (ccyymmdd)  
+PTMXFHMD    char        1   1116   Familial history of mental disorder ?  
+                                   1 = Yes ; 2 = No  
+PTMXMHU1    char        3   1117   M.H. User defined field 1 (Cat V6)  
+PTMXMHU2    char        3   1120   M.H. User defined field 2 (Cat V7)  
+PTMXMHU3    char        3   1123   M.H. User defined field 3 (Cat V8)  
+PTMXECNM    char       20   1126   Emergency contact name  
+PTMXECA1    char       35   1146   Emergency contact address line 1  
+PTMXECA2    char       35   1181   Emergency contact address line 2  
+PTMXECA3    char       35   1216   Emergency contact address line 3  
+PTMXECA4    char       35   1251   Emergency contact address line 4  
+PTMXECPC    char        8   1286   Emergency contact postcode  
+PTMXECPP    char       20   1294   Emergency contact private phone  
+PTMXECBP    char       20   1314   Emergency contact business phone  
+PTMXECRE    char       10   1334   Emergency contact relationship  
+PTMXNRNM    char       20   1344   Nearest relative name  
+PTMXNRA1    char       35   1364   Nearest relative address line 1  
+PTMXNRA2    char       35   1399   Nearest relative address line 2  
+PTMXNRA3    char       35   1434   Nearest relative address line 3  
+PTMXNRA4    char       35   1469   Nearest relative address line 4  
+PTMXNRPC    char        8   1504   Nearest relative postcode  
+PTMXNRPP    char       20   1512   Nearest relative private phone  
+PTMXNRBP    char       20   1532   Nearest relative business phone  
+PTMXNRRE    char       10   1552   Nearest relative relationship  
+PTMX3BEX    char        8   1562   3B certificate expiry date  
+PTMXCARD    char       20   1570   Card number (NZ billing)  
+PTMXCEXP    char        8   1590   Card expiry date (NZ billing)  
+PTMXCXMP    char        3   1598   Card exemption type (Cat XM)  
+PTMXFMLY    char       12   1601   Family id  
+PTMXCHNM    char       20   1613   Chinese Name  
+PTMXDOFR    char        3   1633   District of Residence (Cat DA)  
+PTMXREGP    char        8   1636   No longer in use  
+PTMXGPPC    char        6   1644   No longer in use  
+PTMXSPID    char       20   1650   Supplementary Id  
+PTMXGPPT    char        2   1670   No longer in use  
+PTMXOSDT    char        8   1672   Date Arrived from Overseas (CCYYMMDD)  
+PTMXOPER    char        4   1680   Sec. Code Operator who Created Record  
+PTMXUKDO    char        1   1684   Unknown Date Arrived from O/S (Y/N)  
+PTMXCELL    char       20   1685   Patient's Mobile Phone No.  
+PTMXADD1    char       35   1705   Postal Address Line 1  
+PTMXADD2    char       35   1740   Postal Address Line 2  
+PTMXADD3    char       35   1775   Postal Address Line 3  
+PTMXADD4    char       35   1810   Postal Address Line 4  
+PTMXPOST    char        8   1845   Postal Address Post Code  
+PTMXMCCD    char        2   1853   Medicare Code  
+PTMXSIN1    char        1   1855   Status Ind 1 - Alerts present(1=yes)  
+PTMXSIN2    char        1   1856   Status Ind 2 - Results present(1=yes)  
+PTMXSIN3    char        1   1857   Status Ind 3 - Clinical notes present  
+PTMXSIN4    char        1   1858   Status Ind 4 - Clinical Documentation  
+PTMXSIN5    char        1   1859   Status Ind 5 - Legacy Visits (1=yes)  
+PTMXCTIM    char       20   1860   Time/Date Change(ccyymmddhh:mm:ss:mmm)  
+PTMXSLAC    char        8   1880   Year last Psych adm (was SLA Code)  
+PTMXFILN    char        3   1888   Filing Required  
+PTMXDEAF    char        3   1891   Deaf  
+PTMXOSMS    char        1   1894   Opt Out of SMS  
+                                   0 or Blank = No  
+                                   1 = Yes  
+PTMXUUID    char       10   1895   Web User ID who Updated Record  
+                                   (websecaf)  
+                                   PATNIDFD variables  
+PTNINMPI    char       20   1905   National ID No. (right justified)  
+                                   NHIMASFD variables  
+NHMASURN    char       25   1925   Surname  
+NHMAGIV1    char       20   1950   Given Name 1  
+NHMAGIV2    char       20   1970   Given Name 2  
+NHMAGIV3    char       20   1990   Given Name 3  
+NHMAPREI    char        1   2010   Preferred Name Indicator (1-3)  
+NHMAADD1    char       35   2011   Address Line 1  
+NHMAADD2    char       30   2046   Address Line 2  
+NHMAADD3    char       30   2076   Suburb  
+NHMAADD4    char       30   2106   City/Town  
+NHMAADD5    char       30   2136   Country  
+NHMADOB     char        8   2166   Date of Birth  
+NHMADDTH    char        8   2174   Date of Death  
+NHMADOMC    char        4   2182   Domicile Code  
+NHMARES     char        1   2186   Residence Status (Y/N)  
+NHMAETH     char        5   2187   Ethnicity  
+NHMASEX     char        1   2192   Gender  
+NHMADAT     char        8   2193   Date Last Updated  
+NHMATIM     char        8   2201   Time Last Updated  
+NHMAETH2    char        5   2209   2nd Ethnicity  
+NHMAETH3    char        5   2214   3rd Ethnicity  
+NHMAETH4    char        5   2219   4th Ethnicity  
+NHMAETH5    char        5   2224   5th Ethnicity  
+NHMAETH6    char        5   2229   6th Ethnicity  
+                                   PMSPX2FD variables  
+PMPXRHC1    char       10   2234   Registered HCP 1 (pmshcpaf)  
+PMPXRH1G    char       10   2244   Registered HCP 1 Group (pmshcgaf)  
+PMPXR1GC    char        2   2254   Reg. HCP 1 Group Count (pmshclaf)  
+PMPXINTR    char        1   2256   Interpreter Required?  
+PMPXLNG1    char        3   2257   Preferred Language 1 (Cat LA)  
+PMPXLNG2    char        3   2260   Preferred Language 2 (Cat LA)  
+PMPXLNG3    char        3   2263   Preferred Language 3 (Cat LA)  
+PMPXPEML    char       80   2266   Patient's Email Address  
+PMPXEDOB    char        1   2346   Date of Birth Estimated? 0=NO,1=YES  
+PMPXCMOB    char       20   2347   Emergency Contact Mobile Number  
+PMPXCEML    char       80   2367   Emergency Contact Email Address  
+PMPXCCRP    char        1   2447   Emer. Contact Corres. (0=NO,1=YES)  
+PMPXKMOB    char       20   2448   NOK Mobile Number  
+PMPXKEML    char       80   2468   NOK Email Address  
+PMPXKCRP    char        1   2548   NOK Correspondence (0=NO,1=YES)  
+PMPXRMOB    char       20   2549   Nearest Relative Mobile Number  
+PMPXREML    char       80   2569   Nearest Relative Email Address  
+PMPXRCRP    char        1   2649   Nearest Relative Corres. 0=NO,1=YES  
+PMPXMEDC    char        8   2650   Medicare Card Valid to (CCYYMMDD)  
+PMPXDETY    char        3   2658   Death Type (Cat DY)  
+PMPXPRIS    char       15   2661   PRISM Number  
+PMPXCSER    char       15   2676   Correctional Services Number  
+PMPXPHEI    decimal     6   2691   Patient Height  
+PMPXPWEI    decimal     6   2695   Patient Weight  
+PMPXDREC    char        8   2699   Date Weight & Height Rec.(CCYYMMDD)  
+PMPXMSNA    char       20   2707   Mother's Surname  
+PMPXMGNA    char       25   2727   Mother's Given Name  
+PMPXMTLE    char        4   2752   Mother's Title  
+PMPXMAD1    char       35   2756   Mother's Address Line 1  
+PMPXMAD2    char       35   2791   Mother's Address Line 2  
+PMPXMAD3    char       35   2826   Mother's Address Line 3  
+PMPXMAD4    char       35   2861   Mother's Address Line 4  
+PMPXMPOS    char        8   2896   Mother's Address Post Code  
+PMPXMPNO    char       20   2904   Mother's Private Number  
+PMPXMBNO    char       20   2924   Mother's Business Number  
+PMPXMMNO    char       20   2944   Mother's Mobile Number  
+PMPXMEML    char       80   2964   Mother's Email Address  
+PMPXMCNT    char        3   3044   Mother's Country of Birth (Cat C)  
+PMPXMCRP    char        1   3047   Mother's Correspondence 0=NO,1=YES  
+PMPXMLAB    char        1   3048   Mother's Name on Labels 0=NO,1=YES  
+PMPXMREL    char       10   3049   Relationship to Patient  
+PMPXFSNA    char       20   3059   Father's Surname  
+PMPXFGNA    char       25   3079   Father's Given Name  
+PMPXFTLE    char        4   3104   Father's Title  
+PMPXFAD1    char       35   3108   Father's Address Line 1  
+PMPXFAD2    char       35   3143   Father's Address Line 2  
+PMPXFAD3    char       35   3178   Father's Address Line 3  
+PMPXFAD4    char       35   3213   Father's Address Line 4  
+PMPXFPOS    char        8   3248   Father's Address Post Code  
+PMPXFPNO    char       20   3256   Father's Private Number  
+PMPXFBNO    char       20   3276   Father's Business Number  
+PMPXFMNO    char       20   3296   Father's Mobile Number  
+PMPXFEML    char       80   3316   Father's Email Address  
+PMPXFCNT    char        3   3396   Father's Country of Birth (Cat C)  
+PMPXFCRP    char        1   3399   Father's Correspondence 0=NO,1=YES  
+PMPXFLAB    char        1   3400   Father's Name on Labels 0=NO,1=YES  
+PMPXFREL    char       10   3401   Relationship to Patient  
+PMPXTDIG    char        2   3411   Terminal Digit (Last 2 chrs of U/R)  
+PMPXWBID    char       10   3413   WEB User Id re. creator (websecaf)  
+PMPXDVAC    char        3   3423   DVA Card Colour (Cat DX)  
+PMPXPNSD    char        8   3426   Pension Start Date (CCYYMMDD)  
+PMPXUYN4    char        1   3434   User Defined Y/N field 4 0=NO,1=YES  
+PMPXUYN5    char        1   3435   User Defined Y/N field 5 0=NO,1=YES  
+PMPXUYN6    char        1   3436   Not for Resusitation Y/N 0=NO,1=YES  
+PMPXABRG    char        3   3437   Aboriginality (Cat VA)  
+PMPXPRVI    char        3   3440   Privacy Indicator (Cat PV)  
+PMPXCRIN    char        1   3443   Consent Release of Info? 0=NO,1=YES  
+PMPXHOML    char        1   3444   Homeless? (0=NO,1=YES)  
+PMPXUDC1    char       50   3445   User Defined Comments 1  
+PMPXUDC2    char       50   3495   User Defined Comments 2  
+PMPXUDC3    char       50   3545   User Defined Comments 3  
+PMPXUSR7    char        3   3595   User Defined 7 (Category P7)  
+PMPXUSR8    char        3   3598   User Defined 8 (Category P8)  
+PMPXUSR9    char        3   3601   Advance Care Plan Flag(Category P9)  
+PMPXMSNO    char       10   3604   Medicare Safety Net Number  
+PMPXCONP    char        1   3614   Which contact for PRA  
+PMPXFLDR    char        3   3615   Folder Selection (Category FS)  
+PMPXIWI1    char        3   3618   Iwi 1 (Category iw)  
+PMPXIWI2    char        3   3621   Iwi 2 (Category iw)  
+PMPXIWI3    char        3   3624   Iwi 3 (Category iw)  
+PMPXIHOS    char        3   3627   Hospital which initiated UR  
+PMPXPFSN    char       20   3630   Preferred Surname  
+PMPXPFGN    char       25   3650   Preferred Given Name  
+PMPXSIN6    char        1   3675   Transport Required - 1=Yes  
+PMPXSIN7    char        1   3676   Medical Alert (wahealth) - 1=Yes  
+PMPXSIN8    char        1   3677   Micro Alert (wahealth) - 1=Yes  
+PMPXSIN9    char        1   3678   Risk Alert (wahealth) - 1=Yes  
+PMPXSN10    char        1   3679   PCEHR Flag  
+                                   0 - Blank  
+                                   1 - Not published / unknown PCEHR  
+                                   2 - No / non advertised PCEHR  
+                                   3 - Yes / advertised PCEHR  
+PMPXSN11    char        1   3680   Chronic Condition Alert (wah) 1=Yes  
+PMPXSN12    char        1   3681   Patient Debt Only - 1=Yes  
+PMPXSN13    char        1   3682   Set Payment Plan - 1=Yes  
+PMPXSN14    char        1   3683   Debt Collection Agency - 1=Yes  
+PMPXSN15    char        1   3684   Outstanding Debt Ind. 1=Yes  
+PMPXPFAX    char       20   3685   Patient Fax Number  
+PMPXFNAM    char       40   3705   Patient First Name  
+PMPXSNAM    char       40   3745   Patient Second Name  
+PMPXHFGN    char       40   3785   Health Fund First Given Name Alias  
+PMPXHFSN    char       40   3825   Health Fund Surname Alias  
+PMPXFUPI    char        2   3865   Health Fund UPI  
+PMPXVGPC    char       10   3867   Verified GP Code (pmshcpaf)  
+PMPXVGPP    char       10   3877   Verified GP Practice (pmshcgaf)  
+PMPXVGPG    char        2   3887   Verified GP Group Count (pmshclaf)  
+PMPXASNO    char       15   3889   Ambulance Subscriber No.  
+PMPXMAID    char       20   3904   Maiden Name  
+PMPXETHN    char        3   3924   Ethnicity (Cat EN)  
+PMPXHFCN    char       40   3927   Health Fund Contributor Name  
+PMPXLUBH    char        3   3967   Last Updated By Hospital (pathspaf)  
+PMPXPMCN    char        3   3970   Preferred Method of Contact (Cat Pn  
+PMPXPMCR    char        3   3973   Preferred Method of Correspondence  
+PMPXCRN1    char        1   3976   Consent of Release of Info to HCP1  
+PMPXCRN2    char        1   3977   Consent of Release of Info to HCP2  
+PMPXCRN3    char        1   3978   Consent of Release of Info to HCP3  
+PMPXCRN4    char        1   3979   Consent of Release of Info to HCP4  
+PMPXCRN5    char        1   3980   Consent of Release of Info to HCP5  
+PMPXOSMS    char        1   3981   Opt out of SMS  
+PMPXRPER    char        3   3982   Retention Period (Cat rt)  
+PMPXRDAT    char        8   3985   Retention Date (ccyymmdd)  
+PMPXUPRF    char        3   3993   Usual PRFA Coded (Cat tc)  
+PMPXUUID    char       10   3996   User Id who Last Updated Record  
+                                   (websecaf)  
+PMPXUDAT    char        8   4006   Date Record Last Updated (ccyymmdd)  
+PMPXUTIM    char        8   4014   Time Record Last Updated (hh:mm:ss)  
+PMPXAUF1    char        1   4022   Additional User Defined Field 1  
+                                   Used for LegalGuardian by RCH  
+                                   (Mother)  
+PMPXAUF2    char        1   4023   Additional User Defined Field 2  
+                                   Used for LegalGuardian by RCH  
+                                   (Father)  
+PMPXAUF3    char        1   4024   Additional User Defined Field 3  
+                                   Used for LegalGuardian by RCH  
+                                   (NoK)  
+PMPXAUF4    char        1   4025   Additional User Defined Field 4  
+                                   Used for LegalGuardian by RCH  
+                                   (Emergency Contact)  
+PMPXAUF5    char        1   4026   Additional User Defined Field 5  
+                                   Used for LegalGuardian by RCH  
+                                   (Nearest Relative)  
+PMPXAUF6    char        1   4027   Additional User Defined Field 6  
+PMPXAUF7    char        1   4028   Additional User Defined Field 7  
+PMPXAUF8    char        1   4029   Additional User Defined Field 8  
+PMPXAUF9    char        1   4030   Additional User Defined Field 9  
+PMPXAU10    char        1   4031   Additional User Defined Field 10  
+PMPXSN16    char        1   4032   MyHR Consent Flag  
+                                   0 = No  
+                                   Blank or 1 = Yes  
+PMPXSN17    char        1   4033   SMR - Scanned Medical Record Exists  
+                                   Blank or 0 = No  
+                                   1 = Yes  
+PMPXSN18    char        1   4034   Secure Address  
+PMPXSN19    char        1   4035   Verified Address  
+PMPXSN20    char        1   4036   Multiple Birth Indicator  
+PMPXSN21    char        1   4037   Email Validation Flag  
+PMPXSN22    char        1   4038   Status Indicator 22  
+PMPXSN23    char        1   4039   Status Indicator 23  
+PMPXSN24    char        1   4040   Status Indicator 24  
+PMPXSN25    char        1   4041   Status Indicator 25  
+PMPXSN26    char        1   4042   Status Indicator 26  
+PMPXSN27    char        1   4043   Status Indicator 27  
+PMPXSN28    char        1   4044   Status Indicator 28  
+PMPXSN29    char        1   4045   Status Indicator 29  
+PMPXSN30    char        1   4046   Status Indicator 30  
+PMPXUCC1    char        3   4047   User Defined Category Code 1  
+PMPXUCC2    char        3   4050   User Defined Category Code 2  
+PMPXUCC3    char        3   4053   User Defined Category Code 3  
+PMPXUCC4    char        3   4056   Identifying Gender (Cat Gi)  
+PMPXUCC5    char        3   4059   Identifying Pronoun (Cat Gp)  
+PMQPSPAR    char       14   4062   Spare Variable  
+lf          char        1        Spare Blank
+=====================================================================
+UNIQUE INDEX 1
+DPMQPMES
+  
+UNIQUE INDEX 2
+PURNO
+DPMQPMES
+  
+=====================================================================

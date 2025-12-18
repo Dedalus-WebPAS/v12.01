@@ -1,0 +1,18 @@
+
+=====================================================================
+TABLE DESCRIPTION  :  File Definition include for Patient * 
+                      Invoices with Journals Entered 
+  
+TABLE NAME         :  patijrnf
+=====================================================================
+IJINVNO     char        8     1   Invoice Number  
+IJADMNO     char        8     9   Admission Number  
+DIJBATCH    char        8    17   Batch Number  
+IJSPARE     char       12    25   Spare  
+lf          char        1        Spare Blank
+=====================================================================
+UNIQUE INDEX 1
+DIJBATCH
+IJINVNO
+  
+=====================================================================
