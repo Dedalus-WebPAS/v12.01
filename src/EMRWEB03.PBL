@@ -6,6 +6,8 @@
 . Modifications :
 .
 .----------------------------------------------------------------------
+. V12.01.01 21/11/2025  Zumin Yu         TSK 0969522
+.           Recompiled for EMRMR5 amended WACLN000
 . V12.00.02 19/11/2025  Nikitha Bhaskar  TSK 0969069
 .           Recompiled for EMRMR5N2 changes
 . V12.00.01 08/09/2025  Thanh T          TSK 0949457
@@ -1154,7 +1156,7 @@ ALRCOMM   DIM       100
 MULTILIN  FORM      1  
 .--------------------------------------------------------------------------------
 PRGID     INIT      "EMRWEB03"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Print Emergency Patient Labels and ID Sheets"
 .--------------------------------------------------------------------------------
 .

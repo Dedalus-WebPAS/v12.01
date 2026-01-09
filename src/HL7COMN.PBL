@@ -2,9 +2,14 @@
 .*                              HL7COMN.PBL                                  *
 .*        Contains common HL7 routines used by both HL7CISIN and HL7QUERY    *
 .* Mods:                                                                     *
+.*        V12.01.01 11/12/2025  Nikitha B        TSK 0958929                 *
+.*                  Stripped leading white spaces of PV1.17.                 *
+.*                  Added check for EMCNDCLI - YES(1) for PV1.10 and PV1.17  *
+.*                  Added default of EMVIUR02 or EMVIUR02 for PV1.17 when    *
+.*                  EMCNEDCL is active and YES(1).                           *
 .*        V12.00.10 25/10/2025  Nikitha B        TSK 0958929                 *
-.*                  Added to get HCP code from EMCNDCLI when EMCNEDCL is on  *
-.*                  at EPV11000.                                             *
+.*                  Added to get HCP code from EMCNDCLI when EMCNEDCL is     *
+.*                  active at EPV11000.                                      *
 .*        V12.00.09 21/10/2025  Bella Turco      TSK 0960178                 *
 .*                  Added ZXP.77: Sending Estimated DOB Flag                 *
 .*                  (WRZXP000/PMPXEDOB)                                      *
@@ -7908,27 +7913,30 @@ EPV11000  MATCH     "1",PTCNEDDD
 .
           MOVE      EMRVDOCT,KEY10
           MATCH     SP10,KEY10
+          IF        @EQUAL
+            PACK      CPARHPID,PMVXMHOS,SP70    * Visit Hospital
+            MOVE      "EMCNEDCL",CPARPARM
+            PACK      CPARPARM,CPARPARM,SP70    * Sending ED Def Clian & Spslt
+            CALL      GTCMPH00
+            COMPARE   "0",CPARERRO              * Parameter exists & active ?
             IF        @EQUAL
-              PACK      CPARHPID,PMVXMHOS,SP70    * Visit Hospital
-              MOVE      "EMCNEDCL",CPARPARM
-              PACK      CPARPARM,CPARPARM,SP70    * Sending ED Def Clian & Spslt
-              CALL      GTCMPH00
-              COMPARE   "0",CPARERRO              * Parameter active ?
+              MATCH    "1",CMPAVALU             * Parameter ON ?
               IF        @EQUAL
                 MOVE      SP70,CPARPARM
                 MOVE      "EMCNDCLI",CPARPARM
                 PACK      CPARPARM,CPARPARM,SP70  * ED Default Clinician
                 CALL      GTCMPH00
-                COMPARE   "0",CPARERRO            * Parameter active ?
+                COMPARE   "0",CPARERRO            * Parameter exists & active ?
                 IF        @EQUAL
                   MOVE      CMPAVALU,KEY10        * HCP Code
                 ENDIF
               ENDIF
             ENDIF
+          ENDIF
 .
           MATCH     SP10,KEY10                   * doctor seen blank ?
           IF        !@EQUAL
-            MOVE      KEY10,FIELDSTR          * no - load dr code
+            MOVE      KEY10,FIELDSTR             * no - load dr code
             CALL      SPCHR000                   * convert special characters
             MOVE      FIELDSTR,PV1009
             ENDSET    PV1009
@@ -8071,24 +8079,46 @@ EPV11000  MATCH     "1",PTCNEDDD
 
 .         Default 'ED Default Clinician' for AUZ sites when
 .         'Sending Default ED Clinician and Specialty' parameter is set to Yes
-
-          PACK      CPARHPID,PMVXMHOS,SP70    * Visit Hospital
-          MOVE      "EMCNEDCL",CPARPARM
-          PACK      CPARPARM,CPARPARM,SP70    * Sending ED Def Clian & Spslt
-          CALL      GTCMPH00
-          COMPARE   "0",CPARERRO              * Parameter active ?
-          IF        @EQUAL
-            MOVE      SP70,CPARPARM
-            MOVE      "EMCNDCLI",CPARPARM
-            PACK      CPARPARM,CPARPARM,SP70  * ED Default Clinician
+.
+          IF        PTCNNHII <> 1
+            PACK      CPARHPID,PMVXMHOS,SP70    * Visit Hospital
+            MOVE      "EMCNEDCL",CPARPARM
+            PACK      CPARPARM,CPARPARM,SP70    * Sending ED Def Clian & Spslt
             CALL      GTCMPH00
-            COMPARE   "0",CPARERRO            * Parameter active ?
+            COMPARE   "0",CPARERRO              * Parameter exists & active ?
             IF        @EQUAL
-              MOVE      BLANKSTR,PV1017
-              MOVE      CMPAVALU,PV1017       * HCP Code
+              MATCH    "1",CMPAVALU             * Parameter ON ?
+              IF        @EQUAL
+                MATCH     "1",PTCNEDDD          * 'HL7 using ED Disc Doc' ON ?
+                IF        @EQUAL
+                  MOVE      EMVIUR02,EMRVDOCT       * using ED Discharge Doctor
+                ELSE
+                  MOVE      EMVIDOCT,EMRVDOCT       * using Attending Doctor
+                ENDIF
+.
+                MOVE      BLANKSTR,PV1017
+                MOVE      EMRVDOCT,KEY10
+                MATCH     SP10,KEY10
+                IF        @EQUAL
+                  MOVE      "EMCNDCLI",CPARPARM
+                  PACK      CPARPARM,CPARPARM,SP70  * ED Default Clinician
+                  CALL      GTCMPH00
+                  COMPARE   "0",CPARERRO          * Parameter exists & active ?
+                  IF        @EQUAL
+                    MOVE      CMPAVALU,KEY10       * HCP Code
+                  ENDIF
+                ENDIF
+.
+                MATCH     SP10,KEY10              * doctor seen blank ?
+                IF        !@EQUAL
+                  MOVE      KEY10,FIELDSTR        * no - load dr code
+                  CALL      SPCHR000              * convert special characters
+                  MOVE      FIELDSTR,PV1017
+                  STRIP     PV1017
+                ENDIF
+              ENDIF
             ENDIF
           ENDIF
-
 .
 .         Format Admitting Doctor  (Local GP for NZ only)
 .         Send repeating fields which contain, Doctor code, Provider 1,
@@ -8106,22 +8136,25 @@ EPV11000  MATCH     "1",PTCNEDDD
               MOVE      "EMCNEDCL",CPARPARM
               PACK      CPARPARM,CPARPARM,SP70    * Sending ED Def Clian & Spslt
               CALL      GTCMPH00
-              COMPARE   "0",CPARERRO              * Parameter active ?
+              COMPARE   "0",CPARERRO              * Parameter exists & active ?
               IF        @EQUAL
-                MOVE      SP70,CPARPARM
-                MOVE      "EMCNDCLI",CPARPARM
-                PACK      CPARPARM,CPARPARM,SP70  * ED Default Clinician
-                CALL      GTCMPH00
-                COMPARE   "0",CPARERRO            * Parameter active ?
+                MATCH    "1",CMPAVALU             * Parameter ON ?
                 IF        @EQUAL
-                  MOVE      CMPAVALU,KEY10        * HCP Code
+                  MOVE      SP70,CPARPARM
+                  MOVE      "EMCNDCLI",CPARPARM
+                  PACK      CPARPARM,CPARPARM,SP70  * ED Default Clinician
+                  CALL      GTCMPH00
+                  COMPARE   "0",CPARERRO            * Parameter exists & active?
+                  IF        @EQUAL
+                    MOVE      CMPAVALU,KEY10        * HCP Code
+                  ENDIF
                 ENDIF
               ENDIF
             ENDIF           
 .
             MATCH     SP10,KEY10                 * doctor seen blank ?
             IF        !@EQUAL
-              MOVE      KEY10,FIELDSTR        * no - load dr code
+              MOVE      KEY10,FIELDSTR           * no - load dr code
               CALL      SPCHR000                 * convert special characters
               MOVE      FIELDSTR,PV1017
               ENDSET    PV1017

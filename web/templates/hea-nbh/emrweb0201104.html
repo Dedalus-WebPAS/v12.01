@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="hea-nbh">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -77,6 +77,18 @@ function deleteEvent() {
   Left=(document.body.clientWidth-420)/2;
   DFrameLink(linkurl,0,Left,420,130);
  }
+}
+function setUndischarge() {
+    if(!isWhitespace(document.UpdateForm.username.value)) {
+      getUserIDForLoginName(UpdateForm.username,UpdateForm.webuseid);
+    }
+    var validateresult = validateMandatory(document.UpdateForm);
+    if (validateresult==true) {
+      document.UpdateForm.nextpage.value="1;"
+      document.UpdateForm.formactn.value="U ";
+      document.UpdateForm.updttype.value="UNDIS";
+      DFrameHide(UpdateForm);
+   }
 }
 function setFormactn(type) {
     p=document.UpdateForm;

@@ -9,6 +9,8 @@
 .*             copied from IBAPAT44.                                          *
 .* Mods     :                                                                 *
 .*                                                                            *
+.*        V12.01.01 21/11/2025  J.Tan          TSK 0946593                    *
+.*                  Recompiled for CMXMATRX -Sort Casepayment Theatre fee item*
 .*        V12.00.01 30/05/2025  Don Nguyen     TSK 0955096                    *
 .*                  Alphanumeric visit number changes                         *
 .*        V11.05.01 27/03/2024 Nikitha B       TSK 0958725                    *
@@ -230,6 +232,7 @@
           INC       PATDHEAD/INC
           INC       PATDSCFD/INC
           INC       PATDTRFD/INC
+          INC       PATDDHFD/INC
           INC       PATECDFD/INC
           INC       PATECOFD/INC
           INC       PATEX1FD/INC
@@ -243,6 +246,7 @@
           INC       PATMI1FD/INC
           INC       PATMMBFD/INC
           INC       PATRCAUD/INC
+          INC       PATTFEFD/INC
           INC       PATTRNFD/INC
           INC       PATVISFD/INC
           INC       PATWR1FD/INC
@@ -335,6 +339,7 @@ SDAYMON   DIM       4
 SEC       FORM      2
 SYEAR     DIM       4
 .
+THCFLG    FORM      2
 TDAYMON   DIM       4
 TODAY     DIM       10
 TOTMBS    FORM      6
@@ -366,7 +371,7 @@ PATEXC    INIT      "patexc"
 .
 PRGID     INIT      "IBAPMS26"
 PRGNAM    INIT      "Management Analysis Generation"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .**********************************************************************
 .*                           MAINLINE                                 *
@@ -2712,6 +2717,7 @@ DETMPR1   RESET     KEY8
           INC       CALCAGE
           INC       CALCDAYS
           INC       GETBFEES
+          INC       GETTFEES
           INC       RTIODAYS
           INC       PATGEXT
           INC       STEPDOWN
@@ -2732,6 +2738,7 @@ DETMPR1   RESET     KEY8
           INC       PATCHCIO/INC
           INC       PATDADIO/INC
           INC       PATDAYIO/INC
+          INC       PATDDHIO/INC
           INC       PATECDIO/INC
           INC       PATECOIO/INC
           INC       PATEX1IO/INC
@@ -2750,6 +2757,7 @@ DETMPR1   RESET     KEY8
           INC       PATMI1IO/INC
           INC       PATMMBIO/INC
           INC       PATRCAIO/INC
+          INC       PATTFEIO/INC
           INC       PATTRNIO/INC
           INC       PATVISIO/INC
           INC       PATWR1IO/INC
@@ -2764,6 +2772,7 @@ DETMPR1   RESET     KEY8
           INC       PATPGRIO/INC
           INC       PATMCHIO/INC
           INC       PMSEDGIO/INC             * Effective DRG Dates
+          INC       PATDDHRD
           INC       GETEFDRG
           INC       CMXMATRX
           INC       GETCNEFF

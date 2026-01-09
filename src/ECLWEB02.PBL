@@ -5,6 +5,8 @@
 .
 . Modifications :
 .----------------------------------------------------------------------
+. V12.01.01 08/12/2025  Thanh T        TSK 0953127
+.           Recompiled for MRTAUCFD changes
 . V12.00.01 11/06/2025  Ebon Clements   TSK 0961623
 .           Alphanueric visit number changes
 . V11.05.01 22/11/2024 Peter Vela    TSK 0939466
@@ -1219,7 +1221,7 @@ TILDA30   INIT      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 .
 .------------------------------------------------------------------------
 PRGID     INIT      "ECLWEB02"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Eclipse Server 2"
 .------------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.

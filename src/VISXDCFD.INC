@@ -1,7 +1,8 @@
+. V12.01.01 15/12/2025 TT C-0917450 Renamed VSXDYN01 and VSXDDAT1 descriptions  
 . V11.03.01 18/05/2023 JT C-0923703 Added Type 004 AMHCC End Code               
-. V11.02.02 09/11/2022 DS C-0923862 Added type 003 Amount To Be Invoiced
-. V11.02.01 07/04/2022 EC C-0915984 Added type 002 discharge details
-. V10.10.01 02/05/2017 PV C-0833345 Created Include
+. V11.02.02 09/11/2022 DS C-0923862 Added type 003 Amount To Be Invoiced        
+. V11.02.01 07/04/2022 EC C-0915984 Added type 002 discharge details            
+. V10.10.01 02/05/2017 PV C-0833345 Created Include                             
 . *----------------------------------------------------------------------
 . * Include Name  :   VISXDCFD.INC
 . *
@@ -58,7 +59,7 @@ VSXDTXT7  DIM       80     80       622   Text 7
 VSXDTXT8  DIM       80     80       702   Text 8                             
 VSXDTXT9  DIM       80     80       782   Text 9                             
 VSXDTX10  DIM       80     80       862   Text 10                            
-VSXDYN01  DIM       1      1        942   Y/N 1 (0 = No, 1 = Yes, 2 = N/A)   
+VSXDYN01  DIM       1      1        942   Accident Y/N OEC                   
 VSXDYN02  DIM       1      1        943   Y/N 2 (0 = No, 1 = Yes, 2 = N/A)   
 VSXDYN03  DIM       1      1        944   Y/N 3 (0 = No, 1 = Yes, 2 = N/A)   
 VSXDYN04  DIM       1      1        945   Y/N 4 (0 = No, 1 = Yes, 2 = N/A)   
@@ -68,7 +69,7 @@ VSXDYN07  DIM       1      1        948   Y/N 7 (0 = No, 1 = Yes, 2 = N/A)
 VSXDYN08  DIM       1      1        949   Y/N 8 (0 = No, 1 = Yes, 2 = N/A)   
 VSXDYN09  DIM       1      1        950   Y/N 9 (0 = No, 1 = Yes, 2 = N/A)   
 VSXDYN10  DIM       1      1        951   Y/N 10 (0 = No, 1 = Yes, 2 = N/A)  
-VSXDDAT1  DIM       8      8        952   User Defined Date Field 1          
+VSXDDAT1  DIM       8      8        952   Accident Date OEC                  
 VSXDTIM1  DIM       8      8        960   User Defined Time Field 1          
 VSXDDAT2  DIM       8      8        968   User Defined Date Field 2          
 VSXDTIM2  DIM       8      8        976   User Defined Time Field 2          

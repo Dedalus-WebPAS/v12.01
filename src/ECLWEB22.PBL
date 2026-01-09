@@ -6,6 +6,10 @@
 . Modifications :
 .
 .----------------------------------------------------------------------
+. V12.01.02 15/12/2025 Thanh T           TSK 0958864
+.           Recompiled for WEBIHCFD changes  
+. V12.01.01 15/12/2025 Thanh T           TSK 0958864
+.           Recompiled for WEBERHFD changes  
 . V11.04.04 05/04/2024  PJ Le Febour     TSK 0929044ri
 .           update WBICUUID WBICUDAT WBICUTIM before call UPWBIHC6
 .           update WBIMUUID WBIMUDAT WBIMUTIM before call UPWBIMC6
@@ -711,7 +715,7 @@ ALRCOMM   DIM       100
 MULTILIN  FORM      1  
 .--------------------------------------------------------------------------------
 PRGID     INIT      "ECLWEB22"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Medicare WebServices ERAW RTVW Polling Response Server"
 .--------------------------------------------------------------------------------
 .

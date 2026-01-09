@@ -7,6 +7,11 @@
 .  *                                                                          *
 .  *     Modifications:                                                       *
 .  ****************************************************************************
+.  *     V12.01.01 27/11/2025 Zumin Yu         TSK 0955341                    *
+.  *               Added EMRCN053 - Entering Doctors Seen Date and Time       *
+.  *               Added EMRCN054 - Go Live Date for Emergency                *
+.  *               Added EMRCN055 - Using paticddf or emricdaf file           *
+.  *               Added EMRCN056 - Display Desc of Injury Event in PC Field  *
 .  *     V11.04.02 07/02/2024 Nikitha B        TSK 0931586                    *
 .  *               Added EMRCN052 - EMCNAZTR - Send ZTR with A03, A04, A08    *
 .  *     V11.04.01 06/02/2024 Nikitha B        TSK 0931173                    *
@@ -169,6 +174,10 @@ CPEM0000  MOVE      Z70,EMRCN001
           MOVE      Z70,EMRCN050
           MOVE      Z70,EMRCN051
           MOVE      Z70,EMRCN052
+          MOVE      Z70,EMRCN053
+          MOVE      Z70,EMRCN054
+          MOVE      Z70,EMRCN055
+          MOVE      Z70,EMRCN056
 .
 CPEM9999  RETURN
 .
@@ -185,7 +194,8 @@ EMCN0000  BRANCH    FLDITMNO,EMCN1010,EMCN1020,EMCN1030,EMCN1040,EMCN1050:
                              EMCN1360,EMCN1370,EMCN1380,EMCN1390,EMCN1400:
                              EMCN1410,EMCN1420,EMCN1430,EMCN1440,EMCN1450:
                              EMCN1460,EMRCN047,EMRCN048,EMRCN049,EMRCN050:
-                             EMRCN051,EMRCN052
+                             EMRCN051,EMRCN052,EMRCN053,EMRCN054,EMRCN055:
+                             EMRCN056
 .
           WRITE     HTMLFILE;"Invalid IBA Tag";
           GOTO      EMCN9999
@@ -356,6 +366,21 @@ EMRCN051 WRITE     HTMLFILE;EMCPRCMP;  * Additional Presenting ComplaintComment
 EMRCN052 WRITE     HTMLFILE;EMCNAZTR;  * Send ZTR with A03, A04, A08
          GOTO      EMCN9999
 .
+EMRCN053 WRITE     HTMLFILE;EMCNDDTM;  * Entering Doctors Seen Date and Time
+         GOTO      EMCN9999
+.
+EMRCN054 UNPACK    EMCNLDAT,CCENT,CYEAR,CMON,CDAY
+         MOVE      CMON,F2             * Go Live Date for Emergency
+         LOAD      MTHNAM3,F2,JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEP,OCT,NOV,DEC
+         WRITE     HTMLFILE;CDAY,SP1,MTHNAM3,SP1,CCENT,CYEAR;
+         GOTO      EMCN9999
+.
+EMRCN055 WRITE     HTMLFILE;EMCNICDF;  * Using paticddf or emricdaf file
+         GOTO      EMCN9999
+.
+EMRCN056 WRITE     HTMLFILE;EMCNPCIE;  * Display Desc of Injury Event in Patient Complaint Field
+         GOTO      EMCN9999
+.
 EMCN9999  RETURN
 .
 .------------------------------------------------------------
@@ -374,7 +399,8 @@ SPEMR000  MOVE      ZERO,EXIT
                        SPEMR036,SPEMR037,SPEMR038,SPEMR039,SPEMR040:
                        SPEMR041,SPEMR042,SPEMR043,SPEMR044,SPEMR045:
                        SPEMR046,SPEMR047,SPEMR048,SPEMR049,SPEMR050:
-                       SPEMR051,SPEMR052
+                       SPEMR051,SPEMR052,SPEMR053,SPEMR054,SPEMR055:
+                       SPEMR056
 .
           MOVE      ONE,EXIT
           GOTO      SPEMR999
@@ -540,6 +566,25 @@ SPEMR051  MOVE      QRYDATA,EMRCN051
           GOTO      SPEMR999
 .
 SPEMR052  MOVE      QRYDATA,EMRCN052
+          GOTO      SPEMR999
+.
+SPEMR053  MOVE      QRYDATA,EMRCN053
+          GOTO      SPEMR999
+.
+SPEMR054  PACK      QRYDATA,QRYDATA,SP70
+          MATCH     SP70,QRYDATA
+          GOTO      SPEMR999 IF EQUAL
+.
+          UNPACK    QRYDATA,CDAY,KEY1,MTHNAM3,KEY1,CCENT,CYEAR
+          CALL      SETMTH00            * Set CMON from MTHNAM3
+          PACK      EMRCN054,CCENT,CYEAR,CMON,CDAY
+          REP       " 0",EMRCN054
+          GOTO      SPEMR999
+.
+SPEMR055  MOVE      QRYDATA,EMRCN055
+          GOTO      SPEMR999
+.
+SPEMR056  MOVE      QRYDATA,EMRCN056
           GOTO      SPEMR999
 .
 SPEMR999  RETURN
@@ -804,6 +849,26 @@ MVEM0000  MATCH     Z70,EMRCN001
           MATCH     Z70,EMRCN052
           IF        !@EQUAL
             MOVE      EMRCN052,EMCNAZTR
+          ENDIF
+.
+          MATCH     Z70,EMRCN053
+          IF        !@EQUAL
+            MOVE      EMRCN053,EMCNDDTM
+          ENDIF
+.
+          MATCH     Z70,EMRCN054
+          IF        !@EQUAL
+            MOVE      EMRCN054,EMCNLDAT
+          ENDIF
+.
+          MATCH     Z70,EMRCN055
+          IF        !@EQUAL
+            MOVE      EMRCN055,EMCNICDF
+          ENDIF
+.
+          MATCH     Z70,EMRCN056
+          IF        !@EQUAL
+            MOVE      EMRCN056,EMCNPCIE
           ENDIF
 .
 MVEM9999  RETURN

@@ -7,6 +7,14 @@
 .* Author         :  J.Tan                                                    *
 .* Function       :  Upload MBS Items from ASCII file                         *
 .* Modifications  :                                                           *
+.******************************************************************************
+.* V12.01.02 16/12/2025 Thanh T          TSK 0949163                          *
+.*           Fixed issue with MBS item not updated when uploading date equal  *
+.*           to effective from date                                           *
+.* V12.01.01 24/11/2025 Thanh T          TSK 0949163                          *
+.*           Added Option 2 and 3 for uploading MBS Amount Only and Suggested *
+.*           Classification Only                                              *
+.******************************************************************************
 .*                   V11.02.01 02/02/2022 Alina.B TSK 0903886                 *
 .*                   Recompiled for PATIKIPR- Made users able to be search by *
 .*                                            long description                *
@@ -30,7 +38,7 @@
           INC       PATITMFD/INC            * Item file
 .
 .         Temporary file for MBS item records which
-.         are loaded from the upload file provided by the customer (PROC0000)
+.         are loaded from the upload file provided by the customer (UPLD0000)
 .
 .         MBS Item Upload file
 .
@@ -99,10 +107,18 @@ ITEMDESC  DIM       20
 PATHNAME  DIM       150
 USERID    DIM       10
 UPDCOUNT  FORM      8
+UPLDDATE  DIM       8
+.
 VALFDATE  DIM       8
 VALTDATE  DIM       8
 WORKDATE  DATE      8
 .
+DIM18     DIM       18
+UPLDTE10  DIM       10
+WORKFLD   DIM       30
+WORKFLDI  DIM       30
+WORKFLDD  DIM       30
+. 
 XFLD0001  DIM       30
 XFLD0002  DIM       30
 XFLD0003  DIM       40
@@ -149,7 +165,7 @@ XFLD0040  DIM       30
 .
 PRGID     INIT      "IBAADT14"
 PRGNAM    INIT      "Upload & Update MBS Item"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 +
 .******************************************************************************
 .*                                  ML0000                                    *
@@ -159,13 +175,35 @@ ML0000    CALL      INIT0000                * Initailize variables & open files
           CALL      KOPT0000                * Keyin Upload or Update option
           BRANCH    EXIT,ML9999
 .
-          BRANCH    COPTION,ML1000
+          BRANCH    COPTION,ML1000,ML2000,ML2000
           GOTO      ML9999
 .
 ML1000    CALL      KASC0000                * Keyin ascii file
-          BRANCH    EXIT,ML9900
+          BRANCH    EXIT,ML9999
+. 
+          GOTO      ML6000
 .
-ML1100    CALL      SCRD0000                * Display screen
+ML2000    CALL      KASC0000                * Keyin ascii file
+          BRANCH    EXIT,ML9999
+.
+. Keyin From Date...
+.
+ML2200    DISPLAY   *P1:11,*EF,"Keyin Upload Date: ";
+          MOVE      "11",CVERT
+          MOVE      "20",CCOL
+          DISPLAY   *P20:11,*EL;
+.
+          UNPACK    SP8,CYEAR,CMON,CDAY
+          MOVE      CCC,CCENT
+          CALL      KEYDATE
+          BRANCH    OVRCD,ML2000     * nothing entered; go back to start
+.
+          PACK      UPLDDATE,CCENT,CYEAR,CMON,CDAY
+          REP       " 0",UPLDDATE
+.
+          GOTO      ML6000
+.
+ML6000    CALL      SCRD0000                * Display screen
 .
           CALL      KUSR0000                * Keyin user id
           BRANCH    EXIT,ML0000
@@ -174,13 +212,13 @@ ML1100    CALL      SCRD0000                * Display screen
           BRANCH    EXIT,ML0000
 .
           CALL      SFLD0000
-          BRANCH    EXIT,ML1100
+          BRANCH    EXIT,ML6000
 .
           CALL      PRHD0000                * Print header
 .
           CALL      CTOT0000                * Clear total vars
 .
-          CALL      PROC0000                * Updating file
+          CALL      UPLD0000                * Updating file
 .
           CALL      PTOT0000                * Print report totals
 .
@@ -222,13 +260,15 @@ INIT9999  RETURN
 .******************************************************************************
 KOPT0000  MOVE      ZERO,EXIT
           MOVE      ZERO,COPTION
-          DISPLAY   *P1:6,*EF:
-                    *P1:6,*V2LON,"0",*HOFF," = Exit":
-                    *P1:7,*V2LON,"1",*HOFF," = Upload MBS Items";
-          DISPLAY   *P1:9,"Select Option : ";
+          DISPLAY   *P1:1,*EF:
+                    *P1:1,*V2LON,"0",*HOFF," = Exit":
+                    *P1:2,*V2LON,"1",*HOFF," = Upload MBS Items":
+                    *P1:3,*V2LON,"2",*HOFF," = Update MBS Amount":
+                    *P1:4,*V2LON,"3",*HOFF," = Update Suggested Classification";
+          DISPLAY   *P1:6,"Select Option : ";
 .
-KOPT1000  KEYIN     *P17:9,*V2LON,COPTION;
-          BRANCH    COPTION,KOPT9999
+KOPT1000  KEYIN     *P17:6,*V2LON,COPTION;
+          BRANCH    COPTION,KOPT9999,KOPT9999,KOPT9999
 .
           COMPARE   ZERO,COPTION
           GOTO      KOPT9000 IF EQUAL
@@ -245,9 +285,9 @@ KOPT9999  RETURN
 KASC0000  MOVE      ZERO,EXIT
           PACK      FNAMEI WITH SP70,SP70,SP70
 .
-          DISPLAY   *P19:13,*EF,"MBS Item Load File";
+          DISPLAY   *P19:8,*EF,"MBS Item Load File";
 .
-          KEYIN     *P1:14,*EL,"Keyin Path & File Name : ",*V2LON,FNAMEI
+          KEYIN     *P1:9,*EL,"Keyin Path & File Name : ",*V2LON,FNAMEI
 .
           PACK      FNAMEI,FNAMEI,SP70,SP70,SP70
 .
@@ -264,7 +304,7 @@ KASC0000  MOVE      ZERO,EXIT
           ENDIF
           RESET     FNAMEI
 .
-          DISPLAY   *P26:14,*V2LON,*EL,FNAMEI;
+          DISPLAY   *P26:9,*V2LON,*EL,FNAMEI;
           MOVE      ZERO,OVRCD
           TRAP      OVERCOND IF IO
           OPEN      UITEMTXT,FNAMEI
@@ -287,16 +327,16 @@ KASC9999  RETURN
 .*                                 SCRD0000                                   *
 .*                            Screen display                                  *
 .******************************************************************************
-SCRD0000  DISPLAY   *P1:11,*EF:
-                    *P1:15," 3. Keyin User id      :":
-                    *P1:16," 4. Keyin Path name    :";
+SCRD0000  DISPLAY   *P1:13,*EF:
+                    *P1:13,"Keyin User id      :":
+                    *P1:14,"Keyin Path name    :";
 SCRD9999  RETURN
 +
 .******************************************************************************
 .*                                  KUSR0000                                  *
 .*                     Keyin user id                                          *
 .******************************************************************************
-KUSR0000  KEYIN     *P26:15,*EL,*V2LON,USERID;
+KUSR0000  KEYIN     *P26:13,*EL,*V2LON,USERID;
           PACK      USERID,USERID,SP70
           MATCH     SP70,USERID
           GOTO      KUSR9500 IF EQUAL
@@ -312,7 +352,7 @@ KUSR9999  RETURN
 .*                     Keyin path name                                        *
 .******************************************************************************
 KPTH0000  PACK      PATHNAME,SP70,SP70,SP70
-          KEYIN     *P26:16,*EL,*V2LON,PATHNAME;
+          KEYIN     *P26:14,*EL,*V2LON,PATHNAME;
           ENDSET    PATHNAME
           APPEND    SP70,PATHNAME
           APPEND    SP70,PATHNAME
@@ -355,9 +395,24 @@ SFLD9999  RETURN
 .******************************************************************************
 PRHD0000  CALL      HEAD132
 .
-          PRINT     *N,"Upload MBS Items"
+          BRANCH    COPTION,PRHD1000,PRHD2000,PRHD3000
+          GOTO      PRHD9999
 .
-          PRINT     *N,"Date     : ",CDATE:
+PRHD1000  PRINT     *N,"Upload MBS Items"
+          GOTO      PRHD6000
+.
+PRHD2000  UNPACK    UPLDDATE,CCENT,CYEAR,CMON,CDAY
+          PACK      UPLDTE10,CDAY,SLASH,CMON,SLASH,CCENT,CYEAR,SP70
+          PRINT     *N,"Update MBS Amount ONLY",*40,"Upload Date: ",UPLDTE10
+          GOTO      PRHD6000
+.
+PRHD3000  UNPACK    UPLDDATE,CCENT,CYEAR,CMON,CDAY
+          PACK      UPLDTE10,CDAY,SLASH,CMON,SLASH,CCENT,CYEAR,SP70
+          PRINT     *N,"Update Suggested Classification ONLY":
+                    *40,"Upload Date: ",UPLDTE10
+          GOTO      PRHD6000
+.
+PRHD6000  PRINT     *N,"Date     : ",CDATE:
                     *N,"Time     : ",CTIMEIS:
                     *N,"User ID  : ",USERID
 .
@@ -370,8 +425,24 @@ PRHD0000  CALL      HEAD132
 PRHD9999  RETURN
 +
 .******************************************************************************
-.*                                  PROC0000                                  *
-.*                        Post record                                         *
+.* Process upload                                                                *
+.******************************************************************************
+UPLD0000  BRANCH    COPTION,UPLD1000,UPLD2000,UPLD3000
+          GOTO      UPLD9999
+.
+UPLD1000  CALL      PROC0000         * Load All MBS Items
+          GOTO      UPLD9999
+.
+UPLD2000  CALL      UMSAM000         * Update MBS Amount ONLY
+          GOTO      UPLD9999
+.
+UPLD3000  CALL      USGCL000         * Update Suggested Classification ONLY
+          GOTO      UPLD9999
+.
+UPLD9999  RETURN
++
+.******************************************************************************
+.* Load All MBS Items                                                         *
 .******************************************************************************
 PROC0000  MOVE      ZERO,LINECNTR
 .
@@ -454,7 +525,7 @@ PROC1000  READ      UITEMTXT,SEQ;XFLD0001,XFLD0002,XFLD0003,XFLD0004,XFLD0005:
           PACK      KEY75,XITEMNO,SP1,XIALPHA,SP1,ITEMDESC,SP1:
                           XIQIAMT,SP1,XIMSGRP,SP1,XITCLSS,SP1,XITEFDT,SP70
 .
-          CALL      VFLD0000                * Validation pass
+          CALL      VALD0000                * Validation pass
           BRANCH    ERRFLAG,PROC1000        * validate fields
 .
           REP       " 0",XITEFDT
@@ -491,6 +562,206 @@ PROC1000  READ      UITEMTXT,SEQ;XFLD0001,XFLD0002,XFLD0003,XFLD0004,XFLD0005:
           GOTO      PROC1000
 .
 PROC9999  RETURN
+.
+.******************************************************************************
+.* Update MBS Amount ONLY                                                     *
+.******************************************************************************
+UMSAM000  MOVE      ZERO,LINECNTR
+.
+          OPEN      UITEMTXT,FNAMEI
+.
+UMSAM100  READ      UITEMTXT,SEQ;XFLD0001,XFLD0002,XFLD0003,XFLD0004,XFLD0005:
+                                 XFLD0006,XFLD0007,XFLD0008,XFLD0009,XFLD0010:
+                                 XFLD0011,XFLD0012,XFLD0013,XFLD0014,XFLD0015:
+                                 XFLD0016,XFLD0017,XFLD0018,XFLD0019,XFLD0020:
+                                 XFLD0021,XFLD0022,XFLD0023,XFLD0024,XFLD0025:
+                                 XFLD0026,XFLD0027,XFLD0028,XFLD0029,XFLD0030:
+                                 XFLD0031,XFLD0032,XFLD0033,XFLD0034,XFLD0035:
+                                 XFLD0036,XFLD0037,XFLD0038,XFLD0039,XFLD0040
+          GOTO      UMSAM999 IF OVER
+.
+          PACK      XFLD0001,XFLD0001,SP70   * ITEM NUMBER
+          PACK      XFLD0002,XFLD0002,SP70   * ITEM ALPHA KEY 
+          PACK      XFLD0003,XFLD0003,SP70   * ITEM DESCRIPTION
+          PACK      XFLD0004,XFLD0004,SP70   * MBS AMOUNT 
+.
+          MATCH     SP70,XFLD0001
+          GOTO      UMSAM200 IF NOT EQUAL
+.
+          MATCH     SP70,XFLD0002
+          GOTO      UMSAM200 IF NOT EQUAL
+.
+          MATCH     SP70,XFLD0003
+          GOTO      UMSAM200 IF NOT EQUAL
+.
+          MATCH     SP70,XFLD0004
+          GOTO      UMSAM200 IF NOT EQUAL
+.
+          GOTO      UMSAM100
+.
+UMSAM200  ADD       ONE,LINECNTR            * Text file line counter for error
+.
+          PACK      XITEMNO,XFLD0001,SP70   * ITEM NUMBER
+          PACK      XIALPHA,XFLD0002,SP70   * ITEM ALPHA KEY
+          PACK      XITMDES,XFLD0003,SP70   * ITEM DESCRIPTION
+.
+          MOVE      SP70,DIM18
+          MOVE      XFLD0004,DIM18
+          RJUSTIFY  DIM18
+          MOVE      ZERO,XIQIAMT
+          STRIP     XFLD0004
+          MOVE      XFLD0004,XIQIAMT        * MBS AMOUNT
+.
+          PACK      XIMSGRP,XFLD0005,SP70   * MISCELLANEOUS GROUP (CAT FI)
+          PACK      XITCLSS,XFLD0006,SP70   * SUGGESTED CLASS (CAT A )
+.
+          UNPACK    XFLD0007,XDAY,XMON,XCENT,XYEAR
+          PACK      XITEFDT,XCENT,XYEAR,XMON,XDAY,SP70
+.
+          PACK      ITEMDESC,XITMDES,SP70
+          PACK      KEY75,XITEMNO,SP1,XIALPHA,SP1,ITEMDESC,SP1:
+                          DIM18,SP1,XIMSGRP,SP1,XITCLSS,SP1,XITEFDT,SP70
+.
+          CALL      VALD0000                * Validation pass
+          BRANCH    ERRFLAG,UMSAM100        * validate fields
+.
+UMSAM400  PACK      KEY17,XITEMNO,UPLDDATE,SP70
+          CALL      RDITEM1
+          IF        OVRCD = 0
+            GOTO      UMSAM440
+          ENDIF
+.
+          PACK      KEY17,XITEMNO,UPLDDATE,Z70
+          CALL      RDSITEM1
+UMSAM420  CALL      RDPITEM1
+          BRANCH    OVRCD,UMSAM800
+.
+          MATCH     XITEMNO,ITEMNO
+          GOTO      UMSAM800 IF NOT EQUAL
+.
+UMSAM440  MATCH     SP70,PTITETDT           * Effective to date
+          IF        !@EQUAL
+            MATCH     UPLDDATE,PTITETDT
+            GOTO      UMSAM420 IF LESS
+          ENDIF
+.
+UMSAM450  MOVE      XIQIAMT,QIAMT
+.
+          CALL      IBACLOCK
+          PACK      PTITUDAT,CCC,CYY,CMM,CDD
+          REP       " 0",PTITUDAT           * date record updated
+          MOVE      CTIMEIS,PTITUTIM        * time record updated
+          MOVE      USERID,PTITUUID         * web user updated
+.
+          CALL      UPITEM1
+.
+          ADD       ONE,UPDCOUNT       * Total records updated 
+.
+UMSAM480  GOTO      UMSAM420
+. 
+UMSAM800  GOTO      UMSAM100
+.
+UMSAM999  RETURN
+.
+.******************************************************************************
+.* Update Suggested Classification ONLY                                       *
+.******************************************************************************
+USGCL000  MOVE      ZERO,LINECNTR
+.
+          OPEN      UITEMTXT,FNAMEI
+.
+USGCL100  READ      UITEMTXT,SEQ;XFLD0001,XFLD0002,XFLD0003,XFLD0004,XFLD0005:
+                                 XFLD0006,XFLD0007,XFLD0008,XFLD0009,XFLD0010:
+                                 XFLD0011,XFLD0012,XFLD0013,XFLD0014,XFLD0015:
+                                 XFLD0016,XFLD0017,XFLD0018,XFLD0019,XFLD0020:
+                                 XFLD0021,XFLD0022,XFLD0023,XFLD0024,XFLD0025:
+                                 XFLD0026,XFLD0027,XFLD0028,XFLD0029,XFLD0030:
+                                 XFLD0031,XFLD0032,XFLD0033,XFLD0034,XFLD0035:
+                                 XFLD0036,XFLD0037,XFLD0038,XFLD0039,XFLD0040
+          GOTO      USGCL999 IF OVER
+.
+          PACK      XFLD0001,XFLD0001,SP70   * ITEM NUMBER
+          PACK      XFLD0002,XFLD0002,SP70   * ITEM ALPHA KEY
+          PACK      XFLD0003,XFLD0003,SP70   * ITEM DESCRIPTION
+          PACK      XFLD0004,XFLD0004,SP70   * MBS AMOUNT
+.
+          MATCH     SP70,XFLD0001
+          GOTO      USGCL200 IF NOT EQUAL
+.
+          MATCH     SP70,XFLD0002
+          GOTO      USGCL200 IF NOT EQUAL
+.
+          MATCH     SP70,XFLD0003
+          GOTO      USGCL200 IF NOT EQUAL
+.
+          MATCH     SP70,XFLD0004
+          GOTO      USGCL200 IF NOT EQUAL
+.
+          GOTO      USGCL100
+.
+USGCL200  ADD       ONE,LINECNTR            * Text file line counter for error
+.
+          PACK      XITEMNO,XFLD0001,SP70   * ITEM NUMBER
+          PACK      XIALPHA,XFLD0002,SP70   * ITEM ALPHA KEY
+          PACK      XITMDES,XFLD0003,SP70   * ITEM DESCRIPTION
+.
+          MOVE      SP70,DIM18
+          MOVE      XFLD0004,DIM18
+          RJUSTIFY  DIM18
+          MOVE      ZERO,XIQIAMT
+          STRIP     XFLD0004
+          MOVE      XFLD0004,XIQIAMT        * MBS AMOUNT
+.
+          PACK      XIMSGRP,XFLD0005,SP70   * MISCELLANEOUS GROUP (CAT FI)
+          PACK      XITCLSS,XFLD0006,SP70   * SUGGESTED CLASS (CAT A )
+.
+          UNPACK    XFLD0007,XDAY,XMON,XCENT,XYEAR
+          PACK      XITEFDT,XCENT,XYEAR,XMON,XDAY,SP70
+.
+          PACK      ITEMDESC,XITMDES,SP70
+          PACK      KEY75,XITEMNO,SP1,XIALPHA,SP1,ITEMDESC,SP1:
+                          DIM18,SP1,XIMSGRP,SP1,XITCLSS,SP1,XITEFDT,SP70
+.
+          CALL      VALD0000                * Validation pass
+          BRANCH    ERRFLAG,USGCL100        * validate fields
+.
+USGCL400  PACK      KEY17,XITEMNO,UPLDDATE,SP70
+          CALL      RDITEM1
+          IF        OVRCD = 0
+            GOTO      USGCL440
+          ENDIF
+.
+          PACK      KEY17,XITEMNO,UPLDDATE,Z70
+          CALL      RDSITEM1
+USGCL420  CALL      RDPITEM1
+          BRANCH    OVRCD,USGCL800
+.
+          MATCH     XITEMNO,ITEMNO
+          GOTO      USGCL800 IF NOT EQUAL
+.
+USGCL440  MATCH     SP70,PTITETDT                * Effective to date
+          IF        !@EQUAL
+            MATCH     UPLDDATE,PTITETDT
+            GOTO      USGCL420 IF LESS
+          ENDIF
+.
+USGCL450  MOVE      XITCLSS,ICLSS 
+.
+          CALL      IBACLOCK
+          PACK      PTITUDAT,CCC,CYY,CMM,CDD
+          REP       " 0",PTITUDAT           * date record updated
+          MOVE      CTIMEIS,PTITUTIM        * time record updated
+          MOVE      USERID,PTITUUID         * web user updated
+.
+          CALL      UPITEM1
+.
+          ADD       ONE,UPDCOUNT       * Total records updated
+.
+USGCL480  GOTO      USGCL420
+.
+USGCL800  GOTO      USGCL100
+.
+USGCL999  RETURN
 +
 .******************************************************************************
 .*                             EDAT0000                                       *
@@ -522,8 +793,27 @@ EDAT0000  PACK      KEY17,XITEMNO,XITEFDT,SP70
 EDAT9999  RETURN
 +
 .******************************************************************************
-.*                             VFLD0000                                       *
-.*                           Validate fields                                  *
+. Validate input text file fields
+.******************************************************************************
+VALD0000  MOVE      ZERO,EXIT
+          MOVE      ZERO,ERRFLAG
+.
+          BRANCH    COPTION,VALD1000,VALD2000,VALD3000
+          GOTO      VALD9999
+.
+VALD1000  CALL      VFLD0000        * Val Upload All MBS Items 
+          GOTO      VALD9999
+.
+VALD2000  CALL      VUPAM000        * Val Update MBS Amount ONLY
+          GOTO      VALD9999
+.
+VALD3000  CALL      VUPSG000        * Val Update Suggested Classification ONLY
+          GOTO      VALD9999
+.
+VALD9999  RETURN
++
+.******************************************************************************
+.* Validate Upload MBS Items fields                                           *
 .******************************************************************************
 VFLD0000  MOVE      ZERO,ERRFLAG
           MOVE      ZERO,ERRDATE
@@ -904,6 +1194,130 @@ VFLD2000  MATCH     SP70,XIBAND1
 VFLD9999  RETURN
 +
 .******************************************************************************
+. Validate Update MBS Amount ONLY fields     
+.******************************************************************************
+VUPAM000  MOVE      ZERO,ERRFLAG
+          MOVE      ZERO,ERRDATE
+.
+          MATCH     SP70,XITEMNO
+          IF        @EQUAL
+            MOVE      "Blank Item Number",ERRORMSG
+            CALL      PERR0000
+            GOTO      VUPAM300
+          ENDIF
+.
+          PACK      KEY17,XITEMNO,SP70
+          CALL      RDSITEM1
+VUPAM200  CALL      RDKITEM1
+          IF        OVRCD = 1
+            MOVE      "Invalid Item Number",ERRORMSG
+            CALL      PERR0000
+            GOTO      VUPAM300
+          ENDIF
+.
+          MATCH     XITEMNO,ITEMNO
+          IF        !@EQUAL
+            MOVE      "Invalid Item Number",ERRORMSG
+            CALL      PERR0000
+            GOTO      VUPAM300
+          ENDIF
+.
+VUPAM300  MATCH     SP70,XFLD0004
+          IF        @EQUAL | @EOS 
+            MOVE      "Blank MBS Amount",ERRORMSG
+            CALL      PERR0000
+            GOTO      VUPAM999
+          ENDIF
+.
+          STRIP     XFLD0004
+          MOVE      XFLD0004,WORKFLD
+.
+VUPAM320  TYPE      WORKFLD 
+          IF        !@EQUAL
+            GOTO      VUPAM900
+          ENDIF
+.
+VUPAM350  SCAN      ".",WORKFLD
+          IF        @EQUAL
+            BUMP      WORKFLD
+            MOVEFPTR  WORKFLD,FORM2
+            MOVE      WORKFLD,WORKFLDD
+            SUB       TWO,FORM2
+            MOVE      XFLD0004,WORKFLD
+            SETLPTR   WORKFLD,FORM2
+            MOVE      WORKFLD,WORKFLDI
+          ELSE
+            MOVE      WORKFLD,WORKFLDI
+            MOVE      SP70,WORKFLDD
+          ENDIF
+.
+          SQUEEZE   WORKFLDI
+          MOVELPTR  WORKFLDI,FORM2
+          IF        FORM2 > 14
+            GOTO      VUPAM900
+          ENDIF
+.
+          SQUEEZE   WORKFLDD
+          MOVELPTR  WORKFLDD,FORM2
+          IF        FORM2 > 2
+            GOTO      VUPAM900
+          ENDIF
+.
+          GOTO      VUPAM999
+.
+VUPAM900  MOVE      "Invalid MBS Amount",ERRORMSG
+          CALL      PERR0000
+          GOTO      VUPAM999
+.
+VUPAM999  RETURN
++
+.******************************************************************************
+. Validate Update MBS Amount ONLY fields
+.******************************************************************************
+VUPSG000  MOVE      ZERO,ERRFLAG
+          MOVE      ZERO,ERRDATE
+.
+          MATCH     SP70,XITEMNO
+          IF        @EQUAL
+            MOVE      "Blank Item Number",ERRORMSG
+            CALL      PERR0000
+            GOTO      VUPSG300
+          ENDIF
+.
+          PACK      KEY17,XITEMNO,SP70
+          CALL      RDSITEM1
+VUPSG200  CALL      RDKITEM1
+          IF        OVRCD = 1
+            MOVE      "Invalid Item Number",ERRORMSG
+            CALL      PERR0000
+            GOTO      VUPSG300
+          ENDIF
+.
+          MATCH     XITEMNO,ITEMNO
+          IF        !@EQUAL
+            MOVE      "Invalid Item Number",ERRORMSG
+            CALL      PERR0000
+            GOTO      VUPSG300
+          ENDIF
+.
+VUPSG300  MATCH     SP70,XITCLSS
+          IF        @EQUAL
+            MOVE      "Blank Suggested Classification",ERRORMSG
+            CALL      PERR0000
+            GOTO      VUPSG999
+          ENDIF
+.
+          PACK      KEY5,ANSA,SP1,XITCLSS,SP70
+          CALL      RDCODE1
+          IF        OVRCD=1
+            MOVE      "Invalid Suggested Classification",ERRORMSG
+            CALL      PERR0000
+            GOTO      VUPSG999
+          ENDIF
+.
+VUPSG999  RETURN
++
+.******************************************************************************
 .*                                  VLDT0000                                  *
 .*                             Validate date                                  *
 .******************************************************************************
@@ -986,6 +1400,7 @@ SETF0000  PACK      ITEMNO,XITEMNO,SP70     * ITEM NUMBER
           UNPACK    SP70,PTITCDAT,PTITCTIM,PTITCUID
           UNPACK    SP70,PTITUDAT,PTITUTIM,PTITUUID
           MOVE      SP70,PTITSPAR
+.
 SETF9999  RETURN
 +
 .******************************************************************************
@@ -998,6 +1413,7 @@ EXCUS000  CLEAR     CMDLINE
           APPEND    SP70,CMDLINE
           RESET     CMDLINE
           EXECUTE   CMDLINE,TASKID
+.
 EXCUS999  RETURN
 +
 .******************************************************************************
@@ -1007,7 +1423,6 @@ PERR0000  ADD       ONE,ERRCOUNT            * Total error count
 .
           PRINT     *1,"|",LINECNTR,*12,"|",ERRORMSG,*54,"|":
                     KEY75,*132,"|"
-          PACK      KEY75,SP70,SP20
           MOVE      ONE,ERRFLAG
 .
 PERR9999  RETURN
@@ -1027,7 +1442,11 @@ CTOT999   RETURN
 PTOT0000  CALL      UND132
 .
           PRINT     *1,"| Total Errors  : ",ERRCOUNT,*132,"|"
-          PRINT     *1,"| Total Added   : ",ADDCOUNT,*132,"|"
+.
+          IF        COPTION = 1 
+            PRINT     *1,"| Total Added   : ",ADDCOUNT,*132,"|"
+          ENDIF
+. 
           PRINT     *1,"| Total Updated : ",UPDCOUNT,*132,"|"
 .
           CALL      UND132

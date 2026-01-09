@@ -5,6 +5,9 @@
 .
 . Modifications  :
 .------------------------------------------------------------------------------
+. V12.01.01  16/12/2025  Ebon Clements TSK 0970431
+.            Default the case end date/time to the close rerral date/time if
+.            auto closing the primary referral - ALLEVT70
 . V12.00.04  11/11/2025  Bella Turco   TSK 0968146
 .            Recompiled for ALLREFTM
 . V12.00.03  10/11/2025  Bella Turco   TSK 0968532
@@ -2419,7 +2422,7 @@ SHOWACTV  DIM       1             * Flag for showing active clinics only
 
 .******************************************************************************
 PRGID     INIT      "ALLWEB02"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Allied Health Referral Information Server"
 .******************************************************************************
           CALL      WEBINT00                * Initialise FIFO Etc.
@@ -5016,7 +5019,27 @@ ALLEVT70  MOVE      ZERO,AUTOCLOS           * Use MVALRE00 for ref cgi vars
 .
           MOVE      SAVPRIRF,ADMISSNO       * Set primary referral
           MOVE      ONE,AUTOCLOS            * Use selective cgi vars
-          CALL      CLSREF00                * Close primary referral
+.
+          COMPARE   THREE,PTCNHDPS          * Victoria ? Check case end date
+          GOTO      ALLEVT79 IF NOT EQUAL
+.
+          MATCH    Z70,ALREF136             * No case end date
+          IF       @EQUAL
+            MATCH    Z70,ALREF007
+            IF       !@EQUAL
+              MOVE     ALREF007,ALREF136    * Default to close date
+            ENDIF
+          ENDIF
+.
+          MATCH    Z70,ALREF137             * No case end time
+          IF       @EQUAL
+            MATCH    Z70,ALREF008
+            IF       !@EQUAL
+              MOVE     ALREF008,ALREF137    * Default to close time
+            ENDIF
+          ENDIF
+.
+ALLEVT79  CALL      CLSREF00                * Close primary referral
           GOTO      ALLEV999                               
 .-------- *T0865480-end
 .

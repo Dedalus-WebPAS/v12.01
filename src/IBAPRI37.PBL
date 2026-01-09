@@ -10,6 +10,8 @@
 .* Mods      :                                                                *
 .*                                                                            *
 .******************************************************************************
+.* V12.01.01 26/11/2025  Alina Bhari      TSK 0969472                         *
+.*           Displayed Linked visit num with correct value - DISP1020,DISP1002*
 .* V12.00.01 27/08/2025  Alina Bhari      TSK 0954453                         *
 .*           Recompiled for PRIINVHL - Added Patient Name                     *
 .* V11.05.02 06/03/2025  Jacob Jackson    TSK 0945956                         *
@@ -637,7 +639,7 @@ VALDGICD  FORM      1
 .
 PRGID     INIT      "IBAPRI37"
 PRGNAM    INIT      "Invoice Pending Report"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .**************************************************************************
 .*                              ML0000                                    *
@@ -1967,7 +1969,7 @@ DISP1000  COMPARE   FULLINE,ZERO                 * not full line
 DISP1002     CALL      RDLN0000
              BRANCH    PHLNFLAG,DISP1003
 .
-             PRINT     *1,PIPE,*12,PIPE,*30,PIPE,*31,PRHTLVIS,*40,PIPE,*45,PIPE;
+             PRINT     *1,PIPE,*12,PIPE,*30,PIPE,*31,TMPLVIS,*40,PIPE,*45,PIPE;
              GOTO      DISP1005
 .
 DISP1003     PRINT     *1,PIPE,*12,PIPE,*30,PIPE,*40,PIPE,*45,PIPE;
@@ -1994,7 +1996,7 @@ DISP1020     CALL      RDLN0000
              BRANCH    PHLNFLAG,DISP1025
 .
              PRINT     *1,PIPE,*2,FMTDEBT,*12,PIPE,*14,DIM15,*30,PIPE:
-                       *31,PRHTLVIS,*40,PIPE,*41,TMPPIND,*45,PIPE,*47,TMPPRAC;
+                       *31,TMPLVIS,*40,PIPE,*41,TMPPIND,*45,PIPE,*47,TMPPRAC;
              GOTO      DISP1029
 .            
 DISP1025     PRINT     *1,PIPE,*2,FMTDEBT,*12,PIPE,*14,DIM15,*30,PIPE:

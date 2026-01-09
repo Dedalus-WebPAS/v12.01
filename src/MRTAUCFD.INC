@@ -1,3 +1,4 @@
+. V12.01.01 05/12/2025 TT C-0953127 Added Status Of Audit field                
 . V11.00.01 12/03/2020 TNG C-0889496 Added MRACDDNR,MRACOHCP,MRACOCOF,MRACODAT  
 . V10.04.02 26/02/2014 SA C-294526 Added MRACODOL, MRACNDOL & MRACDIFD          
 . V10.04.01 02/01/2014 PA C-294990 Reversed order of EPSN and ADTE in index 2   
@@ -53,7 +54,8 @@ MRACDDNR  DIM       1      1        298   Doctor Did Not Respond
 MRACOHCP  DIM       10     10       299   HCP Code                           
 MRACOCOF  DIM       3      3        309   Outcome of Change (Cat aO)         
 MRACODAT  DIM       8      8        312   Outcome Date                       
-MRACSPAR  DIM       28     28       320   Spare                              
+MRACSTAT  DIM       3      3        320   Status Of Audit (CAT YJ)           
+MRACSPAR  DIM       25     25       323   Spare                              
 .
 .End of Record                      348  
 .

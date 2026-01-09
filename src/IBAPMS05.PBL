@@ -7,6 +7,8 @@
 .* Author   :  S O'Gorman                                                     *
 .* Modifications  :                                                           *
 .******************************************************************************
+.* V12.01.01 04/12/2025  Jacob Jackson     TSK 0980319                        *
+.*           Add auditing when U/R is merged                                  *
 .* V12.00.02 25/06/2025  J.Tan             TSK 0961696                        *
 .*           Added Patient Debt type (PTDETYPE)=4 for Payment Plan admission  *
 .* V12.00.01 23/05/2025  Bella Turco      TSK 0955096                         *
@@ -620,6 +622,8 @@ SAVKEY17  DIM       17
 SAVKEY20  DIM       20
 MAXNOTEN  FORM      6
 COMTFLAG  FORM      1
+ISTHEBOK  FORM      1
+FRMOPDMN  FORM      8
 .
 USERID    INIT      "          "
 WBSEUID   INIT      "          "
@@ -634,7 +638,7 @@ PREDEC    INIT      "redc"
 .-----------------------------------------------------------------------
 PRGID     INIT      "IBAPMS05"
 PRGNAM    INIT      "Auto Merge U/R 2"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 .-----------------------------------------------------------------------
 +
 .**********************************************************************
@@ -1845,6 +1849,7 @@ OPRH1000  CALL      RKOPHIS1
 .
           MOVE      NEWURNO,OPHIURNO
           CALL      UPOPHIS1
+.
           GOTO      OPRH1000
 .
 OPRH9000  CLOSE     OPRHISA1
@@ -2468,7 +2473,16 @@ BOKC1000  PACK      KEY16,OLDURNO,SP70
           MOVE      NEWURNO,BKREURNO
           CALL      UPBKREC6
 .
+          MOVE      ZERO,ISTHEBOK
+.
           CALL      FIXDET00
+.
+          COMPARE   ZERO,ISTHEBOK
+          IF        @EQUAL
+            MOVE      BKREBOOK,PVIBILL
+            CALL      URNC0000
+          ENDIF
+.
           GOTO      BOKC1000           * Loop back to correct file position
 .                                      * after key has been updated
 BOKC9999  RETURN
@@ -2501,6 +2515,12 @@ FIXDET10  CALL      RKOPDEA2
           CLOCK     TIME,OPDAUTIM
 .
           CALL      UPOPDEA2
+.
+          MOVE      ZERO,FRMOPDMN
+          MOVE      ONE,ISTHEBOK
+          MOVE      OPDAADMN,FRMOPDMN
+          MOVE      FRMOPDMN,PVIBILL
+          CALL      URNC0000
 .
           GOTO      FIXDET10
 .
@@ -3592,7 +3612,10 @@ BOOK2500  MOVE      NEWURNO,OBAURNO
 .
           CALL      OUAT0000                * Outpatient Un-attendance          
           CALL      OUTBIT00                * outpatient booking items
-
+.
+          MOVE      OBAOUTNO,PVIBILL
+          CALL      URNC0000
+.
           GOTO      BOOK1000
 .
 BOOK3000  DISPLAY   *P1:24,*EL,*P20:24,*V2LON:
@@ -3664,6 +3687,9 @@ CANN1000  PACK      KEY24,PVIURNO,SP30
 .
           MOVE      NEWURNO,OPCNURNO
           CALL      UPOTCAN1
+.
+          MOVE      OPCNOUTN,PVIBILL
+          CALL      URNC0000
 .
           DISPLAY   *P30:24,*EL,"Outpatient Booking : ",*V2LON,OPCNOUTN;
           GOTO      CANN1000
@@ -3771,6 +3797,10 @@ WTRE3000  MOVE      WMCNT,NEWCNT                 * save the new count
           CALL      WSUS0000                     * update proc. suspension file
           CALL      WCMN0000                     * update message file
           CALL      WLCH0000                     * data integrity audit file
+.
+          MOVE      WMBOOK,PVIBILL
+          CALL      URNC0000
+.
           GOTO      WTRE1000
 .
 WTRE9000  CLOSE     WATTR1A1

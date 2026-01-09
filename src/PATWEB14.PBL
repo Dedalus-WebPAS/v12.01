@@ -5,6 +5,10 @@
 .
 . Modifications :
 .----------------------------------------------------------------------
+. V12.01.02 11/12/2025 Ebon Clements   TSK 0970794
+.           Added keep alive to eAdmission list - GETEAD00
+. V12.01.01 25/11/2025 Nikitha Bhaskar  TSK 0969892                     
+.           Recompiled for PMSEDBXD                                    
 . V12.00.02 12/11/2025  Ebon Clements  TSK 0960938
 .           Delete correspondence audit when unlinking UR/Visit - UNDC3000
 . V12.00.01 19/05/2025  Ebon Clements    TSK 0960463
@@ -301,6 +305,7 @@ HYPERURL  DIM       650
 INDEXNO7  FORM      1
 .
 LINKDOC   DIM       100
+LOOPCNTR  FORM      3
 .
 MBSDESC   DIM       70
 .
@@ -400,7 +405,7 @@ TOLOCASE  INIT      "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "PATWEB14"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "eAdmission Web Server"
 .----------------------------------------------------------------------
 .
@@ -2451,6 +2456,8 @@ GETEAD00  IF        INDEXNO7=1
             ENDIF
           ENDIF
 .
+          MOVE      ZERO,LOOPCNTR           * Keep alive loop counter
+.
           PACK      KEY32,FRSTDATE,SP70
           IF        INDEXNO7=1
             CALL      RSPMEHB7
@@ -2472,7 +2479,17 @@ GETEAD10  IF        INDEXNO7=1
             GOTO      GETEAD99 IF LESS
           ENDIF
 .
-GETEAD40  MATCH     SP70,HOSPFLAG
+.------------------------------------------------------
+. Loop counter to prevent timeout internal server error
+.------------------------------------------------------
+          ADD       ONE,LOOPCNTR            * Increment loop counter
+.
+          IF        (LOOPCNTR > 50)
+            WRITE     HTMLFILE;"// Keep Alive -  ",LOOPCNTR
+            MOVE      ZERO,LOOPCNTR
+          ENDIF
+.
+          MATCH     SP70,HOSPFLAG
           IF        !@EQUAL
             MATCH     HOSPFLAG,PMHBHOSP
             GOTO      GETEAD10 IF NOT EQUAL
@@ -2500,6 +2517,8 @@ GETEAD40  MATCH     SP70,HOSPFLAG
           GOTO      GETEAD10 IF NOT EQUAL
 .
 GETEAD90  CALL      PMRW0000
+.
+          MOVE      ZERO,LOOPCNTR           * Record output reset counter
           GOTO      GETEAD10
 .
 GETEAD99  RETURN

@@ -9,6 +9,14 @@
 .  *                                                                          *
 .  *     Modifications:                                                       *
 .  ****************************************************************************
+.  *     V12.01.01 19/12/2021  Zumin Yu      TSK 0970978                      *
+.  *               Added MEHCN022 - Min. no. of days for Holiday Leave        *
+.  *               Added MEHCN023 - Min. no. of days for Trial Leave          *
+.  *               Added MEHCN024 - Max. no. of months for Holiday Leave      *
+.  *               Added MEHCN025 - Max. no. of years for Trial Leave         *
+.  *               Added MEHCN026 - Using Mental Health System                * 
+.  *               Added MEHCN027 - Keying in Leave End Reasons               *
+.  *               Added MEHCN028 - Using Diagnosis Screen in Admissions      *
 .  *     V11.01.01 10/12/2021  Sunny         TSK 0858604                      *
 .  *               Added MEHCN021 - Add MH Diagnosis using prev MH Diagnosis  *
 .  *     V11.00.01 20/05/2020  Thanh T       TSK 0858656                      *
@@ -67,5 +75,11 @@ MEHCN018  DIM       2             Minimum security level to see MH visits
 MEHCN019  DIM       1             Record Responsible DHB on Legal Status
 MEHCN020  DIM       1             Hide DSM-IV coding from MH Diagnosis
 MEHCN021  DIM       1             Add MH Diagnosis using previous MH Diagnosis
-.
+MEHCN022  DIM       2        71   MHCNMINH -Min. no. of days for Holiday Leave
+MEHCN023  DIM       2        73   MHCNMINT -Min. no. of days for Trial Leave 
+MEHCN024  DIM       2        75   MHCNMAXH -Max. no. of months for Holiday Leave
+MEHCN025  DIM       2        77   MHCNMAXT -Max. no. of years for Trial Leave
+MEHCN026  DIM       1        69   MHCNUSE - Using Mental Health System
+MEHCN027  DIM       1        79   MHCNKLER - Keying in Leave End Reasons
+MEHCN028  DIM       1        80   MHCNUDSA-Using Diagnosis Screen in Admissions
 .

@@ -8,6 +8,8 @@
 .* Function       :  Load eAccreditation Doctor Details from CSV file          *
 .* Modifications  :                                                            *
 .*******************************************************************************
+.* V12.01.01   26/11/2025 J.Tan                  TSK 0969590                   *
+.*                        Mod checking for a space between Doctor code-CSPA0000*
 .* V12.00.04   14.10.2025 DA Sarkies             TSK 0948995                   *
 .*                        Cleared hospital flag PTDOHOSS if update flag        *
 .*                        PTCNUPEA is set at PROC5200                          *
@@ -556,7 +558,7 @@ EXCEP020  INIT      "Last Accreditation Date is invalid "
 PRGID     INIT      "IBAHMS40"
 .                   ****************** NB Spaces at end of PRGNAM are deliberate
 PRGNAM    INIT      "Load eAccreditation Doctor Details   "
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .******************************************************************************
 .*                                  MAIN0000                                  *
@@ -1094,6 +1096,9 @@ VALI0000  MOVE      ZERO,EXIT
 .                                                * Validate Doctor Code
           MATCH     SP70,EACRHCPC
           GOTO      VALI9890 IF EQUAL
+.
+          CALL      CSPA0000                    * Check a space b/w Doctorcode
+          BRANCH    EXIT,VALI9890
 .                                                * Validate Doctor DOB
           MOVE      EACRDTOB,TEMPDATE
           CALL      VDTE0000
@@ -1609,7 +1614,26 @@ VALI9998  MOVE      ZERO,EXIT
 VALI9999  RETURN
 +
 .******************************************************************************
-.*                                  VALI0000             Called by : PROC0000 *
+.*                                  CSPA0000                                  *
+.*  Check for spaces in doctor - spaces are not permitted in between code     *
+.******************************************************************************
+CSPA0000  MOVE      ZERO,EXIT
+          PACK      KEY10,EACRHCPC,SP70
+.
+          SCAN      SP1,KEY10
+          GOTO      CSPA9999 IF NOT EQUAL
+.
+CSPA1000  BUMP      KEY10,1
+          GOTO      CSPA9999 IF EOS
+.
+          CMATCH    SP1,KEY10
+          GOTO      CSPA1000 IF EQUAL
+.
+CSPA9000  MOVE      ONE,EXIT
+CSPA9999  RETURN
++
+.******************************************************************************
+.*                                  VALIE000             Called by : PROC0000 *
 .*  Validate input fields                                                     *
 .******************************************************************************
 VALIE000  MOVE      ZERO,EXIT
@@ -2399,7 +2423,7 @@ PRUPST00  COMPARE   "60",CLNO
             MATCH     SP70,EACRHSP0
             IF        !@EQUAL
               APPEND    " - invalid code",PTHSNAME
-           ELSE
+            ELSE
               MOVE      "Valid to All Hospitals",PTHSNAME
             ENDIF
             RESET     PTHSNAME

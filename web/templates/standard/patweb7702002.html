@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -121,10 +121,11 @@ function valCID(ReturnCID,CIDName) {
 <img align="right" alt="Exit" class="MenuIcon"
  src="../images/ExitIcon.gif" onclick="DFrameExit();">
 <script type="text/javascript">
-if ("%PATWEB77.02.027" == "C") {
-  document.write("Current File - Theatre Fee Maintenance"); }
-else {
-  document.write("New File - Theatre Fee Maintenance"); }
+// if ("%PATWEB77.02.027" == "C") {
+//   document.write("Current File - Add Theatre Fee"); }
+//  else {
+//   document.write("New File - Add Theatre Fee"); }
+  document.write("Add Theatre Fee");
 </script>
 
 </span>
@@ -163,7 +164,7 @@ else {
 
 <tr><td class=DataLabel>Health Fund </td>
     <td class=DataField>
-    <input type=text size=6 id=opchg002 name=opchg002 maxlength=6
+    <input type=text size=10 id=opchg002 name=opchg002 maxlength=6
       value="" title="Health Fund"
       onblur="valHfund(opchg002,dummy,funddesc,dummy,hfband,showFeeClass);">
     <input type=text size=30 id=funddesc name=funddesc title="Health Fund" readonly

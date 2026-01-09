@@ -8,10 +8,16 @@
 .* Function  :   This program will open an eReferral XML File and              *
 .*               load the details into comerhaf and comerdaf                   *
 .* Modification :                                                              *
-.* V11.04.01     11.01.2024 DA Sarkies       TSK 0941573
-.*               Added code to change " to '
-.* V11.03.02     11.01.2024 DA Sarkies       TSK 0941573
-.*               Added code to change " to '
+.* V12.01.02     16/12/2025 Ebon clements    TSK 0970614                       *
+.*               Process ""space"" as a clear field value and write record to  *
+.*               comerdaf - WRDD0000                                           *
+.* V12.01.01     15/12/2025 Ebon clements    TSK 0970614                       *
+.*               Process "" as a clear field value and write record to         *
+.*               comerdaf - WRDD0000                                           *
+.* V11.04.01     11.01.2024 DA Sarkies       TSK 0941573                       *
+.*               Added code to change " to '                                   *
+.* V11.03.02     11.01.2024 DA Sarkies       TSK 0941573                       *
+.*               Added code to change " to '                                   *
 .* V11.03.01     14/11/2023 Ebon Clements    TSK 0939966 (0908102)             *
 .*               Added blank validation to CMRDVALU before write to comerdaf   *
 .* V10.14.01     27/08/2019 Ebon Clements    TSK 0880418                       *
@@ -92,7 +98,7 @@ CNVQUOTE  INIT      "#"'"
 . ------------------------------------------------------------------------------
 PRGID     INIT      "IBACOM10"
 PRGNAM    INIT      "eReferral XML load"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 +
 .*******************************************************************************
 .*                              MAIN0000                                       *
@@ -217,14 +223,31 @@ PROC9999  RETURN
 WRDD0000  
 .
 WRDD1000  READ      EREFDTXT,SEQ;XMRDPRID,XMRDWBID,XMRDVALU
-          REP       CNVQUOTE,XMRDVALU
+          REP       CNVQUOTE,XMRDVALU            * replace " with '
           GOTO      WRDD9999 IF OVER
 .
-          MATCH     SP600,XMRDVALU
+          MOVELPTR  XMRDVALU,F3
+          IF        F3=2
+            MATCH     "''",XMRDVALU              * "" mapped to ''
+            IF        @EQUAL
+              MOVE      SP70,XMRDVALU            * clear field value
+              GOTO      WRDD2000                 * and load
+            ENDIF
+          ENDIF
+.
+          IF        F3=5
+            MATCH     "'' ''",XMRDVALU           * "" mapped to '' x two fields
+            IF        @EQUAL
+              MOVE      SP70,XMRDVALU            * clear field value
+              GOTO      WRDD2000                 * and load
+            ENDIF
+          ENDIF
+.
+          MATCH     SP600,XMRDVALU               * don't load blank values
           GOTO      WRDD1000 IF EQUAL
           GOTO      WRDD1000 IF EOS
 .
-          PACK      KEY28,CMRHUNIQ,XMRDPRID,SP70
+WRDD2000  PACK      KEY28,CMRHUNIQ,XMRDPRID,SP70
           CALL      RDCMERD1
           IF        OVRCD=1
             PACK      CMRDUNIQ,CMRHUNIQ,SP70

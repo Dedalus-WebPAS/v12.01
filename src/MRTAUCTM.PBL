@@ -5,26 +5,30 @@
 . *
 . * Modifications :
 . *
-. *V11.00.01 16/03/2020   Tracey Nguyen   TSK 0889496
-. *          Added MRAUC025/MRACDDNR - Doctor did not respond
-. *          Added MRAUC026/MRACOHCP - HCP                       
-. *          Added MRAUC027/MRACOCOF - Outcome of change (cat aO)
-. *          Added MRAUC028/MRACODAT - Outcome date
 . *---------------------------------------------------------------------------
-. *V10.11.01 29/07/2017   J.Tan          TSK 0838634
-. *          Fixed DRG description
-. *V10.04.01 27/03/2014   Peter Vela     CAR 294526
-. *          Added MRAUC022 - Original Dollar Value
-. *          Added MRAUC023 - New Dollar Value
-. *          Added MRAUC024 - Difference in Dollar Value
+. * V12.01.01 08/12/2025  Thanh T        TSK 0953127
+. *           Changed CLMRAC00 to space out MRACSTAT field 
+. *---------------------------------------------------------------------------
+. * V11.00.01 16/03/2020   Tracey Nguyen   TSK 0889496
+. *           Added MRAUC025/MRACDDNR - Doctor did not respond
+. *           Added MRAUC026/MRACOHCP - HCP                       
+. *           Added MRAUC027/MRACOCOF - Outcome of change (cat aO)
+. *           Added MRAUC028/MRACODAT - Outcome date
+. *---------------------------------------------------------------------------
+. * V10.11.01 29/07/2017   J.Tan          TSK 0838634
+. *           Fixed DRG description
+. * V10.04.01 27/03/2014   Peter Vela     CAR 294526
+. *           Added MRAUC022 - Original Dollar Value
+. *           Added MRAUC023 - New Dollar Value
+. *           Added MRAUC024 - Difference in Dollar Value
 . * V9.12.01  17/12/2009  Peter McMullen CAR 210130
-. *          Convert to newer Dr name format routine DOCNM000
+. *           Convert to newer Dr name format routine DOCNM000
 . * V9.08.01  08/05/2007  Mike Laming   CAR 137125 HDP 2007
-. *          Add DRG Version to Key fields for reads to PATDGWaf
-. * V9.04.01 25/11/2004 Lina Vo                  CAR 34301
-. *          Added GETCMM00 for Comments CGI to get from a Textarea field.
-. * V9.04.00 19/11/2004 Lina Vo                  CAR 34301
-. *          Created include
+. *           Add DRG Version to Key fields for reads to PATDGWaf
+. * V9.04.01  25/11/2004 Lina Vo                  CAR 34301
+. *           Added GETCMM00 for Comments CGI to get from a Textarea field.
+. * V9.04.00  19/11/2004 Lina Vo                  CAR 34301
+. *           Created include
 . *----------------------------------------------------------------------
 .------------------------------------------------------------------------
 .   Clear parameters for the Coding Audit file
@@ -596,6 +600,7 @@ CLMRAC00  MOVE      SP70,MRACVISN
           MOVE      SP70,MRACOHCP 
           MOVE      SP70,MRACOCOF 
           MOVE      SP70,MRACODAT 
+          MOVE      SP70,MRACSTAT
           MOVE      SP70,MRACSPAR 
 .
 CLMRAC99  RETURN

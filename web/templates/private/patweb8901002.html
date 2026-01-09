@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="private">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -46,6 +46,12 @@ function checkOverseas(){
 
 function clickUpdateButton(){
   var dU = document.UpdateForm;
+
+  if(dU.d_pmpmi006.checked==true) {
+      dU.pmpmi006.value="1"
+  } else {
+      dU.pmpmi006.value="0"}
+
   if(!checkMedicare(dU.ptmas023)){
     return;
   }
@@ -476,7 +482,9 @@ function valPostCode(){
   <tr>
     <td class=DataLabel>Estimated DOB</td>
     <td>
-      <input type=checkbox name="" title="Estimated DOB" tabindex=13>
+      <input type=hidden name=pmpmi006>
+      <input type=checkbox name=d_pmpmi006 title="Estimated DOB" tabindex=13
+              value="1">
     </td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -982,6 +990,11 @@ function contacts() {
 function concession() {
   location.href='patweb07.pbl?reportno=04&template=004&urnumber=%PATWEB89.01.003&admissno=%PATWEB89.01.081'
 }
+
+EstDOB="%PATWEB89.01.086.006"
+ if ( EstDOB == "1") {
+   document.UpdateForm.d_pmpmi006.checked=1;
+ }
 
 // Set Field titles for eAdmission
   document.UpdateForm.ptmas049.title=ContactName1+" Name";

@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.03">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -52,6 +52,7 @@ function init() {
       document.UpdateForm.pmext012.selectedIndex="1";
     }
   }
+  InitPostCodes();
 }
 
 function processCompRedirect() {
@@ -151,7 +152,9 @@ function processCompRedirect() {
   + "&template="+template
   + "&urnumber=" + document.PatientLinks.urnumber.value.replace(/ /g,"+")
   + "&mvmedrec=" + document.UpdateForm.mvmedrec.value + "&admissno=" 
-  + document.PatientLinks.admissno.value.replace(/ /g,"+");
+  + document.PatientLinks.admissno.value.replace(/ /g,"+") 
+  + "&seriflag=" + document.UpdateForm.seriflag.value;
+  ;
 }
 
 function SubmitClaim() {
@@ -221,7 +224,7 @@ function SubmitClaim() {
 }
 </script>
 %START.OF.PAGE
-<body onLoad="PageLoad(event);GetDefaultIns();init();
+<body onLoad="PageLoad(event);GetDefaultIns();
               prtFormCheckType();">
 <div id=PageHeadingSection>
 <div id=PatientHeading></div>
@@ -285,6 +288,7 @@ InsertPatientHeader()
   <input type=hidden name=admnstat value="%PATWEB89.01.199.020">
   <input type=hidden name=admntype value="%PATWEB89.01.205">
   <input type=hidden name=chngdsta value="">
+  <input type=hidden name=seriflag value="%PATWEB89.01.927">
   <input type=hidden name=ptcnueoc value="%PATWEB89.01.925">
   <input type=hidden name=chckcomp value="%PATWEB89.01.999.136">
   <input type=hidden name=ccvisbok value="%PATWEB89.01.999.128">
@@ -299,7 +303,7 @@ InsertPatientHeader()
 
 <tr><td class=DataLabel>Medicare Number</td>
     <td class="DataField">%PATWEB89.01.027 %PATWEB89.01.649</td>
-    <td class=DataLabel>Solicitor Details</td>
+    <td class=DataLabel>Solicitor Address Details</td>
     <td><input type="text" size="35" maxlength="35" name=pmext065 tabindex=13
       value="%PATWEB89.01.384.065" title="Solicitor Address 1">
     </td>
@@ -323,7 +327,7 @@ InsertPatientHeader()
         <option> </option>
          %PATWEB89.01.384.099.042.9.1.12.1.A
         </select></td>
-    <td class=DataLabel>&nbsp;<br></td>
+    <td class=DataLabel>Suburb<br></td>
     <td><input type="text" size="35" maxlength="35" name=pmext067 tabindex=15
       value="%PATWEB89.01.384.067" title="Solicitor Address 3"
       onblur="valSolicitorPostCode();">
@@ -345,10 +349,10 @@ InsertPatientHeader()
  <!--    onblur="valDateSentICWA()">-->
     <img src=../images/DateLookup.gif class=Icon date=UpdateForm.pmext010>
     </td>
-    <td class=DataLabel>&nbsp;</td>
+    <td class=DataLabel>Post Code</td>
     <td><input type="text" size="8" maxlength="8" name=pmext069 tabindex=17
       value="%PATWEB89.01.384.069" title="Solicitor Postcode"
-      onchange="SetPostCode02();">
+      onchange="SetPostCode02();LookupSuburb(pmext069.value);">
     </td>
 </tr>
 

@@ -8,6 +8,8 @@
 .
 . Modifications  :
 .-----------------------------------------------------------------------------
+. V12.01.01 08/12/2025  Thanh T        TSK 0953127
+.           Recompiled for MRTAUCFD changes
 . V11.04.03 13/08/2024  Thanh T        TSK 0856783
 .           Changed DELNOT00 to check for MRCNACDA patameter (Allow User,
 .           Date/Time stamped Coding Comments to be deleted by another user) 
@@ -260,7 +262,7 @@ CAUDTITLE INIT      "ICD Coding Audit for Visit: "
 NBSP      INIT      "&nbsp;"
 .---------------------------------------------------------------------------
 PRGID     INIT      "MRTWEB05"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Coding Audit"
 .---------------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.

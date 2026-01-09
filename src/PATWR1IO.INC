@@ -69,7 +69,7 @@ RLWARD1   MOVE      ZERO,OVRCD
                                   PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                                   PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                                   PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                                  WEXTN,PTWDSPAR
+                                  WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERLOCK IF LOCKED
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
@@ -90,7 +90,7 @@ RDWARD1   MOVE      ZERO,OVRCD
                                   PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                                   PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                                   PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                                  WEXTN,PTWDSPAR
+                                  WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -109,7 +109,7 @@ RDKWARD1  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -128,7 +128,7 @@ RDPWARD1  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -151,7 +151,7 @@ WRWARD1   MOVE      ZERO,OVRCD
                                   PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                                   PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                                   PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                                  WEXTN,PTWDSPAR
+                                  WEXTN,PTWDROOM,PTWDSPAR
           TRAPCLR   IO
           RETURN  
 .
@@ -169,7 +169,7 @@ UPWARD1   MOVE      WADMNO,DWADMNO
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           RETURN  
 .
 DEWARD1   RESET     KEY6
@@ -192,7 +192,7 @@ RDWARD2   MOVE      ZERO,OVRCD
                                    PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                                    PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                                    PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                                   WEXTN,PTWDSPAR
+                                   WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -211,7 +211,7 @@ RDKWARD2  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -230,7 +230,7 @@ RDPWARD2  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -250,7 +250,7 @@ UPWARD2   MOVE      WADMNO,DWADMNO
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           RETURN  
 .
 DEWARD2   RESET     KEY14
@@ -273,7 +273,7 @@ RDWARD3   MOVE      ZERO,OVRCD
                                   PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                                   PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                                   PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                                  WEXTN,PTWDSPAR
+                                  WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -289,7 +289,7 @@ RDKWARD3  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -305,7 +305,7 @@ RDPWARD3  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -327,7 +327,7 @@ RDWARD4   MOVE      ZERO,OVRCD
                                    PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                                    PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                                    PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                                   WEXTN,PTWDSPAR
+                                   WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -343,7 +343,7 @@ RDKWARD4  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -359,7 +359,7 @@ RDPWARD4  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -380,7 +380,7 @@ RDWARD5   MOVE      ZERO,OVRCD
                                   PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                                   PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                                   PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                                  WEXTN,PTWDSPAR
+                                  WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -396,7 +396,7 @@ RDKWARD5  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -412,7 +412,7 @@ RDPWARD5  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -433,7 +433,7 @@ RDWARD6   MOVE      ZERO,OVRCD
                                   PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                                   PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                                   PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                                  WEXTN,PTWDSPAR
+                                  WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -449,7 +449,7 @@ RDKWARD6  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -465,7 +465,7 @@ RDPWARD6  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -486,7 +486,7 @@ RDWARD7   MOVE      ZERO,OVRCD
                                   PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                                   PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                                   PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                                  WEXTN,PTWDSPAR
+                                  WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -502,7 +502,7 @@ RDKWARD7  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -518,7 +518,7 @@ RDPWARD7  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -539,7 +539,7 @@ RDWARD8   MOVE      ZERO,OVRCD
                                   PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                                   PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                                   PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                                  WEXTN,PTWDSPAR
+                                  WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -555,7 +555,7 @@ RDKWARD8  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY
@@ -571,7 +571,7 @@ RDPWARD8  MOVE      ZERO,OVRCD
                              PTWDCRDT,PTWDCRTM,PTWDCRID,PTWDUPDT,PTWDUPTM:
                              PTWDUPID,PTWDCOMM,PTWDDFVS,PTWDDFPH:
                              PTWDCFCD,PTWDNDBD,PTWDDOST,PTWDDOET,PTWDSDES:
-                             WEXTN,PTWDSPAR
+                             WEXTN,PTWDROOM,PTWDSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DWADMNO,WADMNO
           MOVE      DWSTBY,WSTBY

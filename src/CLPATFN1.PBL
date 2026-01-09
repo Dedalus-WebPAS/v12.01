@@ -1,0 +1,50 @@
+.---------------------------------------------------------------------------
+. Include Name : CLPATFN1.PBL
+. Function     : Clear function for PATFN1FD
+.---------------------------------------------------------------------------
+. Modifications :
+.---------------------------------------------------------------------------
+. V12.01.00  10/12/2025  Thanh T       TSK 0960753 
+.            Initial Version
+.---------------------------------------------------------------------------
+.
+CLPATFN1  MOVE      SP70,HCODE         . FUND NUMBER     
+          MOVE      SP70,HFTABL        . FUND TABLE     
+          MOVE      SP70,HFNAME        . FUND NAME     
+          MOVE      SP70,HFADD1        . HEALTH FUND ADD 1   
+          MOVE      SP70,HFADD2        . HEALTH FUND ADD 2   
+          MOVE      SP70,HFADD3        . HEALTH FUND ADD 3   
+          MOVE      SP70,HFADD4        . HEALTH FUND ADD 4   
+          MOVE      SP70,HFPCODE       . POST CODE     
+          MOVE      SP70,HFTELE        . HEALTH FUND TELEPHONE    
+          MOVE      ZERO,HFBAND        . THEATRE CHARGING INDICATOR    
+          MOVE      SP70,HFHDPE        . HDP EQUIVALENT     
+          MOVE      SP70,HFFAXN        . FAX NUMBER     
+          MOVE      SP70,PTHFHGRP      . HEALTH FUND GROUP    
+          MOVE      SP70,PTHFHCPE      . HCP EQUIVALENT     
+          MOVE      SP70,PTHFBCAT      . TABLE TYPE (CAT HT)   
+          MOVE      SP70,DHFTACT       . ACTIVE INDICATOR     
+          MOVE      SP70,PTHFGRPV      . VERSION OF GROUPER 031 or 041 
+          MOVE      ZERO,PTHFMAXM      . MAXIMUM PATIENT MOEITY    
+          MOVE      SP70,PTHFDSC1      . PATIENT MOEITY DESCRIPTION 1   
+          MOVE      SP70,PTHFDSC2      . PATIENT MOEITY DESCRIPTION 2   
+          MOVE      SP70,DTHFUMTD      . USE MATRIX DEFAULT INDICATOR   
+          MOVE      SP70,DTHFUCMX      . USE CASEMIX MATRIX INDICATOR   
+          MOVE      SP70,PTHFBILN      . BILLING NAME     
+          MOVE      SP70,PTHFFULD      . FULL DESCRIPTION     
+          MOVE      SP70,PTHFCARC      . Code all records 1=yes   
+          MOVE      SP70,PTHFDFIC      . Default Fee Information Code   
+          MOVE      SP70,PTHFCNAM      . Contact Name     
+          MOVE      SP70,PTHFCTTL      . Contact Title     
+          PACK      PTHFCEML,SP70,SP70 . Contact Email Address    
+          MOVE      SP70,PTHFCMOB      . Contact Mobile Number    
+          MOVE      SP70,PTHFFACD      . Future Action Code (Cat FA)  
+          MOVE      ZERO,PTHFNDFP      . No. of days for payment  
+          MOVE      SP70,PTHFOCGR      . Occupational Group (Cat w0)   
+          MOVE      SP70,PTHFARCE      . AROC Equivalent Code    
+          MOVE      SP70,PTHFIMCD      . Type of IMC Default (Cat ta) 
+          MOVE      SP70,PTHFDPRI      . Default to Sub-item in PRI  
+          MOVE      SP70,PTHFHGEX      . Exclude from Grp for HCP Ext 
+          MOVE      SP70,PTFNSPAR      . SPARE VARIABLE     
+.
+          RETURN

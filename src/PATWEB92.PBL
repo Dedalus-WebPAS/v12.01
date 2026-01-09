@@ -8,6 +8,10 @@
 . Modifications :
 .
 .------------------------------------------------------------------------
+. V12.01.02 03/12/2025  Bella Turco    TSK 0955574
+.           Changed Status to display Cat BG long desc PRHIST00 & PHLIST00
+. V12.01.01 02/12/2025  Bella Turco    TSK 0955574
+.           Added missing OVRCD check after patmi1af read in TASS0010
 . V12.00.03 20/10/2025  Bella Turco    TSK 0955574
 .           Added changes to Nursing Pre-assessment ASSCON00 UPPREA00
 .           New report no 21 for Pre-assessment History
@@ -1441,7 +1445,6 @@ DIM8      DIM       8
 DIM11     DIM       11
 D11       DIM       11
 DIM15     DIM       15
-DIM20A    DIM       20
 DIM20B    DIM       20
 DIM25     DIM       25
 DIM320    DIM       320
@@ -1974,7 +1977,7 @@ ATTEXT    INIT      "at"
 .
 .-----------------------------------------------------------
 PRGID     INIT      "PATWEB92" 
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Hospital List Server"
 .-----------------------------------------------------------
 .
@@ -12889,8 +12892,12 @@ TASS0010  MOVE       "1",NOPATATR
           IF         OVRCD=1
             MOVE     "0",NOPATATR
           ENDIF
-          PACK       KEY8,DBKREBOO,SP70
-          CALL       RDMISS1
+.
+          PACK      KEY8,DBKREBOO,SP70
+          CALL      RDMISS1
+          IF        OVRCD=1
+            CALL      CLPATMIS                    * Booking with no pre-admiss
+          ENDIF
 .
           IF         SHOWCANC<>1
             COMPARE    TWO,BKRESTAT               * Cancelled ?
@@ -13041,12 +13048,12 @@ ASSCON00  MOVE      BKREURNO,URNUMBER          * URNUMBER used in GETPAT
           CALL      PATFLD00               *Returns KEY3 for folder colour code
 .
           MOVE      SP70,TDESC
-          MOVE      SP70,DIM20A
+          MOVE      SP70,KEY50
           MATCH     SP70,BKRXUDF3
           IF        !@EQUAL
             PACK      KEY5,ANSB,ANSG,BKRXUDF3,SP70
             CALL      RDCODE1
-            MOVE      TDESC,DIM20A
+            MOVE      PTCDLDES,KEY50
           ENDIF
 .
           IF        BKRESTAT=2
@@ -13128,7 +13135,7 @@ ASSCON55  MATCH     "0",HISTRECV
                              "#"",DOCFNAME,"#",":                         * 5
                              "#"",KEY3,"#",":                             * 6
                              "#"",BKRXUDD1,BKRXUDT1,"&nbsp;#",":          * 7
-                             "#"",DIM20A,"&nbsp;#",":                     * 8
+                             "#"",KEY50,"&nbsp;#",":                     * 8
                              "#"",HTMLLINK,"#",":                         * 9
                              "#"",ROWCLASS,"#",";                         * 10
 .
@@ -18371,7 +18378,7 @@ PHLIST10  CALL      RPPTATR3
 .
 PHLIST80  WRITE     HTMLFILE;"<tr>":
                     "<td>",KEY11," at ",PTARTIME,"</td>":
-                    "<td>",TDESC,"</td>":
+                    "<td>",PTCDLDES,"</td>":
                     "<td>"
 .
           PACK      SP80,SP70,SP70
@@ -18477,7 +18484,7 @@ PRHIST10  CALL      RPPTATR3
 .
           WRITE     HTMLFILE;"t.addRow(#"",FORMATNM,"#",";
           WRITE     HTMLFILE;"#"",PTARDATE,PTARTIME,"#",";                 * 1
-          WRITE     HTMLFILE;"#"",TDESC,"#",";                             * 2
+          WRITE     HTMLFILE;"#"",PTCDLDES,"#",";                          * 2
 .
           MATCH     "1",CMNTSFLG
           IF        @EQUAL

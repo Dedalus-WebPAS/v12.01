@@ -1,0 +1,16 @@
+.---------------------------------------------------------------------------
+. Include Name : CLIBAVRK.PBL
+. Function     : Clear function for IBAVRKFD
+.---------------------------------------------------------------------------
+. Modifications :
+.---------------------------------------------------------------------------
+. V12.01.00  16/12/2025  Thanh T       TSK 0967055
+.            Initial Version
+.---------------------------------------------------------------------------
+.
+CLIBAVRK  MOVE      SP70,IBVKRTYP      . Stationery Type     
+          MOVE      SP70,IBVKRFNM      . Field Number     
+          MOVE      SP70,IBVKDESC      . Variable Description     
+          MOVE      SP70,IBVKSPAR      . Spare      
+.
+          RETURN

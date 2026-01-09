@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome"    content="hea">
 <meta name="CrossBrowser"    content="true">
 <meta name="HelpFileName"    content="NoContextSet.html">
@@ -13,6 +13,14 @@ PREVIOUS_YEAR = "%PATWEB14.04.014";
 NEXT_YEAR  = "%PATWEB14.04.013";
 </script>
 <body onload="PageLoadExtended();InitTable(%PATWEB14.04.012);">
+<span id=WaitBoxDisplay class=WaitBox style="display:none">
+<img class=WaitImage src="../images/wait.gif">
+<p>Please Wait ...</p>
+</span>
+<div id=PageLayer class=DimmedLayer style="display:none"></div>
+<script type="text/javascript">
+ShowWaitScreen();
+</script>
 <div id=HeadingSection>
 <form name=LinkForm method=post action=patweb89.pbl style="margin:0">
 <input type=hidden name=reportno value=3>
@@ -196,9 +204,16 @@ function InitTable(TableView) {
    t.addColumn("Status","String",12,12,"left","","",40)
    %PATWEB14.04.017
    break;
+
+  case 3:
+   HideWaitScreen();
+   alert("View not supported by this template - hea - deftview=3");
+   return;
+   break;
  }
 
  TableOutput(1,2);    // Order Column,Asc Dsc
+ HideWaitScreen();
 }
 function AddTableRows() {
  %PATWEB14.04.010

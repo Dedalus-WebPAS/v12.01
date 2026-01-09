@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .------------------------------------------------------------------------------
+. V12.01.01 09/12/2025  Thanh T        TSK 0960204
+.           Changed CLRWRD00 to space out PTWDROOM field
 . V12.00.01 28/05/2025  Bella Turco    TSK 0955096
 .           Alphanumeric changes                                                
 . V11.04.03 27/06/2024  Bella Turco    TSK 0947816
@@ -521,7 +523,7 @@ FIRSTBOK  DIM       1
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "PATWEB12"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Bed Board View"
 .----------------------------------------------------------------------
 .
@@ -7441,6 +7443,7 @@ CLRWRD00  MOVE      SP70,WWARD      * WARD NUMBER
           MOVE      SP70,PTWDCOMM   * Comments
           MOVE      SP70,PTWDDFVS   * Default Visits
           MOVE      SP70,PTWDDFPH   * Default Phone Calls
+          MOVE      SP70,PTWDROOM   * Room (for HL7 purposes only)
           MOVE      SP70,PTWDSPAR   * SPARE
 .
 .

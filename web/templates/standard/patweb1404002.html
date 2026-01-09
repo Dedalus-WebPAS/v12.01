@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome"    content="standard">
 <meta name="CrossBrowser"    content="true">
 <meta name="HelpFileName"    content="NoContextSet.html">
@@ -12,6 +12,14 @@ FORWARD  = "%PATWEB14.04.001";
 </script>
 <body onload="PageLoadExtended();InitTable(%PATWEB14.04.012);
               SetMenuDefaultView();">
+<span id=WaitBoxDisplay class=WaitBox style="display:none">
+<img class=WaitImage src="../images/wait.gif">
+<p>Please Wait ...</p>
+</span>
+<div id=PageLayer class=DimmedLayer style="display:none"></div>
+<script type="text/javascript">
+ShowWaitScreen();
+</script>
 <div id=HeadingSection>
 <form name=LinkForm method=post action=patweb89.pbl style="margin:0">
 <input type=hidden name=reportno value=3>
@@ -158,6 +166,12 @@ function InitTable(TableView) {
    t.addColumn("Status","String",12,12,"left","","",40)
    break;
 
+  case 2:
+   HideWaitScreen();
+   alert("View not supported by this template - standard - deftview=2");
+   return;
+   break;
+
   case 3:
    t = new Table(1,0,1,"100%","center",45,45);
    t.addColumn("Priority","ImageText",17,19,"left","Priority","",25,1)
@@ -176,6 +190,7 @@ function InitTable(TableView) {
  }
  AddTableRows();
  TableOutput(1,2);    // Order Column,Asc Dsc
+ HideWaitScreen();
 }
 function AddTableRows() {
  %PATWEB14.04.019

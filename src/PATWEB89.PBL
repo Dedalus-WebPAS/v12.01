@@ -3,8 +3,51 @@
 .
 . Function      : Admissions Web Server
 .
+.      ********************************************************
+.      *                                                      *
+.      *    NB: DO NOT ADD ANY NEW FILE OPENS IN INIT0000     *
+.      *        IF YOU NEED TO OPEN A NEW FILE OPEN IN FILE   *
+.      *        WHERE IS IS REQUIRED AND CLOSE IT STRAIGHT    *
+.      *        AFTER.                                        *
+.      *                                                      *
+.      ********************************************************
+.
 . Modifications :
 .------------------------------------------------------------------------
+. V12.01.03 03/12/2025  J.Tan          TSK 0946593
+.           Recompiled for CMXMATRX -Sort Casepayment Theatre fee items
+.           03/12/2025 J.Tan             TSK 0968040
+.           Mod VALDWB00 to check for template 032
+. V12.01.02 03/12/2025  DA Sarkies     TSK 0968888
+.           Removed following files from INIT0000 due to over 255 files open
+.           - ACCAUDA1 - moved to WRTACAUD
+.           - OPRARDA1 - moved to NZPR0000 and CHKTIM00
+.           - OPRSRGA1 - moved to CHKTIM00
+.           - BOKUNQA1 - moved to WRUSG000
+.           - PMSCMTA1 - removed
+.           - PATCSLA1 - moved to WCSL0000
+.           - PATPEIO1 - moved to WPEI0000
+.           - PATBRDA1 - moved to GUBN0000
+.           - ALLLNKA2 - moved to UPCLTY00
+.           - PATTRAN1 - removed
+.           - MLTHCPA1 - moved to ACTDOC00
+. V12.01.01 25/11/2025 J.Tan             TSK 0968040
+.           Mod VALDWB00 to check for PTMIS027
+. V12.00.28 03/12/2025  DA Sarkies     TSK 0968888
+.           Removed following files from INIT0000 due to over 255 files open
+.           - ACCAUDA1 - moved to WRTACAUD
+.           - OPRARDA1 - moved to NZPR0000 and CHKTIM00
+.           - OPRSRGA1 - moved to CHKTIM00
+.           - BOKUNQA1 - moved to WRUSG000
+.           - PMSCMTA1 - removed
+.           - PATCSLA1 - moved to WCSL0000
+.           - PATPEIO1 - moved to WPEI0000
+.           - PATBRDA1 - moved to GUBN0000
+.           - ALLLNKA2 - moved to UPCLTY00
+.           - PATTRAN1 - removed
+.           - MLTHCPA1 - moved to ACTDOC00
+. V12.00.23 25/11/2025 J.Tan             TSK 0968040
+.           Mod VALDWB00 to check for PTMIS027
 . V12.00.22 14/10/2025 J.Tan             TSK 0968040
 .           Mod ACAT0000 check template 032(Chg Pre-adm) to display Active code
 . V12.00.21 09/10/2025 Nikitha Bhaskar   TSK 0966963
@@ -65,6 +108,31 @@
 .           secondary insurer
 .           28/05/2025  Nikitha        TSK 0955096
 .           Alphanumeric changes.
+. V11.05.38 03/12/2025  DA Sarkies     TSK 0968888
+.           Removed following files from INIT0000 due to over 255 files open
+.           - ACCAUDA1 - moved to WRTACAUD
+.           - OPRARDA1 - moved to NZPR0000 and CHKTIM00
+.           - OPRSRGA1 - moved to CHKTIM00
+.           - BOKUNQA1 - moved to WRUSG000
+.           - PMSCMTA1 - removed
+.           - PATCSLA1 - moved to WCSL0000
+.           - PATPEIO1 - moved to WPEI0000
+.           - PATBRDA1 - moved to GUBN0000
+.           - ALLLNKA2 - moved to UPCLTY00
+.           - PATTRAN1 - removed
+.           - MLTHCPA1 - moved to ACTDOC00
+. V11.05.37 24/11/2025  J.Tan          TSK 0946593
+.           Recompiled for CMXMATRX -Sort Casepayment Theatre fee items
+.           28/11/2025 J.Tan             TSK 0968040
+.           Mod VALDWB00 to check for template 032
+. V11.05.36 25/11/2025 J.Tan             TSK 0968040
+.           Mod VALDWB00 to check for PTMIS027
+. V11.05.35 14/10/2025 J.Tan             TSK 0968040
+.           Mod ACAT0000 check template 032(Chg Pre-adm) to display Active code
+. V11.05.34 09/10/2025 Nikitha Bhaskar   TSK 0966963
+.           Modified error message at OUADMF93.
+. V11.05.33 02/10/2025 Nikitha Bhaskar   TSK 0962784
+.           Added and called new routines WRHIS000, CHAUD000.
 . V11.05.32 02.10.2025 DA Sarkies        TSK 0967778
 .           Added second key in WPMNPL00 to account for an increased counter
 . V11.05.31 19/09/2025 Thanh T           TSK 0937505
@@ -5154,7 +5222,7 @@ AUTOMVMR  DIM       1        * Auto move (track) MR to Admitting Ward
 .
 .---------------------------------------------------------------------------
 PRGID     INIT      "PATWEB89"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.03"
 PRGNAM    INIT      "Admissions Web Server"
 .---------------------------------------------------------------------------
 .
@@ -5533,7 +5601,7 @@ INIT0000  CALL      INTMAS00
           OPEN      PATLSDA1,"patlsdaf"
           OPEN      PATVISA1,"patvisaf"
           OPEN      PMSAIDA1,"pmsaidaf"
-          OPEN      PMSCMTA1,"pmscmtaf"
+....      OPEN      PMSCMTA1,"pmscmtaf"
           OPEN      PMSCHAA1,"pmschaaf"
           OPEN      IBATMHA1,"ibatmhaf"
 ....      OPEN      IBAPOST1,"ibapostf"
@@ -5542,7 +5610,7 @@ INIT0000  CALL      INTMAS00
           OPEN      PATLINK1,"patlinkf"
           OPEN      BOKDIAA1,"bokdiaaf"     * booking diagnosis file
           OPEN      MRTLOCA1,"mrtlocaf"
-          OPEN      ALLLNKA2,"alllnkaf"
+.....     OPEN      ALLLNKA2,"alllnkaf"
           OPEN      EMRSITA1,"emrsitaf"
           OPEN      MRTVISA1,"mrtvisaf"
           OPEN      MRTMASA1,"mrtmasaf"
@@ -5572,12 +5640,12 @@ INIT0000  CALL      INTMAS00
 .....     OPEN      NZPCMTA3,"nzpcmtaf"
 .....     OPEN      NZPCFNA1,"nzpcfnaf"
 .....     OPEN      MLTCFNA1,"mltcfnaf"
-          OPEN      MLTHCPA1,"mlthcpaf"
+.....     OPEN      MLTHCPA1,"mlthcpaf"
 .....     OPEN      ALLPCTA1,"allpctaf"
           OPEN      ALLREFA1,"allrefaf"
 .....     OPEN      ALLRSAA1,"allrsaaf"
           OPEN      AAEDE1A1,"aaede1af"
-          OPEN      ACCAUDA1,"accaudaf"
+.....     OPEN      ACCAUDA1,"accaudaf"
           OPEN      ACCDIAA1,"accdiaaf"
           OPEN      ACCRFPA1,"accrfpaf"
           OPEN      ACCCMTA1,"acccmtaf"
@@ -5593,21 +5661,21 @@ INIT0000  CALL      INTMAS00
           OPEN      OPRMBSA1,"oprmbsaf"
 .....     OPEN      OPRSEMA1,"oprsemaf"
 .....     OPEN      OPRTSMA1,"oprtsmaf"
-          OPEN      OPRARDA1,"oprardaf"
-          OPEN      OPRSRGA1,"oprsrgaf"
+.....     OPEN      OPRARDA1,"oprardaf"
+.....     OPEN      OPRSRGA1,"oprsrgaf"
 .
 .....     OPEN      PMSMTIA1,"pmsmtiaf"
           OPEN      PATBMDA1,"patbmdaf"
           OPEN      PATBMDA2,"patbmdaf"
           OPEN      PATBMDA3,"patbmdaf"
 .....     OPEN      PATBMDA4,"patbmdaf"
-          OPEN      PATBRDA1,"patbrdaf"
+.....     OPEN      PATBRDA1,"patbrdaf"
 .....     OPEN      PATBRDA2,"patbrdaf"
 .....     OPEN      PATBRDA3,"patbrdaf"
 .....     OPEN      PATBRDA4,"patbrdaf"
           OPEN      VISMDTA1,"vismdtaf"
           OPEN      VISMTXA1,"vismtxaf"
-          OPEN      PATCSLA1,"patcslaf"
+.....     OPEN      PATCSLA1,"patcslaf"
           OPEN      PATCFAA1,"patcfaaf"
 .....     OPEN      COMDEPA2,"comdepaf"
           OPEN      DISMASA1,"dismasaf"
@@ -5619,10 +5687,10 @@ INIT0000  CALL      INTMAS00
           OPEN      PATRE1A1,"patre1af"
           OPEN      PATRGMA1,"patrgmaf"
           OPEN      PATPA1A1,"patpa1af"
-          OPEN      PATPEIO1,"patpeiaf"
+.....     OPEN      PATPEIO1,"patpeiaf"
           OPEN      PATPGRA1,"patpgraf"
           OPEN      PRSPMIA1,"prspmiaf"
-          OPEN      BOKUNQA1,"bokunqaf"
+.....     OPEN      BOKUNQA1,"bokunqaf"
           OPEN      BOKRC1A1,"bokrc1af"
           OPEN      BOKRC1A6,"bokrc1af"
           OPEN      BOKRX1A1,"bokrx1af"
@@ -5632,7 +5700,7 @@ INIT0000  CALL      INTMAS00
           OPEN      PATWC1A3,"patwc1af"
 .....     OPEN      PATDNRA1,"patdnraf"
           OPEN      PATHSPA1,"pathspaf"
-          OPEN      PATTRAN1,"pattranf"
+.....     OPEN      PATTRAN1,"pattranf"
           OPEN      PATTRAN2,"pattranf"
           OPEN      PATDGWA1,"patdgwaf"
           OPEN      PATLOCA1,"patlocaf"
@@ -14312,11 +14380,20 @@ MBDEF999  RETURN
 .                  1 = Error
 .------------------------------------------------------------
 .
-VALDWB00  MATCH     SP70,ACLAIM
+VALDWB00  MATCH     Z70,PTMIS027
+          IF        !@EQUAL
+            MATCH     SP70,PTMIS027
+            IF        !@EQUAL & !@EOS
+              PACK      KEY5,ANSC,ANSL,PTMIS027,SP70
+              GOTO      VALDWB04
+            ENDIF
+          ENDIF
+.
+          MATCH     SP70,ACLAIM
           GOTO      VALDWB10 IF EQUAL
 .
           PACK      KEY5,ANSC,ANSL,ACLAIM,SP70
-          CALL      RDCODE1
+VALDWB04  CALL      RDCODE1
           BRANCH    OVRCD,VALDWB93
 .
           MATCH     ANSI,PTCOACTV
@@ -17627,22 +17704,25 @@ UPCLTY46    CALL      RDPTRAN2                  * read pattranf
             CALL      UPPMEXT1                    * update pmsextaf
             CALL      OPMESS00                    * send HL7 message
 .
-UPCLTY50    PACK      KEY16,PMEXVISN,SP70
+UPCLTY50    OPEN      ALLLNKA2,"alllnkaf"
+            PACK      KEY16,PMEXVISN,SP70
             CALL      RSALLNK2
 UPCLTY55    CALL      RKALLNK2                    * read alllnkaf
-            BRANCH    OVRCD,UPCLTY99
+            BRANCH    OVRCD,UPCLTY95
 .
             MATCH     PMEXVISN,ALLNLNKV
-            GOTO      UPCLTY99 IF NOT EQUAL
+            GOTO      UPCLTY95 IF NOT EQUAL
 .
             PACK      KEY8,ALLNVISN,SP70
             CALL      RDALREF1                    * read allrefaf
-            BRANCH    OVRCD,UPCLTY99
+            BRANCH    OVRCD,UPCLTY95
             PACK      ALRECOMP,PMEXALEL,SP70
             CALL      UPALREF1                    * update allrefaf
             CALL      LKMESS00                    * send HL7 message
             GOTO      UPCLTY55                    * next alllnkaf record
           ENDIF
+.
+UPCLTY95  CLOSE     ALLLNKA2
 .
 UPCLTY99  RETURN
 +
@@ -24453,6 +24533,7 @@ WCSL0000  MOVE      ONE,PCASE                     * Will have case notes
           COMPARE   ZERO,PTCNUCSL                 * using case notes loc. file ?
           GOTO      WCSL9999 IF EQUAL             * no
 .
+          OPEN      PATCSLA1,"patcslaf"
           PACK      KEY11,PURNO,Z70
           CALL      RSPTCSL1
           CALL      RPPTCSL1
@@ -24468,6 +24549,7 @@ WCSL8000  MOVE      PURNO,PTCLURNO
           MOVE      CNAME,PTCLDESC
           PACK      KEY11,PTCLURNO,PTCLUNIQ
           CALL      WRPTCSL1
+          CLOSE     PATCSLA1
 .
 WCSL9999  RETURN
 +
@@ -33638,6 +33720,7 @@ WPEI0000  READ      CONTROLF,EIGHTY8;*116,CHCSDTE,*124,CHCSST,*132,CHCSED
           MATCH     CHCSST,ADATE
           GOTO      WPEI9000 IF NOT LESS    * Adm date >= PRS2 extract start dte
 .
+          OPEN      PATPEIO1,"patpeiaf"
           PACK      KEY16,SP8,AADMNO
           CALL      RDPTPEI1                * Read a PRS2 inc/exc file record
           COMPARE   ONE,OVRCD
@@ -33675,6 +33758,7 @@ WPEI2000  MOVE      PASSCODE,PTPEOPER
           CALL      WRPTPEI1                * Write a PRS2 inc/exc file record
 .
 WPEI9000  MOVE      ZERO,EXIT
+          CLOSE     PATPEIO1
 .
 WPEI9999  RETURN
 +
@@ -34530,6 +34614,7 @@ ACTDOC00  MATCH     SP70,CHCKDOCT           * No doctors code so exit
           IF        IBCNMHOS=1
             MATCH    "1",PTDOHOSS
             IF       @EQUAL
+              OPEN     MLTHCPA1,"mlthcpaf"
               PACK     KEY13,WBSEHOSP,DCODE,SP70
               CALL     RDMLHCP1               * use mlthcp dates if they exist
               IF        OVRCD=0
@@ -34542,6 +34627,7 @@ ACTDOC00  MATCH     SP70,CHCKDOCT           * No doctors code so exit
                   MOVE      MLHCEDAT,PTDOEDAT    * end date
                 ENDIF
               ENDIF
+              CLOSE    MLTHCPA1
             ENDIF
           ENDIF
 .
@@ -35230,6 +35316,7 @@ NZPR0000  MOVE      URNUMBER,KEY8
             CALL      GETTH000
           ENDIF
 .
+          OPEN      OPRARDA1,"oprardaf"
           CALL      CLOPRARD
           MATCH     Z70,UNIQUEKY
           IF        !@EQUAL
@@ -35251,6 +35338,7 @@ NZPR0000  MOVE      URNUMBER,KEY8
               ENDIF
             ENDIF
           ENDIF
+          CLOSE     OPRARDA1
 .
           MATCH     SP70,UPDTTYPE      * Display
           GOTO      NZPR8000 IF EQUAL
@@ -36081,8 +36169,10 @@ CHKTIM05  MATCH     Z70,UNIQUEKY
 CHKTIM10  MATCH     "1",THEADURA
           GOTO      CHKTIM99 IF EQUAL * No checking for theatre duration
 .
+          OPEN      OPRARDA1,"oprardaf"
           PACK      KEY10,UNIQUEKY,SP70
           CALL      RDOPARD1
+          CLOSE     OPRARDA1
           BRANCH    OVRCD,CHKTIM92
 .
           PACK      KEY10,UNIQUEKY,SP70
@@ -36091,9 +36181,11 @@ CHKTIM10  MATCH     "1",THEADURA
 .
 . check if session went overnight
 .
+          OPEN      OPRSRGA1,"oprsrgaf"
           PACK      KEY11,UNIQUEKY,SP70
           CALL      RSOPSRG1
           CALL      RKOPSRG1
+          CLOSE     OPRSRGA1
           BRANCH    OVRCD,CHKTIM20
           MATCH     UNIQUEKY,OPSGUNID
           GOTO      CHKTIM20 IF NOT EQUAL
@@ -38318,7 +38410,8 @@ MVACR999  RETURN
 .-------------------------------------------------------------------------
 . Write record to ACC Audit File (accaudaf)
 .-------------------------------------------------------------------------
-WRTACAUD  CALL      IBACLOCK
+WRTACAUD  OPEN      ACCAUDA1,"accaudaf"
+          CALL      IBACLOCK
           PACK      ACAUDATE,CCC,CYY,CMM,CDD        * Date
           REP       " 0",ACAUDATE
           MOVE      CTIMEIS,ACAUTIME
@@ -38328,7 +38421,7 @@ WRTACA10  PACK      KEY54,ACAUCLMN,ACAUADMN,ACAUDATE,ACAUTIME,ACAUWUID
           CALL      RAACAUD1
           IF        OVRCD=1
             CALL      WRACAUD1
-            GOTO      WRTACA99
+            GOTO      WRTACA95
           ELSE
             CALL      IBACLOCK                    * Set new date and time and
             PACK      ACAUDATE,CCC,CYY,CMM,CDD    * try write again
@@ -38338,6 +38431,8 @@ WRTACA10  PACK      KEY54,ACAUCLMN,ACAUADMN,ACAUDATE,ACAUTIME,ACAUWUID
             REP       " 0",ACAUTIME
             GOTO      WRTACA10
           ENDIF
+.
+WRTACA95  CLOSE     ACCAUDA1
 .
 WRTACA99  RETURN
 .
@@ -40508,10 +40603,11 @@ WRUSG000  MOVE      "42",FORM2              * get previous unique record
           CALL      RELSLK00        * Release System Lock of Sector 42
           MOVE      OPCNUNIQ,OPDAUNIQ
 .
+          OPEN      BOKUNQA1,"bokunqaf"
           PACK      KEY18,BKREBOOK,OPDAUNIQ,SP70
           CALL      RDBKUNQ1
           IF        OVRCD<>1
-            GOTO      WRUSG999
+            GOTO      WRUSG995
           ENDIF
 .
           PACK      BKUNVISN,BKREBOOK,SP70
@@ -40522,6 +40618,8 @@ WRUSG000  MOVE      "42",FORM2              * get previous unique record
           PACK      BKUNTIML,SP70
           PACK      KEY18,BKUNVISN,BKUNUNIQ,SP70
           CALL      WRBKUNQ1
+.
+WRUSG995  CLOSE     BOKUNQA1
 .
 WRUSG999  RETURN
 .
@@ -42977,6 +43075,7 @@ UPDBRD99  CLOSE     PATBRDA3
 GUBN0000  MOVE      "118",PRXCODE
           CALL      GETSLK00
           READ      CONTROLF,HUND18;*140,PTCNUNBN
+          OPEN      PATBRDA1,"patbrdaf"
 .
 GUBN0100  MOVE      PTCNUNBN,PTBRBRDN
           UNPACK    PTCNUNBN,ANS,KEY9
@@ -43018,13 +43117,15 @@ GUBN1150  MOVE      ONE,F9
           GOTO      GUBN9500
 .
 GUBN9000  MOVE      ONE,EXIT                  * Passcode allocation full
-          GOTO      GUBN9999
+          GOTO      GUBN9995
 .
 GUBN9500  MOVE      KEY10,PTCNUNBN
           WRITAB    CONTROLF,HUND18;*140,PTCNUNBN
 .
           MATCH     "0000000000",PTBRBRDN
           GOTO      GUBN0100 IF EQUAL
+.
+GUBN9995  CLOSE     PATBRDA1
 .
 GUBN9999  CALL      RELSLK00
           RETURN

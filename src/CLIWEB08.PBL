@@ -5,6 +5,8 @@
 .
 . Modifications  :
 .-------------------------------------------------------------------------------
+. V12.01.01 08/12/2025  Thanh T        TSK 0953127
+.           Recompiled for MRTAUCFD changes
 . V12.00.05 30/10/2025  Ebon Clements  TSK 0968602
 .           Correctly set up FHRSTAT, DOCSTCOD, DRAFTDES    
 .           api call with _id - CORR5800                          
@@ -938,7 +940,7 @@ STRETURN  FORM      1
 .
 .------------------------------------------------------------------------------
 PRGID     INIT      "CLIWEB08"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Patient Correspondence Details"
 .------------------------------------------------------------------------------
 .

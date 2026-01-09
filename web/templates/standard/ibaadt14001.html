@@ -1,26 +1,58 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="HelpFileName"    content="NoContextSet.html">
-<meta name="CrossBrowser" content="true">
+<meta name="CrossBrowser"    content="true">
 <script type="text/javascript" src="../js/ReportStandard.js"></script>
 <script type="text/javascript">
 function ProcessReport() {
- if(validateMandatory(document.ReportForm)){
-    if(document.ReportForm.loadfnam.value.search(/.txt/g)==-1) {
+  f = document.ReportForm;
+  if (!validateMandatory(document.ReportForm)) {
+    return;
+  }
+ 
+  if(document.ReportForm.loadfnam.value.search(/.txt/g)==-1) {
      alert("File name must be text (tab delimited) (.txt)");
      return;
+  }
+
+  f.keystr01.value = f.keyinoption.value;
+  f.keystr03.value = f.userid.value;
+  
+  if (f.keyinoption.value == "2" || f.keyinoption.value == "3") {
+    f.keystr03.value = SetDateDDMMYYYY(f.uplddate.value);
+    f.keystr04.value = f.userid.value;
+    f.keystr05.value = f.loadfnam.value;
+    f.keystr06.value = "P";
+    if(confirm('Only MBS Items with an Effective From Date less than or ' +
+               'equal to the \nUpload Date and an Effective To Date greater ' +
+               'than or equal to the Upload date will be Updated. \n \n' +
+               'Click OK to Continue with the update or Cancel')) {
+      f.submit();
     }
-    document.ReportForm.keystr01.value="1";
-    document.ReportForm.keystr03.value=document.ReportForm.userid.value;
-    document.ReportForm.keystr04.value=document.ReportForm.loadfnam.value;
-    document.ReportForm.keystr05.value="P";
-    document.ReportForm.submit(); 
+  }
+  else
+  {
+    f.keystr03.value = f.userid.value;
+    f.keystr04.value = f.loadfnam.value;
+    f.keystr05.value = "P";
+    f.submit();
   }
 }
-
+function DisplayUploadDate() {
+  f = document.ReportForm;
+  if (f.keyinoption.value == "2" || f.keyinoption.value == "3") {
+    document.getElementById('UploadDate').style.display = "";   
+    AddClassName(f.uplddate,"Mandatory"); 
+    f.uplddate.value = f.currdate.value;
+  } 
+  else {
+    document.getElementById('UploadDate').style.display = "none";   
+    RemoveClassName(f.uplddate,"Mandatory");
+  }
+} 
 </script>
 </head>
 %START.OF.PAGE
-<body onload="PageLoad(event);ReportLoad();">
+<body onload="PageLoad(event);ReportLoad();DisplayUploadDate();">
 
 <form name=ReportForm method=post action=rshweb02.pbl style="margin:0" 
    enctype="multipart/form-data">
@@ -40,6 +72,8 @@ function ProcessReport() {
   <input type=hidden name=keystr04 value=" ">
   <input type=hidden name=keystr05 value=" ">
   <input type=hidden name=keystr06 value=" ">
+  <input type=hidden name=keystr07 value=" ">
+  <input type=hidden name=currdate id=currdate value="%STANDARD.01.015">
 
 <table width=100% align=center border=0 cellspacing=0>
 <tr><td class=HeadingCell align=center colspan=2>
@@ -79,12 +113,34 @@ function ProcessReport() {
 </table>
 
 <table width=80% align=center border=0 cellspacing=2 cellpadding=1>
+<tr><td class=DataLabel width=25%>Option</td>
+    <td><select name=keyinoption title="Option" class=Mandatory
+         onchange="DisplayUploadDate();">
+      <option value=""></option>
+      <option value="1">Upload All MBS Items</option>
+      <option value="2">Update MBS Amount ONLY</option>
+      <option value="3">Update Suggested Classification ONLY</option>
+      </select>
+</td></tr>
+
 <tr><td class=DataLabel width=25%>Path & File Name</td>
     <td><input type=file name=loadfnam id=loadfnam title="Path & File name" 
           size=40 maxlength=120 class=Mandatory>&nbsp;&nbsp;
          <input type=hidden size=50 name=filedesc Readonly tabindex=-1
          style=border:0;background:paper.gif;>
     </td></tr>
+
+<tr id=UploadDate><td class=DataLabel width=25%>Upload Date</td>
+    <td><input type=text name=uplddate id=uplddate
+         title="Upload Date"
+         size=12 maxlength=11
+         onblur="checkDate(this,'Date')">
+        <img notab src="../images/DateTimeStamp.gif" class=Icon
+         alt="Current" date="ReportForm.uplddate">
+        <img notab src="../images/DateLookup.gif" class=Icon
+         alt="Show Calendar" date="ReportForm.uplddate">
+    </td>
+</tr>
 </table>
 
 <table width=80% align=center border=0 cellspacing=2 cellpadding=1>

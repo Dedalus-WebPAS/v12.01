@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="nz">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -341,8 +341,8 @@ InsertPatientHeader()
   </tr>
 
   <tr><td class=DataLabel>ACC Number<br>
-      <td><input type="text" name="ptclm011" size=22 maxlength=20
-           tabindex=3 value="%PATWEB89.01.310" class=Mandatory 
+      <td><input type="text" name="ptclm011" id="ptclm011" size=22 maxlength=20
+           tabindex=3 value="%PATWEB89.01.310" class="AlphaNum Mandatory"
            title="ACC Number" 
            onchange="UpCase(this);validateACC();">
           <span id=SearchIconSpan></span>

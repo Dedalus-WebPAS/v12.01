@@ -24,6 +24,8 @@
 .*                           1=no matrix record found, check on patcmxaf      *
 .*                                                                            * 
 .* Modifications  :                                                           *
+.*        V12.01.01 20/11/2025  J.Tan         TSK 0946593                     *
+.*                  Mod Casepayment Items to sort using per-diem theatre fee  *
 .*        V12.00.01 14/05/2025  Ebon Clements TSK 0955096                     *
 .*                  Alphanueric visit number changes                          *
 .*        V11.04.04 30/07/2024  J.Tan         TSK 0948860                     *
@@ -220,6 +222,7 @@ CMXMATRX  BRANCH    ABFFLAG,MTRX9999         * ABF invoice
           OPEN      CONTROLF,"controlf"
           OPEN      PATFN1A1,"patfn1af"
           OPEN      PMSCCDA1,"pmsccdaf"
+          READ      CONTROLF,ZERO;*43,IBCNMHOS
           READ      CONTROLF,HUND05;*71,PTCNCMAU,PTCNCMDU,*99,PTCNNWCM
           READ      CONTROLF,HUND13;*50,OPCNCONS
           READ      CONTROLF,HUND24;*121,PTCNDGED
@@ -1528,10 +1531,31 @@ GETM0000  MOVE      SP10,PRICMBS            * initialise primary MBS code
           WHILE     F3<999
             ADD       ONE,F3
             MOVE      SP70,MCHGARR[F3]     * initialise 
-            MOVE      SP70,MCHGAMT[F3]
+            MOVE      ZERO,MCHGAMT[F3]
+            MOVE      ZERO,MCHGQMT[F3]
           DO
 .
-          MOVE      ZERO,F3
+          MOVE      ONE,SORTDONE            * use perdiem theatre fee to sort
+          IF        IBCNMHOS=1
+            MOVE     SP70,PMVXMHOS
+            OPEN     PMSVX1A1,"pmsvx1af"
+            PACK     KEY8,AADMNO
+            CALL     RDPMVX11
+            IF       OVRCD=0
+              OPEN      PATHSPA1,"pathspaf"
+              MOVE      PMVXMHOS,KEY3
+              CALL      RDPTHSP1
+              IF        OVRCD=0
+                MATCH     "1",PTHSTFEE
+                GOTO      GETM0800 IF EQUAL  * using theatre fees file
+              ENDIF
+            ENDIF
+          ELSE
+            BRANCH    PTCNTFEE,GETM0800      * using theatre fees file
+          ENDIF
+          MOVE      ZERO,SORTDONE
+.
+GETM0800  MOVE      ZERO,F3
           PACK      KEY22,AADMNO,SP20,SP20
           CALL      RDSDTRN1
 GETM1000  CALL      RDKDTRN1
@@ -1550,13 +1574,27 @@ GETM1000  CALL      RDKDTRN1
 .
           PACK      KEY8,DTFCENT,DTFYEAR,DTFMONTH,DTFDAY,SP8
 GETM2000  REP       " 0",KEY8
+          MOVE      KEY8,PMMITDAT
           PACK      KEY17,TITEMNO,KEY8,SP70
           CALL      PATITMRD
           BRANCH    OVRCD,GETM7000          * not a valid item code
 .
-          ADD       ONE,F3
+          MOVE      ZERO,FORM12P2
+          BRANCH    SORTDONE,GETM3000
+          GOTO      GETM4000
+.
+.        use per diem theatre fee to sort
+.
+GETM3000  CALL      TFEE0000                 * get normal theatre charge
+          BRANCH    EXIT OF GETM4000
+.
+          MOVE      TFPAT1,FORM12P2
+          ADD       TFHF1,FORM12P2
+.
+GETM4000  ADD       ONE,F3
           MOVE      TITEMNO,MCHGARR[F3]
-          MOVE      QIAMT,MCHGAMT[F3]
+          MOVE      QIAMT,MCHGQMT[F3]
+          MOVE      FORM12P2,MCHGAMT[F3]    * per diem theatre fee
           GOTO      GETM7000
 .
 .         Check items in pmsmtiaf file
@@ -1596,19 +1634,32 @@ GETM8000  COMPARE   ZERO,F3
             MOVE      TWO,FORM3
 .
             WHILE     FORM3<=TARGET
-              IF        MCHGAMT[FORM3]>MCHGAMT[F3]
-                MOVE      MCHGAMT[F3],FORM12P2
-                MOVE      MCHGARR[F3],KEY9
-.
-                MOVE      MCHGAMT[FORM3],MCHGAMT[F3]
-                MOVE      MCHGARR[FORM3],MCHGARR[F3]
-                MOVE      FORM12P2,MCHGAMT[FORM3]
-                MOVE      KEY9,MCHGARR[FORM3]
-.
-                MOVE      ONE,SWAPFLAG
-                MOVE      F3,LASTSWAP
+              IF        MCHGAMT[FORM3]<MCHGAMT[F3]
+                GOTO      GETM8600
               ENDIF
-              ADD      ONE,F3
+.
+              IF        MCHGAMT[FORM3]=MCHGAMT[F3]
+                IF        MCHGQMT[FORM3]<=MCHGQMT[F3]
+                  GOTO      GETM8600
+                ENDIF
+              ENDIF
+.
+              MOVE      MCHGAMT[F3],FORM12P2
+              MOVE      MCHGARR[F3],KEY9
+              MOVE      MCHGQMT[F3],FORM12F2
+.
+              MOVE      MCHGAMT[FORM3],MCHGAMT[F3]
+              MOVE      MCHGARR[FORM3],MCHGARR[F3]
+              MOVE      MCHGQMT[FORM3],MCHGQMT[F3]
+.
+              MOVE      FORM12P2,MCHGAMT[FORM3]
+              MOVE      KEY9,MCHGARR[FORM3]
+              MOVE      FORM12F2,MCHGQMT[FORM3]
+.
+              MOVE      ONE,SWAPFLAG
+              MOVE      F3,LASTSWAP
+.
+GETM8600      ADD      ONE,F3
               ADD      ONE,FORM3
             DO
 .
@@ -1626,6 +1677,60 @@ GETM8000  COMPARE   ZERO,F3
                                      FORCMBS,FIFCMBS,SIXCMBS
           DO
 GETM9999  RETURN
++
+.******************************************************************************
+.         Subroutine to get the theatre fee amount
+.******************************************************************************
+TFEE0000  MOVE      ZERO,NOFEE
+          OPEN      PATFN1A1,"patfn1af"
+.
+.         Set up the daycase rate indicator
+.
+          MOVE      SP1,DIM1
+          MATCH     ADATE,DDATE
+          GOTO      TFEE1000 IF NOT EQUAL
+          MOVE      "D",DIM1
+.
+TFEE1000  PACK      KEY9,ACLAIM,AFUNDH,SP70
+          CALL      GETCNEFF                * Get Contract Effective details
+          BRANCH    EXIT,TFEE8000
+.
+          MOVE      PMMITDAT,CEFFDATE       * as at date
+          LOAD      CEFFDATE,CNTRCEFR,ADATE,DDATE
+.
+.         If Contract Effective From is 'For Discharges From', Discharged date
+.         is blank and TCINDC19=D, default Effective date to Current date
+.
+          IF        CNTRCEFR=2
+            PACK      DDATE,DDATE,SP70
+            MATCH     SP70,DDATE
+            IF        @EQUAL
+              PACK      KEY5,CODECL,ACLAIM
+              CALL      RDCODE1
+              IF        OVRCD=0
+                MATCH     "D",TCINDC19
+                IF        @EQUAL
+                  PACK      CEFFDATE,CCC,CYY,CMM,CDD,SP70
+                  REP       " 0",CEFFDATE
+                ENDIF
+              ENDIF
+            ENDIF
+          ENDIF
+.
+          PACK      KEY18 WITH ACLAIM,AFUNDH,AFNDTB,DIM1
+          CALL      GETTFEES
+          BRANCH    EXIT,TFEE8000
+.
+          COMPARE   ZERO,HFBAND
+          GOTO      TFEE9999 IF EQUAL
+          UNPACK    DIM5,PMMISUNQ          * Theatre banding
+          UNPACK    DIM5,PTDTSUNQ          * Theatre banding
+          GOTO      TFEE9999
+.
+TFEE8000  MOVE      ONE,NOFEE
+          GOTO      TFEE9999
+.
+TFEE9999  RETURN
 +
 .******************************************************************************
 .*         GETI0000 - get the first ICD Disease                               *

@@ -12,6 +12,8 @@
 .*  MODIFICATIONS:                                                            *
 .*                                                                            *
 .*----------------------------------------------------------------------------*
+.*        V12.01.01 16/12/2025  J.Tan   TSK 0970843                           *
+.*                  Recompiled for NZPCATBI - I*C on oprdetaf                 *
 .*        V11.05.01 21/02/2025  J.Tan   TSK 0955356                           *
 .*                  Added FININVN,FINADMN,FINURNO                             *
 .*                  14/02/2025 J.Tan           TSK 0946490                    *
@@ -728,7 +730,7 @@ CFPAYCOD  DIM       3        * 3M Codefinder PAY Code
 .
 PRGID     INIT      "NZPBIL19"
 PRGNAM    INIT      "Fees Invoiced Report"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .
 .        ======================================================================

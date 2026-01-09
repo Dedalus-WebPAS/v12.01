@@ -8,6 +8,11 @@
 .  *                                                                          *
 .  *     Modifications:                                                       *
 .  ****************************************************************************
+.  *     V12.01.01 27/11/2025 Zumin Yu         TSK 0955341                    *
+.  *               Added EMRCN053 - Entering Doctors Seen Date and Time       *
+.  *               Added EMRCN054 - Go Live Date for Emergency                *
+.  *               Added EMRCN055 - Using paticddf or emricdaf file           *
+.  *               Added EMRCN056 - Display Desc of Injury Event in PC Field  *
 .  *     V11.04.02 07/02/2024 Nikitha B        TSK 0931586                    *
 .  *               Added EMRCN052 - Send ZTR with A03, A04, A08               *
 .  *     V11.04.01 06/02/2024 Nikitha B        TSK 0931173                    *
@@ -157,7 +162,16 @@ EMRCN027  DIM       4        237      Display Red Sad Face after x minutes for
 EMRCN028  DIM       3        241      ED Fax Scheduler Delay (mins)
 EMRCN029  DIM       6        244      ED Fax Printer
 EMRCN030  DIM       6        250      ED Stationary Template
-.
+EMRCN053  DIM       1        145      Entering Doctors Seen Date and Time
+.                                       0 = No
+.                                       1 = Yes
+EMRCN054  DIM       8        180      Go Live Date for Emergency
+EMRCN055  DIM       1        138      Using paticddf or emricdaf file
+.                                       0 = paticddf
+.                                       1 = emricdaf
+EMRCN056  DIM       1        139      Display Desc of Injury Event in Patient Complaint Field
+.                                       0 = No
+.                                       1 = Yes
 .*****************************************************************************
 .  Sector 122
 .*****************************************************************************

@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -72,6 +72,10 @@ function LoadPeriodDates(isChecked) {
       if ((parent.parent.pat96btf != undefined) &&
 	  (parent.parent.pat96btf.trandate != undefined)) {
 	admisDate = parent.parent.pat96btf.trandate.value;
+      } 
+      else if ((parent.parent.pat96pdf != undefined) &&
+	  (parent.parent.pat96pdf.trandate1 != undefined)) {
+	admisDate = parent.parent.pat96pdf.trandate1.value;
       }
       else if ((parent.parent.UpdateForm != undefined) &&
 	       (parent.parent.UpdateForm.ptmis001 != undefined)) {

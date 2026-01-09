@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -42,6 +42,7 @@ function init() {
     document.getElementById('ReasonForChange').style.display="";
     AddClassName(document.UpdateForm.reasonchange,"Mandatory");
   }
+  InitPostCodes();
 }
 
 function processCompRedirect() {
@@ -229,7 +230,7 @@ function SubmitClaim() {
 }
 </script>
 %START.OF.PAGE
-<body onLoad="PageLoad(event);GetDefaultIns();init();prtFormCheckType();">
+<body onLoad="PageLoad(event);GetDefaultIns();prtFormCheckType();">
 <span class=DFrameTitleBar>
 <img align="right" alt="Exit" class="MenuIcon"
  src="../images/ExitIcon.gif" onclick="DFrameExit();">
@@ -307,7 +308,7 @@ function SubmitClaim() {
         <option> </option>
          %PATWEB89.01.384.099.042.9.1.12.1.A
         </select></td>
-    <td class=DataLabel>&nbsp;<br></td>
+    <td class=DataLabel>Suburb<br></td>
     <td><input type="text" size="35" maxlength="35" name=pmext067 tabindex=15
       value="%PATWEB89.01.384.067" title="Solicitor Address 3"
       onblur="valSolicitorPostCode();">
@@ -329,7 +330,7 @@ function SubmitClaim() {
      onblur="valDateSentICWA()">
     <img src=../images/DateLookup.gif class=Icon date=UpdateForm.pmext010>
     </td>
-    <td class=DataLabel>&nbsp;</td>
+    <td class=DataLabel>Post Code</td>
     <td><input type="text" size="8" maxlength="8" name=pmext069 tabindex=17
       value="%PATWEB89.01.384.069" title="Solicitor Postcode"
       onchange="SetPostCode02();">

@@ -95,6 +95,8 @@
 .***************************************************************************
 .*  Mod's     :                                                            *
 .***************************************************************************
+.*        V12.01.01 04/12/2025  Davin          TSK 0970365                 *
+.*                  Replace " with ' for ZTR.2/3/4/5/6/7 (RZTR0000)        *
 .*        V12.00.10 18/11/2025  Davin          TSK 0968897                 *
 .*                  Added broadcast of EMR A08 after successful receipt of *
 .*                  incoming EMR A08 (parameter based/BEMRUP00/DGCLICEC)   *
@@ -5719,7 +5721,7 @@ DEC       INIT      "December"
 .-----------------------------------------------------------------------
 PRGID     INIT      "HL7RECVR"
 PRGNAM    INIT      "HL7 General Receiving Server"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 .-----------------------------------------------------------------------
 +
 .*************************************************************************
@@ -41471,6 +41473,10 @@ RZTR0201  RESET     ZTR00201
           MOVE      ZTR00201,OLDSTRNG
           CALL      CONV0000                     * convert any escape sequences
           MOVE      NEWSTRNG,ZTR00201
+          MATCH     BLANKSTR,ZTR00201
+          IF        !@EQUAL
+            REP       "#"'",ZTR00201
+          ENDIF
           GOTO      RZTR9999
 .
 .         ZTR.3  Presenting Complaint Line 2 (ST)
@@ -41481,6 +41487,10 @@ RZTR0301  RESET     ZTR00301
           MOVE      ZTR00301,OLDSTRNG
           CALL      CONV0000                     * convert any escape sequences
           MOVE      NEWSTRNG,ZTR00301
+          MATCH     BLANKSTR,ZTR00301
+          IF        !@EQUAL
+            REP       "#"'",ZTR00301
+          ENDIF
           GOTO      RZTR9999
 .
 .         ZTR.4  Presenting Complaint Line 3 (ST)
@@ -41491,6 +41501,10 @@ RZTR0401  RESET     ZTR00401
           MOVE      ZTR00401,OLDSTRNG
           CALL      CONV0000                     * convert any escape sequences
           MOVE      NEWSTRNG,ZTR00401
+          MATCH     BLANKSTR,ZTR00401
+          IF        !@EQUAL
+            REP       "#"'",ZTR00401
+          ENDIF
           GOTO      RZTR9999
 .
 .         ZTR.5  Presenting Complaint Line 4 (ST)
@@ -41501,6 +41515,10 @@ RZTR0501  RESET     ZTR00501
           MOVE      ZTR00501,OLDSTRNG
           CALL      CONV0000                     * convert any escape sequences
           MOVE      NEWSTRNG,ZTR00501
+          MATCH     BLANKSTR,ZTR00501
+          IF        !@EQUAL
+            REP       "#"'",ZTR00501
+          ENDIF
           GOTO      RZTR9999
 .
 .         ZTR.6  Presenting Complaint Line 5 (ST)
@@ -41511,6 +41529,10 @@ RZTR0601  RESET     ZTR00601
           MOVE      ZTR00601,OLDSTRNG
           CALL      CONV0000                     * convert any escape sequences
           MOVE      NEWSTRNG,ZTR00601
+          MATCH     BLANKSTR,ZTR00601
+          IF        !@EQUAL
+            REP       "#"'",ZTR00601
+          ENDIF
           GOTO      RZTR9999
 .
 .         ZTR.7  Presenting Complaint Line 6 (ST)
@@ -41521,6 +41543,10 @@ RZTR0701  RESET     ZTR00701
           MOVE      ZTR00701,OLDSTRNG
           CALL      CONV0000                     * convert any escape sequences
           MOVE      NEWSTRNG,ZTR00701
+          MATCH     BLANKSTR,ZTR00701
+          IF        !@EQUAL
+            REP       "#"'",ZTR00701
+          ENDIF
           GOTO      RZTR9999
 .
 .         ZTR.8  Location (emrlocaf code) (CE)
@@ -48516,7 +48542,7 @@ PODC9999  RETURN
 .
 .         Bump through the text string on a character by character basis
 .         and for each character check to see whether there is a line break.
-.         Allow 100 characters/line, unless of course there is a line break
+.         Allow 60 characters/line, unless of course there is a line break
 .         or the end of the string is reached.
 .
 WODC0000  MOVE      ZERO,LINENUMB                * initialise line number

@@ -8,8 +8,10 @@
 .* Comment  :                                                                 *
 .* Mod's    :                                                                 *
 .*                                                                            *
+.* V12.01.01 25/11/2025  Nikitha B      TSK 0969892                           *
+.*           Commented duplicate "verified address" variable - ADFR0313       *
 .* V11.04.01 15.05.2024  DA Sarkies     TSK 0933585                           *
-.*           Added ADFR039 to ADFR0334                                       *
+.*           Added ADFR039 to ADFR0334                                        *
 .* V11.02.03 21/09/2022  Ebon Clements  TSK 0924736                           *
 .*           Added ADFR0328                                                   *
 .* V11.02.02 23/08/2022  Ebon Clements  TSK 0912508                           *
@@ -349,7 +351,7 @@ ADFR0309  INIT      "PMIUserDefined2PASCode"
 ADFR0310  INIT      "PMIUserDefined3PASCode"
 ADFR0311  INIT      "PMIUserDefined4PASCode"
 ADFR0312  INIT      "PMIUserDefined5PASCode"
-ADFR0313  INIT      "VerifiedAddress"
+.ADFR0313  INIT      "VerifiedAddress"          * Duplicate Variable
 ADFR0314  INIT      "IdentifyingGenderPASCode"
 ADFR0315  INIT      "IdentifyingPronounPASCode"
 ADFR0316  INIT      "AdmissionEmploymentStatusPASCode"
@@ -678,7 +680,7 @@ PMDB0309  INIT     "ADFR0309"
 PMDB0310  INIT     "ADFR0310"
 PMDB0311  INIT     "ADFR0311"
 PMDB0312  INIT     "ADFR0312"
-PMDB0313  INIT     "ADFR0313"
+.PMDB0313  INIT     "ADFR0313"              * Duplicate Variable
 PMDB0314  INIT     "ADFR0314"
 PMDB0315  INIT     "ADFR0315"
 PMDB0316  INIT     "ADFR0316"

@@ -1,9 +1,33 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.03">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
 <script type="text/javascript">
 function PostForm() {
+  if (document.UpdateForm.d_emrcn053.checked==false) {
+    document.UpdateForm.emrcn053.value="0";
+  } else {
+    document.UpdateForm.emrcn053.value="1";
+  }
+  
+  if (document.UpdateForm.d_aaecn014.checked==false) {
+    document.UpdateForm.aaecn014.value="0";
+  } else {
+    document.UpdateForm.aaecn014.value="1";
+  }
+
+  if (document.UpdateForm.d_aaecn020.checked==false) {
+    document.UpdateForm.aaecn020.value="0";
+  } else {
+    document.UpdateForm.aaecn020.value="1";
+  }
+
+  if (document.UpdateForm.d_aaecn021.checked==false) {
+    document.UpdateForm.aaecn021.value="0";
+  } else {
+    document.UpdateForm.aaecn021.value="1";
+  }
+
   setFormactn('U');
 }
 function GoBack() {
@@ -19,9 +43,14 @@ function GoBack() {
 <input type=hidden name=redirect value="comweb98.pbl?reportno=14&template=001">
 <input type=hidden name=nextpage value="1">
 <input type=hidden name=updttype value=" ">
-
+<input type=hidden name=emrcn053 value=" ">
+<input type=hidden name=aaecn014 value=" ">
+<input type=hidden name=aaecn020 value=" ">
+<input type=hidden name=aaecn021 value=" ">
+ 
 <table align=center width=100% border=0 cellspacing=0 cellpadding=0>
-<tr><td class=HeadingCell align=center>Emergency Parameter Maintenance -IBA Controlled 1</td>
+<tr><td class=HeadingCell 
+ align=center>Emergency Parameter Maintenance - Vendor Controlled 1</td>
     </tr>
 <tr><td>
 </table>
@@ -37,8 +66,8 @@ function GoBack() {
     <td width=10% class=DataItem><select name=emrcn002>
         <option value="0">patdo1af</option>
         <option value="1">emrdocaf</option>
-        </select></td>
-    </tr>
+    </select></td>
+</tr>
 
 <tr><td width=10% class=DataLabel>Type of Fee</td>
     <td width=10% class=DataItem><select name=aaecn009>
@@ -46,6 +75,62 @@ function GoBack() {
     <option value="1">Facility Fee</option>
     <option value="2">NZ Facility Fee</option>
     <option value="3">Triage Fee</option>
+    </select></td>
+</tr>
+
+<tr><td class=DataLabel>Entering Doctors Seen Date and Time</td>
+    <td class=DataField>
+      <input type=checkbox name=d_emrcn053 value="1"
+       title="Entering Doctors Seen Date and Time">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Go Live Date for Emergency</td>
+<td><input type=text size=12 maxlength=11 id=emrcn054 name=emrcn054 class="Date"
+     value="%COMWEB98.14.254"
+     title="Go Live Date for Emergency">
+    <img src=../images/DateLookup.gif class=Icon alt="Current"
+     date=UpdateForm.emrcn054>
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Using Theatre Fee file for MBS Item Code</td>
+    <td class=DataField>
+      <input type=checkbox name=d_aaecn014 value="1"
+       title="Using Theatre Fee file for MBS Item Code">
+    </td>
+</tr>
+
+<tr><td width=10% class=DataLabel>Type of Emergency</td>
+    <td width=10% class=DataItem><select name=aaecn015
+       title="Type of Emergency">
+    <option value="0">Standard</option>
+    <option value="1">Modbury</option>
+    <option value="2">NZ</option>
+    </select></td>
+</tr>
+
+<tr><td class=DataLabel>Input Claim Details in Emergency</td>
+    <td class=DataField>
+      <input type=checkbox name=d_aaecn020 value="1"
+       title="Input Claim Details in Emergency">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Charging by Discharge Status</td>
+    <td class=DataField>
+      <input type=checkbox name=d_aaecn021 value="1"
+       title="Charging by Discharge Status">
+    </td>
+</tr>
+
+<tr><td width=10% class=DataLabel>Type of Emergency charging to be used</td>
+    <td width=10% class=DataItem><select name=aaecn022
+       title="Type of Emergency charging to be used">
+    <option value="0">PATNIPA1</option>
+    <option value="1">AAEBCHA1</option>
+    </select></td>
+</tr>
 
 <tr><td colspan=2 align=center><hr width=100%></td></tr>
 
@@ -66,4 +151,35 @@ function GoBack() {
  for (var i =0 ; i < document.UpdateForm.aaecn009.length; i++) {
   if (document.UpdateForm.aaecn009.options[i].value==FeeType.substr(0,1)) {
        document.UpdateForm.aaecn009.selectedIndex=i } };
+
+ EnterDocSeenDT="%COMWEB98.14.253";
+   if (EnterDocSeenDT=="1") {
+     document.UpdateForm.d_emrcn053.checked=true;
+ } 
+
+ UsingTheatreFeeFileForMBSItemCd="%COMWEB98.14.114";
+   if (UsingTheatreFeeFileForMBSItemCd=="1") {
+     document.UpdateForm.d_aaecn014.checked=true;
+ }
+
+ TypeOfEmergency="%COMWEB98.14.115";
+ for (var i =0 ; i < document.UpdateForm.aaecn015.length; i++) {
+  if (document.UpdateForm.aaecn015.options[i].value==TypeOfEmergency.substr(0,1)) {
+    document.UpdateForm.aaecn015.selectedIndex=i } };
+
+ InputClaimDetailsInEmergency="%COMWEB98.14.120";
+ if (InputClaimDetailsInEmergency=="1") {
+     document.UpdateForm.d_aaecn020.checked=true;
+ }
+
+ ChargingByDischargeStatus="%COMWEB98.14.121";
+ if (ChargingByDischargeStatus=="1") {
+     document.UpdateForm.d_aaecn021.checked=true;
+ }
+
+ TypeOfEmergencyChargingToBeUsed="%COMWEB98.14.122";
+ for (var i =0 ; i < document.UpdateForm.aaecn022.length; i++) {
+  if (document.UpdateForm.aaecn022.options[i].value==TypeOfEmergencyChargingToBeUsed.substr(0,1)) {
+     document.UpdateForm.aaecn022.selectedIndex=i } };
+
 </script>

@@ -7,6 +7,8 @@
 . Modifications : 
 .
 .-------------------------------------------------------------------------
+. V12.01.01 15/12/2025  PJ Le Febour   TSK 0963446
+.           Added print Diet desc alongside Diet Icon for CAB        
 . V12.00.08 07/10/2025  Ebon Clements  TSK 0968096
 .           Added custom print-key attribute for bulk A4 labels sheet
 .           printing - CBEDG300
@@ -2502,7 +2504,7 @@ TZFILE    FILE      ASCII, FIXED=256
 .
 .------------------------------------------------------------------------------
 PRGID     INIT      "PATWEB93"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Ward Patient List Server"
 .------------------------------------------------------------------------------
 .
@@ -14586,6 +14588,7 @@ CBEDK500  WRITE     HTMLFILE;"#"";
                                URNUMBER,"','",ADMISSNO,"')>";
 .
             WRITE     HTMLFILE;"#",";
+
           ENDIF
 .
 CBEDK520  REP       "+ ",ADMISSNO
@@ -14964,6 +14967,60 @@ CBEDK815  WRITE     HTMLFILE;"#",";                                     * 15
             WRITE     HTMLFILE;"#"",SP1,"#",";                          * 32
           ELSE
             WRITE     HTMLFILE;"#"",VSCTDATA,"#",";                     * 32
+          ENDIF
+.
+          REP       " +",ADMISSNO
+          REP       " +",URNUMBER 
+.
+          WRITE     HTMLFILE;"#"";
+.
+          MOVE      "DC",CATEGORY
+          MOVE      ADIET,CODE
+          CALL      GETCOD00
+          MOVE      TDESC,DIETDESC
+.
+          IF        EXTRDIET = 1
+            MOVE      "MJ",CATEGORY
+            MOVE      PMNUML01,CODE
+            CALL      GETCOD00
+            MOVE      TDESC,DIETDSC2
+            STRIP     DIETDSC2
+.
+            MOVE      "MJ",CATEGORY
+            MOVE      PMNUML03,CODE
+            CALL      GETCOD00
+            MOVE      TDESC,DIETDSC3
+            STRIP     DIETDSC3
+.
+            MOVE      "MJ",CATEGORY
+            MOVE      PMNUML05,CODE
+            CALL      GETCOD00
+            MOVE      TDESC,DIETDSC4
+            STRIP     DIETDSC4
+.
+            MOVE      "MJ",CATEGORY
+            MOVE      PMNUML07,CODE
+            CALL      GETCOD00
+            MOVE      TDESC,DIETDSC5
+            STRIP     DIETDSC5
+.
+            WRITE     HTMLFILE;"<img src='../images/DietIcon.gif' ":
+                               " class=ListIcon onclick=UpdateDiet('":
+                               URNUMBER,"','",ADMISSNO,"')>";
+.
+            WRITE     HTMLFILE;"#",";
+          ELSE IF
+            MATCH     SP1,PMNUFAST
+            IF        @EQUAL
+              WRITE     HTMLFILE;"<img src='../images/DietIcon.gif' ":
+                                 " class=ListIcon onclick=UpdateDiet('":
+                                 URNUMBER,"','",ADMISSNO,"')> ",DIETDESC,"#",";
+            ELSE
+               WRITE    HTMLFILE;"<img src='../images/DietIcon.gif' ":
+                                 " class=ListIcon onclick=UpdateDiet('":
+                        URNUMBER,"','",ADMISSNO,"')> ",DIETDESC,"<br>":
+                        ",","<br>","Fasting","#",";
+            ENDIF
           ENDIF
 .
           WRITE     HTMLFILE;"#"",SP1,"#");"                            * XX

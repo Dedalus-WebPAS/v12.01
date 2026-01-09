@@ -1,0 +1,18 @@
+.---------------------------------------------------------------------------
+. Include Name : CLPMSPSC.PBL
+. Function     : Clear function for PMSPSCFD
+.---------------------------------------------------------------------------
+. Modifications :
+.---------------------------------------------------------------------------
+. V12.01.00  16/12/2025  Thanh T       TSK 0964761 
+.            Initial Version
+.---------------------------------------------------------------------------
+.
+CLPMSPSC  MOVE      SP70,PMPSCODE      . Program Code (pmsprgaf.pmpgcode)    
+          MOVE      SP70,PMPSATYP      . Admission Type     
+          MOVE      SP70,PMPSHDIP      . Highest Day in Period   
+          MOVE      SP70,PMPSSRCD      . Service Code     
+          MOVE      SP70,PMPSACTV      . Active / Inactive Flag   
+          MOVE      SP70,PMPSSPAR      . Spare      
+.
+          RETURN

@@ -6,6 +6,8 @@
 . Modifications : 
 .
 .---------------------------------------------------------------------- 
+. V12.01.01 09/12/2025  Thanh T        TSK 0960204
+.           Changed CLRWRD00 to space out PTWDROOM field
 . V12.00.04 01.09.2025  DA Sarkies     TSK 0966037
 .           Added line to set DISNUMB to 0 in CLRPAR00
 . V12.00.03 20/08/2025  Zumin Yu       TSK 0965668
@@ -755,7 +757,7 @@ HOSPCODE  DIM       3
 .
 .---------------------------------------------------------------------------
 PRGID     INIT      "PATWEB95"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Ward/Bed Server"
 .---------------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -3134,11 +3136,12 @@ CLRWRD00  MOVE      SP70,WWARD      * WARD NUMBER
           MOVE      SP70,PTWDGLDG   * G/L and Cost Centre code
           MOVE      SP70,PTWDNSTA   * Nursing station
           MOVE      SP70,PTWDDOSA
-          MOVE      SP70,PTWDSPAR   * SPARE
           MOVE      ZERO,SWINPUT
           MOVE      SP70,PTWDCOMM   * Comments
           MOVE      SP70,PTWDDFVS   * Default Visits
           MOVE      SP70,PTWDDFPH   * Default Phone Calls
+          MOVE      SP70,PTWDROOM   * Room (for HL7 purposes only)
+          MOVE      SP70,PTWDSPAR   * SPARE
 .
 CLRWRD99  RETURN
 .---------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome"    content="wahealth">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser"    content="true"> 
@@ -176,9 +176,8 @@ function setRedirectXCom() {
    if (checkComp=="O") {
      strTemplate="241";
      scrName="OD"; }
-   if (checkComp=="M" || document.UpdateForm.opwamvny.value == "1") {
-     strTemplate="342";
-     //strTemplate="242";
+   if (checkComp=="M") {
+     strTemplate="242";
      scrName="MV"; }
    if (checkComp=="F") {
      strTemplate="243";
@@ -234,6 +233,15 @@ function setRedirectXCom() {
   if(chkExtraTempl(document.UpdateForm,"B",document.UpdateForm.newslotk.value,
                 PatientLinks.urnumber.value.replace(/ /g,"+"),scrName)) {
     document.UpdateForm.nextpage.value="6";
+  }
+
+  if (document.UpdateForm.opwamvny != undefined){
+    if (document.UpdateForm.opwamvny.value=="1") {
+      document.UpdateForm.redirect.value="patweb89.pbl?reportno=1&template="+
+         "342&urnumber="+PatientLinks.urnumber.value.replace(/ /g,"+")+
+         "&pmext049="+document.UpdateForm.opwamvny.value+
+         "&foupbkin=1&chckcomp="+checkComp+"O";
+    }
   }
 }
 function DisplayWarning(){

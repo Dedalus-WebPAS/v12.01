@@ -7,6 +7,14 @@
 .  *                    Mental Health Control File cgi variable functions     *
 .  *                                                                          *
 .  *     Modifications:                                                       *
+.  *      V12.01.01 19/12/2021  Zumin Yu      TSK 0970978                     *
+.  *                Added MEHCN022 - Min. no. of days for Holiday Leave       *
+.  *                Added MEHCN023 - Min. no. of days for Trial Leave         *
+.  *                Added MEHCN024 - Max. no. of months for Holiday Leave     *
+.  *                Added MEHCN025 - Max. no. of years for Trial Leave        *
+.  *                Added MEHCN026 - Using Mental Health System               *
+.  *                Added MEHCN027 - Keying in Leave End Reasons              *
+.  *                Added MEHCN028 - Using Diagnosis Screen in Admissions     *
 .  *      V11.01.01 12/09/2021  Sunny         TSK 0858604                     *
 .  *                Added MEHCN021 - Add MH Diagnosis using prev MH Diagnosis *
 .  *      V11.00.01 20/05/2020  Thanh T       TSK 0858656                     *
@@ -56,6 +64,13 @@ CPMH0000  MOVE      Z70,MEHCN001
           MOVE      Z70,MEHCN019
           MOVE      Z70,MEHCN020
           MOVE      Z70,MEHCN021
+          MOVE      Z70,MEHCN022
+          MOVE      Z70,MEHCN023
+          MOVE      Z70,MEHCN024
+          MOVE      Z70,MEHCN025
+          MOVE      Z70,MEHCN026
+          MOVE      Z70,MEHCN027
+          MOVE      Z70,MEHCN028
 .
 CPMH9999  RETURN
 .
@@ -66,7 +81,8 @@ MHCN0000  BRANCH    FLDITMNO,MHCN0010,MHCN0020,MHCN0030,MHCN0040,MHCN0050:
                              MHCN0060,MHCN0070,MHCN0080,MHCN0090,MHCN0100:
                              MHCN0110,MHCN9999,MHCN0130,MHCN0140,MHCN0150:
                              MHCN0160,MHCN0170,MHCN0180,MHCN0190,MHCN0200:
-                             MHCN0210
+                             MHCN0210,MHCN0220,MHCN0230,MHCN0240,MHCN0250:
+                             MHCN0260,MHCN0270,MHCN0280
 .
           WRITE     HTMLFILE;"Invalid IBA Tag";
           GOTO      MHCN9999
@@ -146,6 +162,27 @@ MHCN0200  WRITE     HTMLFILE;MHCNHDDS;  * Hide DSM-IV coding from MH Diag
 MHCN0210  WRITE     HTMLFILE;MHCNPRDS;  * Add MH Diag using prev MH Diagnosis
           GOTO      MHCN9999
 .
+MHCN0220  WRITE     HTMLFILE;MHCNMINH;  * Minimum no. of days for Holiday Leave
+          GOTO      MHCN9999
+.
+MHCN0230  WRITE     HTMLFILE;MHCNMINT;  * Minimum no. of days for Trial Leave
+          GOTO      MHCN9999
+.
+MHCN0240  WRITE     HTMLFILE;MHCNMAXH;  * Max. no. of months for Holiday Leave
+          GOTO      MHCN9999
+.
+MHCN0250  WRITE     HTMLFILE;MHCNMAXT;  * Maximum no. of years for Trial Leave
+          GOTO      MHCN9999
+.
+MHCN0260  WRITE     HTMLFILE;MHCNUSE;  * Using Mental Health System
+          GOTO      MHCN9999
+.
+MHCN0270  WRITE     HTMLFILE;MHCNKLER;  * Keying in Leave End Reasons
+          GOTO      MHCN9999
+.
+MHCN0280  WRITE     HTMLFILE;MHCNUDSA;  * Using Diagnosis Screen in Admissions
+          GOTO      MHCN9999
+.
 MHCN9999  RETURN
 .
 .------------------------------------------------------------
@@ -158,7 +195,8 @@ SPMEH000  MOVE      ZERO,EXIT
                        SPMEH006,SPMEH007,SPMEH008,SPMEH009,SPMEH010:
                        SPMEH011,SPMEH012,SPMEH013,SPMEH014,SPMEH015:
                        SPMEH016,SPMEH017,SPMEH018,SPMEH019,SPMEH020:
-                       SPMEH021
+                       SPMEH021,SPMEH022,SPMEH023,SPMEH024,SPMEH025:
+                       SPMEH026,SPMEH027,SPMEH028
 .
           MOVE      ONE,EXIT
           GOTO      SPMEH999
@@ -226,6 +264,27 @@ SPMEH020  MOVE      QRYDATA,MEHCN020
           GOTO      SPMEH999
 .
 SPMEH021  MOVE      QRYDATA,MEHCN021
+          GOTO      SPMEH999
+.
+SPMEH022  MOVE      QRYDATA,MEHCN022
+          GOTO      SPMEH999
+.
+SPMEH023  MOVE      QRYDATA,MEHCN023
+          GOTO      SPMEH999
+.
+SPMEH024  MOVE      QRYDATA,MEHCN024
+          GOTO      SPMEH999
+.
+SPMEH025  MOVE      QRYDATA,MEHCN025
+          GOTO      SPMEH999
+.
+SPMEH026  MOVE      QRYDATA,MEHCN026
+          GOTO      SPMEH999
+.
+SPMEH027  MOVE      QRYDATA,MEHCN027
+          GOTO      SPMEH999
+.
+SPMEH028  MOVE      QRYDATA,MEHCN028
           GOTO      SPMEH999
 .
 SPMEH999  RETURN
@@ -336,6 +395,41 @@ MVMH0000  MATCH     Z70,MEHCN001
           MATCH     Z70,MEHCN021
           IF        !@EQUAL
             MOVE      MEHCN021,MHCNPRDS
+          ENDIF
+.
+          MATCH     Z70,MEHCN022
+          IF        !@EQUAL
+            MOVE      MEHCN022,MHCNMINH  * Min no. of days for Holiday Leave
+          ENDIF
+.
+          MATCH     Z70,MEHCN023
+          IF        !@EQUAL
+            MOVE      MEHCN023,MHCNMINT * Min no. of days for Trial Leave
+          ENDIF
+.
+          MATCH     Z70,MEHCN024
+          IF        !@EQUAL
+            MOVE      MEHCN024,MHCNMAXH * Max no. of months for Holiday Leave
+          ENDIF
+.
+          MATCH     Z70,MEHCN025
+          IF        !@EQUAL
+            MOVE      MEHCN025,MHCNMAXT * Max no. of years for Trial Leave
+          ENDIF
+.
+          MATCH     Z70,MEHCN026
+          IF        !@EQUAL
+            MOVE      MEHCN026,MHCNUSE  * Using Mental Health System
+          ENDIF
+.
+          MATCH     Z70,MEHCN027
+          IF        !@EQUAL
+            MOVE      MEHCN027,MHCNKLER * Keying in Leave End Reasons
+          ENDIF
+.
+          MATCH     Z70,MEHCN028
+          IF        !@EQUAL
+            MOVE      MEHCN028,MHCNUDSA * Using Diagnosis Screen in Admissions
           ENDIF
 .
 MVMH9999  RETURN

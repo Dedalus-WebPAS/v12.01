@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.03
 //========================================================================
 // Global Variables
 //========================================================================
@@ -1018,6 +1018,7 @@ if (window.addEventListener) {
   // Resize DIV's in other browsers (not IE) when window is resized by the user
   window.addEventListener('resize', PageResize);
 }
+
 function PageResize() {
   // We need to set the sizes of our container DIV's for other browsers;
   // i.e. 'PatientHeading', 'PatientMenu' & 'PageBodySection'
@@ -13437,7 +13438,6 @@ function ibaGetElement()
   if (arguments.length == 2) context  = arguments[1];
   if (context == null) context = document;  // default to current document 
 
-  //var objlist;
   var obj = context.getElementById(idorname);
   if (obj) return obj;
 
@@ -13451,7 +13451,6 @@ function ibaGetElement()
 //------------------------------------------------------------------------
 function ibaGetIframeDoc(iframe)
 {
-
   var context = null;   // parameter 2 (optonal) defaults to curent doc.
 
   // get the arguments 
@@ -13460,19 +13459,33 @@ function ibaGetIframeDoc(iframe)
 
   var iFrameDoc = null;
 
-  // find the PopUpFrame
+  // find the 'PopUpFrame'
   var PopUpFrame = ibaGetElement(iframe,context);
+
   if (PopUpFrame)
   {
-    if (PopUpFrame.contentDocument)                // W3C standards compliant
-    {
-      iFrameDoc = PopUpFrame.contentDocument;
+    try {
+      if (PopUpFrame.contentDocument)
+      {
+        iFrameDoc = PopUpFrame.contentDocument;  // W3C standards compliant
+      }
+      else
+      {
+        iFrameDoc = PopUpFrame.contentWindow.document;  // IE only
+      }
     }
-    else
-    {
-      iFrameDoc = PopUpFrame.contentWindow.document; // IE only
+    catch (err) {  // Cross-origin or other access error
+      if (PopUpFrame != null && PopUpFrame.parentNode) {
+        // Re-add 'PopUpFrame' to the DOM
+        var elParent = PopUpFrame.parentNode;
+        elParent.removeChild(PopUpFrame);
+        elParent.appendChild(PopUpFrame);
+
+        iFrameDoc = PopUpFrame.contentDocument || PopUpFrame.contentWindow?.document;
+      }
     }
   }
+
   return iFrameDoc;
 }
 
@@ -14592,7 +14605,20 @@ function getQueryString(string)
 
  return "";
 }
-
+//-------------------------------------------------------------
+// function : getQueryStringURL(url,cgi) - get any cgi in a url string
+//            by cgi name.
+//-------------------------------------------------------------
+function getQueryStringURL(url,cgi) {
+ var queryParam = url.split("&");
+ for (i=0;i<queryParam.length;i++)
+ {
+   var temp = queryParam[i].split("=");
+   if (temp[0] == cgi)
+     return decodeURIComponent(temp[1]);
+ }
+ return "";
+}
 //=============================================================
 //        Refresh the page in intervals of seconds
 //
@@ -16876,6 +16902,7 @@ function HideChildElements(span_name) {
 //                ASS = Associate No
 //                ACTIVE = Active or Inactive
 //                ACODE = Category Code Value
+//                MULTI1-5 = Indicators 1-5
 // FiltValue    = Value to filter
 // FiltOption   = 1 - Remove option when field value matches and not selected
 //                2 - Only display option with blank and matching field value
@@ -16884,6 +16911,7 @@ function HideChildElements(span_name) {
 //                5 - Remove option when field value matches
 //                6 - As 4 however if selected value does not match displayed
 //                    as blank
+//                7 - Remove option if selected value does not exist in string
 //------------------------------------------------------------
 //------------------------------------------------------------
 function filterCatCodeList(SelectObject,FiltField,FiltValue,FiltOption){
@@ -16966,16 +16994,14 @@ function filterCatCodeList(SelectObject,FiltField,FiltValue,FiltOption){
            field_value=SelectObject.options[i].value.substr(47,1);break;
       case "ACTIVE":
            field_value=SelectObject.options[i].value.substr(38,1);break;
+      case "MULTI1-5":
+           field_value=SelectObject.options[i].value.substr(3,5);break;
      }
      if (FiltOption == "1" && (field_value == FiltValue)) {
       if(SelectObject.options[i].selected!=true) {  // Do not remove
           SelectObject.remove(i);                   // selected options
           i--;
       }
-     }
-     if (FiltOption == "5" && (field_value == FiltValue)) {
-       SelectObject.remove(i);                   
-       i--;
      }
      if (FiltOption == "2" && (field_value != FiltValue) &&
          !isWhitespace(field_value) &&
@@ -17007,12 +17033,19 @@ function filterCatCodeList(SelectObject,FiltField,FiltValue,FiltOption){
           i--;
          }
      }
-
+     if (FiltOption == "5" && (field_value == FiltValue)) {
+       SelectObject.remove(i);                   
+       i--;
+     }
      //As option 4, but excludes selected value if does not match
      if (FiltOption == "6" && (field_value != FiltValue) &&
          !isWhitespace(SelectObject.options[i].value.substr(0,3))) {
           SelectObject.remove(i);                   
           i--;
+     }
+     if (FiltOption == "7" && field_value.search(FiltValue)==-1){
+       SelectObject.remove(i);
+       i--;
      }
   }
 }

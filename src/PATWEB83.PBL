@@ -6,6 +6,8 @@
 . Modifications  :
 .
 .--------------------------------------------------------------------------
+. V12.01.01 04/12/2025  Jacob Jackson     TSK 0908319
+.           Add ability to change/merge UR for medical/maternity booking
 . V12.00.04 27/07/2025  Nikitha Bhaskar   TSK 0963585
 .           Recompiled for WEBCHGUR
 . V12.00.03 24/06/2025  J.Tan             TSK 0961696
@@ -1063,6 +1065,8 @@ OLDURNO   DIM       8
 OLDURNUM  DIM       8
 OPATBOOK  FORM      1                       * Valid outpatient booking      
 OPATCANC  FORM      1                       * cancelled outpatient booking      
+MEDIBOOK  FORM      1
+THEABOOK  FORM      1
 OPATSITE  DIM       6                       * Outpatient user id site code
 OPERCODE  DIM       4
 OURNO     DIM       8
@@ -1362,7 +1366,7 @@ URWTARAY  INIT      "234567"
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "PATWEB83"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Input New Borns Web Server"
 .----------------------------------------------------------------------
 .
@@ -1542,6 +1546,8 @@ CLRPAR00  MOVE      ZERO,REPORTNO
           MOVE      SP70,OPATSITE
           MOVE      ZERO,OPATBOOK
           MOVE      ZERO,OPATCANC
+          MOVE      ZERO,MEDIBOOK
+          MOVE      ZERO,THEABOOK
           MOVE      ZERO,MRGURDAT           * I CAR 41829
           MOVE      SP70,EDLINKIP
           MOVE      SP70,IPLINKED
@@ -3159,7 +3165,12 @@ CHAD0000  UNPACK    SP20,OLDURNO,NEWURNO
             MOVE      NEWURNUM,NEWURNO
             CALL      CHKC0000            * Check if outpatient cancellation
             BRANCH    OPATCANC,CHAD0500
-            CALL      CHGT0000            * Check if theatre booking
+            CALL      CHGT0000            * Check if medical/maternity booking
+            BRANCH    MEDIBOOK,CHAD3900
+.
+            MATCH     OLDURNO,NEWURNO       * can't change to itself
+            GOTO      CHAD9100 IF EQUAL
+.
             CALL      FIXDET00            * fix oprdetaf
             GOTO      CHAD8000
           ENDIF
@@ -3236,6 +3247,13 @@ CHAD3500  MATCH     " 2",PVISYST          * Allied Health
           GOTO      CHAD4000
 .
 CHAD3800  CALL      FIXEVT                * Events
+          GOTO      CHAD4000
+.
+CHAD3900  MATCH     OLDURNO,NEWURNO       * can't change to itself
+          GOTO      CHAD9100 IF EQUAL
+.
+          CALL      PBOK0000
+          GOTO      CHAD4500
 .
 CHAD4000  COMPARE   ONE,OPATBOOK          * Outpatient booking 
           GOTO      CHAD4500 IF EQUAL
@@ -3395,6 +3413,11 @@ FIXDET10  CALL      RKOPDEA2
           MOVE      "008",TADTTYPE
           PROC      OPTHETAT
 .
+          COMPARE   TWO,THEABOOK
+          IF        @EQUAL
+            CALL      URNC0000
+          ENDIF
+.
           GOTO      FIXDET10
 .
 FIXDET99  RETURN
@@ -3414,17 +3437,20 @@ PAAE9999  RETURN
 . Outpatient
 .------------------------------------------------------------
 POUT0000  COMPARE   ONE,OPATCANC          * outpatient cancelled
-          GOTO      POUT2000 IF EQUAL
+          GOTO      POUT1900 IF EQUAL
 .
           CALL      FBOA0000              * Fixed outbokaf file (FIXBOKA)
 .
           COMPARE   ONE,OPATBOOK          * It is a booking so there is no
-          GOTO      POUT2000 IF EQUAL     * visits or invoices to change
+          GOTO      POUT1900 IF EQUAL     * visits or invoices to change
 .
           CALL      FIXVIS
           MOVE      ONE,FORM1             * using pat files in fixinv
           PROC      FIXINV
 .
+          GOTO      POUT2000
+.
+POUT1900  CALL      URNC0000
 POUT2000  CALL      FEOC0000              * remove linked event
 .
           CALL      PMIGTNID              * get national id for dgate write
@@ -3440,6 +3466,21 @@ POUT9999  RETURN
 PDAY0000  CALL      FIXVIS
           CALL      FEOC0000              * remove linked event
 PDAY9999  RETURN
+.------------------------------------------------------------
+. Booking
+.------------------------------------------------------------
+PBOK0000  PROC      FIXBKR
+          CALL      URNC0000
+          CALL      FEOC0000              * remove linked event
+.
+          CALL      PMIGTNID              * get national id for dgate write
+          MOVE      NMPNUMB,PTNINMPI
+          MOVE      SEVEN,HL7TRGID
+          MOVE      SP8,HL7INCLD
+          PROC      DGCLICUR              * broadcast A44 message
+.
+PBOK9999  RETURN
++
 .------------------------------------------------------------
 . U/R change Audit
 .------------------------------------------------------------
@@ -3600,7 +3641,8 @@ CHKC9999  RETURN
 .*********************************************************************
 .        Subroutine to fix up a single theatre booking
 .*********************************************************************
-CHGT0000  MOVE      ADMISSNO,PVIBILL
+CHGT0000  MOVE      ZERO,MEDIBOOK
+          MOVE      ADMISSNO,PVIBILL
           MOVE      ADMISSNO,AADMNO
           MOVE      AADMNO,KEY8
           CALL      RDBKREC1
@@ -3613,6 +3655,17 @@ CHGT0000  MOVE      ADMISSNO,PVIBILL
           MOVE      BKREURNO,OLDURNUM
 
           CALL      FXBKRES1               * fix Booking record and WL
+.
+          PACK      KEY5,ANSB,ANSK,BKRETYPE,SP70
+          CALL      RDCODE1
+          BRANCH    OVRCD,CHGT9999
+.
+          MATCH     "THE",THCSCOD
+          IF        !@EQUAL
+            MOVE      ONE,MEDIBOOK
+          ELSE
+            MOVE      TWO,THEABOOK
+          ENDIF
 .
 CHGT9999  RETURN
 +

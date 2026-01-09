@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.04">
 <meta name="TemplateHome" content="standard">
 <meta name="CrossBrowser" content="true">
 <meta name="HelpFileName" content="NoContextSet.html">
@@ -61,6 +61,7 @@ function ShowHLCTSpan() {
   }
   if (document.SelectPeriod.hlfdclty.value=="1") {
     HealthFund.innerHTML=ClmTyp.innerHTML;
+    filterCatCodeList(document.getElementById("claimtyp"),"MULTI1-5","V","7");
   }
 }
 function healthfundchange () {
@@ -76,6 +77,13 @@ function healthfundchange () {
  }
 }
 function FilterSubmit() {
+  if(isWhitespace(document.SelectPeriod.hlthfund.value)){
+    document.SelectPeriod.hlthfund.value =
+      document.SelectPeriod.healthfd.value;
+  }
+  if (document.getElementById("hospcode") != undefined){
+    document.getElementById("hospcode").disabled = false;
+  }
   document.SelectPeriod.submit();
 }
 
@@ -188,11 +196,18 @@ case 0: {
   }
  }
 }
+function FilterAllHospitals(){
+  document.getElementById("hospcode").disabled = true;
+  if (document.getElementById("hospcode").value==" "){
+    document.SelectPeriod.allhflag.value=1;
+  } else {
+    document.SelectPeriod.allhflag.value=0;
+  }
+}
 </script>
 </head>
 %START.OF.PAGE
-<body onload="PageLoad(event);InitTable(0);
-              document.SelectPeriod.allhflag.value=1;"
+<body onload="PageLoad(event);InitTable(0);"
       onunload="document.cookie = 'EclipseClaimPath=' + 
                 escape(location.href) + ';'">
 
@@ -261,7 +276,7 @@ function AddTableRows() {
   <input type="hidden" name="schddesc" value="Manually generate webservices
                                               claims">
   <input type="hidden" name="nextpage" value="1">
-  <input type="hidden" name="redirect" value="eclweb24.pbl?reportno=6&template=1">
+  <input type="hidden" name="redirect" value="eclweb24.pbl?reportno=6&template=5">
   <input type=hidden name=schdprnt value="S  ">
   <input type=hidden name=schddate value="%STANDARD.01.015">
   <input type=hidden name=schdtime value="%STANDARD.01.016">
@@ -280,9 +295,9 @@ function AddTableRows() {
 <table width=100% align=center border=0 cellspacing=2 cellpadding=0>
     <tr><td class=DataLabel>Hospital ID</td>
     <td><select name=hospcode id=hospcode title="Hospital ID "
-                    onchange="FilterSubmit();">
-    %ECLWEB24.06.003
-    </select>
+                onchange="FilterAllHospitals(); FilterSubmit();">
+          %ECLWEB24.06.003
+        </select>
     </td></tr>
 </table>
 </span>
@@ -310,6 +325,7 @@ function AddTableRows() {
 <script type="text/javascript">
 if (document.SelectPeriod.ibcnmhos.value==1) {
   HospitalID.innerHTML = HospID.innerHTML;
+  FilterAllHospitals();
 }
 HealthFundClaimType="%ECLWEB24.06.005";
 for (var i =0 ; i < document.SelectPeriod.hlfdclty.length; i++) {

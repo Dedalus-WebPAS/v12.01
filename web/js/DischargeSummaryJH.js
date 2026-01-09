@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 // Program   : DischargeSummaryJH.js
 //
@@ -1449,6 +1449,231 @@ if(Patient.allergy5.value!=""){
   "<td>&nbsp;" + Patient.allergyd5.value + "</td>\n" +
   "<td>&nbsp;" + Patient.allergyc5.value + "</td></tr>\n"
 }
+if(Patient.allergy6.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy6.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction6.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd6.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc6.value + "</td></tr>\n"
+}
+if(Patient.allergy7.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy7.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction7.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd7.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc7.value + "</td></tr>\n"
+}
+if(Patient.allergy8.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy8.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction8.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd8.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc8.value + "</td></tr>\n"
+}
+if(Patient.allergy9.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy9.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction9.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd9.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc9.value + "</td></tr>\n"
+}
+if(Patient.allergy10.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy10.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction10.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd10.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc10.value + "</td></tr>\n"
+}
+if(Patient.allergy11.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy11.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction11.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd11.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc11.value + "</td></tr>\n"
+}
+if(Patient.allergy12.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy12.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction12.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd12.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc12.value + "</td></tr>\n"
+}
+if(Patient.allergy13.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy13.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction13.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd13.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc13.value + "</td></tr>\n"
+}
+if(Patient.allergy14.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy14.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction14.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd14.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc14.value + "</td></tr>\n"
+}
+if(Patient.allergy15.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy15.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction15.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd15.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc15.value + "</td></tr>\n"
+}
+if(Patient.allergy16.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy16.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction16.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd16.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc16.value + "</td></tr>\n"
+}
+if(Patient.allergy17.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy17.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction17.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd17.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc17.value + "</td></tr>\n"
+}
+if(Patient.allergy18.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy18.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction18.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd18.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc18.value + "</td></tr>\n"
+}
+if(Patient.allergy19.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy19.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction19.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd19.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc19.value + "</td></tr>\n"
+}
+if(Patient.allergy20.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy20.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction20.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd20.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc20.value + "</td></tr>\n"
+}
+if(Patient.allergy21.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy21.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction21.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd21.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc21.value + "</td></tr>\n"
+}
+if(Patient.allergy22.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy22.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction22.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd22.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc22.value + "</td></tr>\n"
+}
+if(Patient.allergy23.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy23.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction23.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd23.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc23.value + "</td></tr>\n"
+}
+if(Patient.allergy24.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy24.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction24.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd24.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc24.value + "</td></tr>\n"
+}
+if(Patient.allergy25.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy25.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction25.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd25.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc25.value + "</td></tr>\n"
+}
+if(Patient.allergy26.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy26.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction26.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd26.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc26.value + "</td></tr>\n"
+}
+if(Patient.allergy27.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy27.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction27.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd27.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc27.value + "</td></tr>\n"
+}
+if(Patient.allergy28.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy28.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction28.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd28.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc28.value + "</td></tr>\n"
+}
+if(Patient.allergy29.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy29.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction29.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd29.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc29.value + "</td></tr>\n"
+}
+if(Patient.allergy30.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy30.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.reaction30.value + "</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;</td>\n" +
+  "<td>&nbsp;" + Patient.allergyd30.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.allergyc30.value + "</td></tr>\n"
+}
 DocumentHTML+=
 "</table></td></tr>\n" +
 "<tr><td>Alerts/Warnings: "+ "</td></tr>\n" +
@@ -1483,6 +1708,157 @@ if(Patient.alert5.value!=""){
   "<td>&nbsp;" + Patient.alertd5.value + "</td>\n" +
   "<td>&nbsp;" + Patient.alertc5.value + "</td></tr>\n"
 }
+if(Patient.alert6.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert6.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd6.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc6.value + "</td></tr>\n"
+}
+if(Patient.alert7.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert7.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd7.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc7.value + "</td></tr>\n"
+}
+if(Patient.alert8.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert8.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd8.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc8.value + "</td></tr>\n"
+}
+if(Patient.alert9.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert9.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd9.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc9.value + "</td></tr>\n"
+}
+if(Patient.alert10.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert10.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd10.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc10.value + "</td></tr>\n"
+}
+if(Patient.alert11.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert11.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd11.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc11.value + "</td></tr>\n"
+}
+if(Patient.alert12.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert12.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd12.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc12.value + "</td></tr>\n"
+}
+if(Patient.alert13.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert13.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd13.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc13.value + "</td></tr>\n"
+}
+if(Patient.alert14.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert14.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd14.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc14.value + "</td></tr>\n"
+}
+if(Patient.alert15.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert15.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd15.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc15.value + "</td></tr>\n"
+}
+if(Patient.alert16.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert16.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd16.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc16.value + "</td></tr>\n"
+}
+if(Patient.alert17.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert17.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd17.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc17.value + "</td></tr>\n"
+}
+if(Patient.alert18.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert18.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd18.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc18.value + "</td></tr>\n"
+}
+if(Patient.alert19.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert19.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd19.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc19.value + "</td></tr>\n"
+}
+if(Patient.alert20.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert20.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd20.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc20.value + "</td></tr>\n"
+}
+if(Patient.alert21.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert21.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd21.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc21.value + "</td></tr>\n"
+}
+if(Patient.alert22.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert22.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd22.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc22.value + "</td></tr>\n"
+}
+if(Patient.alert23.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert23.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd23.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc23.value + "</td></tr>\n"
+}
+if(Patient.alert24.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert24.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd24.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc24.value + "</td></tr>\n"
+}
+if(Patient.alert25.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert25.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd25.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc25.value + "</td></tr>\n"
+}
+if(Patient.alert26.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert26.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd26.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc26.value + "</td></tr>\n"
+}
+if(Patient.alert27.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert27.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd27.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc27.value + "</td></tr>\n"
+}
+if(Patient.alert28.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert28.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd28.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc28.value + "</td></tr>\n"
+}
+if(Patient.alert29.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert29.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd29.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc29.value + "</td></tr>\n"
+}
+if(Patient.alert30.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert30.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertd30.value + "</td>\n" +
+  "<td>&nbsp;" + Patient.alertc30.value + "</td></tr>\n"
+}
+
 DocumentHTML+=
 "</table></td></tr>" +
 "<tr><td>&nbsp;</td></tr>\n" +
@@ -1804,7 +2180,131 @@ if(Patient.allergy5.value!=""){
   "<tr><td>&nbsp;" + Patient.allergy5.value + "</td>\n "+
   "<td>&nbsp;" + Patient.allergyc5.value + "</td></tr>\n"
 }
-
+if(Patient.allergy6.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy6.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc6.value + "</td></tr>\n"
+}
+if(Patient.allergy7.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy7.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc7.value + "</td></tr>\n"
+}
+if(Patient.allergy8.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy8.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc8.value + "</td></tr>\n"
+}
+if(Patient.allergy9.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy9.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc9.value + "</td></tr>\n"
+}
+if(Patient.allergy10.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy10.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc10.value + "</td></tr>\n"
+}
+if(Patient.allergy11.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy11.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc11.value + "</td></tr>\n"
+}
+if(Patient.allergy12.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy12.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc12.value + "</td></tr>\n"
+}
+if(Patient.allergy13.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy13.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc13.value + "</td></tr>\n"
+}
+if(Patient.allergy14.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy14.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc14.value + "</td></tr>\n"
+}
+if(Patient.allergy15.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy15.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc15.value + "</td></tr>\n"
+}
+if(Patient.allergy16.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy16.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc16.value + "</td></tr>\n"
+}
+if(Patient.allergy17.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy17.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc17.value + "</td></tr>\n"
+}
+if(Patient.allergy18.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy18.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc18.value + "</td></tr>\n"
+}
+if(Patient.allergy19.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy19.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc19.value + "</td></tr>\n"
+}
+if(Patient.allergy20.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy20.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc20.value + "</td></tr>\n"
+}
+if(Patient.allergy21.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy21.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc21.value + "</td></tr>\n"
+}
+if(Patient.allergy22.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy22.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc22.value + "</td></tr>\n"
+}
+if(Patient.allergy23.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy23.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc23.value + "</td></tr>\n"
+}
+if(Patient.allergy24.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy24.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc24.value + "</td></tr>\n"
+}
+if(Patient.allergy25.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy25.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc25.value + "</td></tr>\n"
+}
+if(Patient.allergy26.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy26.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc26.value + "</td></tr>\n"
+}
+if(Patient.allergy27.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy27.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc27.value + "</td></tr>\n"
+}
+if(Patient.allergy28.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy28.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc28.value + "</td></tr>\n"
+}
+if(Patient.allergy29.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy29.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc29.value + "</td></tr>\n"
+}
+if(Patient.allergy30.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.allergy30.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.allergyc30.value + "</td></tr>\n"
+}
 DocumentHTML+=
 "</table></td></tr>\n" +
 "<tr><td>Alerts/Warnings: "+ "</td></tr>\n" +
@@ -1833,6 +2333,132 @@ if(Patient.alert5.value!=""){
   "<tr><td>&nbsp;" + Patient.alert5.value + "</td>\n "+
   "<td>&nbsp;" + Patient.alertc5.value + "</td></tr>\n"
 }
+if(Patient.alert6.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert6.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc6.value + "</td></tr>\n"
+}
+if(Patient.alert7.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert7.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc7.value + "</td></tr>\n"
+}
+if(Patient.alert8.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert8.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc8.value + "</td></tr>\n"
+}
+if(Patient.alert9.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert9.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc9.value + "</td></tr>\n"
+}
+if(Patient.alert10.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert10.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc10.value + "</td></tr>\n"
+}
+if(Patient.alert11.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert11.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc11.value + "</td></tr>\n"
+}
+if(Patient.alert12.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert12.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc12.value + "</td></tr>\n"
+}
+if(Patient.alert13.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert13.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc13.value + "</td></tr>\n"
+}
+if(Patient.alert14.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert14.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc14.value + "</td></tr>\n"
+}
+if(Patient.alert15.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert15.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc15.value + "</td></tr>\n"
+}
+if(Patient.alert16.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert16.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc16.value + "</td></tr>\n"
+}
+if(Patient.alert17.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert17.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc17.value + "</td></tr>\n"
+}
+if(Patient.alert18.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert18.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc18.value + "</td></tr>\n"
+}
+if(Patient.alert19.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert19.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc19.value + "</td></tr>\n"
+}
+if(Patient.alert20.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert20.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc20.value + "</td></tr>\n"
+}
+if(Patient.alert21.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert21.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc21.value + "</td></tr>\n"
+}
+if(Patient.alert22.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert22.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc22.value + "</td></tr>\n"
+}
+if(Patient.alert23.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert23.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc23.value + "</td></tr>\n"
+}
+if(Patient.alert24.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert24.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc24.value + "</td></tr>\n"
+}
+if(Patient.alert25.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert25.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc25.value + "</td></tr>\n"
+}
+if(Patient.alert26.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert26.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc26.value + "</td></tr>\n"
+}
+if(Patient.alert27.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert27.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc27.value + "</td></tr>\n"
+}
+if(Patient.alert28.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert28.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc28.value + "</td></tr>\n"
+}
+if(Patient.alert29.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert29.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc29.value + "</td></tr>\n"
+}
+if(Patient.alert30.value!=""){
+  DocumentHTML+=
+  "<tr><td>&nbsp;" + Patient.alert30.value + "</td>\n "+
+  "<td>&nbsp;" + Patient.alertc30.value + "</td></tr>\n"
+} 
+
 DocumentHTML+=
 "</table></td></tr>" +
 "<tr><td>&nbsp;</td></tr>\n" +

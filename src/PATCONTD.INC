@@ -10,6 +10,13 @@
 .  *     Modifications:                                                       *
 .  *                                                                          *
 .  ****************************************************************************
+.  *     V12.01.01  17/12/2025  Zumin Yu         TSK 0968747                  *
+.  *                Added CSURG1, CMURG1, CSURG2, CMURG2, CSURG3, CMURG3,     *
+.  *                CSURG4, CMURG4, CIPRG, COPRG, CAERG, CNBRG, CCNOTES,      *
+.  *                CPMIAD, CURDEL, CURCHG, CSRCHDRG, CSRCHYRG, CFFMORB,      *
+.  *                PTCNURCF, PTCNRQCF, PTCNDPCF, PTCNRLAY, PTCNUCOD,         *
+.  *                PTCNMRPN, PTCNUDRN, PTCECODE, CMDISP, CMDISS, CMDISC,     *
+.  *                CMDISA, CMDISD, CMOPRT, CMDISL and CMDISM from IBAHOS93   *
 .  *     V12.00.05  19/11/2025  Davin            TSK 0968897                  *
 .  *                Added PATCN663 - Broadcast HL7 EMR A08 from HL7RECVR      *
 .  *                Added PATCN664 - Sending application MSH.3 for EMR A08    *
@@ -1739,6 +1746,51 @@ PATCN662  DIM       1     * Broadcast Outpatient Expected Discharge Date and
 PATCN663  DIM       1     * PTCNB08E - Broadcast HL7 EMR A08 from HL7RECVR
 .                           0 or blank = No, 1 = Yes
 PATCN664  DIM       50    * PTCNMSH3 - Sending application MSH.3 for EMR A08
+PATCN665  DIM       9     * CSURG1 - Range 1 - Next U/R Number
+PATCN666  DIM       8     * CMURG1 - Range 1 - Maximum  U/R Number
+PATCN667  DIM       9     * CSURG2 - Range 2 - Next U/R Number
+PATCN668  DIM       8     * CMURG2 - Range 2 - Maximum  U/R Number
+PATCN669  DIM       9     * CSURG3 - Range 3 - Next U/R Number
+PATCN670  DIM       8     * CMURG3 - Range 3 - Maximum  U/R Number
+PATCN671  DIM       9     * CSURG4 - Range 4 - Next U/R Number
+PATCN672  DIM       8     * CMURG4 - Range 4 - Maximum  U/R Number
+PATCN673  DIM       1     * CIPRG - Inpatient System using Range
+PATCN674  DIM       1     * COPRG - Outpatient System using Range
+PATCN675  DIM       1     * CAERG - A & E System using Range
+PATCN676  DIM       1     * CNBRG - Newborn System using Range
+PATCN677  DIM       1     * CCNOTES - Case Notes Symbol
+PATCN678  DIM       1     * CPMIAD - Using PMI Change Audit
+.                           0 = No, 1 = Yes
+PATCN679  DIM       1     * CURDEL - Using PMI Deletion Audit
+.                           0 = No, 1 = Yes
+PATCN680  DIM       1     * CURCHG - Using U/R Number Change Audit
+.                           0 = No, 1 = Yes
+PATCN681  DIM       2     * CSRCHDRG - Day range for DOB in searches
+PATCN682  DIM       2     * CSRCHYRG - Year range for DOB in searches
+PATCN683  DIM       1     * CFFMORB - Change desc. in Morbidity 
+.                           0 = No, 1 = Yes
+PATCN684  DIM       1     * PTCNURCF - Using Free Format for Urgency
+.                           0 = No, 1 = Yes
+PATCN685  DIM       1     * PTCNRQCF - Using Free Format for Requested
+.                           0 = No, 1 = Yes
+PATCN686  DIM       1     * PTCNDPCF - Using Free Format for Department 
+.                           0 = No, 1 = Yes
+PATCN687  DIM       1     * PTCNRLAY - Medical Record Request Form Layout
+.                           0 = User Defined                            
+PATCN688  DIM       6     * PTCNUCOD - User Defined Stationery Code
+PATCN689  DIM       3     * PTCNMRPN - Printer for Medical Record Request Form
+PATCN690  DIM       1     * PTCNUDRN - Using ranges for DOB searches
+.                           0 = No, 1 = Yes 
+PATCN691  DIM       1     * PTCECODE - Mandatory 'E' Code Check 
+.                           0 = No, 1 = Yes
+PATCN692  DIM       1     * CMDISP - Prefix for Primary Disease Codes
+PATCN693  DIM       1     * CMDISS - Prefix for Sequela Disease Codes
+PATCN694  DIM       1     * CMDISC - Prefix for Complication Codes
+PATCN695  DIM       1     * CMDISA - Prefix for Associated Disease Codes
+PATCN696  DIM       1     * CMDISD - Prefix for Disability Disease Codes
+PATCN697  DIM       1     * CMOPRT - Prefix for Post-Surgical Operation Codes
+PATCN698  DIM       1     * CMDISL - Prefix for Length of Stay Disease Codes
+PATCN699  DIM       1     * CMDISM - Prefix for Morphology Disease Codes
 .
 IBACN001  DIM       1     * Multi hospital
 IBACN002  DIM       1     * Using Medclaims (0=No/1=Yes)

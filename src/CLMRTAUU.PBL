@@ -1,0 +1,45 @@
+.---------------------------------------------------------------------------
+. Include Name : CLMRTAUU.PBL
+. Function     : Clear function for MRTAUUFD
+.---------------------------------------------------------------------------
+. Modifications :
+.---------------------------------------------------------------------------
+. V12.01.00  10/12/2025  Thanh T       TSK 0953127
+.            Initial Version
+.---------------------------------------------------------------------------
+.
+CLMRTAUU  MOVE      SP70,MRAUVISN      . Visit Number     
+          MOVE      SP70,MRAUEPSN      . Episode Number     
+          MOVE      SP70,MRAUADTE      . Audit Date     
+          MOVE      SP70,MRAUODRG      . Original DRG     
+          MOVE      ZERO,MRAUOWIE      . Original WIES     
+          MOVE      SP70,MRAUNDRG      . New DRG     
+          MOVE      ZERO,MRAUNWIE      . New WIES     
+          MOVE      ZERO,MRAUDWIE      . WIES Difference     
+          MOVE      SP70,MRAUCLNC      . Clinician      
+          MOVE      SP70,MRAUSTAT      . Status Of Audit (CAT YJ)  
+          MOVE      SP70,MRAUTYPE      . Type Audit (CAT YA)   
+          MOVE      SP70,MRAURCHG      . Reason For Change (CAT YB)  
+          MOVE      SP70,MRAUNCHG      . No Change (Y/N)    
+          PACK      MRAUCOMM,SP70,SP70 . Comments      
+          MOVE      SP70,MRAUCDTE      . Date Record Created (CCYYMMDD)   
+          MOVE      SP70,MRAUCTIM      . Date Record Created (CCYYMMDD)   
+          MOVE      SP70,MRAUCUSR      . Web User Id Created (websecaf)  
+          MOVE      SP70,MRAUCDSC      . User Created Description    
+          MOVE      SP70,MRAUUDTE      . Date Record Updated (CCYYMMDD)   
+          MOVE      SP70,MRAUUTIM      . Time Record Updated (hh:mm:ss)   
+          MOVE      SP70,MRAUUUSR      . Web User Id Updated (websecaf)  
+          MOVE      SP70,MRAUUDSC      . User Updated Description    
+          MOVE      ZERO,MRAUODOL      . Original Dollar Value    
+          MOVE      ZERO,MRAUNDOL      . New Dollar Value    
+          MOVE      ZERO,MRAUDIFD      . Difference In Dollar Value   
+          MOVE      SP70,MRAUDDNR      . Doctor Did Not Respond   
+          MOVE      SP70,MRAUOHCP      . HCP Code     
+          MOVE      SP70,MRAUOCOF      . Outcome of Change (Cat aO)  
+          MOVE      SP70,MRAUODAT      . Outcome Date     
+          MOVE      SP70,MRAUUSTS      . Upload Status     
+          MOVE      SP70,MRAULINE      . Line Number     
+          PACK      MRAUEROR,SP70,SP70 . Error      
+          PACK      MRAURDET,SP70,SP70 . Record Details     
+.
+          RETURN

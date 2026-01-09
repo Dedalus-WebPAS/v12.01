@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .----------------------------------------------------------------------
+. V12.01.01 17/12/2025 Ebon Clements   TSK 0963798
+.           Added contact number to message lists - TABU0000 TABM0000
 . V11.04.06 30/09/2024 Nikitha B       TSK 0948566
 .           VINAH MDS for 2024-25 Vic health department changes
 .           Added IT Program - Subcutaneous Immunoglobulin Infusion Therapy
@@ -562,7 +564,7 @@ UNIQCODE  DIM       9
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "ALLWEB05"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Allied Health SAC Extract Maintenance"
 .----------------------------------------------------------------------
 .
@@ -3140,7 +3142,8 @@ TABM1100  MATCH     SP70,DEPTCODE
                              "#"",ALHDDEPT,"#",":                    * 12
                              "#"",TDESC,"#",":                       * 13
                              "#"",DIM8,"#",":                        * 14
-                             "#"",HTMLLNK2,"#"":                     * 15
+                             "#"",HTMLLNK2,"#",":                    * 15
+                             "#"",ALHDCONT,"#"":                     * 16
                              ");"
 .
           GOTO      TABM1000
@@ -3288,7 +3291,8 @@ TABU1000  CALL      RKALHDT3
                              "#"",DIM12,"#",":                       * 11
                              "#"",ALHDDEPT,"#",":                    * 12
                              "#"",TDESC,"#",":                       * 13
-                             "#"",DIM8,"#"":                         * 14
+                             "#"",DIM8,"#",":                        * 14
+                             "#"",ALHDCONT,"#"":                     * 15
                              ");"
 .
           GOTO      TABU1000

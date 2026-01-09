@@ -1,10 +1,4 @@
-//jsVersion  : V12.01.00
-//----------------------------------------------------------------------
-// V9.08.01  01.12.2006 Ebon Clements CAR 126021
-//           Changed using IE6 test to using IE6 or IE7
-// V9.04.00  21.07.2005 Ebon Clements CAR 55997
-//           SmallTable.js with arrays for TableString. SmallTableOLD.js is
-//           the save copy of this before the array changes.
+//jsVersion  : V12.01.01
 //----------------------------------------------------------------------
 var CompatibilityMode = false;  // Browser Compatibility Mode
 function Table(Border,Cellspacing,Cellpadding,Width,Align,Title) {
@@ -21,7 +15,7 @@ function Table(Border,Cellspacing,Cellpadding,Width,Align,Title) {
    this.sortTable = _sortTable;
 }
 function _sortTable(Column,AscDsc) {
-  SortOrderBy = t.columns[Column][3]
+  SortOrderBy = t.columns[Column][3];
   if (AscDsc == 1) {
     switch(t.columns[Column][1]) {
       case "Date"      :  t.rows.sort(NumericSort); break;
@@ -48,19 +42,49 @@ function _sortTable(Column,AscDsc) {
 function NumericSort(a,b) {
   return a[SortOrderBy] - b[SortOrderBy];
 }
+function IsVisitNumber(str) {
+  if (str && str.length < 8) return false;
+
+  var paddedNumeric = /^\s+\d+$/;           // e.g., "   12345"
+  var alphaNumeric = /^[A-Za-z]{2}\d{6}$/;  // e.g., "AB123456"
+
+  return paddedNumeric.test(str) || alphaNumeric.test(str);
+}
+function VisitNumSort(a,b) {
+  if (a[SortOrderBy].slice(-8) < b[SortOrderBy].slice(-8))  { x = -1 }
+  if (a[SortOrderBy].slice(-8) == b[SortOrderBy].slice(-8)) { x = 0 }
+  if (a[SortOrderBy].slice(-8) > b[SortOrderBy].slice(-8))  { x = 1 }
+
+  return x;
+}
+function RevVisitNumSort(a,b) {
+  if (a[SortOrderBy].slice(-8) < b[SortOrderBy].slice(-8))  { x = 1 }
+  if (a[SortOrderBy].slice(-8) == b[SortOrderBy].slice(-8)) { x = 0 }
+  if (a[SortOrderBy].slice(-8) > b[SortOrderBy].slice(-8))  { x = -1 }
+
+  return x;
+}
 function StringSort(a,b) {
-  if (a[SortOrderBy] < b[SortOrderBy] ) { x = -1 }
-  if (a[SortOrderBy] == b[SortOrderBy] ) { x = 0  }
-  if (a[SortOrderBy] > b[SortOrderBy] ) { x = 1  }
+  if (IsVisitNumber(a[SortOrderBy]) && IsVisitNumber(b[SortOrderBy])) {
+    return VisitNumSort(a,b);
+  }
+
+  if (trim(a[SortOrderBy]) < trim(b[SortOrderBy])) { x = -1 }
+  if (trim(a[SortOrderBy]) == trim(b[SortOrderBy])) { x = 0 }
+  if (trim(a[SortOrderBy]) > trim(b[SortOrderBy])) { x = 1 }
   return x ;
 }
 function RevNumericSort(a,b) {
   return b[SortOrderBy] - a[SortOrderBy];
 }
 function RevStringSort(a,b) {
-  if (a[SortOrderBy] < b[SortOrderBy] ) { x = 1 }
-  if (a[SortOrderBy] == b[SortOrderBy] ) { x = 0  }
-  if (a[SortOrderBy] > b[SortOrderBy] ) { x = -1  }
+  if (IsVisitNumber(a[SortOrderBy]) && IsVisitNumber(b[SortOrderBy])) {
+    return RevVisitNumSort(a,b);
+  }
+
+  if (trim(a[SortOrderBy]) < trim(b[SortOrderBy])) { x = 1 }
+  if (trim(a[SortOrderBy]) == trim(b[SortOrderBy])) { x = 0 }
+  if (trim(a[SortOrderBy]) > trim(b[SortOrderBy])) { x = -1 }
   return x ;
 }
 function _addTableColumn() {

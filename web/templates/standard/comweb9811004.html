@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -29,6 +29,51 @@ function PostForm() {
   } else {
      document.UpdateForm.mrtcn064.value="1";
   }
+  if(document.UpdateForm.d_patcn678.checked==false) {
+     document.UpdateForm.patcn678.value="0";
+  } else {
+     document.UpdateForm.patcn678.value="1";
+  }
+  if(document.UpdateForm.d_patcn679.checked==false) {
+     document.UpdateForm.patcn679.value="0";
+  } else {
+     document.UpdateForm.patcn679.value="1";
+  }
+  if(document.UpdateForm.d_patcn680.checked==false) {
+     document.UpdateForm.patcn680.value="0";
+  } else {
+     document.UpdateForm.patcn680.value="1";
+  }
+  if(document.UpdateForm.d_patcn683.checked==false) {
+     document.UpdateForm.patcn683.value="0";
+  } else {
+     document.UpdateForm.patcn683.value="1";
+  }
+  if(document.UpdateForm.d_patcn684.checked==false) {
+     document.UpdateForm.patcn684.value="0";
+  } else {
+     document.UpdateForm.patcn684.value="1";
+  }
+  if(document.UpdateForm.d_patcn685.checked==false) {
+     document.UpdateForm.patcn685.value="0";
+  } else {
+     document.UpdateForm.patcn685.value="1";
+  }
+  if(document.UpdateForm.d_patcn686.checked==false) {
+     document.UpdateForm.patcn686.value="0";
+  } else {
+     document.UpdateForm.patcn686.value="1";
+  }
+  if(document.UpdateForm.d_patcn690.checked==false) {
+     document.UpdateForm.patcn690.value="0";
+  } else {
+     document.UpdateForm.patcn690.value="1";
+  }
+  if(document.UpdateForm.d_patcn691.checked==false) {
+     document.UpdateForm.patcn691.value="0";
+  } else {
+     document.UpdateForm.patcn691.value="1";
+  }
 
   setFormactn('U');
 }
@@ -47,6 +92,15 @@ function PostForm() {
 <input type=hidden name=mrtcn062 value=" ">
 <input type=hidden name=mrtcn063 value=" ">
 <input type=hidden name=mrtcn064 value=" ">
+<input type=hidden name=patcn678 value=" ">
+<input type=hidden name=patcn679 value=" ">
+<input type=hidden name=patcn680 value=" ">
+<input type=hidden name=patcn683 value=" ">
+<input type=hidden name=patcn684 value=" ">
+<input type=hidden name=patcn685 value=" ">
+<input type=hidden name=patcn686 value=" ">
+<input type=hidden name=patcn690 value=" ">
+<input type=hidden name=patcn691 value=" ">
 
 <table align=center width=100% border=0 cellspacing=0 cellpadding=0>
 <tr><td class=HeadingCell align=center>
@@ -112,6 +166,256 @@ function PostForm() {
     <td><input type=checkbox name=d_mrtcn064 value="1">
     </td>
 </tr>
+<tr>
+    <td class=DataLabel>Range 1 - Next U/R Number</td>
+    <td class=DataItem><input type=text name=patcn665
+        title="Range 1 - Next U/R Number"
+        size=12 maxlength=9 value="%COMWEB98.11.299.565">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Range 1 - Maximum U/R Number</td>
+    <td class=DataItem><input type=text name=patcn666
+        title="Range 1 - Maximum U/R Number"
+        size=12 maxlength=8 value="%COMWEB98.11.299.566">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Range 2 - Next U/R Number</td>
+    <td class=DataItem><input type=text name=patcn667
+        title="Range 2 - Next U/R Number"
+        size=12 maxlength=9 value="%COMWEB98.11.299.567">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Range 2 - Maximum U/R Number</td>
+    <td class=DataItem><input type=text name=patcn668
+        title="Range 2 - Maximum U/R Number"
+        size=12 maxlength=8 value="%COMWEB98.11.299.568">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Range 3 - Next U/R Number</td>
+    <td class=DataItem><input type=text name=patcn669
+        title="Range 3 - Next U/R Number"
+        size=12 maxlength=9 value="%COMWEB98.11.299.569">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Range 3 - Maximum U/R Number</td>
+    <td class=DataItem><input type=text name=patcn670
+        title="Range 3 - Maximum U/R Number"
+        size=12 maxlength=8 value="%COMWEB98.11.299.570">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Range 4 - Next U/R Number</td>
+    <td class=DataItem><input type=text name=patcn671
+        title="Range 4 - Next U/R Number"
+        size=12 maxlength=9 value="%COMWEB98.11.299.571">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Range 4 - Maximum U/R Number</td>
+    <td class=DataItem><input type=text name=patcn672
+        title="Range 4 - Maximum U/R Number"
+        size=12 maxlength=8 value="%COMWEB98.11.299.572">
+    </td>
+</tr>
+<tr><td class=Datalabel>Inpatient System using Range</td>
+    <td><select name=patcn673 id=patcn673
+         title="Inpatient System using Range">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        </select></td>
+</tr>
+<tr><td class=Datalabel>Outpatient System using Range</td>
+    <td><select name=patcn674 id=patcn674
+         title="Outpatient System using Range">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        </select></td>
+</tr>
+<tr><td class=Datalabel>A & E System using Range</td>
+    <td><select name=patcn675 id=patcn675
+         title="A & E System using Range">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        </select></td>
+</tr>
+<tr><td class=Datalabel>Newborn System using Range</td>
+    <td><select name=patcn676 id=patcn676
+         title="Newborn System using Range">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        </select></td>
+</tr>
+<tr>
+    <td class=DataLabel>Case Notes Symbol</td>
+    <td class=DataItem><input type=text name=patcn677
+        title="Case Notes Symbol"
+        size=3 maxlength=1 value="%COMWEB98.11.299.577">
+    </td>
+</tr>
+<tr><td class=DataLabel>Using PMI Change Audit (Y/N)</td>
+    <td class=DataField>
+      <input type=checkbox name=d_patcn678 value="1"
+       title="Using PMI Change Audit (Y/N)">
+    </td>
+</tr>
+<tr><td class=DataLabel>Using PMI Deletion Audit (Y/N)</td>
+    <td class=DataField>
+      <input type=checkbox name=d_patcn679 value="1"
+       title="Using PMI Deletion Audit (Y/N)">
+    </td>
+</tr>
+<tr><td class=DataLabel>Using U/R No. Change Audit (Y/N)</td>
+    <td class=DataField>
+      <input type=checkbox name=d_patcn680 value="1"
+       title="Using U/R No. Change Audit (Y/N)">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Day range for DOB in searches</td>
+    <td class=DataItem><input type=text name=patcn681
+        class="Number JustifyRight Integer" min=0 max=99
+        title="Day range for DOB in searches"
+        size=3 maxlength=2 value="%COMWEB98.11.299.581">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Year range for DOB in searches</td>
+    <td class=DataItem><input type=text name=patcn682
+        class="Number JustifyRight Integer" min=0 max=99
+        title="Year range for DOB in searches"
+        size=3 maxlength=2 value="%COMWEB98.11.299.582">
+    </td>
+</tr>
+<tr><td class=DataLabel>Change desc. in Morbidity  (Y/N)</td>
+    <td class=DataField>
+      <input type=checkbox name=d_patcn683 value="1"
+       title="Change desc. in Morbidity  (Y/N)">
+    </td>
+</tr>
+<tr><td class=DataLabel>Using Free Format for Urgency (Y/N)</td>
+    <td class=DataField>
+      <input type=checkbox name=d_patcn684 value="1"
+       title="Using Free Format for Urgency (Y/N)">
+    </td>
+</tr>
+<tr><td class=DataLabel>Using Free Format for Requested (Y/N)</td>
+    <td class=DataField>
+      <input type=checkbox name=d_patcn685 value="1"
+       title="Using Free Format for Requested (Y/N)">
+    </td>
+</tr>
+<tr><td class=DataLabel>Using Free Format for Department (Y/N)</td>
+    <td class=DataField>
+      <input type=checkbox name=d_patcn686 value="1"
+       title="Using Free Format for Department (Y/N)">
+    </td>
+</tr>
+<tr><td width=10% class=DataLabel>Medical Record Request Form Layout</td>
+    <td width=10% class=DataItem><select name=patcn687
+       title="Medical Record Request Form Layout">
+    <option value="0">User Defined</option>
+    </select></td>
+</tr>
+<tr><td width=10% class=DataLabel>User Defined Stationery Code</td>
+    <td width=10% class=DataItem><select id=patcn688 name=patcn688
+       title="User Defined Stationery Code">
+      <option> </option>
+      %STANDARD.01.020.  4.
+      </select>
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Printer for Medical Record Request Form</td>
+    <td class=DataItem><input type=text name=patcn689
+        title="Printer for Medical Record Request Form"
+        size=5 maxlength=3 value="%COMWEB98.11.299.589">
+    </td>
+</tr>
+<tr><td class=DataLabel>Using ranges for DOB searches</td>
+    <td class=DataField>
+      <input type=checkbox name=d_patcn690 value="1"
+       title="Using ranges for DOB searches">
+    </td>
+</tr>
+<tr><td class=DataLabel>Mandatory 'E' Code Check (Y/N)</td>
+    <td class=DataField>
+      <input type=checkbox name=d_patcn691 value="1"
+       title="Mandatory 'E' Code Check (Y/N)">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Prefix for Primary Diseases Codes</td>
+    <td class=DataItem><input type=text name=patcn692
+        title="Prefix for Primary Diseases Codes"
+        size=3 maxlength=1 value="%COMWEB98.11.299.592">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Prefix for Sequela Diseases Codes</td>
+    <td class=DataItem><input type=text name=patcn693
+        title="Prefix for Sequela Diseases Codes"
+        size=3 maxlength=1 value="%COMWEB98.11.299.593">
+      </td>
+</tr>
+<tr>
+    <td class=DataLabel>Prefix for Complication Codes</td>
+    <td class=DataItem><input type=text name=patcn694
+        title="Prefix for Complication Codes"
+        size=3 maxlength=1 value="%COMWEB98.11.299.594">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Prefix for Associated Disease Codes</td>
+    <td class=DataItem><input type=text name=patcn695
+        title="Prefix for Associated Diseases"
+        size=3 maxlength=1 value="%COMWEB98.11.299.595">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Prefix for Disability Disease Codes</td>
+    <td class=DataItem><input type=text name=patcn696
+        title="Prefix for Disability Disease Codes"
+        size=3 maxlength=1 value="%COMWEB98.11.299.596">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Prefix for Post-Surgical Operation Codes</td>
+    <td class=DataItem><input type=text name=patcn697
+        title="Prefix for Post-Surgical Operation Codes"
+        size=3 maxlength=1 value="%COMWEB98.11.299.597">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Prefix for Length of Stay Disease Codes</td>
+    <td class=DataItem><input type=text name=patcn698
+        title="Prefix for Length of Stay Disease Codes"
+        size=3 maxlength=1 value="%COMWEB98.11.299.598">
+    </td>
+</tr>
+<tr>
+    <td class=DataLabel>Prefix for Morphology Disease Codes</td>
+    <td class=DataItem><input type=text name=patcn699
+        title="Prefix for Morphology Disease Codes"
+        size=3 maxlength=1 value="%COMWEB98.11.299.599">
+    </td>
+</tr>
 
 <tr><td width=10% class=DataLable>&nbsp;</td>
     <td width=10% class=DataItem>&nbsp;</td>
@@ -166,4 +470,79 @@ if ("%COMWEB98.11.163"=="1") {
 if ("%COMWEB98.11.164"=="1") {
   document.UpdateForm.d_mrtcn064.checked=1;
 }
+InPatientSystemUsingRange="%COMWEB98.11.299.573";
+for (var i =0 ; i < document.UpdateForm.patcn673.length; i++) {
+  if (document.UpdateForm.patcn673.options[i].value==InPatientSystemUsingRange) {
+    document.UpdateForm.patcn673.selectedIndex=i;
+  }
+}
+OutPatientSystemUsingRange="%COMWEB98.11.299.574";
+for (var i =0 ; i < document.UpdateForm.patcn674.length; i++) {
+  if (document.UpdateForm.patcn674.options[i].value==OutPatientSystemUsingRange) {
+    document.UpdateForm.patcn674.selectedIndex=i;
+  }
+}
+AESystemUsingRange="%COMWEB98.11.299.575";
+for (var i =0 ; i < document.UpdateForm.patcn675.length; i++) {
+  if (document.UpdateForm.patcn675.options[i].value==AESystemUsingRange) {
+    document.UpdateForm.patcn675.selectedIndex=i;
+  }
+}
+NewBornSystemUsingRange="%COMWEB98.11.299.576";
+for (var i =0 ; i < document.UpdateForm.patcn676.length; i++) {
+  if (document.UpdateForm.patcn676.options[i].value==NewBornSystemUsingRange) {
+    document.UpdateForm.patcn676.selectedIndex=i;
+  }
+}
+UsingPMIChangeAudit="%COMWEB98.11.299.578";
+if (UsingPMIChangeAudit=="1") {
+     document.UpdateForm.d_patcn678.checked=true;
+ }
+UsingPMIDeletionAudit="%COMWEB98.11.299.579";
+if (UsingPMIDeletionAudit=="1") {
+     document.UpdateForm.d_patcn679.checked=true;
+ }
+UsingURChangeAudit="%COMWEB98.11.299.580";
+if (UsingURChangeAudit=="1") {
+     document.UpdateForm.d_patcn680.checked=true;
+ }
+ChangeDescInMorbidity="%COMWEB98.11.299.583";
+if (ChangeDescInMorbidity=="1") {
+     document.UpdateForm.d_patcn683.checked=true;
+ }
+UsingFreeFormatForUrgency="%COMWEB98.11.299.584";
+if (UsingFreeFormatForUrgency=="1") {
+     document.UpdateForm.d_patcn684.checked=true;
+ }
+UsingFreeFormatForRequested="%COMWEB98.11.299.585";
+if (UsingFreeFormatForRequested=="1") {
+     document.UpdateForm.d_patcn685.checked=true;
+ }
+UsingFreeFormatForDepartment="%COMWEB98.11.299.586";
+if (UsingFreeFormatForDepartment=="1") {
+     document.UpdateForm.d_patcn686.checked=true;
+ }
+UsingRangesForDOBSearches="%COMWEB98.11.299.590";
+if (UsingRangesForDOBSearches=="1") {
+     document.UpdateForm.d_patcn690.checked=true;
+ }
+MandatoryECodeCheck="%COMWEB98.11.299.591";
+if (MandatoryECodeCheck=="1") {
+     document.UpdateForm.d_patcn691.checked=true;
+ }
+MedicalRecordRequestFormLayout="%COMWEB98.11.299.587";
+for (var i =0 ; i < document.UpdateForm.patcn687.length; i++) {
+  if (document.UpdateForm.patcn687.options[i].value==
+      MedicalRecordRequestFormLayout) {
+      document.UpdateForm.patcn687.selectedIndex=i;
+  }
+}
+UserDefinedStationeryCode="%COMWEB98.11.299.588";
+for (var i =0 ; i < document.UpdateForm.patcn688.length; i++) {
+  if (document.UpdateForm.patcn688.options[i].value==
+      UserDefinedStationeryCode) {
+      document.UpdateForm.patcn688.selectedIndex=i;
+  }
+}
+
 </script>

@@ -20,7 +20,7 @@ RDMRAUC1  RESET     KEY10
                                    MRACRCHG,MRACNCHG,MRACCOMM,MRACCDTE,MRACCTIM:
                                    MRACCUSR,MRACCDSC,MRACUDTE,MRACUTIM,MRACUUSR:
                                    MRACUDSC,MRACODOL,MRACNDOL,MRACDIFD,MRACDDNR:
-                                   MRACOHCP,MRACOCOF,MRACODAT,MRACSPAR          
+                                   MRACOHCP,MRACOCOF,MRACODAT,MRACSTAT,MRACSPAR 
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -30,7 +30,7 @@ RKMRAUC1  MOVE      ZERO,OVRCD
                              MRACRCHG,MRACNCHG,MRACCOMM,MRACCDTE,MRACCTIM:      
                              MRACCUSR,MRACCDSC,MRACUDTE,MRACUTIM,MRACUUSR:      
                              MRACUDSC,MRACODOL,MRACNDOL,MRACDIFD,MRACDDNR:      
-                             MRACOHCP,MRACOCOF,MRACODAT,MRACSPAR                
+                             MRACOHCP,MRACOCOF,MRACODAT,MRACSTAT,MRACSPAR       
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -40,7 +40,7 @@ RPMRAUC1  MOVE      ZERO,OVRCD
                              MRACRCHG,MRACNCHG,MRACCOMM,MRACCDTE,MRACCTIM:      
                              MRACCUSR,MRACCDSC,MRACUDTE,MRACUTIM,MRACUUSR:      
                              MRACUDSC,MRACODOL,MRACNDOL,MRACDIFD,MRACDDNR:      
-                             MRACOHCP,MRACOCOF,MRACODAT,MRACSPAR                
+                             MRACOHCP,MRACOCOF,MRACODAT,MRACSTAT,MRACSPAR       
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -50,7 +50,7 @@ UPMRAUC1  MOVE      ZERO,OVRCD
                              MRACRCHG,MRACNCHG,MRACCOMM,MRACCDTE,MRACCTIM:      
                              MRACCUSR,MRACCDSC,MRACUDTE,MRACUTIM,MRACUUSR:      
                              MRACUDSC,MRACODOL,MRACNDOL,MRACDIFD,MRACDDNR:      
-                             MRACOHCP,MRACOCOF,MRACODAT,MRACSPAR                
+                             MRACOHCP,MRACOCOF,MRACODAT,MRACSTAT,MRACSPAR       
           RETURN
 .
 WRMRAUC1  RESET     KEY10                                                       
@@ -59,7 +59,7 @@ WRMRAUC1  RESET     KEY10
                                    MRACRCHG,MRACNCHG,MRACCOMM,MRACCDTE,MRACCTIM:
                                    MRACCUSR,MRACCDSC,MRACUDTE,MRACUTIM,MRACUUSR:
                                    MRACUDSC,MRACODOL,MRACNDOL,MRACDIFD,MRACDDNR:
-                                   MRACOHCP,MRACOCOF,MRACODAT,MRACSPAR          
+                                   MRACOHCP,MRACOCOF,MRACODAT,MRACSTAT,MRACSPAR 
           RETURN
 .
 DEMRAUC1  RESET     KEY10                                                       
@@ -83,7 +83,7 @@ RDMRAUC2  RESET     KEY18
                                    MRACRCHG,MRACNCHG,MRACCOMM,MRACCDTE,MRACCTIM:
                                    MRACCUSR,MRACCDSC,MRACUDTE,MRACUTIM,MRACUUSR:
                                    MRACUDSC,MRACODOL,MRACNDOL,MRACDIFD,MRACDDNR:
-                                   MRACOHCP,MRACOCOF,MRACODAT,MRACSPAR          
+                                   MRACOHCP,MRACOCOF,MRACODAT,MRACSTAT,MRACSPAR 
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -93,7 +93,7 @@ RKMRAUC2  MOVE      ZERO,OVRCD
                              MRACRCHG,MRACNCHG,MRACCOMM,MRACCDTE,MRACCTIM:      
                              MRACCUSR,MRACCDSC,MRACUDTE,MRACUTIM,MRACUUSR:      
                              MRACUDSC,MRACODOL,MRACNDOL,MRACDIFD,MRACDDNR:      
-                             MRACOHCP,MRACOCOF,MRACODAT,MRACSPAR                
+                             MRACOHCP,MRACOCOF,MRACODAT,MRACSTAT,MRACSPAR       
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -103,7 +103,7 @@ RPMRAUC2  MOVE      ZERO,OVRCD
                              MRACRCHG,MRACNCHG,MRACCOMM,MRACCDTE,MRACCTIM:      
                              MRACCUSR,MRACCDSC,MRACUDTE,MRACUTIM,MRACUUSR:      
                              MRACUDSC,MRACODOL,MRACNDOL,MRACDIFD,MRACDDNR:      
-                             MRACOHCP,MRACOCOF,MRACODAT,MRACSPAR                
+                             MRACOHCP,MRACOCOF,MRACODAT,MRACSTAT,MRACSPAR       
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -113,7 +113,7 @@ UPMRAUC2  MOVE      ZERO,OVRCD
                              MRACRCHG,MRACNCHG,MRACCOMM,MRACCDTE,MRACCTIM:      
                              MRACCUSR,MRACCDSC,MRACUDTE,MRACUTIM,MRACUUSR:      
                              MRACUDSC,MRACODOL,MRACNDOL,MRACDIFD,MRACDDNR:      
-                             MRACOHCP,MRACOCOF,MRACODAT,MRACSPAR                
+                             MRACOHCP,MRACOCOF,MRACODAT,MRACSTAT,MRACSPAR       
           RETURN
 .
 WRMRAUC2  RESET     KEY18                                                       
@@ -122,7 +122,7 @@ WRMRAUC2  RESET     KEY18
                                    MRACRCHG,MRACNCHG,MRACCOMM,MRACCDTE,MRACCTIM:
                                    MRACCUSR,MRACCDSC,MRACUDTE,MRACUTIM,MRACUUSR:
                                    MRACUDSC,MRACODOL,MRACNDOL,MRACDIFD,MRACDDNR:
-                                   MRACOHCP,MRACOCOF,MRACODAT,MRACSPAR          
+                                   MRACOHCP,MRACOCOF,MRACODAT,MRACSTAT,MRACSPAR 
           RETURN
 .
 DEMRAUC2  RESET     KEY18                                                       

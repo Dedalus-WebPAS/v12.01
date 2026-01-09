@@ -6,6 +6,11 @@
 . Modifications : 
 .
 .----------------------------------------------------------------------
+. V12.01.02 04/12/2025 Nikitha Bhaskar TSK 0969804
+.           Modified at MISC1100 & MISC1200 to accomodate more than 9 alerts.
+. V12.01.01 03/12/2025 Don Nguyen      TSK 0970388
+.           Replaced check of first note line with routine to check whether all
+.           lines are empty; called EMPNOT00 where applicable
 . V12.00.14 06.10.2025 Alina Bhari     TSK 0967329
 .           Modified lastupdateby to return the a value reference field
 . V12.00.13 14.09.2025 DA Sarkies      TSK 0967090
@@ -1384,7 +1389,7 @@ TZFILE    FILE      ASCII, FIXED=256
 .
 .------------------------------------------------------------
 PRGID     INIT      "CLIWEB06"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Clinical Notes Server"
 .------------------------------------------------------------
 .
@@ -4170,8 +4175,11 @@ ADDNT100  MOVE      CLNOT005,OBCAMIN
             ENDIF
           ENDIF
 .                                           
-          MATCH     SP70,NOTETEXT[001]      * If FF Note is Empty ?
-          GOTO      ADDNT999 IF EQUAL
+.         MATCH     SP70,NOTETEXT[001]      * If FF Note is Empty ?
+.         GOTO      ADDNT999 IF EQUAL
+          CALL      EMPNOT00                * Check if notes are empty
+          BRANCH    EXIT,ADDNT940
+.
           MOVE      ZERO,F3
 ADDNT900  ADD       ONE,F3
           IF        F3<=LASTITEM
@@ -4184,7 +4192,7 @@ ADDNT900  ADD       ONE,F3
             GOTO      ADDNT900
           ENDIF 
 .          
-          MOVE      ZERO,EXIT
+ADDNT940  MOVE      ZERO,EXIT
           GOTO      ADDNT999
 .
 ADDNT950  MOVE      "Invalid Security Level for this Note Type",WEBTITLE
@@ -4193,7 +4201,32 @@ ADDNT950  MOVE      "Invalid Security Level for this Note Type",WEBTITLE
           GOTO      ADDNT999
 .
 ADDNT999  RETURN
++
+.------------------------------------------------------------------------------
+. Checks whether the NOTETEXT array contains text
 .
+. Loops through the array (up to LASTITEM) and checks whether it contains a
+. non-empty element (i.e. line with text).
+.
+. Return:
+.          EXIT=0 if contains text; i.e. non-empty array element (line) exists
+.          EXIT=1 if is empty; i.e. ALL empty array elements (lines)
+.------------------------------------------------------------------------------
+EMPNOT00  MOVE      ZERO,F3
+EMPNOT10  ADD       ONE,F3
+          IF        F3<=LASTITEM
+            MATCH     SP70,NOTETEXT[F3]      * If note line is empty ?
+            GOTO      EMPNOT90 IF NOT EQUAL
+            GOTO      EMPNOT10
+          ENDIF
+          GOTO      EMPNOT91
+.
+EMPNOT90  MOVE      ZERO,EXIT  * non-empty array
+          GOTO      EMPNOT99
+.
+EMPNOT91  MOVE      ONE,EXIT   * empty array elements
+EMPNOT99  RETURN
++
 .------------------------------------------------------------
 . Update Clinical Note
 .------------------------------------------------------------
@@ -4291,8 +4324,12 @@ UPDNT700  PACK      KEY15,ADMISSNO,OBCACID,SP70
           CALL      DEOBCB1
           GOTO      UPDNT700
 .
-UPDNT750  MATCH     SP70,NOTETEXT[001]      * If FF Note is Empty ?
-          GOTO      UPDNT999 IF EQUAL
+UPDNT750  
+.         MATCH     SP70,NOTETEXT[001]      * If FF Note is Empty ?
+.         GOTO      UPDNT999 IF EQUAL
+          CALL      EMPNOT00                * Check if notes are empty
+          BRANCH    EXIT,UPDNT950
+.
           MOVE      ZERO,F3
 UPDNT800  ADD       ONE,F3
           IF        F3<=LASTITEM
@@ -5343,6 +5380,7 @@ VISRES00  IF        FHIRTYPE=1
             MOVE      "1",CHKNTSEC          * Check note type security
             CALL      ADDNT000              * Add New Note SubRoutine
             BRANCH    EXIT,VISRES99
+.
             CALL      ADDNDD00              * Add Nursing Diagnosis
             CALL      UPNTD000              * Update note details
             CALL      PRDET000              * Update principle details
@@ -9018,7 +9056,7 @@ MISC1050  CALL      RKPTECO1
           ENDIF
           GOTO      MISC9999
 .
-MISC1100  MOVE      ZERO,F1
+MISC1100  MOVE      ZERO,F3
           UNPACK    DIM127,D1,D2,D1,KEY1,DIM127
           PACK      KEY16,URNUMBER,SP70
           CALL      RSPTALR1
@@ -9049,8 +9087,9 @@ MISC1150  CALL      RKPTALR1
           MATCH     ANSP,TCINDC3
           GOTO      MISC1150 IF NOT EQUAL
 .
-          ADD       ONE,F1
-          PACK      DIM2,SP1,F1
+          ADD       ONE,F3
+          MOVE      F3,F2
+          PACK      DIM2,F2
           MATCH     D2,DIM2 
           GOTO      MISC1150 IF NOT EQUAL
 .         
@@ -9175,7 +9214,7 @@ MISC1191  CALL      RKPMALA1
           WRITE     HTMLFILE;*+,PMANCOMM;
           GOTO      MISC1191
 .
-MISC1200  MOVE      ZERO,F1
+MISC1200  MOVE      ZERO,F3
           UNPACK    DIM127,D1,D2,D1,KEY1,DIM127
           PACK      KEY16,URNUMBER,SP70
           CALL      RSPTALR1
@@ -9196,8 +9235,9 @@ MISC1250  CALL      RKPTALR1
           MATCH     ANSP,TCINDC3
           GOTO      MISC1250 IF NOT EQUAL
 .
-          ADD       ONE,F1
-          PACK      DIM2,SP1,F1
+          ADD       ONE,F3
+          MOVE      F3,F2
+          PACK      DIM2,F2
           MATCH     D2,DIM2
           GOTO      MISC1250 IF NOT EQUAL
 .
@@ -16847,8 +16887,12 @@ ADDCL000  PACK      KEY17,REHARDT,REHARTM,REHARUN
           MOVE      REHARUN,REHDRUN
           PACK      REHDRCI,SP70,SP70,SP70,SP70,SP70
           SFORMAT   OUTVAR,127
-          MATCH     SP70,NOTETEXT[001]      * If FF Note is Empty ?
-          GOTO      ADDCL999 IF EQUAL
+.
+.         MATCH     SP70,NOTETEXT[001]      * If FF Note is Empty ?
+.         GOTO      ADDCL999 IF EQUAL
+          CALL      EMPNOT00                * Check if notes are empty
+          BRANCH    EXIT,ADDCL900
+.
           CLEAR     REHDRCI
           MOVE      ZERO,F3
 ADDCL100  ADD       ONE,F3
@@ -16877,6 +16921,7 @@ ADDCL100  ADD       ONE,F3
 ADDCL200  RESET     REHDRCI
           CALL      WRREHD1             * write clinical details to clinical
 .                                       * results relevant clinical information
+ADDCL900  MOVE      ZERO,EXIT
 ADDCL999  RETURN
 +
 .------------------------------------------------------------------------------

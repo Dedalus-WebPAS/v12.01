@@ -1,3 +1,5 @@
+. V12.01.01 15/12/2025 TTI C-0963741 Added new Eclipse Status Flag 17
+.                      (Review - Extracted)
 . V11.04.01 29/11/2023 TTI C-0929044 Added Created User Id/Date/Time and        
 . V                                  Updated User Id/Date/Time fields           
 . V11.01.01 01/04/2021 PVL C-0902857 Added Index 8                              
@@ -34,6 +36,7 @@ DWBICFLG  DIM       2      2        1     Eclipse Status Flag
 .                                            0 = Not Sent                      
 .                                            1 = Error (PAS validation)        
 .                                            2 = Extracted                     
+.                                           17 = Review - Extracted
 .                                         WebServices - Processing             
 .                                            3 = Error (SA validation)         
 .                                            4 = Posted                        

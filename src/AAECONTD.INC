@@ -7,7 +7,10 @@
 .  *     Sector used  :  30 and 78                                            *
 .  *                                                                          *
 .  *     Modifications:                                                       *
-.  *    V11.01.01  30/08/2021  J.Tan  TSK 0905305                             *
+.  *    V12.01.01  04/12/2025  Zumin Yu          TSK 0955272                  *
+.  *               Added HEMBSTHE, HSTANDM, HINPCLM, AECNCHRS, AECNFTYP,      *
+.  *               HEPMR5, HEMR5L, HEMR5COD, HINVDES and HNUMDES              *
+.  *    V11.01.01  30/08/2021  J.Tan             TSK 0905305                  *
 .  *               Added AECNAECC - Start date for AECC Class ABF calculation *
 .  *    V10.05.01  31/07/2014  Steve Armstrong   CAR 294204                   *
 .  *               Extended AAECN004 from DIM 1 to DIM 2.                     *
@@ -40,6 +43,31 @@ AAECN009  DIM       1        180      Type of Fee
 .                                     1 = Facility Fee
 .                                     2 = NZ Facility Fee
 .                                     3 = Triage Fee
+AAECN013  DIM       1        94       Using MR-5 Forms
+.                                     0 = No
+.                                     1 = Yes
+AAECN014  DIM       1        131      Using Theatre Fee file for MBS Item Code
+.                                     0 = No
+.                                     1 = Yes
+AAECN015  DIM       1        132      Type of Emergency
+.                                     0 = Standard
+.                                     1 = Modbury
+.                                     2 = NZ                                 
+AAECN016  DIM       30       133      Description on Invoice
+AAECN017  DIM       9        168      Description for system number
+AAECN018  DIM       1        186      Layout for MR5
+.                                     0 = Modbury
+.                                     1 = User Defined
+AAECN019  DIM       6        187      User Defined Stationery Code (MR5)
+AAECN020  DIM       1        195      Input Claim Details in Emergency
+.                                     0 = No
+.                                     1 = Yes
+AAECN021  DIM       1        196      Charging by Discharge Status
+.                                     0 = No
+.                                     1 = Yes
+AAECN022  DIM       1        200      Type of Emergency charging to be used
+.                                     0 = PATNIPA1
+.                                     1 = AAEBCHA1
 .
 .  ****************************************************************************
 .  Sector 78

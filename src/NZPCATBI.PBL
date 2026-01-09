@@ -17,6 +17,8 @@
 .
 
 .----------------------------------------------------------------------------
+. V12.01.01 16/12/2025  J.Tan   TSK 0970843
+.           Mod to open oprdetaf before CPRI0000
 . V12.00.01 19/05/2025 Thanh T         TSK 0955096
 .           Changed for alphanumeric visit number
 .----------------------------------------------------------------------------
@@ -275,6 +277,13 @@ NZINV000  MOVE      ZERO,STALLW
           REP       " 0",CRCENT
           REP       " 0",CRYEAR
 .
+          OPEN      NZPIBRA1,"nzpibraf"
+          OPEN      NZPIVBA1,"nzpivbaf"
+          OPEN      NZPRBRA1,"nzprbraf"
+          OPEN      NZPRVBA1,"nzprvbaf"
+          OPEN      OPRDETA3,"oprdetaf"
+          OPEN      NZPRDTA1,"nzprdtaf"
+.
           CALL      CRWL0000          * Create a tempfile to Win/Loss procedure
           CALL      CPRI0000          * Set primary funder
 .
@@ -291,12 +300,6 @@ NZINV000  MOVE      ZERO,STALLW
           REP       " 0",IDATEF
           PACK      SIDATET,SP20
           PACK      IDATET,SP20
-          OPEN      NZPIBRA1,"nzpibraf"
-          OPEN      NZPIVBA1,"nzpivbaf"
-          OPEN      NZPRBRA1,"nzprbraf"
-          OPEN      NZPRVBA1,"nzprvbaf"
-          OPEN      OPRDETA3,"oprdetaf"
-          OPEN      NZPRDTA1,"nzprdtaf"
 .
 . ----- Get GST stuff -----
 .

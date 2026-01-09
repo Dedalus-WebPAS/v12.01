@@ -1,0 +1,42 @@
+.---------------------------------------------------------------------------
+. Include Name : CLMRTAUC.PBL
+. Function     : Clear function for MRTAUCFD
+.---------------------------------------------------------------------------
+. Modifications :
+.---------------------------------------------------------------------------
+. V12.01.00  08/12/2025  Thanh T       TSK 0953127 
+.            Initial Version
+.---------------------------------------------------------------------------
+.
+CLMRTAUC  MOVE      SP70,MRACVISN      . Visit Number     
+          MOVE      SP70,MRACEPSN      . Episode Number     
+          MOVE      SP70,MRACADTE      . Audit Date     
+          MOVE      SP70,MRACODRG      . Original DRG     
+          MOVE      ZERO,MRACOWIE      . Original WIES     
+          MOVE      SP70,MRACNDRG      . New DRG     
+          MOVE      ZERO,MRACNWIE      . New WIES     
+          MOVE      ZERO,MRACDWIE      . WIES Difference     
+          MOVE      SP70,MRACCLNC      . Clinician      
+          MOVE      SP70,MRACTYPE      . Type Audit (CAT YA)   
+          MOVE      SP70,MRACRCHG      . Reason for Change (CAT YB)  
+          MOVE      SP70,MRACNCHG      . No Change (Y/N)    
+          PACK      MRACCOMM,SP70,SP70 . Comments      
+          MOVE      SP70,MRACCDTE      . Date Record Created    
+          MOVE      SP70,MRACCTIM      . Time Record Created    
+          MOVE      SP70,MRACCUSR      . Web User Created (websecaf)   
+          MOVE      SP70,MRACCDSC      . User Created Description    
+          MOVE      SP70,MRACUDTE      . Date Last Updated    
+          MOVE      SP70,MRACUTIM      . Time Last Updated    
+          MOVE      SP70,MRACUUSR      . Web User Updated (websecaf)   
+          MOVE      SP70,MRACUDSC      . User Updated Description    
+          MOVE      ZERO,MRACODOL      . Original Dollar Value    
+          MOVE      ZERO,MRACNDOL      . New Dollar Value    
+          MOVE      ZERO,MRACDIFD      . Difference in Dollar Value   
+          MOVE      SP70,MRACDDNR      . Doctor Did Not Respond   
+          MOVE      SP70,MRACOHCP      . HCP Code     
+          MOVE      SP70,MRACOCOF      . Outcome of Change (Cat aO)  
+          MOVE      SP70,MRACODAT      . Outcome Date     
+          MOVE      SP70,MRACSTAT      . Status Of Audit (CAT YJ)  
+          MOVE      SP70,MRACSPAR      . Spare      
+.
+          RETURN

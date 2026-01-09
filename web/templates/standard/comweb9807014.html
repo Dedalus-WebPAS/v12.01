@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -691,7 +691,15 @@ function CheckSite(){
     <td class=DataItem><input type=checkbox name=d_patcn279
      title="HL7 using ED Discharge Doctor (emviur02)" 
      value="1">
-    </td></tr>
+    <td class=DataLabel>
+        Send/Receive NTE segment in M02</td>
+    <td><select name=patcn701 title="Send/Receive NTE segment in M02">
+        <option value="0">No</option>
+        <option value="1">Yes</option>
+        <option value="2">Yes - send with linebreaks</option>
+        </select>
+    </td>
+</tr>
 
 <tr><td class=DataLabel>
        Replace A08 with A38/A05 for rescheduled O/P Appointments Messages</td>
@@ -1119,6 +1127,12 @@ function CheckSite(){
  PTCNEDDT="%COMWEB98.07.199.562"
  if(PTCNEDDT=="1") {
    document.UpdateForm.d_patcn662.checked=1;
+ }
+ PTCNNTES="%COMWEB98.07.199.601"
+ for (var i=0; i<document.UpdateForm.patcn701.length; i++) {
+   if (document.UpdateForm.patcn701.options[i].value==PTCNNTES) {
+      document.UpdateForm.patcn701.selectedIndex=i;
+   }
  }
 //
 </script>

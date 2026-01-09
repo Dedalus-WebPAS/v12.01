@@ -4,6 +4,8 @@
 .
 . Modifications : 
 .----------------------------------------------------------------------
+. V12.01.01 09/12/2025  Thanh T        TSK 0960753
+.           Changed CLRHLT00, CLRHTB00 to space out PTHFHGEX field
 . V12.00.03 31/07/2025  Jacob Jackson  TSK 0964160
 .           Fix logic which allowed a duplicate 'Effective To' date when
 .           existing record containing it was deleted.
@@ -1096,7 +1098,7 @@ FLTATTND  DIM       3         * filter for Attendance Type
 +
 .-----------------------------------------------------------
 PRGID     INIT      "PATWEB87"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Health Fund Table Maintenance Server"
 .-----------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -7323,6 +7325,7 @@ CLRHLT00  MOVE      SP70,HCODE
           PACK      PTHFARCE,SP70                                   * Car 273294
           PACK      PTHFIMCD,SP70
           PACK      PTHFDPRI,SP70
+          MOVE      SP70,PTHFHGEX
           MOVE      SP70,PTFNSPAR   
 .
 .  Health Fund Comments 
@@ -7787,6 +7790,7 @@ CLRHTB00  MOVE      SP70,HCODE
           MOVE      ZERO,PTHFNDFP
           PACK      PTHFOCGR,SP70
           PACK      PTHFARCE,SP70                                   * Car 273294
+          MOVE      SP70,PTHFHGEX
           MOVE      SP70,PTFNSPAR   
 .
 CLRHTB99  RETURN

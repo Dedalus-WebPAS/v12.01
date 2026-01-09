@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .------------------------------------------------------------------------------
+.V12.01.01  19/12/2025  J.Tan          TSK 0970926
+.           Mod VALNZM00 for Favourite items to use default Claim code
 .V12.00.09  05/09/2025  J.Tan          TSK 0963745
 .           Mod SELHFT00 to return DTHFUCMX (Make CP)
 .V12.00.08  05/08/2025  Zumin Yu       TSK 0964772
@@ -74,7 +76,7 @@
 .V11.04.04  13/03/2024   J.Tan          TSK 0919335
 .           Mod to check for HF history - to set TSRVDATE
 .V11.04.03  05/03/2024  Thanh T        TSK 0923560
-.           Changed VALNZM11 for hospital ID changes
+.           Changed VALNZM14 for hospital ID changes
 .V11.04.02  29/01/2024   Jacob Jackson  TSK 0919335
 .           Add new local variable and recompile for GETTFEES
 .V11.04.01  22/11/2023   J.Tan          TSK  0939335
@@ -1220,7 +1222,7 @@ WSININDC  DIM       1
 .
 .------------------------------------------------------------
 PRGID     INIT      "PATWEB80"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "XML Remote Code Validation Service"
 .------------------------------------------------------------
 .
@@ -5359,12 +5361,27 @@ VALMSC99  RETURN
 VALNZM00  CALL      XMLHED00
           BRANCH    EXIT,VALNZM99
 .
+          PACK      VALDCLMT,VALDCLMT,SP70
           IF        IBCNMHOS=1
             MATCH     "1",OPCNPTMC
             IF        @EQUAL
               PACK      KEY10,USERID,SP70
               CALL      RDWBSE1
               BRANCH    OVRCD,VALNZM91
+            ENDIF
+          ENDIF
+.
+          IF        VALDTYPE=4
+            MATCH     SP70,VALDCLMT
+            IF        @EQUAL
+              MOVE      PTCNDCLM,VALDCLMT        * use default Claim code
+              IF        IBCNMHOS=1
+                PACK      KEY3,WBSEHOSP
+                CALL      RDPTHSP1
+                IF        OVRCD=0
+                  MOVE      PTHSDCLM,VALDCLMT    * Use Hospital default Claim
+                ENDIF
+              ENDIF
             ENDIF
           ENDIF
 .
@@ -5388,10 +5405,10 @@ VALNZM10  MATCH     "N",FILEFLAG
           ELSE
             CALL      RKNZMCH3
           ENDIF
-          BRANCH    OVRCD,VALNZM14
+          BRANCH    OVRCD,VALNZM18
 .
           MATCH     MCHARGE,NZMCMCHG
-          GOTO      VALNZM14 IF NOT EQUAL        * does charge code exist?
+          GOTO      VALNZM18 IF NOT EQUAL        * does charge code exist?
 .
           MATCH     SP70,VALDCLMT
           IF        !@EQUAL
@@ -5420,10 +5437,10 @@ VALNZM10  MATCH     "N",FILEFLAG
           ENDIF
 .
           COMPARE   THREE,VALDTYPE
-          GOTO      VALNZM11 IF NOT EQUAL
+          GOTO      VALNZM14 IF NOT EQUAL
 .
           MATCH     DIM3,NZMCHOSP
-          GOTO      VALNZM14 IF NOT EQUAL   * try blank hospital if necessary
+          GOTO      VALNZM18 IF NOT EQUAL   * try blank hospital if necessary
 .
 .         Check Contract
 .
@@ -5433,7 +5450,7 @@ VALNZM10  MATCH     "N",FILEFLAG
 .
 .         Check Effective date
 .
-          PACK      VALDCEFF,VALDCEFF,SP70
+VALNZM12  PACK      VALDCEFF,VALDCEFF,SP70
           MATCH     SP70,VALDCEFF
           IF        @EQUAL
             PACK      VALDCEFF,CCC,CYY,CMM,CDD
@@ -5449,9 +5466,9 @@ VALNZM10  MATCH     "N",FILEFLAG
             GOTO      VALNZM10 IF LESS
           ENDIF
 .
-          GOTO      VALNZM12
+          GOTO      VALNZM16
 .
-VALNZM11  IF        IBCNMHOS=1
+VALNZM14  IF        IBCNMHOS=1
             MATCH     "1",OPCNPTMC
             IF        @EQUAL
               MATCH     SP70,NZMCHOSP
@@ -5468,14 +5485,14 @@ VALNZM11  IF        IBCNMHOS=1
             ENDIF
           ENDIF
 .
-VALNZM12  BRANCH    VALDTYPE,VALNZM20,VALNZM30
+VALNZM16  BRANCH    VALDTYPE,VALNZM20,VALNZM30
 .
           WRITE     HTMLFILE;"<RETURN_VALUE TYPE=SIMPLE>":
                              NZMCDESC:
                              "</RETURN_VALUE>"
           GOTO      VALNZM98
 .
-VALNZM14  MATCH     SP70,DIM3
+VALNZM18  MATCH     SP70,DIM3
           GOTO      VALNZM90 IF EQUAL
 .
           MOVE      SP70,DIM3      *  Try with blank Hospital

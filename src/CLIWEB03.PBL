@@ -5,6 +5,8 @@
 .
 . Modifications  : 
 .----------------------------------------------------------------------
+. V12.01.01 09/12/2025  Thanh T        TSK 0960204
+.           Changed CLRWRD00 to space out PTWDROOM field 
 . V11.05.03 17/02/2024  Ebon Clements  TSK 0954547
 .           Added showallf to report 5 NEXT000 and PREV0000
 .           If result error not found in current year check
@@ -505,7 +507,7 @@ FHRPARIN  FORM      1      * _include=DiagnosticReport:participant
 .
 .------------------------------------------------------------
 PRGID     INIT      "CLIWEB03"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Clinical Results List Server"
 .------------------------------------------------------------
 .
@@ -1209,31 +1211,33 @@ WRDRES99  RETURN
 .------------------------------------------------------------
 . Clear Ward File Variables
 .------------------------------------------------------------
-CLRWRD00  MOVE       "Unspecified Ward",WBDESC  
-          MOVE       SP70,WWARD   
-          MOVE       SP70,WBED    
-          MOVE       SP70,DWADMNO 
-          MOVE       SP70,WEXTN   
-          MOVE       SP70,WRTYPE  
-          MOVE       SP70,WEFRBT  
-          MOVE       SP70,WSERV   
-          MOVE       SP70,WCLASS  
-          MOVE       SP70,DWSTBY  
-          MOVE       SP70,PTWDHOSN
-          MOVE       SP70,PTWDIAGE
-          MOVE       SP70,PTWDICRE
-          MOVE       SP70,PTWDSEX 
-          MOVE       SP70,PTWDLOCN
-          MOVE       SP70,PTWDGLDG
-          MOVE       SP70,PTWDSPAR 
-          MOVE       ZERO,WOCCBED
-          MOVE       ZERO,WBLINE  
-          MOVE       ZERO,WNBEDS   
-          MOVE       ZERO,WHCSSUB    
-          MOVE       ZERO,WPLUR  
-          MOVE       ZERO,WINPUT   
-          MOVE       ZERO,WACTIVE   
-          MOVE       ZERO,PTWDDNIN   
+CLRWRD00  MOVE      "Unspecified Ward",WBDESC  
+          MOVE      SP70,WWARD   
+          MOVE      SP70,WBED    
+          MOVE      SP70,DWADMNO 
+          MOVE      SP70,WEXTN   
+          MOVE      SP70,WRTYPE  
+          MOVE      SP70,WEFRBT  
+          MOVE      SP70,WSERV   
+          MOVE      SP70,WCLASS  
+          MOVE      SP70,DWSTBY  
+          MOVE      SP70,PTWDHOSN
+          MOVE      SP70,PTWDIAGE
+          MOVE      SP70,PTWDICRE
+          MOVE      SP70,PTWDSEX 
+          MOVE      SP70,PTWDLOCN
+          MOVE      SP70,PTWDGLDG
+          MOVE      ZERO,WOCCBED
+          MOVE      ZERO,WBLINE  
+          MOVE      ZERO,WNBEDS   
+          MOVE      ZERO,WHCSSUB    
+          MOVE      ZERO,WPLUR  
+          MOVE      ZERO,WINPUT   
+          MOVE      ZERO,WACTIVE   
+          MOVE      ZERO,PTWDDNIN  
+          MOVE      SP70,PTWDROOM 
+          MOVE      SP70,PTWDSPAR
+.
 CLRWRD99  RETURN
 .------------------------------------------------------------
 . EMR Site Results

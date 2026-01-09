@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -60,7 +60,6 @@ function init() {
     document.UpdateForm.ptelg045.className="Readonly";
   }
 
-
   } else {
     DeftRateName.innerHTML="";
     DeftRateField.innerHTML=blanklabe1.innerHTML;
@@ -102,6 +101,11 @@ function init() {
      CoPayName.innerHTML=CoPayTheDesc.innerHTML;
      CoPayField.innerHTML=CoPayTheAmnt.innerHTML;
      CoPayField1.innerHTML=CoPayTheAmnt1.innerHTML;
+     if(document.getElementById("calcthea").value == "1") {
+       document.UpdateForm.d_ptelg039.checked=true;
+     } else {
+       document.UpdateForm.d_ptelg039.checked=false;
+     }
   }
 
 }
@@ -538,6 +542,7 @@ InsertPatientHeader()
  <input type=hidden name=selfinsr value="%PATWEB78.06.264">
  <input type=hidden name=usebasic value="%PATWEB78.06.280">
  <input type=hidden name=casmixcd value="%PATWEB78.06.279.0">
+ <input type=hidden name=calcthea id=calcthea value="%PATWEB78.06.269">
  <input type=hidden name=ptelg035>
  <input type=hidden name=ptelg036>
  <input type=hidden name=ptelg037>
@@ -1664,11 +1669,6 @@ if (CoSDay == "1") {
 CoHosp="%PATWEB78.06.268"
 if (CoHosp == "1") {
   document.UpdateForm.d_ptelg038.checked=true;
-}
-CoThea="%PATWEB78.06.269"
-if ((CoThea == "1") &&  
-    (document.getElementById('d_ptelg034') != undefined)) {
-  document.getElementById('d_ptelg039').checked=true;
 }
 CoICU="%PATWEB78.06.273"
 if (CoICU == "1") {

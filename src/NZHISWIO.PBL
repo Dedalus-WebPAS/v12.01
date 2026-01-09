@@ -20,9 +20,12 @@
 .*                                                                           *
 .*  Mod's    :                                                               *
 .*****************************************************************************
+.*        V12.00.01 09/12/2025  Ebon Clements  TSK 0968452                   *
+.*                  Added timeout tests to the nhi reply fifo reads for      *
+.*                  medical warning - GETMWS                                 *
 .*        V11.04.01 28/10/2024  Ebon Clements  TSK 0948906                   *
 .*                  Ignore space in AE2034 Unrecoverable read error format   *
-.*                  scan in GETMWS                                          *
+.*                  scan in GETMWS                                           *
 .*        V11.02.01 28/07/2022 Jill Parkinson Task 0920166                   *
 .*                  Added check for deceased on nhi but not on local         *
 .*        V10.15.02 20/02/2020  Peter Vela     TSK 0887845                   *
@@ -1246,10 +1249,11 @@ GETMWS    MOVE      "10",NZIBACTN                 * action identifier
           WRITE     NZWFIFA1;NZIBSTX,NZIBACTN,NZIBUSER,NZIBVDU,NZIBRFIF:
                              NZIBNMPI,NZIBCPTR,NZIBMWRP;
 .
-. now get the reply (firstly checking for an error)
+. now get the reply (firstly checking for an error) or a timeout
 .
           MOVE      "86",RDLNGTH
           READ      NZRFIFA1,RDLNGTH,PTCNNHTM;NZIBAPPC,NZIBERRN,NZIBERRD;
+          GOTO      GTMWS900 IF TIMEOUT
 .
           MATCH     "AA",NZIBAPPC                 * valid read?
           GOTO      GTMWS900 IF NOT EQUAL         * error
@@ -1257,6 +1261,7 @@ GETMWS    MOVE      "10",NZIBACTN                 * action identifier
           MOVE      "29",RDLNGTH
           READ      NZRFIFA1,RDLNGTH,PTCNNHTM;NZIBMWDN,NZIBMRGS,NZIBNMWF:
                              NZIBNMWR,NZIBCPTR;
+          GOTO      GTMWS900 IF TIMEOUT
 .
           MOVE      ONE,NZIBCNT
           SQUEEZE   NZIBNMWR
@@ -1269,6 +1274,7 @@ GETMWS    MOVE      "10",NZIBACTN                 * action identifier
                                NZARWDTU[NZIBCNT],NZARFACC[NZIBCNT]:
                                NZARDOCC[NZIBCNT],NZARSYSI[NZIBCNT]:
                                NZARMWCD[NZIBCNT],NZARENTM[NZIBCNT];
+            GOTO      GTMWS900 IF TIMEOUT
 .
             PACK      KEY120,NZARSEVR[NZIBCNT]:
                              NZARDTON[NZIBCNT]:

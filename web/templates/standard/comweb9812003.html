@@ -1,9 +1,25 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
 <script type="text/javascript">
 function PostForm() {
+  if(document.UpdateForm.d_mehcn026.checked==false) {
+     document.UpdateForm.mehcn026.value="0";
+  } else {
+     document.UpdateForm.mehcn026.value="1";
+  }
+  if(document.UpdateForm.d_mehcn027.checked==false) {
+     document.UpdateForm.mehcn027.value="0";
+  } else {
+     document.UpdateForm.mehcn027.value="1";
+  }
+  if(document.UpdateForm.d_mehcn028.checked==false) {
+     document.UpdateForm.mehcn028.value="0";
+  } else {
+     document.UpdateForm.mehcn028.value="1";
+  }
+
   setFormactn('U');
 }
 function GoBack() {
@@ -19,9 +35,13 @@ function GoBack() {
 <input type=hidden name=redirect value="comweb98.pbl?reportno=12&template=001">
 <input type=hidden name=nextpage value="1">
 <input type=hidden name=updttype value=" ">
+<input type=hidden name=mehcn026 value=" ">
+<input type=hidden name=mehcn027 value=" ">
+<input type=hidden name=mehcn028 value=" ">
 
 <table align=center width=100% border=0 cellspacing=0 cellpadding=0>
-<tr><td class=HeadingCell align=center>Mental Health Parameter Maintenance -IBA Controlled 1</td>
+<tr><td class=HeadingCell 
+ align=center>Mental Health Parameter Maintenance - Vendor Controlled 1</td>
     </tr>
 <tr><td>
 </table>
@@ -39,6 +59,25 @@ function GoBack() {
      size=10 maxlength=8 value="%COMWEB98.12.104">
    </td></tr>
 
+<tr><td class=DataLabel>Using Mental Health System</td>
+    <td class=DataItem><input type=checkbox name=d_mehcn026
+        title="Using Mental Health System" value="1">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Keying in Leave End Reasons</td>
+    <td class=DataItem><input type=checkbox name=d_mehcn027
+        title="Keying in Leave End Reasons" value="1">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Using Diagnosis Screen in Admissions</td>
+    <td class=DataItem><input type=checkbox name=d_mehcn028
+        title="Using Diagnosis Screen in Admissions" value="1">
+    </td>
+</tr>
+
+
 <tr><td width=10% class=DataLable>&nbsp;</td>
     <td width=10% class=DataItem>&nbsp;</td>
     </tr>
@@ -52,3 +91,23 @@ function GoBack() {
 
 </table>
 </form>
+
+<script type="text/javascript">
+ UsingMentalHealthSystem="%COMWEB98.12.126"
+ if(UsingMentalHealthSystem=="1") {
+   document.UpdateForm.d_mehcn026.checked=true;
+ }
+
+ KeyingInLeaveEndReasons="%COMWEB98.12.127"
+ if(KeyingInLeaveEndReasons=="1") {
+   document.UpdateForm.d_mehcn027.checked=true;
+ }
+
+ UsingDiagnosisScreenInAdmissions="%COMWEB98.12.128"
+ if(UsingDiagnosisScreenInAdmissions=="1") {
+   document.UpdateForm.d_mehcn028.checked=true;
+ }
+
+</script>
+
+

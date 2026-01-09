@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="nz">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -141,12 +141,12 @@ function clearVariables(){
 
   if(document.getElementById('fundingsrc').style.display=="none"){
      document.getElementById('trntofns').selectedIndex=0;
-     i=document.getElementById('trntopat').selectedIndex;
+   /*i=document.getElementById('trntopat').selectedIndex;
      ind=document.getElementById('trntopat').options[i].value.substring(14,15);
      if(ind!='0' && ind!='5'){
        document.getElementById('ptasf003').value="";
        document.getElementById('d_ptasf003').value="";
-     }
+     }*/
   }    
 }
 function filterSpecialtyNZ() {
@@ -157,6 +157,12 @@ function filterSpecialtyNZ() {
       defaultSpecialty();
     }
   }
+}
+
+function updateThisArray(ReturnCode){
+  var codenum = ReturnCode.name.substr(5,8);
+  var spec = document.getElementById("trntopat"+codenum).value;
+  UpdateArray(ReturnCode.value+","+spec);
 }
 function UpdateRecords() {
   if(OutputArray.length=="0") {
@@ -173,6 +179,23 @@ function UpdateRecords() {
   if (validateMandatory(UpdateForm)) {
    document.UpdateForm.submit();
   }
+}
+
+function changeArray(returnCode){
+
+  var tranName = "uptrn"+returnCode.name.substr(8,11);
+  var patientCode = document.getElementById(tranName).value;
+
+  for (i=0;i<OutputArray.length;i++){
+    x = patientCode.substring(0,30);
+    y = OutputArray[i].substring(40,70);
+    if (x==y){
+      var newCode = x+","+returnCode.value;
+      OutputArray[i] = "<input type=hidden name=updtrnno" +
+                       " value='" + newCode + "'>"
+    }
+  }
+  OutputDivision();
 }
 
 </script>
@@ -318,11 +341,10 @@ function AddTableRows() {
 </span>
 
 <span id=PatTypeChange style="display:none">
-  <td class=DataLabel> &nbsp; %STANDARD.01.017.A  
+  <!--<td class=DataLabel> &nbsp; %STANDARD.01.017.A  
   <select name=trntopat class=Mandatory title="%STANDARD.01.017.A "
    id="trntopat" onchange="DispContractID();">
     <option></option>
-    %STANDARD.01.007.A 
   </select>
     
   <span id=spContractID style="display:none">
@@ -338,7 +360,7 @@ function AddTableRows() {
       <img src="../images/SearchIcon.gif" class=icon
        onclick="TransferSourceFrame(UpdateForm.ptasf003,UpdateForm.d_ptasf003)">
     </td>
-  </span>
+  </span>-->
 </span>
 
 <span id=DoctorStdChange style="display:none">

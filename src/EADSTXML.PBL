@@ -9,6 +9,8 @@
 .*               load the details into pmsehbaf and pmsedbaf                 *
 .* Version   :   v10.03.00                                                   *
 .*                                                                           *
+.* V12.00.01     25/11/2025 Nikitha Bhaskar  TSK 0969892                     *
+.*               Recompiled for PMSEDBXD                                     *
 .* V10.11.01     18/12/2017 Peter Vela       TSK 0850270                     *
 .*               Recompiled for PMSEDBXD                                     *
 .* v10.03.02     01.08.2013 Patrick Adair    Car 289389                      *
@@ -79,7 +81,7 @@ SEDSTRNG  INIT      "sed 's/<\/[^>]*>/&\n/g'"
 .
 PRGID     INIT      "EADSTXML"
 PRGNAM    INIT      "eAdmission change status XML load"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .*****************************************************************************
 .*                              MAIN0000                                     *

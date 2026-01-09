@@ -9,7 +9,7 @@ Cache-Control: no-cache
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome"    content="hea">
 <meta name="CrossBrowser"    content="true">
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=%STANDARD.01.044.124.161.050"></script>
@@ -447,18 +447,58 @@ function AddClinicalNote(theField, theKey,theText) {
       myNode.scrollIntoView(false);
     }
 }
+
+// Sets the width of the Clinical Results <div> (SectionId) to be its parent's
+function SetClinicalResultsWidth(SectionId) {
+  var elClinResSec = tinyMCE.activeEditor.dom.get('clinicalResultsSection');
+  var elClinRes = tinyMCE.activeEditor.dom.get(SectionId);
+  var parentDiv = elClinRes ? elClinRes.closest('div') : null;
+
+  if (parentDiv != null) {
+    var style = window.getComputedStyle(parentDiv);
+    var width = style.getPropertyValue('width');
+    elClinRes.style.width = width;
+  }
+
+  // Set width of any 'resultTab' (<table>) to be its parent DIV width
+  var arrResTab = elClinResSec.getElementsByClassName('resultTab');
+
+  for (resultTab of arrResTab) {
+    var parentDiv = resultTab ? resultTab.closest('div') : null;
+    if (parentDiv != null) {
+      var style = window.getComputedStyle(parentDiv);
+      var width = style.getPropertyValue('width');
+      resultTab.style.width = width;
+      resultTab.offsetWidth;  // triggers reflow
+
+      // Also set the width of 'resultCom' (<div>) accordingly
+      var resultCom = resultTab.getElementsByClassName('resultCom')[0];
+      resultCom.style.width = parseInt(width,10) + 'px';
+    }
+  }
+}
 function AppendSingle(theURL) {
   resultKey=theURL.replace(/.*resultky=/,"")
   xmlHttp.open("GET", theURL, false);
   xmlHttp.send();
   if (xmlHttp.status=="200") {
-    var el=tinyMCE.activeEditor.dom.get('clinicalResultsSection');
-    if (el == null) {
-      tinyMCE.activeEditor.dom.add(tinyMCE.activeEditor.getBody(), 
-                   'span', {id : 'cr'+resultKey}, xmlHttp.responseText);
+    // Remove any line break (<br/>) that's in the middle of a word
+    var respTxt = xmlHttp.responseText;
+    var regex = /(\w)<br\s*\/?\s*>(\w)/gi;  // <br>, <br/>, <br />, etc.
+    var respTxt = respTxt.replace(regex, '$1$2');
+
+    // Insert result text
+    var elClinResSec = tinyMCE.activeEditor.dom.get('clinicalResultsSection');
+    if (elClinResSec == null) {
+      tinyMCE.activeEditor.dom.add(tinyMCE.activeEditor.getBody(),
+        'div', {id : 'cr'+resultKey}, respTxt);
     } else {
-      tinyMCE.activeEditor.dom.add(el, 'span', {id : 'cr'+resultKey}, xmlHttp.responseText);
+      tinyMCE.activeEditor.dom.add(elClinResSec, 'div', {id : 'cr'+resultKey}, respTxt);
     }
+
+    // Set width of 'cr'+resultKey (<div>)
+    SetClinicalResultsWidth('cr'+resultKey);
+
     var myNode = tinyMCE.activeEditor.getDoc().getElementById('cr'+resultKey) 
     myNode.scrollIntoView(false);
   } else {
@@ -488,39 +528,14 @@ function AppendResults() {
       // Insert results text
       var elClinResSec = tinyMCE.activeEditor.dom.get('clinicalResultsSection');
       if (elClinResSec == null) {
-        tinyMCE.activeEditor.dom.add(tinyMCE.activeEditor.getBody(),   
+        tinyMCE.activeEditor.dom.add(tinyMCE.activeEditor.getBody(),
           'div', {id : 'clinicalResults'}, respTxt);
       } else {
-        tinyMCE.activeEditor.dom.add(elClinResSec, 'div', {id : 'clinicalResults'},
-          respTxt);
+        tinyMCE.activeEditor.dom.add(elClinResSec, 'div', {id : 'clinicalResults'}, respTxt);
       }
 
-      // Set width of 'clinicalResults' (<div>) to be its parent DIV width
-      var elClinRes = tinyMCE.activeEditor.dom.get('clinicalResults');
-      var parentDiv = elClinRes ? elClinRes.closest('div') : null;
-
-      if (parentDiv != null) {
-        var style = window.getComputedStyle(parentDiv);
-        var width = style.getPropertyValue('width');
-        elClinRes.style.width = width;
-      }
-
-      // Set width of any 'resultTab' (<table>) to be its parent DIV width
-      var arrResTab = elClinResSec.getElementsByClassName('resultTab');
-
-      for (resultTab of arrResTab) {
-        var parentDiv = resultTab ? resultTab.closest('div') : null;
-        if (parentDiv != null) {
-          var style = window.getComputedStyle(parentDiv);
-          var width = style.getPropertyValue('width');
-          resultTab.style.width = width;
-          resultTab.offsetWidth;  // triggers reflow
-
-          // Also set the width of 'resultCom' (<div>) accordingly
-          var resultCom = resultTab.getElementsByClassName('resultCom')[0];
-          resultCom.style.width = parseInt(width,10) + 'px';
-        }
-      }
+      // Set width of 'clinicalResults' (<div>)
+      SetClinicalResultsWidth('clinicalResults');
 
       var myNode = tinyMCE.activeEditor.getDoc().getElementById('clinicalResults') 
       myNode.scrollIntoView(false);
@@ -684,9 +699,10 @@ function SaveDocument(documentStatus) {
     UpdateForm.corsp008.value=UpdateForm.corsp008.value.replace(/ /g,"")+"^"+UpdateForm.printfmt.value
     UpdateForm.draftdoc.value="1";
   }
+
   UpdateForm.htmlline.value = tinyMCE.get('documentContent').getContent({format : 'raw'});
-//console.log(UpdateForm.htmlline.value);
-  if(bool) {
+
+  if (bool) {
     theURL=document.UpdateForm.action;
 //
     if ((documentStatus=='F'||documentStatus=="P"||documentStatus=="S")&&

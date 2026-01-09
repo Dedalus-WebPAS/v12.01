@@ -9,6 +9,9 @@
 .*                   the selected date range                                  *
 .* Modifications  :                                                           *
 .******************************************************************************
+.* V12.01.01 21/11/2025  Alina Bhari    TSK 0954635                           *
+.*           Report 9999 if the patient weight is unknown and age is 365      *
+.*           Reported establishment number for NTAHCHCE                       *
 .* V12.00.10 18/11/2025  Alina Bhari    TSK 0954635                           *
 .*           Reported space for unqualified newborn caretype NTAHQDNB-SETF7000*
 .*           Used the admission date to calculate the patient age - SETF2500  *
@@ -502,7 +505,7 @@ ZED30     INIT      "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
 .
 PRGID     INIT      "IBAINP60"
 PRGNAM    INIT      "NT Health Department Transmissions"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .******************************************************************************
 .*                                 MAIN0000                                   *
@@ -1033,7 +1036,7 @@ SETF2500  PACK      KEY8,DDADMNO
 .          Report weight if weight < than 9001g and is less than 365 old days
             MATCH     SP70,DIM4
             IF        @EQUAL
-              IF      CDYSDAYS < 365
+              IF      CDYSDAYS <= 365
                 MOVE    "9999",NTAHBWHT
               ENDIF
             ELSE
@@ -1121,31 +1124,34 @@ SETF3040  IF        DOYR2025 = 1
             ENDIF
           ELSE
             MOVE      "5",NTAHICPS
-            MATCH     NTAHACLM,NINETEEN            * get the Establishment Identifier
+            MATCH     NTAHACLM,NINETEEN       * get the Establishment Identifier
             GOTO      SETF3050 IF NOT EQUAL
+          ENDIF
 .
-            PACK      KEY8,DDADMNO,SP70
-            CALL      RDPTDAD1
-            BRANCH    OVRCD,SETF3050
+          PACK      KEY8,DDADMNO,SP70
+          CALL      RDPTDAD1
+          BRANCH    OVRCD,SETF3050
 .
-            MATCH     SP70,PTDAADTS
-            IF        @EQUAL
-              GOTO      SETF3050
-            ENDIF
+          MATCH     SP70,PTDAADTS
+          IF        @EQUAL
+            GOTO      SETF3050
+          ENDIF
 .
-            PACK      PTVAESTB,SP1
-            PACK      KEY5,PTDAADTS,SP70
-            CALL      RDPTVAD1
-            BRANCH    OVRCD,SETF3050
+          PACK      PTVAESTB,SP1
+          PACK      KEY5,PTDAADTS,SP70
+          CALL      RDPTVAD1
+          BRANCH    OVRCD,SETF3050
 .
-            MATCH     SP70,PTVAESTB
-            IF        @EQUAL
-              PACK      ERRMSG,ERRORES,ERRORES1
-              CALL      PRID0000
-              GOTO      SETF3050
-            ENDIF
+          MATCH     SP70,PTVAESTB
+          IF        @EQUAL
+            PACK      ERRMSG,ERRORES,ERRORES1
+            CALL      PRID0000
+            GOTO      SETF3050
+          ENDIF
 .
-            PACK      NTAHCHCE,PTVAESTB,SP10
+          PACK      NTAHCHCE,PTVAESTB,SP10
+.
+          IF        DOYR2025 <> 1
             PACK      NTAHICPS,ONE
           ENDIF
 .                                                * Urgency of Admission
@@ -1632,15 +1638,6 @@ DYRC0000  MATCH     SP70,IBPOASGC
                 MOVE      "JUN2026",NTAHQIDC * Before  June 30 2026
               ENDIF
             ENDIF
-          ENDIF
-.
-.         Contracted hospital care establishment identifier
-.         If cat CL HDP Default isnot 08 then report blank
-.         Else report IBPOASGC
-          MOVE    IBPOASGC,NTAHCHCE
-          MATCH   "08",NTAHACLM
-          IF       !@EQUAL
-            MOVE     SP70,NTAHCHCE
           ENDIF
 .
 DYRC9999  RETURN

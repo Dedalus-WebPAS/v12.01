@@ -7,6 +7,9 @@
 .
 . Modifications : 
 .----------------------------------------------------------------------
+. V12.01.01 27/11/2025  Nikitha B      TSK 0969669
+.           Modified at PTHE0600 to display inactive theatre details only when
+.           a theatre session exists.
 . V12.00.01 15.05.2025  DA Sarkies     TSK 0955096
 .           Updated for Alpha-Numeric Visit Number
 . V11.05.05 12/03/2025  Ebon Clements  TSK 0958207
@@ -813,7 +816,7 @@ FHRINTHE  FORM      1
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "PATWEB10"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Patient Calendar Views"
 .----------------------------------------------------------------------
 .
@@ -7048,8 +7051,25 @@ PTHE0500  MATCH     "1",LSTDSCFL
             CALL      RKOPOPR1
           ENDIF   
           BRANCH    OVRCD,PTHE9999
+.                                     * Display inactive only if session exists
+          IF        OPRMSTAT = 1
+            PACK      KEY28,WBSEHOSP,WORKDATE,OPRMROOM,SP70
+            CALL      RSOPSES4
+PTHE0600    CALL      RKOPSES4
+            BRANCH    OVRCD,PTHE0500
 .
-          BRANCH    OPRMSTAT,PTHE0500            * Skip inactive
+            MATCH     OPSEHOSP,WBSEHOSP
+            GOTO      PTHE0500 IF NOT EQUAL
+.
+            MATCH     OPSEDATE,WORKDATE
+            GOTO      PTHE0500 IF NOT EQUAL
+.
+            MATCH     OPSETHET,OPRMROOM
+            GOTO      PTHE0500 IF NOT EQUAL
+.
+            COMPARE   ZERO,OPSESTAT                * Cancelled
+            GOTO      PTHE0600 IF EQUAL
+          ENDIF
 .         
           IF        IBCNMHOS=1
             MATCH     SP70,OPRMHOSP

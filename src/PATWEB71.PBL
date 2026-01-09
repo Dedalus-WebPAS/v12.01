@@ -5,6 +5,12 @@
 .  
 . Modifications  :
 .----------------------------------------------------------------------------
+. V12.01.02 11/11/2025  Bella Turco    TSK 0951679
+.           New tags MCHG6800-MCHG7000 for LOS and HITH calculations
+.           New routine CHKUDF00 to update admission/discharge UDF
+.           New routine CHCKBT00 to check if site has a Bed Type with Ind1=H
+. V12.01.01 21/11/2025  J.Tan          TSK 0946593
+.           Recompiled for CMXMATRX -Sort Casepayment Theatre fee items
 . V12.00.13 10/10/2025  J.Tan          TSK 0946593
 .           Recompiled for PATCATBI-Sort Casepayment Theatre fee items
 . V12.00.12 06/10/2025  J.Tan          TSK 0966784
@@ -2439,6 +2445,7 @@
           INC       PMSHCPTD/INC
           INC       PMSHCGTD/INC
           INC       VARGBCRN/INC     * I-48227
+          INC       VARWIS11/INC          * Variables for PATWIS11
           INC       VISPAYFD/INC
           INC       VISPAYTD/INC
           INC       VISPMAFD/INC
@@ -2580,6 +2587,8 @@ ENDDAY    FORM      4
 ERRORDES  DIM       50
 CCVERIFI  DIM       1
 REASONCH  DIM       3
+UDFADMIS  DIM       3
+UDFDISCH  DIM       3
 ATRTYPE   DIM       3
 .
 .
@@ -2689,6 +2698,7 @@ LDEPT     DIM       3
 LNO       FORM      2
 LWCHG     FORM      6.2                     * Labour Ward Fee
 LWDT      DIM       8
+LOSDAYS   FORM      6
 .
 MDATE000  DIM       8
 MAXCNTR   FORM      3
@@ -2958,6 +2968,16 @@ XMBSX     DIM       5
 ZEROINVC  DIM       1
 ZERO6     INIT      "000000"
 .
+CATU1     INIT      "U1"
+CATU2     INIT      "U2"
+CATU3     INIT      "U3"
+CATU4     INIT      "U4"
+CATU5     INIT      "U5"
+CATU8     INIT      "U8"
+CATU9     INIT      "U9"
+CATV1     INIT      "V1"
+CATV2     INIT      "V2"
+.
 . ----- Variables for automatic admission type change / exploding charges -----
 .
 ADMTYP    DIM       3                       * Admission type
@@ -3056,7 +3076,7 @@ CFPAYCOD  DIM       3        * 3M Codefinder PAY Code
 .------------------------------------------------------------------------------
 PRGID     INIT      "PATWEB71"
 PRGNAM    INIT      "Patient Invoice Print Server"      
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 .------------------------------------------------------------------------------
 .
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -3540,7 +3560,7 @@ RDCNT000  READ      CONTROLF,ZERO;*85,IBCNUGST
                                     *148,PTCNINVB
           READ      CONTROLF,HUND03;*212,PTCNPFSN,PTCNPFGN:
                                     *220,PTCNDEES,*221,PTCNDDES
-          READ      CONTROLF,HUND05;*71,PTCNCMAU:
+          READ      CONTROLF,HUND05;*71,PTCNCMAU,*73,PTCNCMDU:
                                     *99,PTCNNWCM:     * using matrix
                                     *130,PTCNAUAT:    * auto update adm.type
                                          PTCNWSPC:    * Warning for sub-seq item
@@ -3784,6 +3804,8 @@ CLRPAR00  MOVE      ZERO,REPORTNO
           MOVE      SP70,PRDCCLSS
           MOVE      SP70,CCVERIFI
           MOVE      SP70,REASONCH
+          MOVE      Z70,UDFADMIS
+          MOVE      Z70,UDFDISCH
           MOVE      ZERO,ABFFLAG
 .
 CLRPAR99  RETURN
@@ -4635,6 +4657,18 @@ SETPAR00  MATCH     "reportno=",QRYNAME
           MATCH     "reasonch=",QRYNAME
           IF        @EQUAL
             MOVE      QRYDATA,REASONCH
+            GOTO      SETPAR99
+          ENDIF
+.
+          MATCH     "udfadmis=",QRYNAME
+          IF        @EQUAL
+            MOVE      QRYDATA,UDFADMIS
+            GOTO      SETPAR99
+          ENDIF
+.
+          MATCH     "udfdisch=",QRYNAME
+          IF        @EQUAL
+            MOVE      QRYDATA,UDFDISCH
             GOTO      SETPAR99
           ENDIF
 .
@@ -7244,7 +7278,7 @@ SADJ2000
           MATCH     SP70,CCVERIFI
           GOTO      SADJ2080 IF NOT EQUAL  * Casemix Code Verification changed
 .
-          GOTO      SADJ9999               * nothing changed
+          GOTO      SADJ2090               * nothing changed
 .
 SADJ2010  PACK      KEY9,PTMIPCMX,SP70
           CALL      RDPTCMC1
@@ -7266,6 +7300,8 @@ SADJ2010  PACK      KEY9,PTMIPCMX,SP70
 .     
           CALL      UPDCMX00                * Update casemix code
 SADJ2080  CALL      CVERIF00              * Casemix verification audit patatraf
+.
+SADJ2090  CALL      CHKUDF00                * Update Admission/Discharge UDF
           MOVE      ZERO,EXIT
           GOTO      SADJ9999
 .
@@ -9029,6 +9065,48 @@ OUTL0000  MOVE      ZERO,LOWFLAG          * default to high outliers
 OUTL9999  RETURN
 +
 .-----------------------------------------------------------
+.  Update Admission/Discharge UDF
+.-----------------------------------------------------------
+CHKUDF00  COMPARE   ZERO,PTCNCMAU
+          GOTO      CHKUDF50 IF EQUAL
+.
+          MATCH     Z70,UDFADMIS
+          GOTO      CHKUDF50 IF EQUAL
+.
+          MOVE      SP70,KEY3
+          LOAD      KEY3,PTCNCMAU,AUSR1,AUSR2,AUSR3,AUSR4,AUSR5,AUSR6:
+                         AUSR7,PTMIUSR8,PTMIUSR9,PTMIUSR0
+.
+          MATCH     KEY3,UDFADMIS               * Matrix Admission UDF changed
+          GOTO      CHKUDF50 IF EQUAL
+.
+          STORE     UDFADMIS,PTCNCMAU,AUSR1,AUSR2,AUSR3,AUSR4,AUSR5,AUSR6:
+                         AUSR7,PTMIUSR8,PTMIUSR9,PTMIUSR0
+.
+          CALL      UPMISS1                     * Update admission
+.
+CHKUDF50  COMPARE   THREE,ASTAT                 * patient discharged
+          GOTO      CHKUDF99 IF NOT EQUAL
+.
+          COMPARE   ZERO,PTCNCMDU
+          GOTO      CHKUDF99 IF EQUAL
+.
+          MATCH     Z70,UDFDISCH
+          GOTO      CHKUDF99 IF EQUAL
+.
+          MOVE      SP70,KEY3
+          LOAD      KEY3,PTCNCMDU,DUSD1,DUSD2,DUSD3,DUSD4,DUSD5
+.
+          MATCH     KEY3,UDFDISCH               * Matrix Discharge UDF changed
+          GOTO      CHKUDF99 IF EQUAL
+.
+          STORE     UDFDISCH,PTCNCMDU,DUSD1,DUSD2,DUSD3,DUSD4,DUSD5
+.
+          CALL      UPDSCH1                     * Update discharge
+.
+CHKUDF99  RETURN
++
+.-----------------------------------------------------------
 .  Update Casemix Code
 .-----------------------------------------------------------
 UPDCMX00  MOVE      ZERO,NOFEE
@@ -10565,7 +10643,7 @@ PROFLD99  RETURN
 .------------------------------------------------------------
 .   Casemix Code Verification
 .------------------------------------------------------------
-CCVF0000  BRANCH    FLDITMNO,CCVF0100,CCVF0200,CCVF0300
+CCVF0000  BRANCH    FLDITMNO,CCVF0100,CCVF0200,CCVF0300,CCVF0400,CCVF0500
           GOTO      CCVF9999
 .
 CCVF0100  MOVE      "RV",CATEGORY                  * Reason for Change
@@ -10687,6 +10765,40 @@ CCVF0305  MATCH     PTARCOD1,SP70
           CALL      RDCODE1
           BRANCH    OVRCD,CCVF9999
           WRITE     HTMLFILE;PTCDLDES;
+          GOTO      CCVF9999
+.
+CCVF0400  UNPACK    DIM127,ANS,KEY1,DIM127
+          MOVE      ZERO,F1
+          MOVE      KEY1,F1
+          COMPARE   ZERO,PTCNCMAU           * Which Adm UDF for Casemix Matrix
+          GOTO      CCVF9999 IF EQUAL
+.
+          BRANCH    F1,CCVF0410
+.
+          WRITE     HTMLFILE;PTCNCMAU;      * Which Adm UDF for Casemix Matrix
+          GOTO      CCVF9999
+.
+CCVF0410  LOAD      CATEGORY,PTCNCMAU,CATU1,CATU2,CATU3,CATU4,CATU5,CATU6:
+                            CATU7,CATU8,CATU9,CATV1,CATV2
+          LOAD      CODE,PTCNCMAU,AUSR1,AUSR2,AUSR3,AUSR4,AUSR5,AUSR6:
+                             AUSR7,PTMIUSR8,PTMIUSR9,PTMIUSR0
+          CALL      CODITM00
+          GOTO      CCVF9999
+.
+CCVF0500  UNPACK    DIM127,ANS,KEY1,DIM127
+          MOVE      ZERO,F1
+          MOVE      KEY1,F1
+          COMPARE   ZERO,PTCNCMDU           * Which Adm UDF for Casemix Matrix
+          GOTO      CCVF9999 IF EQUAL
+.
+          BRANCH    F1,CCVF0510
+.
+          WRITE     HTMLFILE;PTCNCMDU;      * Which Dis UDF for Casemix Matrix
+          GOTO      CCVF9999
+.
+CCVF0510  LOAD      CATEGORY,PTCNCMDU,CATD1,CATD2,CATD3,CATD4,CATD5
+          LOAD      CODE,PTCNCMDU,DUSD1,DUSD2,DUSD3,DUSD4,DUSD5
+          CALL      CODITM00
           GOTO      CCVF9999
 .
 CCVF9999  RETURN
@@ -15199,7 +15311,7 @@ MCHG0000  BRANCH    FLDITMNO,MCHG0100,MCHG0200,MCHG0300,MCHG0400,MCHG0500:
                              MCHG5100,MCHG5200,MCHG5300,MCHG5400,MCHG5500: 
                              MCHG5600,MCHG5700,MCHG5800,MCHG5900,MCHG6000:
                              MCHG6100,MCHG6200,MCHG6300,MCHG6400,MCHG6500:
-                             MCHG6600,MCHG6700
+                             MCHG6600,MCHG6700,MCHG6800,MCHG6900,MCHG7000
           GOTO      MCHG9999
 .
 MCHG0100  MATCH     PMMITDAT,SP70 
@@ -15686,7 +15798,30 @@ MCHG6610  WRITE     HTMLFILE;MVITSTAT;             * .1 Visit Status
           GOTO      MCHG9999
 .
 MCHG6700  WRITE     HTMLFILE;NZITFLAG;  * Item with NOT performed procedure flag
-          GOTO      INVD9999
+          GOTO      MCHG9999
+.
+MCHG6800  MOVE      ZERO,LOSDAYS
+          DAYSEP    ADATE,DDATE,LOSDAYS
+          MOVE      LOSDAYS,KEY9
+          SQUEEZE   KEY9
+          MOVE      "Days",KEY4
+          PACK      KEY10,KEY9,SP1,KEY4
+          WRITE     HTMLFILE;KEY10;
+          GOTO      MCHG9999
+.
+MCHG6900  MOVE      ADATE,FROMDATE
+          MOVE      DDATE,TODATE
+          CALL      RHIHDAYS                * Get HIH Days
+.
+          MOVE      CALDAYS,KEY9
+          SQUEEZE   KEY9
+          MOVE      "Days",KEY4
+          PACK      KEY10,KEY9,SP1,KEY4
+          WRITE     HTMLFILE;KEY10;
+          GOTO      MCHG9999
+.
+MCHG7000  CALL      CHCKBT00                * Check if site has ind1=H Bed Type
+          GOTO      MCHG9999
 .
 MCHG9999  RETURN
 .
@@ -22955,6 +23090,26 @@ SINVT900  DISPLAY   *P1:24,*EL,*B:
 SINVT950  MOVE      ZERO,EXIT
 SINVT999  RETURN
 +
+.****************************************************************************
+.  CHCKBT00 - Check if site has a Bed Type with Ind1=H
+.****************************************************************************
+CHCKBT00  MOVE      "BT",KEY2
+          PACK      KEY5,KEY2,SP70
+          CALL      RDSCODE1
+CHCKBT10  CALL      RDKCODE1
+          BRANCH    OVRCD,CHCKBT99
+.
+          MATCH     "BT",TCODE
+          GOTO      CHCKBT99 IF NOT EQUAL
+.
+          MATCH     "H",TCINDC1
+          GOTO      CHCKBT10 IF NOT EQUAL
+.
+          WRITE     HTMLFILE;ONE;
+          GOTO      CHCKBT99
+.
+CHCKBT99  RETURN
++
 .******************************************************************************
 
           INC       IBAWEBCD    
@@ -22969,6 +23124,7 @@ SINVT999  RETURN
           INC       PMIGTNID
           INC       CALCCODE
           INC       RTIODAYS 
+          INC       RHIHDAYS
           INC       PRTINVBD
           INC       CLPMSEXT
           INC       CLPMSPWA

@@ -11,6 +11,10 @@
 .*     Mods.        :             look for (spare) or (moved) for free space  *
 .*                                                                            *
 .******************************************************************************
+.*       V12.01.02  17/12/2025  J.Tan            TSK 0956147                  *
+.*                  Added PTCNHACD - HAC Flags for Risk Factors Start Date-ABF*
+.*       V12.01.01  15/12/2025  Zumin Yu         TSK 0968747                  *
+.*                  Updated CPMIAD, CURDEL and CURCHG option to 0 = No        *
 .*       V12.00.07  19/11/2025  Davin            TSK 0968897                  *
 .*                  Added PTCNB08E - Broadcast HL7 EMR A08 from HL7RECVR      *
 .*                  Added PTCNMSH3 - Sending application MSH.3 for EMR A08    *
@@ -1736,9 +1740,9 @@ CDOCLLN   FORM      1        232       Number of lines on Doctors labels
 ..(moved) DIM       6        239    was CHCSED - End date for current HCS run
 CMAXINV   FORM      3        245       Max. No. of days allowed on one invoice
 CURDEL    FORM      1        248       1 = Keeping PMI Deletions Audit
-.                                      0,2 = No
+.                                      0 = No
 CURCHG    FORM      1        249       1 = Keeping UR Number Change Audit
-.                                      0,2 = No
+.                                      0 = No
 .End of Record               250
 +
 .*******************************************************************************
@@ -1944,7 +1948,7 @@ CHDESC3   DIM       20       187       Description for Highlight Code 3
 CHMAN3    FORM      1        207       Highlight Code mandatory 3 ?
 .                                         1 = Yes, 2 = No
 CPMIAD    FORM      1        208       1 = Using PMI Audit
-.                                      2 = No
+.                                      0 = No
 CSRESP    FORM      1        209       1 = Using self for person resp. for acct.
 .                                      2 = No
 CPCFORM   FORM      1        210       Format of patient condition
@@ -2423,7 +2427,7 @@ PTCNDEFT  FORM      1         56       Default Surname Search Param for new U/R
 PTCNUAHS  FORM      1         57       Using Waiting list ad-hoc selection 
 .                                      routine in OPR40 & WAT30
 .                                         0 = No, 1 = Yes
-..(moved) DIM       1         58     was - (spare)
+PTCNHACD  DIM       1         58       HAC Flags for Risk Factors Start Date-ABF
 .
 PTCNWRDS  FORM      1         59       Ward specialities in IBAPAT13       
 .                                         0 = No, 1 = Yes

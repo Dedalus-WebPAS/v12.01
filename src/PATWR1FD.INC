@@ -14,6 +14,9 @@
 .  *                                                                    *
 .  *     Modifications:                                                 *
 .  **********************************************************************
+.  * V12.01.01 08/12/2025 Thanh T     TSK 0960204                       *
+.  *           Addedd PTWDROOM field                                    *
+.  **********************************************************************
 .  * V12.00.01 29/04/2025 Thanh T     TSK 0955096                       *
 .  *           Changed SWADMNO, WADMNO, WSTBY from FORM(8) to DIM(8)    *
 .  **********************************************************************
@@ -126,7 +129,8 @@ PTWDDOET   DIM       2          2         215      Last Display Time for I/P
 .                                                    Scheduling / Day Oncology
 PTWDSDES   DIM      10         10         217      Short ward name/description
 WEXTN      DIM      20         20         227      Extension/contact number 
-PTWDSPAR   DIM      53         53         247      Spare Variable
+PTWDROOM   DIM      20         20         247      Room (for HL7 purposes only) 
+PTWDSPAR   DIM      33         33         267      Spare Variable
 .
 .End of Record                            300
 .

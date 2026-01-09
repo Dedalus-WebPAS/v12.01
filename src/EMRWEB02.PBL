@@ -3,9 +3,20 @@
 .
 . Function      : Emergency Details Server
 .
+.      ********************************************************
+.      *                                                      *
+.      *    NB: DO NOT ADD ANY NEW FILE OPENS IN INIT0000     *
+.      *        IF YOU NEED TO OPEN A NEW FILE OPEN IN FILE   *
+.      *        WHERE IS IS REQUIRED AND CLOSE IT STRAIGHT    *
+.      *        AFTER.                                        *
+.      *                                                      *
+.      ********************************************************
+.
 . Modifications :
 .
 .----------------------------------------------------------------------
+. V12.01.01 02.12.2025  DA Sarkies     TSK 0968888
+.           Added note to advise dev not to add new file opens to INIT0000   
 . V12.00.10 16/10/2025  Nikitha B      TSK 0967649
 .           Added to check for invalid and end date for Active alerts to skip
 .           them from printing at OUTALR10.
@@ -3732,7 +3743,7 @@ SVCRCNTR  FORM      3       Count
 .
 .-----------------------------------------------------------
 PRGID     INIT      "EMRWEB02"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Emergency Details Server"
 .-----------------------------------------------------------
 .

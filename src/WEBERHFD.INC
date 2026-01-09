@@ -1,3 +1,4 @@
+. V12.01.01 15/12/2025 TT C-0958864 Added new wwebPAS status 4 (Closed not relea
 . V11.00.01 11/01/2021 PVL C-0898361 Created FD                                 
 . *----------------------------------------------------------------------
 . * Include Name  :   WEBERHFD.INC
@@ -40,6 +41,7 @@ WBEISTAT  DIM       1      1        206   webPAS Status
 .                                         1 = Partial                          
 .                                         2 = Released                         
 .                                         3 = Processing                       
+.                                         4 = Closed not released              
 WBEIMSID  DIM       36     36       207   Message ID                         
 WBEIRSTA  DIM       40     40       243   Report Status                      
 WBEISPAR  DIM       100    100      283   Spare Variable                     

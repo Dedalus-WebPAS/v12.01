@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //==============================================================================
 // Program   : patweb03.js
 //
@@ -855,8 +855,8 @@ function getDefaultFields(urno,atyp,clam,fund,tabl,edat,icde,asso,sdat) {
   if (isWhitespace(clss)) {
       return; } 
 
-  var r=confirm("AN SNAP Auto Classification\n\n" +
-                "AN SNAP Class " + clss + " Version " + vers +
+  var r=confirm("AN-SNAP Auto Classification\n\n" +
+                "AN-SNAP Class " + clss + " Version " + vers +
                 " has been found\n" + 
                 "Select OK to use, Cancel to ignore this match");
   if (r==true) {

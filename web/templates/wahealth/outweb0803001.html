@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -97,7 +97,10 @@ function valReferralClaim() {
       "Press OK to update the Referral " + categoryName + " code.\n" +
       "Press Cancel to leave the Referral " +categoryName+ " code unchanged.");
       if (ans) {
-        var fundingSourceVal = AddForm.pmsvx141.value.substr(0,3);
+        var fundingSourceVal = " ";
+        if (AddForm.pmsvx141 !== undefined) {
+          fundingSourceVale = AddForm.pmsvx141.value.substr(0,3);
+        }
         var serverURL = "../cgi-bin/outweb02.pbl?reportno=9&updatety=20" +
                         "&admissno="+PatientLinks.admissno.value.replace(/ /g,"+") +
                         "&outbb002="+claimCodeVal+"&pmsvx141="+fundingSourceVal +

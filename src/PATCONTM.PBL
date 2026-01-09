@@ -8,6 +8,13 @@
 .  *     Modifications:                                                       *
 .  *                                                                          *
 .  ****************************************************************************
+.  *     V12.01.01  17/12/2025  Zumin Yu         TSK 0968747                  *
+.  *                Added CSURG1, CMURG1, CSURG2, CMURG2, CSURG3, CMURG3,     *
+.  *                CSURG4, CMURG4, CIPRG, COPRG, CAERG, CNBRG, CCNOTES,      *
+.  *                CPMIAD, CURDEL, CURCHG, CSRCHDRG, CSRCHYRG, CFFMORB,      *
+.  *                PTCNURCF, PTCNRQCF, PTCNDPCF, PTCNRLAY, PTCNUCOD,         *
+.  *                PTCNMRPN, PTCNUDRN, PTCECODE, CMDISP, CMDISS, CMDISC,     *
+.  *                CMDISA, CMDISD, CMOPRT, CMDISL and CMDISM from IBAHOS93   *
 .  *     V12.00.05  19/11/2025  Davin            TSK 0968897                  *
 .  *                Added PATCN663/PTCNB08E - Broadcast EMR A08 from HL7RECVR *
 .  *                Added PATCN664/PTCNMSH3 - Sending appli MSH.3 for EMR A08 *
@@ -1680,6 +1687,41 @@ CPPT0000  MOVE      Z70,PATCN001
           MOVE      Z70,PATCN662
           MOVE      Z70,PATCN663
           MOVE      Z70,PATCN664
+          MOVE      Z70,PATCN665
+          MOVE      Z70,PATCN666
+          MOVE      Z70,PATCN667
+          MOVE      Z70,PATCN668
+          MOVE      Z70,PATCN669
+          MOVE      Z70,PATCN670
+          MOVE      Z70,PATCN671
+          MOVE      Z70,PATCN672
+          MOVE      Z70,PATCN673
+          MOVE      Z70,PATCN674
+          MOVE      Z70,PATCN675
+          MOVE      Z70,PATCN676
+          MOVE      Z70,PATCN677
+          MOVE      Z70,PATCN678
+          MOVE      Z70,PATCN679
+          MOVE      Z70,PATCN680
+          MOVE      Z70,PATCN681
+          MOVE      Z70,PATCN682
+          MOVE      Z70,PATCN683
+          MOVE      Z70,PATCN684
+          MOVE      Z70,PATCN685
+          MOVE      Z70,PATCN686
+          MOVE      Z70,PATCN687
+          MOVE      Z70,PATCN688
+          MOVE      Z70,PATCN689
+          MOVE      Z70,PATCN690
+          MOVE      Z70,PATCN691
+          MOVE      Z70,PATCN692
+          MOVE      Z70,PATCN693
+          MOVE      Z70,PATCN694
+          MOVE      Z70,PATCN695
+          MOVE      Z70,PATCN696
+          MOVE      Z70,PATCN697
+          MOVE      Z70,PATCN698
+          MOVE      Z70,PATCN699
 .
           MOVE      Z70,IBACN001
           MOVE      Z70,IBACN002
@@ -2153,7 +2195,14 @@ PTCO0000  BRANCH    FLDITMNO,PTCO0010,PTCO0020,PTCO0030,PTCO0040,PTCO0050:
                              PTCO5460,PTCO5470,PTCO5480,PTCO5490,PTCO5500: * 550
                              PTCO5510,PTCO5520,PTCO5530,PTCO5540,PTCO5550: * 555
                              PTCO5560,PTCO5570,PTCO5580,PTCO5590,PTCO5600: * 560
-                             PTCO5610,PTCO5620,PTCO5630,PTCO5640
+                             PTCO5610,PTCO5620,PTCO5630,PTCO5640,PTCO5650: * 565
+                             PTCO5660,PTCO5670,PTCO5680,PTCO5690,PTCO5700: * 570
+                             PTCO5710,PTCO5720,PTCO5730,PTCO5740,PTCO5750: * 575
+                             PTCO5760,PTCO5770,PTCO5780,PTCO5790,PTCO5800: * 580
+                             PTCO5810,PTCO5820,PTCO5830,PTCO5840,PTCO5850: * 585
+                             PTCO5860,PTCO5870,PTCO5880,PTCO5890,PTCO5900: * 590
+                             PTCO5910,PTCO5920,PTCO5930,PTCO5940,PTCO5950: * 595
+                             PTCO5960,PTCO5970,PTCO5980,PTCO5990
 .
           WRITE     HTMLFILE;"Invalid IBA tag";
           GOTO      PTCO9999
@@ -4239,6 +4288,111 @@ PTCO5630  WRITE     HTMLFILE;PTCNB08E;   * Broadcast HL7 EMR A08 from HL7RECVR
 PTCO5640  WRITE     HTMLFILE;PTCNMSH3;   * Sending application MSH.3 for EMR A08
           GOTO      PTCO9999
 .
+PTCO5650  WRITE     HTMLFILE;CSURG1;   * Range 1 - Next U/R Number
+          GOTO      PTCO9999
+.
+PTCO5660  WRITE     HTMLFILE;CMURG1;   * Range 1 - Maximum U/R Number
+          GOTO      PTCO9999
+.
+PTCO5670  WRITE     HTMLFILE;CSURG2;   * Range 2 - Next U/R Number
+          GOTO      PTCO9999
+.
+PTCO5680  WRITE     HTMLFILE;CMURG2;   * Range 2 - Maximum U/R Number
+          GOTO      PTCO9999
+.
+PTCO5690  WRITE     HTMLFILE;CSURG3;   * Range 3 - Next U/R Number
+          GOTO      PTCO9999
+.
+PTCO5700  WRITE     HTMLFILE;CMURG3;   * Range 3 - Maximum U/R Number
+          GOTO      PTCO9999
+.
+PTCO5710  WRITE     HTMLFILE;CSURG4;   * Range 4 - Next U/R Number
+          GOTO      PTCO9999
+.
+PTCO5720  WRITE     HTMLFILE;CMURG4;   * Range 4 - Maximum U/R Number
+          GOTO      PTCO9999
+.
+PTCO5730  WRITE     HTMLFILE;CIPRG;   * Inpatient System using Range
+          GOTO      PTCO9999
+.
+PTCO5740  WRITE     HTMLFILE;COPRG;   * Outpatient System using Range
+          GOTO      PTCO9999
+.
+PTCO5750  WRITE     HTMLFILE;CAERG;   * A & E System using Range
+          GOTO      PTCO9999
+.
+PTCO5760  WRITE     HTMLFILE;CNBRG;   *  Newborn System using Range
+          GOTO      PTCO9999
+.
+PTCO5770  WRITE     HTMLFILE;CCNOTES;   *  Case Notes Symbol
+          GOTO      PTCO9999
+.
+PTCO5780  WRITE     HTMLFILE;CPMIAD;   *  Using PMI Change Audit
+          GOTO      PTCO9999
+.
+PTCO5790  WRITE     HTMLFILE;CURDEL;   *  Using PMI Deletion Audit
+          GOTO      PTCO9999
+.
+PTCO5800  WRITE     HTMLFILE;CURCHG;   *  Using U/R Number Change Audit 
+          GOTO      PTCO9999
+.
+PTCO5810  WRITE     HTMLFILE;CSRCHDRG;   *  Day range for DOB in searches
+          GOTO      PTCO9999
+.
+PTCO5820  WRITE     HTMLFILE;CSRCHYRG;   *  Year range for DOB in searches
+          GOTO      PTCO9999
+.
+PTCO5830  WRITE     HTMLFILE;CFFMORB;   *  Change desc. in Morbidity
+          GOTO      PTCO9999
+.
+PTCO5840  WRITE     HTMLFILE;PTCNURCF;  * Using Free Format for Urgency
+          GOTO      PTCO9999
+.
+PTCO5850  WRITE     HTMLFILE;PTCNRQCF;  * Using Free Format for Requested
+          GOTO      PTCO9999
+.
+PTCO5860  WRITE     HTMLFILE;PTCNDPCF;  * Using Free Format for Department
+          GOTO      PTCO9999
+.
+PTCO5870  WRITE     HTMLFILE;PTCNRLAY;  * Medical Record Request Form Layout
+          GOTO      PTCO9999
+.
+PTCO5880  WRITE     HTMLFILE;PTCNUCOD;  * User Defined Stationery Code (Type 4)
+          GOTO      PTCO9999
+.
+PTCO5890  WRITE     HTMLFILE;PTCNMRPN;  * Printer for Med. Rec. Request Form
+          GOTO      PTCO9999
+.
+PTCO5900  WRITE     HTMLFILE;PTCNUDRN;  * Using ranges for DOB searches
+          GOTO      PTCO9999
+.
+PTCO5910  WRITE     HTMLFILE;PTCECODE;  * Mandatory 'E' Code Check
+          GOTO      PTCO9999
+.
+PTCO5920  WRITE     HTMLFILE;CMDISP;    * Prefix for Primary Disease Codes
+          GOTO      PTCO9999
+.
+PTCO5930  WRITE     HTMLFILE;CMDISS;    * Prefix for Sequela Disease Codes 
+          GOTO      PTCO9999
+.
+PTCO5940  WRITE     HTMLFILE;CMDISC;    * Prefix for Complication Codes
+          GOTO      PTCO9999
+.
+PTCO5950  WRITE     HTMLFILE;CMDISA;  * Prefix for Associated Disease Codes
+          GOTO      PTCO9999
+.
+PTCO5960  WRITE     HTMLFILE;CMDISD;  * Prefix for Disability Disease Codes
+          GOTO      PTCO9999
+.
+PTCO5970  WRITE     HTMLFILE;CMOPRT;  * Prefix for Post-Surgical Operation Codes
+          GOTO      PTCO9999
+.
+PTCO5980  WRITE     HTMLFILE;CMDISL;  * Prefix for Length of Stay Disease Codes
+          GOTO      PTCO9999
+.
+PTCO5990  WRITE     HTMLFILE;CMDISM;  * Prefix for Morphology Disease Codes
+          GOTO      PTCO9999
+.
 PTCO9999  RETURN
 +
 .------------------------------------------------------------
@@ -4648,7 +4802,14 @@ SPPAT000  MOVE      ZERO,EXIT
                        SPPAT646,SPPAT647,SPPAT648,SPPAT649,SPPAT650:
                        SPPAT651,SPPAT652,SPPAT653,SPPAT654,SPPAT655:
                        SPPAT656,SPPAT657,SPPAT658,SPPAT659,SPPAT660:
-                       SPPAT661,SPPAT662,SPPAT663,SPPAT664
+                       SPPAT661,SPPAT662,SPPAT663,SPPAT664,SPPAT665:
+                       SPPAT666,SPPAT667,SPPAT668,SPPAT669,SPPAT670:
+                       SPPAT671,SPPAT672,SPPAT673,SPPAT674,SPPAT675:
+                       SPPAT676,SPPAT677,SPPAT678,SPPAT679,SPPAT680:
+                       SPPAT681,SPPAT682,SPPAT683,SPPAT684,SPPAT685:
+                       SPPAT686,SPPAT687,SPPAT688,SPPAT689,SPPAT690:
+                       SPPAT691,SPPAT692,SPPAT693,SPPAT694,SPPAT695:
+                       SPPAT696,SPPAT697,SPPAT698,SPPAT699
 .
           MOVE      ONE,EXIT
           GOTO      SPPAT999
@@ -6832,6 +6993,111 @@ SPPAT663  MOVE      QRYDATA,PATCN663
           GOTO      SPPAT999
 .
 SPPAT664  MOVE      QRYDATA,PATCN664
+          GOTO      SPPAT999
+.
+SPPAT665  MOVE      QRYDATA,PATCN665
+          GOTO      SPPAT999
+.
+SPPAT666  MOVE      QRYDATA,PATCN666
+          GOTO      SPPAT999
+.
+SPPAT667  MOVE      QRYDATA,PATCN667
+          GOTO      SPPAT999
+.
+SPPAT668  MOVE      QRYDATA,PATCN668
+          GOTO      SPPAT999
+.
+SPPAT669  MOVE      QRYDATA,PATCN669
+          GOTO      SPPAT999
+.
+SPPAT670  MOVE      QRYDATA,PATCN670
+          GOTO      SPPAT999
+.
+SPPAT671  MOVE      QRYDATA,PATCN671
+          GOTO      SPPAT999
+.
+SPPAT672  MOVE      QRYDATA,PATCN672
+          GOTO      SPPAT999
+.
+SPPAT673  MOVE      QRYDATA,PATCN673
+          GOTO      SPPAT999
+.
+SPPAT674  MOVE      QRYDATA,PATCN674
+          GOTO      SPPAT999
+.
+SPPAT675  MOVE      QRYDATA,PATCN675
+          GOTO      SPPAT999
+.
+SPPAT676  MOVE      QRYDATA,PATCN676
+          GOTO      SPPAT999
+.
+SPPAT677  MOVE      QRYDATA,PATCN677
+          GOTO      SPPAT999
+.
+SPPAT678  MOVE      QRYDATA,PATCN678
+          GOTO      SPPAT999
+.
+SPPAT679  MOVE      QRYDATA,PATCN679
+          GOTO      SPPAT999
+.
+SPPAT680  MOVE      QRYDATA,PATCN680
+          GOTO      SPPAT999
+.
+SPPAT681  MOVE      QRYDATA,PATCN681
+          GOTO      SPPAT999
+.
+SPPAT682  MOVE      QRYDATA,PATCN682
+          GOTO      SPPAT999
+.
+SPPAT683  MOVE      QRYDATA,PATCN683
+          GOTO      SPPAT999
+.
+SPPAT684  MOVE      QRYDATA,PATCN684
+          GOTO      SPPAT999
+.
+SPPAT685  MOVE      QRYDATA,PATCN685
+          GOTO      SPPAT999
+.
+SPPAT686  MOVE      QRYDATA,PATCN686
+          GOTO      SPPAT999
+.
+SPPAT687  MOVE      QRYDATA,PATCN687
+          GOTO      SPPAT999
+.
+SPPAT688  MOVE      QRYDATA,PATCN688
+          GOTO      SPPAT999
+.
+SPPAT689  MOVE      QRYDATA,PATCN689
+          GOTO      SPPAT999
+.
+SPPAT690  MOVE      QRYDATA,PATCN690
+          GOTO      SPPAT999
+.
+SPPAT691  MOVE      QRYDATA,PATCN691
+          GOTO      SPPAT999
+.
+SPPAT692  MOVE      QRYDATA,PATCN692
+          GOTO      SPPAT999
+.
+SPPAT693  MOVE      QRYDATA,PATCN693
+          GOTO      SPPAT999
+.
+SPPAT694  MOVE      QRYDATA,PATCN694
+          GOTO      SPPAT999
+.
+SPPAT695  MOVE      QRYDATA,PATCN695
+          GOTO      SPPAT999
+.
+SPPAT696  MOVE      QRYDATA,PATCN696
+          GOTO      SPPAT999
+.
+SPPAT697  MOVE      QRYDATA,PATCN697
+          GOTO      SPPAT999
+.
+SPPAT698  MOVE      QRYDATA,PATCN698
+          GOTO      SPPAT999
+.
+SPPAT699  MOVE      QRYDATA,PATCN699
           GOTO      SPPAT999
 .
 SPPAT999  RETURN
@@ -10238,6 +10504,181 @@ MVPT0000  MATCH     Z70,PATCN001
           MATCH     Z70,PATCN664
           IF        !@EQUAL
             MOVE      PATCN664,PTCNMSH3  * Sending application MSH.3 for EMR A08
+          ENDIF
+.
+          MATCH     Z70,PATCN665
+          IF        !@EQUAL
+            MOVE      PATCN665,CSURG1  * Range 1 - Next U/R Number
+          ENDIF
+.
+          MATCH     Z70,PATCN666
+          IF        !@EQUAL
+            MOVE      PATCN666,CMURG1  * Range 1 - Maximum U/R Number
+          ENDIF
+.
+          MATCH     Z70,PATCN667
+          IF        !@EQUAL
+            MOVE      PATCN667,CSURG2  * Range 2 - Next U/R Number
+          ENDIF
+.
+          MATCH     Z70,PATCN668
+          IF        !@EQUAL
+            MOVE      PATCN668,CMURG2  * Range 2 - Maximum U/R Number
+          ENDIF
+.
+          MATCH     Z70,PATCN669
+          IF        !@EQUAL
+            MOVE      PATCN669,CSURG3  * Range 3 - Next U/R Number
+          ENDIF
+.
+          MATCH     Z70,PATCN670
+          IF        !@EQUAL
+            MOVE      PATCN670,CMURG3  * Range 3 - Maximum U/R Number
+          ENDIF
+.
+          MATCH     Z70,PATCN671
+          IF        !@EQUAL
+            MOVE      PATCN671,CSURG4  * Range 4 - Next U/R Number
+          ENDIF
+.
+          MATCH     Z70,PATCN672
+          IF        !@EQUAL
+            MOVE      PATCN672,CMURG4  * Range 4 - Maximum U/R Number
+          ENDIF
+.
+          MATCH     Z70,PATCN673
+          IF        !@EQUAL
+            MOVE      PATCN673,CIPRG  * Inpatient System using Range
+          ENDIF
+.
+          MATCH     Z70,PATCN674
+          IF        !@EQUAL
+            MOVE      PATCN674,COPRG  * Outpatient System using Range
+          ENDIF
+.
+          MATCH     Z70,PATCN675
+          IF        !@EQUAL
+            MOVE      PATCN675,CAERG  * A & E System using Range
+          ENDIF
+.
+          MATCH     Z70,PATCN676
+          IF        !@EQUAL
+            MOVE      PATCN676,CNBRG  * Newborn System using Range
+          ENDIF
+.
+          MATCH     Z70,PATCN677
+          IF        !@EQUAL
+            MOVE      PATCN677,CCNOTES  * Case Notes Symbol
+          ENDIF
+.
+          MATCH     Z70,PATCN678
+          IF        !@EQUAL
+            MOVE      PATCN678,CPMIAD  * Using PMI Change Audit 
+          ENDIF
+.
+          MATCH     Z70,PATCN679
+          IF        !@EQUAL
+            MOVE      PATCN679,CURDEL  * Using PMI Deletion Audit 
+          ENDIF
+.
+          MATCH     Z70,PATCN680
+          IF        !@EQUAL
+            MOVE      PATCN680,CURCHG  * Using U/R Number Change Audit
+          ENDIF
+.
+          MATCH     Z70,PATCN681
+          IF        !@EQUAL
+            MOVE      PATCN681,CSRCHDRG  * Day range for DOB in searches
+          ENDIF
+.
+          MATCH     Z70,PATCN682
+          IF        !@EQUAL
+            MOVE      PATCN682,CSRCHYRG  * Year range for DOB in searches
+          ENDIF
+.
+          MATCH     Z70,PATCN683
+          IF        !@EQUAL
+            MOVE      PATCN683,CFFMORB  * Change desc. in Morbidity 
+          ENDIF
+.
+          MATCH     Z70,PATCN684
+          IF        !@EQUAL
+            MOVE      PATCN684,PTCNURCF  * Using Free Format for Urgency
+          ENDIF
+.
+          MATCH     Z70,PATCN685
+          IF        !@EQUAL
+            MOVE      PATCN685,PTCNRQCF  * Using Free Format for Requested
+          ENDIF
+.
+          MATCH     Z70,PATCN686
+          IF        !@EQUAL
+            MOVE      PATCN686,PTCNDPCF  * Using Free Format for Department
+          ENDIF
+.
+          MATCH     Z70,PATCN687
+          IF        !@EQUAL
+            MOVE      PATCN687,PTCNRLAY  * Medical Record Request Form Layout
+          ENDIF
+.
+          MATCH     Z70,PATCN688
+          IF        !@EQUAL
+            MOVE      PATCN688,PTCNUCOD  * User Defined Stationery Code
+          ENDIF
+.
+          MATCH     Z70,PATCN689
+          IF        !@EQUAL
+            MOVE      PATCN689,PTCNMRPN  * Printer for Med. Rec. Request
+          ENDIF
+.
+          MATCH     Z70,PATCN690
+          IF        !@EQUAL
+            MOVE      PATCN690,PTCNUDRN  * Using ranges for DOB searches
+          ENDIF
+.
+          MATCH     Z70,PATCN691
+          IF        !@EQUAL
+            MOVE      PATCN691,PTCECODE  * Mandatory 'E' Code Check 
+          ENDIF
+.
+          MATCH     Z70,PATCN692
+          IF        !@EQUAL
+            MOVE      PATCN692,CMDISP  * Prefix for Primary Disease Codes
+          ENDIF
+.
+          MATCH     Z70,PATCN693
+          IF        !@EQUAL
+            MOVE      PATCN693,CMDISS  * Prefix for Sequela Disease Codes
+          ENDIF
+.
+          MATCH     Z70,PATCN694
+          IF        !@EQUAL
+            MOVE      PATCN694,CMDISC  * Prefix for Complication Codes
+          ENDIF
+.
+          MATCH     Z70,PATCN695
+          IF        !@EQUAL
+            MOVE      PATCN695,CMDISA  * Prefix for Associated Disease Codes
+          ENDIF
+.
+          MATCH     Z70,PATCN696
+          IF        !@EQUAL
+            MOVE      PATCN696,CMDISD  * Prefix for Disability Disease Codes
+          ENDIF
+.
+          MATCH     Z70,PATCN697
+          IF        !@EQUAL
+            MOVE      PATCN697,CMOPRT * Prefix for Post-Surgical Operation Codes
+          ENDIF
+.
+          MATCH     Z70,PATCN698
+          IF        !@EQUAL
+            MOVE      PATCN698,CMDISL * Prefix for Length of Stay Disease Codes
+          ENDIF
+.
+          MATCH     Z70,PATCN699
+          IF        !@EQUAL
+            MOVE      PATCN699,CMDISM * Prefix for Morphology Disease Codes
           ENDIF
 .
           MATCH     Z70,IBACN001

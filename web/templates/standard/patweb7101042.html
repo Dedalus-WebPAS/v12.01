@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="standard">
 <meta name="CrossBrowser" content="true">
 <meta name="HelpFileName"    content="NoContextSet.html">
@@ -17,6 +17,7 @@ function init() {
     document.getElementById('ReasonForChange').style.display="";
     AddClassName(document.UpdateForm.reasonchange,"Mandatory");
   }
+  InitPostCodes();
 }
 
 function setInsurance() {
@@ -66,7 +67,7 @@ function SubmitClaim() {
 
 </script>
 %START.OF.PAGE
-<body onLoad="PageLoad(event);setInsurance();GetDefaultIns();init();
+<body onLoad="PageLoad(event);setInsurance();GetDefaultIns();
               prtFormCheckType();">
 
 <div id=PageHeadingSection>

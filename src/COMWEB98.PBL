@@ -5,6 +5,28 @@
 .
 . Modifications : 
 .-----------------------------------------------------------------------------
+. V12.01.04 19/12/2025  Zumin Yu         TSK 0968747
+.           Added MEHCN022/MHCNMINH - Min. no. of days for Holiday Leave
+.           Added MEHCN023/MHCNMINT - Min. no. of days for Trial Leave
+.           Added MEHCN024/MHCNMAXH - Max. no. of months for Holiday Leave
+.           Added MEHCN025/MHCNMAXT - Max. no. of years for Trial Leave  
+.           Added MEHCN026/MHCNUSE - Using Mental Health System  
+.           Added MEHCN027/MHCNKLER - Keying in Leave End Reasons
+.           Added MEHCN028/MHCNUDSA - Using Diagnosis Screen in Admissions
+. V12.01.03 17/12/2025  Zumin Yu         TSK 0968747
+.           Added CSURG1, CMURG1, CSURG2, CMURG2, CSURG3, CMURG3, CSURG4, 
+.           CMURG4, CIPRG, COPRG, CAERG, CNBRG, CCNOTES, CPMIAD, CURDEL, 
+.           CURCHG, CSRCHDRG, CSRCHYRG, CFFMORB, PTCNURCF, PTCNRQCF, PTCNDPCF, 
+.           PTCNRLAY, PTCNUCOD, PTCNMRPN, PTCNUDRN, PTCECODE, CMDISP, CMDISS, 
+.           CMDISC, CMDISA, CMDISD, CMOPRT, CMDISL and CMDISM  to read and 
+.           update at RAAE0000 and UAAE0000
+. V12.01.02 04/12/2025  Zumin Yu         TSK 0955272
+.           Added HEMBSTHE, HSTANDM, HINPCLM, AECNCHRS, AECNFTYP, HEPMR5, 
+.           HEMR5L, HEMR5COD, HINVDES and HNUMDES to read and update 
+.           at RAAE0000 and UAAE0000            
+. V12.01.01 27/11/2025  Zumin Yu         TSK 0955341
+.           Added EMCNDDTM, EMCNLDAT, EMCNICDF and EMCNPCIE to read and 
+.           update at REMR0000 and UEMR0000
 . V12.00.08 19/11/2025  Davin            TSK 0968897
 .           Added PATCN663/PTCNB08E - Broadcast HL7 EMR A08 from HL7RECVR
 .           Added PATCN664/PTCNMSH3 - Sending application MSH.3 for EMR A08
@@ -1754,7 +1776,7 @@ ZERO6     INIT      "000000"
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "COMWEB98"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.04"
 PRGNAM    INIT      "Parameter Maintenance"
 .----------------------------------------------------------------------
 .
@@ -2518,13 +2540,16 @@ PROFL102  CALL      OTCN0000                * OUTCONFD Tags
 PROFL103  CALL      PTCN0000                * PATCONFD Tags
           GOTO      PROFL999
 .
-PROFL110  BRANCH    FLDSETNO,PROFL111,PROFL112
+PROFL110  BRANCH    FLDSETNO,PROFL111,PROFL112,PROFL113
           GOTO      PROFL999
 .
 PROFL111  CALL      GTAG0000                * General Common Tags
           GOTO      PROFL999
 .
 PROFL112  CALL      MRCN0000                * MRTCONFD Tags
+          GOTO      PROFL999
+.
+PROFL113  CALL      PTCN0000                * PATCONFD Tags
           GOTO      PROFL999
 .
 PROFL120  BRANCH    FLDSETNO,PROFL121,PROFL122
@@ -3111,27 +3136,40 @@ RPAT0000  READ      CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                   *209,IBCNQSSA,*229,IBCNRESA,*249,IBCNMHPI:
                                   *250,IBCNMHRI
 .
-          READ      CONTROLF,TEN;*54,CFILENO,*66,CINVLAY,*94,CAGECOFF:
-                                 *240,PTCNINVN,*243,PTCNEFLG,*79,CAPPRVNO
+          READ      CONTROLF,TEN;*36,CMDISD,*37,CMOPRT:
+                                 *54,CFILENO,*66,CINVLAY,*94,CAGECOFF:
+                                 *240,PTCNINVN,*243,PTCNEFLG,*79,CAPPRVNO:
+                                 *235,CMDISP,*236,CMDISS,*237,CMDISC:
+                                 *238,CMDISA,*246,CSRCHDRG,*248,CSRCHYRG
           READ      CONTROLF,TEN3;*1,CHADD1,CHADD2,CHPOST,CHPADD1,CHPADD2:
                                      CHPPOST,CHTELEB,*216,CUSR1,*229,CUSR2
           READ      CONTROLF,TEN3;*185,CATBLAY,*245,CHOSTYP
-          READ      CONTROLF,TEN4;*229,CUSMAN1,*230,CUSMAN2
+          READ      CONTROLF,TEN4;*229,CUSMAN1,*230,CUSMAN2,*248,CURDEL:
+                                  *249,CURCHG
           READ      CONTROLF,TEN5;*233,CUSR3,*246,CUSMAN3,*247,CSTDOWN
-          READ      CONTROLF,TEN9;*212,CFEETYP,*213,CDYCASE
+          READ      CONTROLF,TEN9;*1,CSURG1,*10,CMURG1,*18,CSURG2:
+                                  *27,CMURG2,*35,CSURG3,*44,CMURG3:
+                                  *52,CSURG4,*61,CMURG4,*69,CIPRG:
+                                  *70,COPRG,*71,CAERG,*72,CNBRG:
+                                  *75,CCNOTES,*208,CPMIAD:          
+                                  *212,CFEETYP,*213,CDYCASE
           READ      CONTROLF,TWENTY;*53,PTCNPRS1,*63,PTCNPRS2,*77,PT3BHOSP:
                                     *91,PTCNHSEM:
-                                    *166,PTCNTACP,*193,PTCNDCLM
+                                    *166,PTCNTACP,*191,PTCECODE,*193,PTCNDCLM
           READ      CONTROLF,TWENTY1;*45,PTCNDRSM,*51,PTCNINVL:
                                      *105,PTCNIDTH,*111,PTCNBDTH:
                                      *138,PTCNNHII,PTCNNHID:
                                      *191,PTCNNHIF,*204,PTCNAWRN:
-                                     *216,PTCNDTRF,*223,PTCNEIAS:
+                                     *216,PTCNDTRF,*217,CMDISL,*223,PTCNEIAS:
                                      *224,PTCNEIOC,*240,PTCNEDIF
 .                                                                     
           READ      CONTROLF,FIFTY9;*1,CDLSTEP:
                                     *8,PTCN3BFA,*11,PTCN3BDY,*34,CTYPEUR:
-                                    *132,CALRDESC,*141,CPIDCOD,*223,PTCNVDUC
+                                    *63,CFFMORB:
+                                    *132,CALRDESC,*141,CPIDCOD,*192,PTCNURCF:
+                                    *193,PTCNRQCF,*194,PTCNDPCF,*195,PTCNRLAY:
+                                    *196,PTCNUCOD,*202,PTCNMRPN:
+                                    *223,PTCNVDUC
 .
           READ      CONTROLF,SEVENTY7;*45,PTCNNZED,*195,PTCNDLKR
           READ      CONTROLF,SEVENTY9;*33,PTCNSEND,*81,PTCNGEST
@@ -3154,9 +3192,10 @@ RPAT0000  READ      CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                     *241,PTCNCLCD,*242,PTCNHL7L,*243,PTCNADIG:
                                     *244,PTCNNNK1,*245,PTCNWAUC,*246,PTCNLJCD:
                                     *248,PTCNWJCD
-          READ      CONTROLF,HUND05;*71,PTCNCMAU,*73,PTCNCMDU:
+          READ      CONTROLF,HUND05;*71,PTCNCMAU,*73,PTCNCMDU,*100,PTCNUDRN:
                                     *130,PTCNAUAT,*132,PTCNADB1,*135,PTCNADB2:
                                     *138,PTCNADB3,*141,PTCNADB4,*144,PTCNDFAN:
+                                    *147,CMDISM:
                                     *168,PTCNTIMC,*189,PTCNPRCL,*215,PTCNBINV:
                                     *216,PTCNDWAW,*225,PTCNACCD,*226,PTCNPRWD:
                                     *235,PTCNQCCT,*237,PTCNMLEG,*238,PTCNDCHR:
@@ -3340,6 +3379,7 @@ RPAT0000  READ      CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                     *203,PTCNIS14,*204,PTCNIS15,*205,PTCNRS25:
                                     *206,PTCNDCSM,*207,PTCNGOSM,*208,PTCNAILP:
                                     *209,PTCNCPRG,*210,PTCNSTYP,*211,PTCNPCIP:
+
                                     *217,PTCNIMST,*218,PTCNIMRT,*219,PTCNIHST:
                                     *220,PTCNIHRT,*221,PTCNERRT,*222,PTCNIMSD:
                                     *223,PTCNIHSD,*224,PTCNSNTY,*225,PTCNRNTY:
@@ -3379,30 +3419,42 @@ UPAT0000  WRITAB    CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                   *181,IBCNSOLS,*201,IBCNHSID,*206,IBCNHCEN:
                                   *209,IBCNQSSA,*229,IBCNRESA,*249,IBCNMHPI:
                                   *250,IBCNMHRI
-
 .
-          WRITAB    CONTROLF,TEN;*54,CFILENO,*66,CINVLAY,*94,CAGECOFF:
-                                 *240,PTCNINVN,*243,PTCNEFLG,*79,CAPPRVNO
+          WRITAB    CONTROLF,TEN;*36,CMDISD,*37,CMOPRT:
+                                 *54,CFILENO,*66,CINVLAY,*94,CAGECOFF:
+                                 *240,PTCNINVN,*243,PTCNEFLG,*79,CAPPRVNO:
+                                 *235,CMDISP,*236,CMDISS,*237,CMDISC:
+                                 *238,CMDISA,*246,CSRCHDRG,*248,CSRCHYRG
           WRITAB    CONTROLF,TEN3;*1,CHADD1,CHADD2,CHPOST:
                                      CHPADD1,CHPADD2,CHPPOST,CHTELEB:
                                   *216,CUSR1,*229,CUSR2
           WRITAB    CONTROLF,TEN3;*185,CATBLAY,*245,CHOSTYP
-          WRITAB    CONTROLF,TEN4;*229,CUSMAN1,*230,CUSMAN2
+          WRITAB    CONTROLF,TEN4;*229,CUSMAN1,*230,CUSMAN2,*248,CURDEL:
+                                  *249,CURCHG
           WRITAB    CONTROLF,TEN5;*233,CUSR3,*246,CUSMAN3,*247,CSTDOWN
-          WRITAB    CONTROLF,TEN9;*212,CFEETYP,*213,CDYCASE
+          WRITAB    CONTROLF,TEN9;*1,CSURG1,*10,CMURG1,*18,CSURG2:
+                                  *27,CMURG2,*35,CSURG3,*44,CMURG3:
+                                  *52,CSURG4,*61,CMURG4,*69,CIPRG:
+                                  *70,COPRG,*71,CAERG,*72,CNBRG:
+                                  *75,CCNOTES,*208,CPMIAD:
+                                  *212,CFEETYP,*213,CDYCASE
           WRITAB    CONTROLF,TWENTY;*53,PTCNPRS1,*63,PTCNPRS2,*77,PT3BHOSP:
                                     *91,PTCNHSEM:
-                                    *166,PTCNTACP
+                                    *166,PTCNTACP,*191,PTCECODE
           WRITAB    CONTROLF,TWENTY1;*45,PTCNDRSM,*51,PTCNINVL:
                                      *105,PTCNIDTH,*111,PTCNBDTH:
                                      *138,PTCNNHII,PTCNNHID:
                                      *191,PTCNNHIF,*204,PTCNAWRN:
-                                     *216,PTCNDTRF,*223,PTCNEIAS:
+                                     *216,PTCNDTRF,*217,CMDISL,*223,PTCNEIAS:
                                      *224,PTCNEIOC,*240,PTCNEDIF
 .
           WRITAB    CONTROLF,FIFTY9;*1,CDLSTEP:
                                     *8,PTCN3BFA,*11,PTCN3BDY,*34,CTYPEUR:
-                                    *132,CALRDESC,*141,CPIDCOD,*223,PTCNVDUC
+                                    *63,CFFMORB:
+                                    *132,CALRDESC,*141,CPIDCOD,*192,PTCNURCF:
+                                    *193,PTCNRQCF,*194,PTCNDPCF,*195,PTCNRLAY:
+                                    *196,PTCNUCOD,*202,PTCNMRPN:
+                                    *223,PTCNVDUC
 .
           WRITAB    CONTROLF,SEVENTY7;*45,PTCNNZED,*195,PTCNDLKR
           WRITAB    CONTROLF,SEVENTY9;*33,PTCNSEND,*81,PTCNGEST
@@ -3427,9 +3479,10 @@ UPAT0000  WRITAB    CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                    *241,PTCNCLCD,*242,PTCNHL7L,*243,PTCNADIG:
                                    *244,PTCNNNK1,*245,PTCNWAUC,*246,PTCNLJCD:
                                    *248,PTCNWJCD
-          WRITAB    CONTROLF,HUND05;*71,PTCNCMAU,*73,PTCNCMDU:
+          WRITAB    CONTROLF,HUND05;*71,PTCNCMAU,*73,PTCNCMDU,*100,PTCNUDRN:
                                     *130,PTCNAUAT,*132,PTCNADB1,*135,PTCNADB2:
                                     *138,PTCNADB3,*141,PTCNADB4,*144,PTCNDFAN:
+                                    *147,CMDISM:
                                     *168,PTCNTIMC,*189,PTCNPRCL,*215,PTCNBINV:
                                     *216,PTCNDWAW,*225,PTCNACCD,*226,PTCNPRWD:
                                     *235,PTCNQCCT,*237,PTCNMLEG,*238,PTCNDCHR:
@@ -3913,10 +3966,17 @@ MCON1000  CALL      RMRT0000           * Read MRTCONFD file
 .
           CALL      UMRT0000           * Update MRTCONFD file
 .
+          CALL      RPAT0000           * Read PATCONFD
+.
+          CALL      MVPT0000           * Move cgi variables to file PATCONFD
+.
+          CALL      UPAT0000           * Update PATCONFD file
+.
           MOVE      ZERO,EXIT
           GOTO      MCON9999
 .
 MCON7000  CALL      RMRT0000           * Read MRTCONFD file
+          CALL      RPAT0000           * Read PATCONFD
 .
           CLEAR     WEBTITLE
           MOVE      "Medical Records Parameter Maintenance",WEBTITLE
@@ -4114,7 +4174,11 @@ MEHCON99  RETURN
 .------------------------------------------------------------
 . Read all MEHCONFD file variables
 .------------------------------------------------------------
-RMEH0000  READ      CONTROLF,SIXTY9;*82,MHCNDVIS:
+RMEH0000  READ      CONTROLF,SIXTY9;*69,MHCNUSE:
+                                    *71,MHCNMINH,*73,MHCNMINT:
+                                    *75,MHCNMAXH,*77,MHCNMAXT:
+                                    *79,MHCNKLER,*80,MHCNUDSA:
+                                    *82,MHCNDVIS:
                                     *84,MHCEMPST,*86,MHCNUNIQ:
                                     *94,MHCNSINP,*97,MHCNMINC:
                                     *102,MHCNPHED,*103,MHCNPHVR:
@@ -4132,7 +4196,11 @@ RMEH9999  RETURN
 .------------------------------------------------------------
 . Update all MEHCONFD file variables
 .------------------------------------------------------------
-UMEH0000  WRITAB    CONTROLF,SIXTY9;*82,MHCNDVIS:
+UMEH0000  WRITAB    CONTROLF,SIXTY9;*69,MHCNUSE:
+                                    *71,MHCNMINH,*73,MHCNMINT:
+                                    *75,MHCNMAXH,*77,MHCNMAXT:
+                                    *79,MHCNKLER,*80,MHCNUDSA:
+                                    *82,MHCNDVIS:
                                     *84,MHCEMPST,*86,MHCNUNIQ:
                                     *94,MHCNSINP,*97,MHCNMINC:
                                     *102,MHCNPHED,*103,MHCNPHVR:
@@ -4195,8 +4263,12 @@ ECON9999  RETURN
 .------------------------------------------------------------
 . Read all AAECONFD file variables
 .------------------------------------------------------------
-RAAE0000  READ      CONTROLF,THIRTY;*89,HELPAGE,*90,HELPRNT,*95,HESYST:
-                                    *93,HELSIZE,*178,HADDLAB
+RAAE0000  READ      CONTROLF,THIRTY;*89,HELPAGE,*90,HELPRNT,*93,HELSIZE:
+                                    *94,HEPMR5,*95,HESYST:
+                                    *131,HEMBSTHE,*132,HSTANDM,*133,HINVDES:
+                                    *168,HNUMDES:
+                                    *178,HADDLAB,*186,HEMR5L,*187,HEMR5COD:
+                                    *195,HINPCLM,*196,AECNCHRS,*200,AECNFTYP
 .
           READ      CONTROLF,SEVENTY8;*35,AECNAELT,*40,AECNAEIH,*46,AECNAEIT:
                                       *52,AECNAERH,*58,AECNAERT,*64,AECNLABL:
@@ -4207,7 +4279,9 @@ RAAE9999  RETURN
 .------------------------------------------------------------
 . Read all EMRCONFD file variables
 .------------------------------------------------------------
-REMR0000  READ      CONTROLF,EIGHTY9;*144,EMCNDOCT,*188,EMCNWTTM:
+REMR0000  READ      CONTROLF,EIGHTY9;*138,EMCNICDF,*139,EMCNPCIE:
+                                     *144,EMCNDOCT,*145,EMCNDDTM,*180,EMCNLDAT:
+                                     *188,EMCNWTTM:
                                      *191,EMCNBAKH,*194,EMCNLOSW,*198,EMCNA44M:
                                      *199,EMCNA03M,*200,EMCNA04M,*201,EMCNA08M:
                                      *202,EMCNA11M,*203,EMCNA13M:
@@ -4233,8 +4307,12 @@ REMR9999  RETURN
 .------------------------------------------------------------
 . Update all AAECONFD file variables
 .------------------------------------------------------------
-UAAE0000  WRITAB    CONTROLF,THIRTY;*89,HELPAGE,*90,HELPRNT,*95,HESYST:
-                                    *93,HELSIZE,*178,HADDLAB
+UAAE0000  WRITAB    CONTROLF,THIRTY;*89,HELPAGE,*90,HELPRNT,*93,HELSIZE:
+                                    *94,HEPMR5,*95,HESYST:
+                                    *131,HEMBSTHE,*132,HSTANDM,*133,HINVDES:
+                                    *168,HNUMDES:
+                                    *178,HADDLAB,*186,HEMR5L,*187,HEMR5COD:
+                                    *195,HINPCLM,*196,AECNCHRS,*200,AECNFTYP
 .
           WRITAB    CONTROLF,SEVENTY8;*35,AECNAELT,*40,AECNAEIH,*46,AECNAEIT:
                                       *52,AECNAERH,*58,AECNAERT,*64,AECNLABL:
@@ -4245,7 +4323,9 @@ UAAE9999  RETURN
 .------------------------------------------------------------
 . Update all EMRCONFD file variables
 .------------------------------------------------------------
-UEMR0000  WRITAB    CONTROLF,EIGHTY9;*144,EMCNDOCT,*188,EMCNWTTM:
+UEMR0000  WRITAB    CONTROLF,EIGHTY9;*138,EMCNICDF,*139,EMCNPCIE:
+                                     *144,EMCNDOCT,*145,EMCNDDTM,*180,EMCNLDAT:
+                                     *188,EMCNWTTM:
                                      *191,EMCNBAKH,*194,EMCNLOSW,*198,EMCNA44M:
                                      *199,EMCNA03M,*200,EMCNA04M,*201,EMCNA08M:
                                      *202,EMCNA11M,*203,EMCNA13M:

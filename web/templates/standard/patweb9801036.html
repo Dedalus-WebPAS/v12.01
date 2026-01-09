@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -77,12 +77,16 @@ function GetAppointmentTypeCookie() {
   if (GetCookieData("AppointmentTypeCookie") != "unknown" &&
       !isWhitespace(GetCookieData("AppointmentTypeCookie"))) {
     aptyckie = GetCookieData("AppointmentTypeCookie");
+    cookieur = getQueryStringURL(aptyckie,"urnumber");
+    if(trim(cookieur.replace(/\+/g," ")) !=
+       trim(document.PatientLinks.urnumber.value)) {
+      return;
+    }
     ExpireCookiePath("AppointmentTypeCookie");
     Left=(document.body.clientWidth-900)/2;
     DFrameLink(aptyckie,100,Left,920,900);
   }
 }
-
 </script>
 </head>
 %START.OF.PAGE

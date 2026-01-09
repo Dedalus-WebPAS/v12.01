@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .--------------------------------------------------------------------------
+. V12.01.01 07/01/2026  J.Tan          TSK 0970926
+.           Mod SPTNKA00 - NZ Search Misc.item to use the latest Effective date
 . V11.05.02 20/03/2025  Davin         TSK 0956210
 .           Add ICD10 Ed.13 - Go-live Date PTCNGDX3 (Sect.130 Pos.86)
 . V11.05.01 25/02/2025  Don Nguyen    TSK 0952080
@@ -325,7 +327,7 @@ ENDFONT   DIM       7
 .
 .------------------------------------------------------------
 PRGID     INIT      "PATWEB94"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "MBS/DRG/ICD/CMC Key Word Search Server"
 .------------------------------------------------------------
 .
@@ -3162,9 +3164,9 @@ SPTNKA10  IF        DEFCLMFL=1
 .
           IF        CFEETYP=5
 .
-            PACK      KEY37,MULTHOSP,PTMKCODE,SP70
+            PACK      KEY37,MULTHOSP,PTMKCODE,Z70
             CALL      RSNZMCH1
-            CALL      RKNZMCH1
+            CALL      RPNZMCH1
             BRANCH    OVRCD,SPTNKA13
             MOVE      NZMCEFDT,PTMCEFDT
             MOVE      NZMCMCHG,MCHARGE
@@ -3182,9 +3184,9 @@ SPTNKA10  IF        DEFCLMFL=1
 .
             GOTO      SPTNKA17
 .
-SPTNKA13    PACK      KEY37,SP3,PTMKCODE,SP70
+SPTNKA13    PACK      KEY37,SP3,PTMKCODE,Z70
             CALL      RSNZMCH1
-            CALL      RKNZMCH1
+            CALL      RPNZMCH1
             BRANCH    OVRCD,SPTNKA10
             MOVE      NZMCEFDT,PTMCEFDT
             MOVE      NZMCMCHG,MCHARGE

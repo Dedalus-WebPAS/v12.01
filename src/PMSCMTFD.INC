@@ -1,4 +1,32 @@
-. V11.04.01 20/12/2023 TTI C-0910994 Added PMCCFTAD to PMCCFCFC fields
+. V12.01.01 15/12/2025 TTI C-0949686 Changed PMCCFCTA Descriptions 
+. V11.04.01 20/12/2023 TTI C-0910994 Added PMCCFTAD to PMCCFCFC fields          
+. V11.01.02 06/04/2021 Tracey Nguyen  TSK 0901515
+.                      Added the following new fields using spare variable
+.                      a) 1 File type for ICD procedure (PMCCIPF)
+.                      b) 3 new CMBS Field Type (PMCCFTS4/PMCCFT5C/PMCCFT6C)
+.                      c) 3 new CMBS Codes From (PMCCPC4F,PMCCSC5F,PMCCTC6F)
+.                      d) 3 new CMBS Codes To   (PMCCPC4T/PMCCSC5T,PMCCTC6T)
+. V11.01.01 09/03/2021 Tracey Nguyen  TSK 0901515
+.                      Added Primary ICD Procedure 1-5 (PMCCICP1-5)
+.                      Increased file length from 300 to 400
+. V10.06.01 15/07/2015 J.Tan          CAR 319342
+.                      Changed Discharge UDF to Care Class
+. V10.03.02 20/09/2012 J.Tan          CAR 271474
+.                      Added index 5
+. V10.03.01 14/05/2012 Jill Parkinson CAR 265369
+.                      Added index 4
+. V10.01.02 20/01/2011 Ebon Clements CAR 233051
+.                      Added PMCCCONT and PMCCMIND
+. V10.01.01 25/11/2010 J.Tan         CAR 233082
+.                      Added 5th index
+. V9.12.01  05/06/2009 J.Tan         CAR 196010
+.                      ICD10 Disease code (Secondary/Tertiary)
+. V9.04.01  20/04/2005 Jill Habasque CAR 60087
+.                      Added index 4
+. V9.03.01  24/07/2003 Jill Habasque CAR 36530
+.                      Added record type to index, added 5 values for fields
+. V5.09.002 11/01/2001 JH  Take out Audit
+. V5.09.003 11/01/2001 JH  ADDED VARIABLES
 . *----------------------------------------------------------------------
 . * Include Name  :   PMSCMTFD.INC
 . *
@@ -11,36 +39,6 @@
 . *
 . * Index Values  :   KEY34   KEY34   KEY34   KEY34   KEY34                  
 . *
-. *----------------------------------------------------------------------
-. * Modifications :
-. *----------------------------------------------------------------------
-. * V11.01.02 06/04/2021 Tracey Nguyen  TSK 0901515
-. *                      Added the following new fields using spare variable
-. *                      a) 1 File type for ICD procedure (PMCCIPF)
-. *                      b) 3 new CMBS Field Type (PMCCFTS4/PMCCFT5C/PMCCFT6C)
-. *                      c) 3 new CMBS Codes From (PMCCPC4F,PMCCSC5F,PMCCTC6F)
-. *                      d) 3 new CMBS Codes To   (PMCCPC4T/PMCCSC5T,PMCCTC6T)
-. * V11.01.01 09/03/2021 Tracey Nguyen  TSK 0901515
-. *                      Added Primary ICD Procedure 1-5 (PMCCICP1-5)
-. *                      Increased file length from 300 to 400
-. * V10.06.01 15/07/2015 J.Tan          CAR 319342
-. *                      Changed Discharge UDF to Care Class
-. * V10.03.02 20/09/2012 J.Tan          CAR 271474
-. *                      Added index 5
-. * V10.03.01 14/05/2012 Jill Parkinson CAR 265369
-. *                      Added index 4
-. * V10.01.02 20/01/2011 Ebon Clements CAR 233051
-. *                      Added PMCCCONT and PMCCMIND
-. * V10.01.01 25/11/2010 J.Tan         CAR 233082
-. *                      Added 5th index
-. * V9.12.01  05/06/2009 J.Tan         CAR 196010
-. *                      ICD10 Disease code (Secondary/Tertiary)
-. * V9.04.01  20/04/2005 Jill Habasque CAR 60087
-. *                      Added index 4
-. * V9.03.01  24/07/2003 Jill Habasque CAR 36530
-. *                      Added record type to index, added 5 values for fields
-. * V5.09.002 11/01/2001 JH  Take out Audit
-. * V5.09.003 11/01/2001 JH  ADDED VARIABLES
 . *----------------------------------------------------------------------
 .
 .Data File Definition
@@ -169,10 +167,10 @@ PMCCUDF3  DIM       3      3        414   Discharge UDF 3 (cat D3)
 PMCCUDF4  DIM       3      3        417   Discharge UDF 4 (cat D4)           
 PMCCUDF5  DIM       3      3        420   Discharge UDF 5 (cat D5)           
 PMCCFCTA  FORM      1      2        423   Field Type A                       
-.                                         0 = Ignore                           
-.                                         1 = Mandatory                        
-.                                         2 = Must be blank                    
-.                                         3 = Exclude                          
+.                                         0 = Blank / Unchecked                
+.                                         1 = Checked                          
+.                                         2 = Not In Use                       
+.                                         3 = Not In Use                       
 PMCCFCA1  DIM       3      3        425   Cat Code A 1                       
 PMCCFCA2  DIM       3      3        428   Cat Code A 2                       
 PMCCFCA3  DIM       3      3        431   Cat Code A 3                       

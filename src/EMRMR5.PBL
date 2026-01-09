@@ -3,7 +3,9 @@
 .
 . Function : This include prints the EMR MR-5 details
 .
-. Modifications: 
+. Modifications:
+.          V12.01.01 21.11.2025  Zumin Yu         TSK 0969522
+.                    Modified WACLN000 to correct user details for printing 
 .          V11.03.01 09.11.2023  DA Sarkies       TSK 0939373
 .                    Shifted the date processing to after the display
 .                    of the header construction
@@ -1605,15 +1607,19 @@ WACLN200  MOVE      "17",LINSREQD           * total lines in heading
           CALL      CHKWOF00                * check for Page Overflow
 .
           MOVE      ZERO,SAVNOTEN           * reset note number value
+          MOVE      SP70,SAVKEY17
           CALL      WANOTE00                * get Clinical Notes
+.
+          MATCH     SP70,SAVKEY17           * Not signature line required
+          GOTO      WACLN300 IF EQUAL
 .
           MOVE      SAVKEY17,KEY17
           CALL      RDVSMDT1                * get last visit note details
-          BRANCH    OVRCD,WACLN999
+          BRANCH    OVRCD,WACLN300
 .
           PACK      KEY10,VSMDUSER,SP70
           CALL      RDWBSE1
-          BRANCH    OVRCD,WACLN999
+          BRANCH    OVRCD,WACLN300
 .
           MOVE      "3",LINSREQD       * note accounting details & signing line
           CALL      CHKWOF00
@@ -1635,6 +1641,9 @@ WACLN300  MOVE      ONE,PRINTEND
             MOVE      TWO,PASSNO            * now do the printing
             GOTO      WACLN100
           ENDIF
+.
+          MOVE      PASSCODE,EMLPPSC
+          CALL      WEBU0000                * Get web user id
 .
           CALL      CLSPRINT
 WACLN999  RETURN

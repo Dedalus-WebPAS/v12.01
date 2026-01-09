@@ -5,6 +5,8 @@
 .
 . Modifications  :
 .------------------------------------------------------------------------------
+. V12.01.01 04/12/2025  Jacob Jackson  TSK 0908319
+.           Add U/R change audit for waiting list
 . V12.00.03 17/10/2025  Don Nguyen     TSK 0963735
 .           Removed code to stop WTPAEND count at 99 in GETCOM00
 . V12.00.02 20/08/2025  Jacob Jackson  TSK 0963735
@@ -1642,6 +1644,7 @@
           INC       PATMISTD/INC
           INC       PMSBRQFD/INC
           INC       ACCLODFD/INC
+          INC       PATURCFD/INC
 .
 . *** letter printing variables ***
 .
@@ -2395,7 +2398,7 @@ ZERO20    INIT      "00000000000000000000"
 .
 ................................................................................
 PRGID     INIT      "WATWEB01"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Waiting List Information Server"
 ................................................................................
 .
@@ -6623,6 +6626,7 @@ WATDET78  CALL      FIXTRE00                * Change U/R W/List
           CALL      WESP0000
           CALL      WESE0000
           CALL      SETDIR00                * Create redirect to new casekey
+          CALL      WCHUV000                * Change U/R audit (paturcaf)
           CALL      DELP0000                * delete watespaf record
           CALL      NXTPAG00
           GOTO      WATDET99
@@ -20212,6 +20216,34 @@ WESE3000  PACK      WTEEPROC,WMCODE,SP70
 .
 WESE9999  RETURN
 +
+.*****************************************************************************
+.*                            WCHUV000                                       *
+.*  Write to the U/R Number Change Audit file if the system parameter is set *
+.*****************************************************************************
+WCHUV000  OPEN      PATURCA1,"paturcaf";
+.
+          CALL      IBACLOCK
+          PACK      PTURDATE,CCC,CYY,CMM,CDD * Load Date of alteration
+          REP       " 0",PTURDATE            * Zero fill
+          MOVE      CTIMEIS,PTURTIME         * load time of alteration
+          REP       " 0",PTURTIME            * Zero fill
+.
+          PACK      KEY24,WMBOOK,PTURDATE,PTURTIME
+          CALL      RDURCA1
+          IF        OVRCD = 1
+            MOVE      WMBOOK,PTURADMN         * Admission number affected
+            MOVE      OURNO,PTUROURN          * Old U/R number
+            MOVE      SP20,PTURSPAR
+            CALL      WRURCA1
+          ELSE
+            MOVE      OURNO,PTUROURN          * Old U/R number
+            CALL      UPURCA1
+          ENDIF
+.
+          CLOSE     PATURCA1
+.
+WCHUV999  RETURN
++
 .******************************************************************************
 .*                                 CHKESE00                                   *
 .*                Check if any wateseaf details have changed                  *
@@ -24176,6 +24208,7 @@ CATHSD99  RETURN
           INC       PATWMAIO/INC
           INC       PATWVEIO/INC
           INC       ACCLODIO/INC
+          INC       PATURCIO/INC
 .
           INC       CHKWCCLM
           INC       GENANVIS

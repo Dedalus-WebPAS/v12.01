@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome"    content="standard">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser"    content="true">
@@ -72,7 +72,7 @@ function AddHCP() {
               }
             }
           }
-        );
+        )
       } 
     }
   } else {
@@ -297,6 +297,7 @@ function ClearSearchAddress2() {
                <input type="text" size="8" maxlength="6" class="Mandatory"
                 name="pmhcp112" id="pmhcp112" title="Doctor Code" tabindex="6"
                 onblur="UpCase(this);
+                        checkAlphaNum(this);
                         ValDoctor(AddForm.pmhcp112,
                                    AddForm.doctname)"/>
                <input type="text" readonly class="ReadOnly" size="25"

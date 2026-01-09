@@ -10,10 +10,18 @@
 .* Version   :   v10.03.00                                                     *
 .* Modification :                                                              *
 .*                                                                             *
+.* V12.01.03     16/12/2025 Ebon clements    TSK 0970614                       *
+.*               Process ""space"" as a clear field value and write record to  *
+.*               pmsedbaf - WRDD0000                                           *
+.* V12.01.02     15/12/2025 Ebon clements    TSK 0970614                       *
+.*               Process "" as a clear field value and write record to         *
+.*               pmsedbaf - WRDD0000                                           *
+.* V12.01.01     25/11/2025 Nikitha Bhaskar  TSK 0969892                       *
+.*               Recompiled for PMSEDBXD                                       *
 .* V11.04.01     11.01.2024 DA Sarkies       TSK 0941573                       *
-.*               Added code to change " to '
+.*               Added code to change " to '                                   *
 .* V11.03.01     11.01.2024 DA Sarkies       TSK 0941573                       *
-.*               Added code to change " to '
+.*               Added code to change " to '                                   *
 .* V11.01.01     24/06/2021 Peter Vela       TSK 0908102                       *
 .*               Added blank validation to PMDBVALU before write to pmsedbaf   *
 .* V11.00.01     04/06/2020 Don Nguyen       TSK 0881876                       *
@@ -100,7 +108,7 @@ CNVQUOTE  INIT      "#"'"
 . ------------------------------------------------------------------------------
 PRGID     INIT      "EADMNXML"
 PRGNAM    INIT      "eAdmission XML load"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.03"
 +
 .*******************************************************************************
 .*                              MAIN0000                                       *
@@ -208,14 +216,31 @@ PROC9999  RETURN
 WRDD0000  
 .
 WRDD1000  READ      EADDSTXT,SEQ;XMDBPRID,XMDBWBID,XMDBVALU
-          REP       CNVQUOTE,XMDBVALU
+          REP       CNVQUOTE,XMDBVALU            * replace " with '
           GOTO      WRDD9999 IF OVER
 .
-          MATCH     SP600,XMDBVALU
+          MOVELPTR  XMDBVALU,F3
+          IF        F3=2
+            MATCH     "''",XMDBVALU              * "" mapped to ''
+            IF        @EQUAL
+              MOVE      SP70,XMDBVALU            * clear field value
+              GOTO      WRDD2000                 * and load
+            ENDIF
+          ENDIF
+.
+          IF        F3=5
+            MATCH     "'' ''",XMDBVALU           * "" mapped to '' x two fields
+            IF        @EQUAL
+              MOVE      SP70,XMDBVALU            * clear field value
+              GOTO      WRDD2000                 * and load
+            ENDIF
+          ENDIF
+.
+          MATCH     SP600,XMDBVALU               * don't load blank values
           GOTO      WRDD1000 IF EQUAL
           GOTO      WRDD1000 IF EOS
 .
-          PACK      KEY28,PMHBUNIQ,XMDBPRID,SP70
+WRDD2000  PACK      KEY28,PMHBUNIQ,XMDBPRID,SP70
           CALL      RDPMEDB1
           IF        OVRCD=1
             PACK      PMDBUNIQ,PMHBUNIQ,SP70

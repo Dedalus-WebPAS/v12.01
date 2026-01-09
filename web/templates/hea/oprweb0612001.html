@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.03">
 <meta name="TemplateHome" content="hea">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -59,6 +59,15 @@ function ChkPrevPatient() {
     var booking = returnValue.return_value.substr(16,8);
     f.sessdate.value=sessDate;
     f.sesstime.value=time;
+
+    if(isWhitespace(f.sesstime.value) && !isWhitespace(booking)) {
+      alert("Anaesthetic Started time cannot be entered while previous patient"
+            + " is still in theatre.\n"
+            + "Previous Booking Number: " + booking);
+      f.opard042.value="";
+      f.opard042.focus();
+      return;
+    }
 
     if(!CheckDateTimeRangeCustom(f.sessdate,f.sesstime,f.opsework,f.opard042)) {
       alert("Anaesthetic Started time must be after Patient Out of Theatre "
@@ -303,7 +312,7 @@ function chkAnaesTime() {
 function chkSurgStart() {
   if(!isWhitespace(UpdateForm.opsrg005.value)) {
     if(isWhitespace(UpdateForm.opard042.value)) {
-      alert("Anaesthetic/Prep Time must be entered first.");
+      alert("Anaesthetic Started Time must be entered first.");
       UpdateForm.opsrg005.value="";
       UpdateForm.opard042.focus(); 
       return;
@@ -315,8 +324,8 @@ function chkSurgStart() {
     anaeTime=anaeTime - 0;
     surgStrt=surgStrt - 0;
     if(anaeTime > surgStrt) {
-      if(!confirm("Surgery Started Time should be greater than Anaesthetic/Prep"+
-                  " Time.\n Do you want to override?")) {
+      if(!confirm("Surgery Started Time should be greater than Anaesthetic"+
+                  " Started Time.\n Do you want to override?")) {
         UpdateForm.opsrg005.value="";
         UpdateForm.opsrg005.focus()
         return;
@@ -412,6 +421,12 @@ function chkSurgicalTimeOut() {
 }
 function checkATO() {
   f=document.UpdateForm;
+
+  if(isWhitespace(f.opsrg006.value)) {
+    alert("Surgery Completed Time must be entered first")
+    f.opsrg081.value="";
+    return;
+  }
   if(compareTimes(f.opard061.value,f.opsrg081.value) &&
      !isWhitespace(f.opard061.value)) {
     alert("Patient Out of Theatre must be after Anaesthetic Time Out");
@@ -456,7 +471,7 @@ function checkTOA() {
 function chkPatientIntoAnaesStarted() {
   f=document.UpdateForm;
   if(compareTimes(f.opsrg080.value,f.opard042.value) &&
-     !isWhitespace(f.opsrg080.value)) {
+     !isWhitespace(f.opsrg080.value) && !isWhitespace(f.opard042.value)) {
     alert("Patient Into Theatre time must be before Anaesthetic Started time");
   }
 }
@@ -689,6 +704,11 @@ function valPrepDress() {
     }
     else{
       UpdateForm.opsrg006.focus();
+      UpdateForm.opsrg006.value="";
+      UpdateForm.opsrg081.value="";
+      UpdateForm.opard077.value="";
+      UpdateForm.opard085.value="";
+      UpdateForm.opard080.value="";
       return;
     }
   }
@@ -855,6 +875,12 @@ function checkReadyToDepartExist()
   if(opard085.value.replace(/ /g,"").length != 0)
   {
     adverseEventDiv.style.display = "";
+  }
+
+  if(isWhitespace(f.opard077.value)) {
+    alert("Time in PACU Time must be entered first")
+    f.opard085.value="";
+    return;
   }
 }
 
@@ -1065,6 +1091,12 @@ function validateTIRDP() {
   ProcMan();
   ChkRecoveryInDelay();
   chkWheelsOutTimeInRecoverySurgeryEnd();
+
+  if(isWhitespace(f.opsrg081.value)) {
+    alert("Patient Out of Theatre Time must be entered first")
+    f.opard077.value="";
+    return;
+  }
 }
 function validateExitTC() {
   // validate Exit Theatre Complex
@@ -1073,6 +1105,12 @@ function validateExitTC() {
   chkTime(exitTimeFld);
   ChkRecoveryExitDelay();
   ChkReg();
+
+  if(isWhitespace(f.opard085.value)) {
+    alert("Ready to Depart Time must be entered first")
+    f.opard080.value="";
+    return;
+  }
 }
 function validateRFR1() {
   // validate Ready for Recovery
@@ -1348,7 +1386,7 @@ EventExist="%OPRWEB06.12.843";
     <td width=120px class=DataLabel>Anaesthetic Time Out</td>
     <td width=140px class=DataField><input type=text name=opard061 id=opard061
        size=8 maxlength=8 title="Anaesthetic Time Out"
-       value="%OPRWEB06.12.561" tabindex=9
+       value="%OPRWEB06.12.561" tabindex=-1
        onchange="checkTime(this,this.title);ChkDelayAnaes();checkTimeArrival();">
       <img src="../images/DateTimeStamp.gif" class=Icon
        onclick="SetCurrentDateTime(null,opard061,ChkDelayAnaes);
@@ -1359,7 +1397,7 @@ EventExist="%OPRWEB06.12.843";
     <td><input type=checkbox name="d_opard026" id="d_opard026"
          title="Anaesthetic Time Out Not Applicable"
          value="" onclick="chkAnaesTimeOutNotApplicable();"
-         tabindex=9></td>
+         tabindex=-1></td>
     <td class=DataField>&nbsp;</td>
     <td class=DataLabel>&nbsp;</td>
     <td class=DataField>&nbsp;</td>
@@ -1895,7 +1933,7 @@ if(AnaeAdm>SurgStr) {
   if (confirm("Anaesthetic Started cannot be after Surgery Started." +
      "\n Do you want to override?")) {
 
-      SurgStr = SurgStr + 2400;
+//      SurgStr = SurgStr + 2400;
 
   } else {
     document.UpdateForm.opsrg005.value="";

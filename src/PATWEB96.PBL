@@ -5,6 +5,10 @@
 .
 . Modifications :
 .----------------------------------------------------------------------
+. V12.01.01 26.11.2025 DA Sarkies        TSK 0968888
+.           Moved Error BRANCH in CANCL045 to straight after CALL to CHGADM00
+. V12.00.14 26.11.2025 DA Sarkies        TSK 0968888
+.           Moved Error BRANCH in CANCL045 to straight after CALL to CHGADM00
 . V12.00.13 30/10/2025 Alina Bhari       TSK 0947952
 .           Added check if same vist number for statistical discharge -USDVL010
 . V12.00.12 30/10/2025 Alina Bhari       TSK 0947952
@@ -33,6 +37,32 @@
 .           Alphanumeric error corrections.
 . V12.00.01 23/05/2025 Nikitha B       TSK 0955096
 .           Alphanumeric changes
+. V11.05.19 26.11.2025 DA Sarkies        TSK 0968888
+.           Moved Error BRANCH in CANCL045 to straight after CALL to CHGADM00
+. V11.05.18 24/11/2025  J.Tan          TSK 0946593
+.           Recompiled for CMXMATRX -Sort Casepayment Theatre fee items
+. V11.05.17 30/10/2025 Alina Bhari       TSK 0947952
+.           Added check if same vist number for statistical discharge -USDVL010
+. V11.05.16 30/10/2025 Alina Bhari       TSK 0947952
+.           Correctly checked PTMILSDN for linked statistical discharge
+.           number - USDVL010
+. V11.05.15 15/10/2025 Alina Bhari       TSK 0947952
+.           Added Supervisor functionality to unlink and update the statistical
+.           discharge visit - PTMIS009,PTMIS011,MAIN2500,USDV0000
+. V11.05.14 01/09/2025 J.Tan             TSK 0960675
+.           Added Audit for Change Claim code/HF and Adm.type
+. V11.05.13 08/08/2025 Ebon Clements     TSK 0964891
+.           Fixed wattx1af read for ASA score - WESE0000
+. V11.05.12 04/08/2025 Zumin             TSK 0964707
+.           Recompiled for PATDISCH - Discharge Date/Time error message.
+. V11.05.11 02/07/2025 Davin             TSK 0954308
+.           Recompiled for PATDISCH - Changed standby hl7 trigger
+. V11.05.10 17/06/2025 Ebon Clements     TSK 0961998
+.           Added open of wattx1af to WESE0000
+. V11.05.09 17.06.2025 DA Sarkies        TSK 0954308
+.           Added HL7CODE to flag when patient discharged from leave
+. V11.05.08 16/06/2025 J.Tan             TSK 0961932
+.           Recompiled for WEBDINVS - Moved back SAVEND to FORM3
 . V11.05.07 07/05/2025  Nikitha B      TSK 0959601
 .           Recomplied for PATMISTM.
 . V11.05.06 15.04.2025  DA Sarkies     TSK 0954308
@@ -2969,7 +2999,7 @@ CHWCADMN  DIM       8        * Check Admission Number (Workers Compensation)
 .
 .------------------------------------------------------------------------------
 PRGID     INIT      "PATWEB96"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Admission Discharge Transfer Server"
 .------------------------------------------------------------------------------
 .
@@ -15245,6 +15275,7 @@ CANCL040  IF        UPDATETY<>4
           ENDIF
 .
 CANCL045  CALL      CHGADM00              * Change Admission Date/Time
+          BRANCH    EXIT,CANCL999
           COMPARE   "6",PTCNHDPS          * Special wahealth Assessment stuff
           GOTO      CANCL047 IF NOT EQUAL
 .
@@ -15261,7 +15292,6 @@ CANCL046  CALL      RKPMRUG1
 
           MOVE      PTMIS001,PMRUPSDT
           CALL      UPPMRUG1
-          BRANCH    EXIT,CANCL999
 .
 CANCL047  IF        CHOSTYP=1 & CFEETYP=0
             MOVE      THREE,PTIPRSTA              * change Adm date

@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 // Program   : allweb0202004.js
 //
@@ -22,8 +22,16 @@ function CloseReferral() {
     }
     if(CloseMaster=="1") {
       if(!isWhitespace(VINAH_Ref)) {
-        alert("Warning: This is the last linked episode referral.\n" +
-              "Please close the Program Referral.");
+        if (document.UpdateForm.deptcode == 'undefined'){
+          alert("Warning: This is the last linked episode referral.\n" +
+                "Please close the Program Referral.");
+        } else {
+           var CatCGindc24 = document.UpdateForm.deptcode.value.substr(71,1);
+           if (CatCGindc24 != "C"){
+            alert("Warning: This is the last linked episode referral.\n" +
+                  "Please close the Program Referral.");
+          }
+        }
       }
       else {
         //T0865480-Start

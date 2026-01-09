@@ -6,7 +6,10 @@
 .  *     Function     : CGI Definition include for A&E Control File           *
 .  *                                                                          *
 .  *     Modifications:                                                       *
-.  *    V11.01.01  30/08/2021  J.Tan  TSK 0905305                             *
+.  *    V12.01.01  04/12/2025  Zumin Yu         TSK 0955272                  *
+.  *               Added HEMBSTHE, HSTANDM, HINPCLM, AECNCHRS, AECNFTYP,      *
+.  *               HEPMR5, HEMR5L, HEMR5COD, HINVDES and HNUMDES              *
+.  *    V11.01.01  30/08/2021  J.Tan            TSK 0905305                   *
 .  *               Added AECNAECC - Start date for AECC Class ABF calculation *
 .  *    V10.05.02  31/07/2014  Steve Armstrong  CAR 294204                    *
 .  *               Replaced HETYPLAB with AECNLABL                            *
@@ -39,6 +42,16 @@ CPAE0000  MOVE      Z70,AAECN001
           MOVE      Z70,AAECN010
           MOVE      Z70,AAECN011
           MOVE      Z70,AAECN012
+          MOVE      Z70,AAECN013
+          MOVE      Z70,AAECN014
+          MOVE      Z70,AAECN015
+          MOVE      Z70,AAECN016
+          MOVE      Z70,AAECN017
+          MOVE      Z70,AAECN018
+          MOVE      Z70,AAECN019
+          MOVE      Z70,AAECN020
+          MOVE      Z70,AAECN021
+          MOVE      Z70,AAECN022
 .
 CPAE9999  RETURN
 .
@@ -47,7 +60,9 @@ CPAE9999  RETURN
 .------------------------------------------------------------
 AECN0000  BRANCH    FLDITMNO,AECN1010,AECN1020,AECN1030,AECN1040,AECN1050:
                              AECN1060,AECN1070,AECN1080,AECN1090,AECN1100:
-                             AECN1110,AECN1120
+                             AECN1110,AECN1120,AECN1130,AECN1140,AECN1150:
+                             AECN1160,AECN1170,AECN1180,AECN1190,AECN1200:
+                             AECN1210,AECN1220
 .
           WRITE     HTMLFILE;"Invalid IBA Tag";
           GOTO      AECN9999
@@ -99,6 +114,36 @@ AECN1120  UNPACK    AECNAECC,CCENT,CYEAR,CMON,CDAY
           WRITE     HTMLFILE;CDAY,SP1,MTHNAM3,SP1,CCENT,CYEAR;
           GOTO      AECN9999 
 .
+AECN1130  WRITE     HTMLFILE;HEPMR5;     * Using MR-5 Forms
+          GOTO      AECN9999
+.
+AECN1140  WRITE     HTMLFILE;HEMBSTHE;   * Using Theatre Fee file for MBS Item
+          GOTO      AECN9999
+.
+AECN1150  WRITE     HTMLFILE;HSTANDM;     * Type of Emergency
+          GOTO      AECN9999
+.
+AECN1160  WRITE     HTMLFILE;HINVDES;     * Description on Invoice
+          GOTO      AECN9999
+.
+AECN1170  WRITE     HTMLFILE;HNUMDES;     * Description for system number
+          GOTO      AECN9999
+.
+AECN1180  WRITE     HTMLFILE;HEMR5L;     * Layout for MR5
+          GOTO      AECN9999
+.
+AECN1190  WRITE     HTMLFILE;HEMR5COD;     * User Defined Stationery Code (MR5)
+          GOTO      AECN9999
+.
+AECN1200  WRITE     HTMLFILE;HINPCLM;     * Input Claim Details in Emergency
+          GOTO      AECN9999
+.
+AECN1210  WRITE     HTMLFILE;AECNCHRS;     * Charging by Discharge Status
+          GOTO      AECN9999
+.
+AECN1220  WRITE     HTMLFILE;AECNFTYP;   * Type of Emergency charging to be used
+          GOTO      AECN9999
+.
 AECN9999  RETURN
 .
 .------------------------------------------------------------
@@ -109,7 +154,9 @@ SPAAE000  MOVE      ZERO,EXIT
           MOVE      KEY3,F3
           BRANCH    F3,SPAAE001,SPAAE002,SPAAE003,SPAAE004,SPAAE005:
                        SPAAE006,SPAAE007,SPAAE008,SPAAE009,SPAAE010:
-                       SPAAE011,SPAAE012
+                       SPAAE011,SPAAE012,SPAAE013,SPAAE014,SPAAE015:
+                       SPAAE016,SPAAE017,SPAAE018,SPAAE019,SPAAE020:
+                       SPAAE021,SPAAE022
 .
           MOVE      ONE,EXIT
           GOTO      SPAAE999
@@ -155,6 +202,36 @@ SPAAE012  PACK      QRYDATA,QRYDATA,SP70
           CALL      SETMTH00            * Set CMON from MTHNAM3
           PACK      AAECN012,CCENT,CYEAR,CMON,CDAY
           REP       " 0",AAECN012
+          GOTO      SPAAE999
+.
+SPAAE013  MOVE      QRYDATA,AAECN013
+          GOTO      SPAAE999
+.
+SPAAE014  MOVE      QRYDATA,AAECN014
+          GOTO      SPAAE999
+.
+SPAAE015  MOVE      QRYDATA,AAECN015
+          GOTO      SPAAE999
+.
+SPAAE016  MOVE      QRYDATA,AAECN016
+          GOTO      SPAAE999
+.
+SPAAE017  MOVE      QRYDATA,AAECN017
+          GOTO      SPAAE999
+.
+SPAAE018  MOVE      QRYDATA,AAECN018
+          GOTO      SPAAE999
+.
+SPAAE019  MOVE      QRYDATA,AAECN019
+          GOTO      SPAAE999
+.
+SPAAE020  MOVE      QRYDATA,AAECN020
+          GOTO      SPAAE999
+.
+SPAAE021  MOVE      QRYDATA,AAECN021
+          GOTO      SPAAE999
+.
+SPAAE022  MOVE      QRYDATA,AAECN022
           GOTO      SPAAE999
 .
 SPAAE999  RETURN
@@ -222,4 +299,54 @@ MVAE0000  MATCH     Z70,AAECN001
             MOVE      AAECN012,AECNAECC
           ENDIF
 .
-MVAMVAE9  RETURN
+          MATCH     Z70,AAECN013
+          IF        !@EQUAL
+            MOVE      AAECN013,HEPMR5
+          ENDIF
+.
+          MATCH     Z70,AAECN014
+          IF        !@EQUAL
+            MOVE      AAECN014,HEMBSTHE
+          ENDIF
+.
+          MATCH     Z70,AAECN015
+          IF        !@EQUAL
+            MOVE      AAECN015,HSTANDM
+          ENDIF
+.
+          MATCH     Z70,AAECN016
+          IF        !@EQUAL
+            MOVE      AAECN016,HINVDES
+          ENDIF
+.
+          MATCH     Z70,AAECN017
+          IF        !@EQUAL
+            MOVE      AAECN017,HNUMDES
+          ENDIF
+.
+          MATCH     Z70,AAECN018
+          IF        !@EQUAL
+            MOVE      AAECN018,HEMR5L
+          ENDIF
+.
+          MATCH     Z70,AAECN019
+          IF        !@EQUAL
+            MOVE      AAECN019,HEMR5COD
+          ENDIF
+.
+          MATCH     Z70,AAECN020
+          IF        !@EQUAL
+            MOVE      AAECN020,HINPCLM
+          ENDIF
+.
+          MATCH     Z70,AAECN021
+          IF        !@EQUAL
+            MOVE      AAECN021,AECNCHRS
+          ENDIF
+.
+          MATCH     Z70,AAECN022
+          IF        !@EQUAL
+            MOVE      AAECN022,AECNFTYP
+          ENDIF
+.
+MVAE9999  RETURN

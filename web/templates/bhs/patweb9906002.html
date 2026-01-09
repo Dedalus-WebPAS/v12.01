@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="bhs">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -77,7 +77,8 @@ function setInsurance() {
              <div id="DisplayDoctorCode">
              <input type="text" name="pmhcp112" id=pmhcp112 class="Mandatory" tabindex="6"
                         title="Doctor Code" size="8" maxlength="6" 
-                        onblur="this.value=this.value.toUpperCase();"/>
+                        onblur="this.value=this.value.toUpperCase();
+                                checkAlphaNum(this);"/>
                  <input type="text" readonly class="ReadOnly" size="25"
                         title="Doctor Name" name="doctname" id=doctname tabindex="-1"
                         onfocus="this.blur();pmhcp006.focus();" />

@@ -13,6 +13,9 @@
 .******************************************************************************
 .* Mods      :                                                                *
 .******************************************************************************
+.*       V12.01.01 11/12/2025  Nikitha B        TSK 0958928                   *
+.*                 Recompiled for HL7COMN - Sending HCP code from EMCNDCLI    *
+.*                 when EMCNEDCL is on.                                       *
 .*       V12.00.11 12/11/2025  Nikitha B        TSK 0958928                   *
 .*                 Added CLBKD000 to Broadcast Outpatient Expected Discharge  *
 .*                 Date and Time in PV2.9                                     *
@@ -1669,7 +1672,7 @@ ZEROURNO  INIT      "       0"
 .-----------------------------------------------------------------------
 PRGID     INIT      "HL7CISIN"
 PRGNAM    INIT      "HL7 Broadcast Message Server"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 .-----------------------------------------------------------------------
 +
 .******************************************************************************

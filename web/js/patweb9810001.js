@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.02
 //========================================================================
 // Program   : patweb9810001.js
 //
@@ -20,18 +20,24 @@ function UpdateArray(ReturnCode) {
     if (x!=y) {
       OutputArray[j]=OldArray[i]
       j++
-    }
-    else {
+    } else {
       Flag="1"                     // Remove record from array
     }
   }
 
   if (Flag == "1") {
     OutputDivision()
-  }
-  else {
+  } else {
     AddOutputArray(ReturnCode)    // Add new record to array
     OutputDivision()
+  }
+}
+function activateDropdown(dropdown){
+  dropdown.disabled = !dropdown.disabled;
+  if (!dropdown.disabled){
+    AddClassName(dropdown,"Mandatory");
+  } else {
+    RemoveClassName(dropdown,"Mandatory");
   }
 }
 function OutputDivision() {
@@ -59,7 +65,7 @@ function UpdateRecords() {
 
   SetRedirect();
   if (validateMandatory(UpdateForm)) {
-   document.UpdateForm.submit();
+    document.UpdateForm.submit();
   }
 }
 function DispChangeType() {
@@ -96,8 +102,13 @@ function DispChangeType() {
   }
 }
 function SetRedirect() {
-
   if (document.UpdateForm.trntoclm != undefined) {
+
+    if (document.UpdateForm.curclaim != undefined) {
+     if ((document.UpdateForm.trntoclm.value.substr(0,3)) != (document.UpdateForm.curclaim.value.substr(0,3))) {
+  return;
+     }
+    }
     var checkCLAM=document.UpdateForm.trntoclm.value.substr(3,1);
 
     if (checkCLAM=="D") {

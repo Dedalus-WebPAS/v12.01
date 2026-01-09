@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -46,6 +46,19 @@ function PostForm() {
   } else {
     document.UpdateForm.emrcn051.value="1";
   }
+
+  if (document.UpdateForm.d_emrcn056.checked==false) {
+    document.UpdateForm.emrcn056.value="0";
+  } else {
+    document.UpdateForm.emrcn056.value="1";
+  }
+
+  if (document.UpdateForm.d_aaecn013.checked==false) {
+    document.UpdateForm.aaecn013.value="0";
+  } else {
+    document.UpdateForm.aaecn013.value="1";
+  }
+
   setFormactn('U');
 }
 function showHideDiv(e) {
@@ -76,6 +89,8 @@ function showHideDiv(e) {
 <input type=hidden name=emrcn047 value=" ">
 <input type=hidden name=emrcn048 value=" ">
 <input type=hidden name=emrcn051 value=" ">
+<input type=hidden name=emrcn056 value=" ">
+<input type=hidden name=aaecn013 value=" ">
 
 <!--Removed for TSK 0876992
 <input type=hidden name=emrcn040 value=" ">
@@ -210,6 +225,61 @@ function showHideDiv(e) {
     </td>
 </tr>
 <!-- 0932530 end --!>
+
+<tr><td class=Datalabel>Using paticddf or emricdaf file</td>
+    <td><select name=emrcn055 id=emrcn055
+         title="Using paticddf or emricdaf file">
+        <option value="0">paticddf</option>
+        <option value="1">emricdaf</option>
+        </select></td></tr>
+
+<tr><td class=DataLabel>Display Desc of Injury Event in Patient Complaint Field</td>
+    <td class=DataField>
+      <input type=checkbox name=d_emrcn056 value="1"
+       title="Display Desc of Injury Event in Patient Complaint Field">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Using MR5 Forms</td>
+    <td class=DataField>
+      <input type=checkbox name=d_aaecn013 value="1"
+       title="Using MR5 Forms">
+    </td>
+</tr>
+
+<tr><td width=10% class=DataLabel>Layout for MR5</td>
+    <td width=10% class=DataItem><select name=aaecn018
+       title="Layout for MR5">
+    <option value="0">Modbury</option>
+    <option value="1">User Defined</option>
+    </select></td>
+</tr>
+
+<tr><td width=10% class=DataLabel>User Defined Stationery Code (MR5)</td>
+    <td width=10% class=DataItem><select id=aaecn019 name=aaecn019
+       title="User Defined Stationery Code (MR5)">
+      <option> </option>
+      %STANDARD.01.020.  2.      
+      </select>
+    </td>
+</tr>
+
+<tr>
+    <td class=DataLabel>Description on Invoice</td>
+    <td class=DataItem><input type=text name=aaecn016
+        title="Description on Invoice"
+        size=35 maxlength=30 value="%COMWEB98.14.116">
+    </td>
+</tr>
+
+<tr>
+    <td class=DataLabel>Description for system number</td>
+    <td class=DataItem><input type=text name=aaecn017
+        title="Description for system number"
+        size=12 maxlength=9 value="%COMWEB98.14.117">
+    </td>
+</tr>
+
 <tr>
   <td width=10% class=DataLabel>&nbsp;</td>
   <td width=10% class=DataField>&nbsp;</td>
@@ -311,5 +381,37 @@ for (var i =0 ; i < document.UpdateForm.emrcn050.length; i++) {
 PresentingComplaintComments="%COMWEB98.14.251";
 if (PresentingComplaintComments=="1") {
   document.UpdateForm.d_emrcn051.checked=true;
+}
+
+DispDescOfInjuryEventInPC="%COMWEB98.14.256";
+if (DispDescOfInjuryEventInPC=="1") {
+  document.UpdateForm.d_emrcn056.checked=true;
+}
+
+UseFile="%COMWEB98.14.255"
+for (var i =0 ; i < document.UpdateForm.emrcn055.length; i++) {
+  if (document.UpdateForm.emrcn055.options[i].value==UseFile.substr(0,1)) {
+    document.UpdateForm.emrcn055.selectedIndex=i;
+  }
+}
+
+UsingMR5Forms="%COMWEB98.14.113"
+if (UsingMR5Forms=="1") {
+     document.UpdateForm.d_aaecn013.checked=true;
+ }
+
+LayoutForMR5="%COMWEB98.14.118"
+for (var i =0 ; i < document.UpdateForm.aaecn018.length; i++) {
+  if (document.UpdateForm.aaecn018.options[i].value==LayoutForMR5.substr(0,1)) {
+    document.UpdateForm.aaecn018.selectedIndex=i;
+  }
+}
+
+UserDefinedStationeryCodeMR5="%COMWEB98.14.119"
+for (var i =0 ; i < document.UpdateForm.aaecn019.length; i++) {
+  if (document.UpdateForm.aaecn019.options[i].value==
+    UserDefinedStationeryCodeMR5) {
+    document.UpdateForm.aaecn019.selectedIndex=i;
+  }
 }
 </script> 

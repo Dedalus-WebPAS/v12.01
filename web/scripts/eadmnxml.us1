@@ -3,6 +3,8 @@
 /****************************************************************
  *  eAdmission xml parser
  * 
+ *  25/11/2025  V12.01.01  Nikitha B        TSK 0969892
+ *              Removed duplicate variable ADFR0313 - Verified Address
  *  26.09.2024  V11.04.02  DA Sarkies       TSK 0938030
  *              added code to contact titles
  *  15/05/2024  V11.04.01  DA Sarkies       TSK 0933585
@@ -711,8 +713,6 @@ if ($xml->PMIUserDefined4PASCode == true) {
    fwrite($detailFile,"ADFR0311|ptmas042|".$xml->PMIUserDefined4PASCode."\n");}
 if ($xml->PMIUserDefined5PASCode == true) {
    fwrite($detailFile,"ADFR0312|ptmas043|".$xml->PMIUserDefined5PASCode."\n");}
-if ($xml->VerifiedAddress == true) {
-   fwrite($detailFile,"ADFR0313|pmpmi113|".$xml->VerifiedAddress."\n");}
 if ($xml->IdentifyingGenderPASCode == true) {
    fwrite($detailFile,"ADFR0314|pmpmi125|".$xml->IdentifyingGenderPASCode."\n");
 }
@@ -747,7 +747,7 @@ if ($xml->AdmissionUserDefined3PASCode == true) {
 if ($xml->AdmissionUserDefined4PASCode == true) {
    fwrite($detailFile,"ADFR0326|ptmis040|".$xml->AdmissionUserDefined4PASCode."\n");}
 if ($xml->AdmissionUserDefined5PASCode == true) {
-   fwrite($detailFile,"ADFR0327|ptmis041".$xml->AdmissionUserDefined5PASCode."\n");}
+   fwrite($detailFile,"ADFR0327|ptmis041|".$xml->AdmissionUserDefined5PASCode."\n");}
 if ($xml->PostalStatePASCode == true) {
    fwrite($detailFile,"ADFR0328|ptmsx043|".$xml->PostalStatePASCode."\n");}
 if ($xml->AdmissionSource == true) {

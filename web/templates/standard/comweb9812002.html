@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -30,6 +30,7 @@ function PostForm() {
   } else {
      document.UpdateForm.mehcn021.value="1";
   }
+
   setFormactn('U');
 }
 </script>
@@ -205,6 +206,42 @@ function PostForm() {
     <td class=DataItem><input type=checkbox name=d_mehcn021
      title="Add MH Diagnosis using previous MH Diagnosis" value="0">
     </td></tr>
+
+<tr>
+    <td class=DataLabel>Minimum number of days for Holiday Leave</td>
+    <td class=DataItem><input type=text name=mehcn022
+        class="Number JustifyRight Integer" min=0 max=99
+        title="Minimum number of days for Holiday Leave"
+        size=3 maxlength=2 value="%COMWEB98.12.122">
+    </td>
+</tr>
+
+<tr>
+    <td class=DataLabel>Minimum number of days for Trial Leave</td>
+    <td class=DataItem><input type=text name=mehcn023
+        class="Number JustifyRight Integer" min=0 max=99
+        title="Minimum number of days for Trial Leave"
+        size=3 maxlength=2 value="%COMWEB98.12.123">
+    </td>
+</tr>
+
+<tr>
+    <td class=DataLabel>Maximum number of months for Holiday Leave</td>
+    <td class=DataItem><input type=text name=mehcn024
+        class="Number JustifyRight Integer" min=0 max=99
+        title="Maximum number of months for Holiday Leave"
+        size=3 maxlength=2 value="%COMWEB98.12.124">
+    </td>
+</tr>
+
+<tr>
+    <td class=DataLabel>Maximum number of years for Trial Leave</td>
+    <td class=DataItem><input type=text name=mehcn025
+        class="Number JustifyRight Integer" min=0 max=99
+        title="Maximum number of years for Trial Leave"
+        size=3 maxlength=2 value="%COMWEB98.12.125">
+    </td>
+</tr>
 
 <tr><td class=DataLable>&nbsp;</td>
     </tr>

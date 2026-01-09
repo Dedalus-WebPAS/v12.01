@@ -1,0 +1,27 @@
+.---------------------------------------------------------------------------
+. Include Name : CLMRTAUM.PBL
+. Function     : Clear function for MRTAUMFD
+.---------------------------------------------------------------------------
+. Modifications :
+.---------------------------------------------------------------------------
+. V12.01.00  08/12/2025  Thanh T       TSK 0953127
+.            Initial Version
+.---------------------------------------------------------------------------
+.
+CLMRTAUM  MOVE      SP70,MRAMVISN      . Visit Number     
+          MOVE      SP70,MRAMEPSN      . Episode Number     
+          MOVE      SP70,MRAMADTE      . Audit Date     
+          MOVE      SP70,MRAMRTYP      . Record Type     
+          MOVE      SP70,MRAMNOTE      . Note Number     
+          MOVE      SP70,MRAMLINE      . Line Number     
+          PACK      MRAMCOMM,SP70,SP70 . Comments      
+          MOVE      SP70,MRAMACTV      . Active Flag     
+          MOVE      SP70,MRAMCUSR      . Web User Id Created (websecaf)  
+          MOVE      SP70,MRAMCDTE      . Date record created (CCYYMMDD)   
+          MOVE      SP70,MRAMCTIM      . Time Record Created (hh:mm:ss)   
+          MOVE      SP70,MRAMUUSR      . Web User Id Updated (websecaf)  
+          MOVE      SP70,MRAMUDTE      . Date Record Updated (CCYYMMDD)   
+          MOVE      SP70,MRAMUTIM      . Time Record Updated (hh:mm:ss)   
+          PACK      MRAMSPAR,SP70,SP70 . Spare      
+.
+          RETURN

@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -51,6 +51,17 @@ function OpdMessage() {
   }
 }
 function CloseButtonRedirect() {
+  /* check if close referral was directed after closing appointment */
+  var urlParam = new URLSearchParams(window.location.search);
+  if(urlParam.has('crefflag')){
+   redirectList="outweb02.pbl?reportno=3&template=015" +
+            "&urnumber=" + UpdateForm.urnumber.value.replace(/ /g,"+") +
+            "&admissno=" + UpdateForm.admissno.value.replace(/ /g,"+")
+   getTop().content.location.href=redirectList;
+   return;
+  }
+
+
   OutpatientList=GetContentCookie("OutpatientList");
   if(OutpatientList=="unknown") {
     DFrameClose();

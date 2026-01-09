@@ -3,8 +3,39 @@
 .
 . Function      : Patient Enquiries Template Server
 .
+.      ********************************************************
+.      *                                                      *
+.      *    NB: DO NOT ADD ANY NEW FILE OPENS IN INIT0000     *
+.      *        IF YOU NEED TO OPEN A NEW FILE OPEN IN FILE   *
+.      *        WHERE IS IS REQUIRED AND CLOSE IT STRAIGHT    *
+.      *        AFTER.                                        *
+.      *                                                      *
+.      ********************************************************
+.
 . Modifications :
 .---------------------------------------------------------------------
+. V12.01.05  05.12.2026  DA Sarkies       TSK 0914264
+.            SETPAR00 -  updtrnno - Reads in patient type changes to array
+.            TRNSUP16 -  Added code to display dropdown in the cell for
+.                        patient type
+. V12.01.04  18/12/2025  J.Tan            TSK 0969867
+.            Mod Supervisor Chg Claimcode to write pmsextaf for Adm.Claim only
+. V12.01.03  09/12/2025  Ebon Clements    TSK 0968452
+.            Recompiled for NZHISWIO - Medical warning timeouts
+. V12.01.02  08/12/2025  Thanh T        TSK 0953127
+.            Recompiled for MRTAUCFD changes
+. V12.01.01  03.12.2025  DA Sarkies       TSK 0968888
+.            Added warning regarding adding further open file to INIT0000
+. V12.00.16  05.12.2026  DA Sarkies       TSK 0914264
+.            SETPAR00 -  updtrnno - Reads in patient type changes to array
+.            TRNSUP16 -  Added code to display dropdown in the cell for
+.                        patient type
+. V12.00.15  18/12/2025  J.Tan            TSK 0969867
+.            Mod Supervisor Chg Claimcode to write pmsextaf for Adm.Claim only
+. V12.00.14  09/12/2025  Ebon Clements    TSK 0968452
+.            Recompiled for NZHISWIO - Medical warning timeouts
+. V12.00.13  03.12.2025  DA Sarkies       TSK 0968888
+.            Added warning regarding adding further open file to INIT0000
 . V12.00.12  24/10/2025  J.Tan          TSK 0963838
 .            Added VALDDT00 to validate Supervisor Change Transfer Date/Time 
 . V12.00.11  15/10/2025  Alina Bhari    TSK 0947952
@@ -36,6 +67,47 @@
 .            Removed duplicate ICD10 ED 13 go live date parameter read INIT0000
 . V12.00.01  22/05/2025  J.Tan          TSK 0955096
 .            Added Alphanumeric visit number changes
+. V11.05.28  05.12.2026  DA Sarkies       TSK 0914264
+.            SETPAR00 -  updtrnno - Reads in patient type changes to array
+.            TRNSUP16 -  Added code to display dropdown in the cell for
+.                        patient type
+. V11.05.27  18/12/2025  J.Tan            TSK 0969867
+.            Mod Supervisor Chg Claimcode to write pmsextaf for Adm.Claim only
+. V11.05.26  09/12/2025  Ebon Clements    TSK 0968452
+.            Recompiled for NZHISWIO - Medical warning timeouts
+. V11.05.25  03.12.2025  DA Sarkies       TSK 0968888
+.            Added warning regarding adding further open file to INIT0000
+. V11.05.24  24/10/2025  J.Tan          TSK 0963838
+.            Added VALDDT00 to validate Supervisor Change Transfer Date/Time
+. V11.05.23  15/10/2025  Alina Bhari    TSK 0947952
+.            Formatted discharge date and admission date of linked visit in
+.            DD/MM/YYYY and time - FHIR2200,FHIR2300,FHIR2400
+.            Displayed the admission source class of linked visit
+.            - FHIR2500,FHIR2600
+. V11.05.22  25/09/2025  Jacob Jackson  TSK 0965749
+.            On supervisor 'Change Claim' screen, disable ability to change
+.            ICWA claim types. Throw error if it has been submitted.
+. V11.05.21  16/09/2025  J.Tan          TSK 0965020
+.            Mod to update Date record last changed fields in pattranf,patchcof
+. V11.05.20  04/08/2025  Ebon Clements  TSK 0964910
+.            Open file limit of 255 reached. Closed unused open files
+.            WEBSCHA2, WEBSCHA3, WEBSCHA4, OBSPINA1, MLTCODA2 and MLTHCPA2
+. V11.05.19  24/07/2025  Bella Turco    TSK 0963685
+.            Right justified TEMPLATE field to fix popup templates having wrong
+.            title in GETPAT30
+. V11.05.18  01/07/2025  Ebon Clements  TSK 0962009
+.            Check previous record if current record is deleted.
+.            Discharge management read - OTHS1000
+. V11.05.17  23/06/2025  Ebon Clements  TSK 0962009
+.            Added deleted status check to discharge management read - OTHS1000
+. V11.05.16  23/06/2025  Ebon Clements  TSK 0960171
+.            Corrected visit type - REQLST00
+. V11.05.15  05/06/2025  Ebon Clements  TSK 0961310
+.            Removed duplicate ICD10 ED 13 go live date parameter read INIT0000
+. V11.05.14  08/05/2025  Sunny          TSK 0947378
+.            Fixed OTHS1000 and Added OTHS1040
+. V11.05.13  07/05/2025  Nikitha B      TSK 0959601
+.            Recomplied for PATMISTM.
 . V11.05.12  11/04/2025  Jacob/Sunny    TSK 0947378
 .            Add Discharge Delay fields
 . V11.05.11  20/03/2025  Davin          TSK 0956210
@@ -61,6 +133,14 @@
 .            as blank in DISPRH10
 . V11.05.01  18/11/2024  Bella Turco      TSK 0952905
 .            Fixed keypack when reading pmshcgaf in DISPRH00
+. V11.04.35  05.12.2026  DA Sarkies       TSK 0914264
+.            SETPAR00 -  updtrnno - Reads in patient type changes to array
+.            TRNSUP16 -  Added code to display dropdown in the cell for
+.                        patient type
+. V11.04.34  09/12/2025  Ebon Clements    TSK 0968452
+.            Recompiled for NZHISWIO - Medical warning timeouts
+. V11.04.33 07/05/2025  Nikitha B      TSK 0959601
+.            Recomplied for PATMISTM.
 . V11.04.32  17.01.2025  DA Sarkies       TSK 0954697
 .            Recompiled for OBSPALPR
 . V11.04.31  13.01.2025  DA Sarkies       TSK 0954697
@@ -150,6 +230,19 @@
 .            Recompiled for EMRVISFD changes 
 . V11.04.01  29/11/2023 Thanh T                TSK 0932689
 .            Recompiled for MRTVISFD changes
+. V11.03.46  05.12.2026  DA Sarkies       TSK 0914264
+.            SETPAR00 -  updtrnno - Reads in patient type changes to array
+.            TRNSUP16 -  Added code to display dropdown in the cell for
+.                        patient type
+. V11.03.45  09/12/2025  Ebon Clements    TSK 0968452
+.            Recompiled for NZHISWIO - Medical warning timeouts
+. V11.03.44  28/10/2024  Ebon Clements   TSK 0948906
+.            Recompiled for NSHISWIO - GETMWS AE2034 Unrecoverable read error
+. V11.03.43  21/08/2024  Don Nguyen      TSK 0950408
+.            Added Email Address in 'Extra Contacts' list (sort table); CEXT0000
+. V11.03.42  04/04/2024  Bella Turco     TSK 0914658
+.            Added UPINSU00 routine to auto-update insurance code when MVIT
+.            status is Confirmed
 . V11.03.41  13/03/2024  DA Sarkies      TSK 0939978
 .            Added subroutines to load outpatient appointments as JSON
 . V11.03.40  13/03/2024  Ebon Clements   TSK 0914658
@@ -2414,6 +2507,7 @@
           INC       PATCONFD/INC
           INC       PMSCDNFD/INC
           INC       PMSRUGFD/INC
+          INC       PMSSPEFD/INC
           INC       MEHCONFD/INC
           INC       MEHDLSFD/INC
           INC       MEHLEGFD/INC
@@ -3319,6 +3413,7 @@ ENDDTIME  DIM       5
 EPSSLIST  FORM      1[99]
 TACRECKY  DIM       8[50]
 TRNRECKY  DIM       30[99]
+SPECCODE  DIM       3[99]
 WCORECKY  DIM       8[50]
 ERRORCNT  FORM      3                 * Count of Errors
 ERRORLST  DIM       90[50]            * Error Array
@@ -3525,7 +3620,7 @@ NORETURN  DIM       1      * No return (button) flag
 .
 .------------------------------------------------------------------------
 PRGID     INIT      "PATWEB98"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.05"
 PRGNAM    INIT      "Patient Enquiries Template Server"
 .------------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -3739,6 +3834,7 @@ INIT0000  CALL      INTMAS00   * Open Files Required for PATMASTM
           OPEN      PATICDD1,"paticddf"
           OPEN      PATI10D1,"pati10df"
 .....     OPEN      PATFLET2,"patfltrf"   * commented out 0898168
+          OPEN      PMSSPEA1,"pmsspeaf"
           OPEN      PMSCDNA1,"pmscdnaf"
           OPEN      PMSRUGA1,"pmsrugaf"
           OPEN      IBALPCA1,"ibalpcaf"
@@ -4279,6 +4375,7 @@ CLRPAR00  MOVE      ZERO,REPORTNO
           MOVE      ONE,TRNCOUNT
           WHILE     TRNCOUNT <= 99
             MOVE      SP70,TRNRECKY[TRNCOUNT]
+            MOVE      Z70,SPECCODE[TRNCOUNT]
             ADD       ONE,TRNCOUNT
           DO
 .
@@ -4810,8 +4907,16 @@ SETPAR00  MATCH     "reportno=",QRYNAME
           IF         @EQUAL
             COMPARE   "99",TRNCOUNT
             GOTO      SETPAR99 IF EQUAL
-            ADD       ONE,TRNCOUNT
-            PACK      TRNRECKY[TRNCOUNT],QRYDATA,SP70
+            ADD        ONE,TRNCOUNT
+            IF         PTCNHDPS=1
+              IF         TRNSUPTY=3
+                UNPACK     QRYDATA,TRNRECKY[TRNCOUNT],D1,SPECCODE[TRNCOUNT]
+              ELSE
+                PACK       TRNRECKY[TRNCOUNT],QRYDATA,SP70
+              ENDIF
+            ELSE
+              PACK       TRNRECKY[TRNCOUNT],QRYDATA,Z70
+            ENDIF
             GOTO      SETPAR99
           ENDIF
 .
@@ -20337,13 +20442,49 @@ TRNSUP15  RESET     HTMLLINK
           WRITE     HTMLFILE;"#",":
                              "#"",TRATEF,"#",":            * 5
                              "#"";
-          IF        TRNSUPTY=3
+          IF        TRNSUPTY=3 & PTCNHDPS=1
             IF        RECCNT<>1 | F1=1
-            WRITE     HTMLFILE;"<input type=checkbox name=uptrn",DRECCNT:
-                      " onClick=UpdateArray(this.value); value='",BEDTRKEY,"'>";
+                WRITE     HTMLFILE;"<input type=checkbox name=uptrn",DRECCNT:
+                        " id='uptrn",DRECCNT,"' onClick='updateThisArray(this),":
+                        " activateDropdown(trntopat",DRECCNT,")":
+                        ";' value='",BEDTRKEY,"'>";
+              WRITE     HTMLFILE;"<select name=trntopat",DRECCNT;
+              WRITE     HTMLFILE;" class='SelectMed'";
+              WRITE     HTMLFILE;" onchange='changeArray(this)'";
+.
+              WRITE     HTMLFILE;" id=trntopat",DRECCNT," disabled>";
+              PACK      KEY21,TADOCT,SP70
+              CALL      RSPMSPE1
+TRNSUP16      CALL      RKPMSPE1
+              BRANCH    OVRCD,TRNSUP17
+              MATCH     TADOCT,PMSEHCPC
+              GOTO      TRNSUP17 IF NOT EQUAL
+              MOVE      "A ",CATEGORY
+              MOVE      PMSESPEC,CODE
+              CALL      GETCOD00
+              MATCH     TATYPE,CODE
+              IF        @EQUAL
+                WRITE     HTMLFILE;"<option value='",ACODE,"' selected>":
+                                   TDESC,"</option>";
+              ELSE
+                WRITE     HTMLFILE;"<option value='",ACODE,"'>":
+                                   TDESC,"</option>";
+              ENDIF
+              GOTO      TRNSUP16
+TRNSUP17      WRITE     HTMLFILE;"</select>";
+            ELSE
+              WRITE     HTMLFILE;ATYPDESC;                     * 6
             ENDIF
+          ELSE
+            IF        TRNSUPTY=3
+              IF        RECCNT<>1 | F1=1
+                WRITE     HTMLFILE;"<input type=checkbox name=uptrn",DRECCNT:
+                          " onClick=UpdateArray(this.value); value='";
+                WRITE     HTMLFILE;BEDTRKEY,"'>";
+              ENDIF
+            ENDIF
+            WRITE     HTMLFILE;ATYPDESC;                     * 6
           ENDIF
-          WRITE     HTMLFILE;ATYPDESC;                     * 6
           WRITE     HTMLFILE;"#",":
                              "#"";
           IF        TRNSUPTY=4
@@ -29230,6 +29371,12 @@ UPDTRN57  MATCH     Z70,TRNTOWRD               * update ward/bed
             CALL      UPEX0000                        * Update Extra compensable
           ENDIF
 .
+          MATCH     Z70,SPECCODE[TRNCOUNT]
+          IF        !@EQUAL
+            MOVE      SPECCODE[TRNCOUNT],TRNTOPAT
+            PACK      SPECCODE[TRNCOUNT],Z70
+          ENDIF
+.
           MATCH     Z70,TRNTOPAT                      * update patient type
           IF        !@EQUAL
             PACK      PMCHOVAL,TATYPE,SP70,SP70       * old value
@@ -29925,6 +30072,9 @@ UPEX0050  CALL      CLPMSEXT
             PACK      KEY11,ADMISSNO,PMEXCLAM,SP70
             CALL      UPPMEXT1
           ELSE
+            MATCH     ACLAIM,PTTRCLTY
+            GOTO      UPEX9999 IF NOT EQUAL       * Not the Current Claim code
+.
             CALL      CLPMSEXT                    * Clear file vars
             MOVE      TADMN,PMEXVISN
             MOVE      TURNO,PMEXURNO
@@ -29945,7 +30095,7 @@ UPEX0050  CALL      CLPMSEXT
 .
 UPEX1000  PACK      KEY8,ADMISSNO,SP70
           CALL      RDMISS1
-          BRANCH    OVRCD,UPEX0050 
+          BRANCH    OVRCD,UPEX9999 
 .
           CALL      CLPMSEXT
           PACK      KEY11,ADMISSNO,ACLAIM,SP70
@@ -35364,6 +35514,7 @@ OTRF9999  RETURN
           INC       PATW21IO/INC            * WIES21
           INC       PATWIEIO/INC            * WIES22
           INC       PATWMAIO/INC
+          INC       PMSSPEIO/INC
           INC       PMSCDNIO/INC
           INC       PMSRUGIO/INC
           INC       PMSCTCIO/INC

@@ -13,6 +13,10 @@
 .  *     Keys         : KEY 14, KEY54, KEY20                            *
 .  *                                                                    *
 .  *     Modifications:                                                 *
+.  **********************************************************************
+.  * V12.01.01 09/12/2025 Thanh T       TSK 0960753                     *
+.  *           Added PTHFHGEX field                                     *     
+.  **********************************************************************
 .  *     V10.08.02  18/04/2016 Steve Armstrong TSK 0294177              *
 .  *                Updated PTHFIMCD to be a DIM 3 cat/code field       *
 .  *                instead of a DIM 1.                                 *
@@ -115,7 +119,10 @@ PTHFDPRI   DIM       1          1        635      Default to Sub-item in PRI
 .                                                      when entering items in
 .                                                      PRI for patients with
 .                                                      this HF
-PTFNSPAR   DIM       64         64       636      SPARE VARIABLE
+PTHFHGEX   DIM       3          3        636      Exclude from Grp for HCP Ext
+.                                                 Blank or 001 = No
+.                                                 002 = Yes   
+PTFNSPAR   DIM       61         61       639      SPARE VARIABLE
 .
 .End of Record                           700
 .

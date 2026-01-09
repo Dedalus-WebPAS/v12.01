@@ -5,6 +5,12 @@
 .
 . Modifications  : 
 .-------------------------------------------------------------------------------
+. V12.01.02 27/11/2025  Bella Turco    TSK 0956710
+.           Skip 'anaesthetic started/previous patient out of theatre'
+.           validation if overnight indicator is set POTPRV10
+. V12.01.01 21/11/2025  Bella Turco    TSK 0956710
+.           Removed code that skipped over records with blank Patient Out of
+.           Theatre in POTPRV00
 . V12.00.04 25/09/2025  Bella Turco    TSK 0956710
 .           New remote script POTPRV00 - Get Patient Out of Theatre of Previous
 .           Patient
@@ -2340,7 +2346,7 @@ ISERASE   INIT      "iserase "
 .
 .******************************************************************************
 PRGID     INIT      "OPRWEB06"                                                *
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Theatre Information Server"                              *
 .******************************************************************************
           CALL      WEBINT00                * Initialise FIFO Etc.
@@ -27528,9 +27534,10 @@ POTPRV10  CALL      RPOPDEA5
 .
           MATCH     SP70,OPDADATE
           GOTO      POTPRV99 IF EQUAL
-          MATCH     SP70,OPSGUT02
-          GOTO      POTPRV99 IF EQUAL
           MATCH     SP70,OPDAADMN
+          GOTO      POTPRV99 IF EQUAL
+.
+          MATCH     "1",OPSGUY02              * skip if Overnight
           GOTO      POTPRV99 IF EQUAL
 .
           WRITE     HTMLFILE;"<RETURN_VALUE TYPE=SIMPLE>",OPDADATE,OPSGUT02:

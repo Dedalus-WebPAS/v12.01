@@ -1,9 +1,12 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
 <script type="text/javascript">
 function Merge() {
+ if (!validateMandatory(document.UpdateForm)) {
+   return;
+ }
  if(!isWhitespace(document.UpdateForm.d_emviadmn.value)) {
     if(!confirm("Warning - Linked ED visit " +
           document.UpdateForm.d_emviadmn.value +
@@ -29,7 +32,9 @@ function Merge() {
   AddForm.redirect.value="patweb98.pbl?reportno=1&template=1" + 
                        "&admissno=" + AddForm.admissno.value.replace(/ /g,"+") +
                        "&urnumber=" + AddForm.newurnum.value.replace(/ /g,"+");
-  if(parent.location.search.substring(1,25)=="reportno=04&template=013"){
+  if(parent.location.search.substring(1,25)=="reportno=04&template=013"||
+     parent.location.search.substring(1,25)=="reportno=07&template=001"||
+     parent.location.search.substring(1,25)=="reportno=07&template=002"){
        document.AddForm.nextpage.value="2";
   }
   SubmitHidden(document.AddForm);

@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -161,6 +161,10 @@ function CheckBooking() {
      location.href=LinkUrl;
 //     DFrameLink(LinkUrl,50,0,740,390);
     }
+}
+function ChangeUR(LinkUrl) {
+   Left=(document.body.clientWidth-600)/2;
+   DFrameLink(LinkUrl,100,Left,600,300);
 }
 function valClaimCode() {
   if (UpdateForm.bkrec023.value=="") {
@@ -485,7 +489,9 @@ InsertPatientHeader()
         <input type="button" value="Cancel" class="button"
                onclick='chkeAdmGobck();' />
         <input type="button" value="Delete" class="button"
-               onclick='DeleteBooking();' /></td></tr>
+               onclick='DeleteBooking();' />
+        <input type="button" value="Change U/R" class="button"
+             onclick='ChangeUR("%OPRWEB01.07.001.patweb98.01.041");'/></td></tr>
 </table>
 </form>
 </div>

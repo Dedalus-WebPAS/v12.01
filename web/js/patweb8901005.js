@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 // Program   : patweb8901005.js
 //========================================================================
@@ -347,7 +347,7 @@ function ChkFlag(){
     document.getElementById('AccButtonSpan').innerHTML="";
     document.getElementById('SearchIconSpan').innerHTML="";
   } else {
-    document.UpdateForm.ptclm011.className="Mandatory";
+    document.UpdateForm.ptclm011.className="AlphaNum Mandatory";
     document.UpdateForm.ptclm011.readOnly=false;
     document.getElementById('AccButtonSpan').innerHTML=document.getElementById('OutputACCButton').innerHTML;
   }

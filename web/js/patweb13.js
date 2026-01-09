@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //==============================================================================
 // Program   : patweb13.js
 //
@@ -99,7 +99,7 @@
 // Function : Generate Classification Code keywords
 //------------------------------------------------------------------------------
  function GenerateSNIKeyword() {
-   if(confirm("Generate New ANSNAP Class Code Keyword Table")) {
+   if(confirm("Generate New AN-SNAP Class Code Keyword Table")) {
      document.GenerateForm.submit(); }
  }
 //------------------------------------------------------------------------------

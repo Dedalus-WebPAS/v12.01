@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="private">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -366,7 +366,8 @@ function SetNurseName(name) {
 }
 </script>
 </head>
-<body onload="PageLoad(event);setTimeout('ChkReg()',100);showDelay();">
+<body onload="PageLoad(event);setTimeout('ChkReg()',100);showDelay();
+              showExitDelayHEA();">
 <div id=PatientHeading></div>
 <script type="text/javascript">
 PatientURN="%OPRWEB06.10.003";
@@ -455,6 +456,7 @@ InsertTheatreCaseHead()
     <img src="../images/TimeLookup.gif" class=Icon
      onclick="TimeLookupFrame(UpdateForm.opard077);">
     </td>
+
     <td class=DataField align=left>
       <div id=crrhiDIV></div>
     </td>
@@ -527,13 +529,16 @@ InsertTheatreCaseHead()
      title="Exit Theatre Complex Time" value='%OPRWEB06.10.280' 
      onblur="if (checkTime(this,this.title)) {
             chkTime(this);ChgRTD();chkMan();ChkReg();
-            checkRecoveryTime(this);chkMan2();}">
+            checkRecoveryTime(this);chkMan2();
+            showExitDelayHEA();}">
     <img src="../images/DateTimeStamp.gif" class=Icon
      onclick="SetCurrentDateTime(null,UpdateForm.opard080);">
     <img src="../images/TimeLookup.gif" class=Icon
      onclick="TimeLookupFrame(UpdateForm.opard080);"> </td>
-<td class=DataLabel>&nbsp;</td>
-<td class=DataField >&nbsp;</td></tr>
+
+   <td class=DataLabel><div id="DelayExitReasonTitleDIV"></div></td>
+   <td class=DataField><div id="DelayExitReasonFieldDIV"></div></td></tr>
+
 </table>
 
 <div id=PrintReg></div>
@@ -689,6 +694,22 @@ name=WaitNote>%OPRWEB06.10.459</textarea>
 <input type="hidden" name="opard030" id="opard030" value=" ">
 <input type="hidden" name="opard031" id="opard031" value=" ">
 </div>
+
+<span id="DelayExitReasonTitleSPAN" style="display:none;">
+%STANDARD.01.035.Tk
+</span>
+
+<span id="DelayExitReasonFieldSPAN" style="display:none;">
+    <select name=opsrg055 id=opsrg055 title="%STANDARD.01.035.Tk "
+     class=Mandatory tabindex=12>
+     <option></option>
+     %OPRWEB06.10.355.2
+    </select>
+</span>
+
+<span id="NoDelayExitReasonFieldSPAN" style="display:none;">
+<input type="hidden" name="opsrg055" id="opsrg055" value=" ">
+</span>
 
 <script type="text/javascript">
 if (document.UpdateForm.suprlevl!=undefined) {

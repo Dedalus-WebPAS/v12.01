@@ -7,6 +7,8 @@
 .
 . Modifications :
 .----------------------------------------------------------------------
+. V12.01.01 08/12/2025  Thanh T        TSK 0953127
+.           Recompiled for MRTAUCFD changes
 . V12.00.04 18.11.2025  DA Sarkies     TSK 0920925
 .           Fixed tag for displaying data from PATMISTM
 . V12.00.03 17.11.2025  DA Sarkies     TSK 0920925
@@ -1269,7 +1271,7 @@ TILDA30   INIT      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 .
 .------------------------------------------------------------------------
 PRGID     INIT      "ECLWEB24"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Webservices Claim Enquiries"
 .------------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.

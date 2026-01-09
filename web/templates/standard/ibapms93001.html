@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -283,8 +283,9 @@ Set Defaults (only used for new Charges if the Input field is blank)
 <div id=BrowseFile style="display:none">
 <table width=80% align=center border=0 cellspacing=2 cellpadding=1>
 <tr><td class=DataLabel width=25%>Path & File Name</td>
-    <td><input type=file name=keystr01 title="Path & File name"
-          size=35 maxlength=60 class=Mandatory>&nbsp;&nbsp;
+    <td><input type=hidden name=keystr01 value="Import File Name">
+        <input type=file name=loadfnam title="Path & File name"
+          size=40 maxlength=120 class=Mandatory>&nbsp;&nbsp;
          <input type=text size=50 name=filedesc Readonly tabindex=-1
          style=border:0;background:paper.gif;>
     </td></tr>

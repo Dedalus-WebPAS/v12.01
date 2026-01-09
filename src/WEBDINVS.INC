@@ -6,7 +6,9 @@
 .
 . Modifications   :
 .
-.         V12.00.01 16/06/2025 J.Tan             TSK 0961932
+.         V12.01.01 01/12/2025 J.Tan             TSK 0946593
+.                   Added MCHGQMT for CMXMATRX - sorting Casemix MBS items
+.         V11.05.05 16/06/2025 J.Tan             TSK 0961932
 .                   Moved back SAVEND to FORM3
 .         V11.05.04 20/02/2025 Peter Vela        TSK 0939466
 .                   Added DVAWBILL for Eclipse WebServices DVAW
@@ -260,8 +262,11 @@ ALLINFLG  FORM      1
 ACCCOUNT  FORM      6
 ACCARRAY  FORM      6.2[50]
 ACOMDAYS  FORM      4
+.
 MCHGARR   DIM       9[999]
 MCHGAMT   FORM      12.2[999]
+MCHGQMT   FORM      12.2[999]
+.
 MVENHOUR  FORM      6
 SORTDONE  FORM      1
 SWAPFLAG  FORM      1

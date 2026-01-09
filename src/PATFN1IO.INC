@@ -8,6 +8,10 @@
 . *  Keys         :  KEY14 KEY54 KEY20                     *
 . *                                                        *
 . *  Modifications:                                        *
+. **********************************************************
+. * V12.01.01 09/12/2025 Thanh T       TSK 0960753         *
+. *           Added PTHFHGEX field                         *
+. **********************************************************
 . *      V10.08.01  24/03/2016 Steve Armstrong TSK 0294177 *
 . *                 Added PTHFIMCD & PTHFDPRI              *
 . **********************************************************
@@ -68,7 +72,7 @@ RDFUND1   MOVE      ZERO,OVRCD
                                    DTHFUMTD,DTHFUCMX,PTHFBILN,PTHFFULD,PTHFCARC:
                                    PTHFDFIC,PTHFCNAM,PTHFCTTL,PTHFCEML,PTHFCMOB:
                                    PTHFFACD,PTHFNDFP,PTHFOCGR,PTHFARCE,PTHFIMCD:
-                                   PTHFDPRI,PTFNSPAR
+                                   PTHFDPRI,PTHFHGEX,PTFNSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DHFTACT,PHFTACT
           MOVE      DTHFUMTD,PTHFUMTD
@@ -84,7 +88,7 @@ RLFUND1   MOVE      ZERO,OVRCD
                                    DTHFUMTD,DTHFUCMX,PTHFBILN,PTHFFULD,PTHFCARC:
                                    PTHFDFIC,PTHFCNAM,PTHFCTTL,PTHFCEML,PTHFCMOB:
                                    PTHFFACD,PTHFNDFP,PTHFOCGR,PTHFARCE,PTHFIMCD:
-                                   PTHFDPRI,PTFNSPAR
+                                   PTHFDPRI,PTHFHGEX,PTFNSPAR
           GOTO      OVERLOCK IF LOCKED
           GOTO      OVERCOND IF OVER
           MOVE      DHFTACT,PHFTACT
@@ -100,7 +104,7 @@ RDKFUND1  MOVE      ZERO,OVRCD
                              DTHFUMTD,DTHFUCMX,PTHFBILN,PTHFFULD,PTHFCARC:
                              PTHFDFIC,PTHFCNAM,PTHFCTTL,PTHFCEML,PTHFCMOB:
                              PTHFFACD,PTHFNDFP,PTHFOCGR,PTHFARCE,PTHFIMCD:
-                             PTHFDPRI,PTFNSPAR
+                             PTHFDPRI,PTHFHGEX,PTFNSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DHFTACT,PHFTACT
           MOVE      DTHFUMTD,PTHFUMTD
@@ -115,7 +119,7 @@ RDPFUND1  MOVE      ZERO,OVRCD
                              DTHFUMTD,DTHFUCMX,PTHFBILN,PTHFFULD,PTHFCARC:
                              PTHFDFIC,PTHFCNAM,PTHFCTTL,PTHFCEML,PTHFCMOB:
                              PTHFFACD,PTHFNDFP,PTHFOCGR,PTHFARCE,PTHFIMCD:
-                             PTHFDPRI,PTFNSPAR
+                             PTHFDPRI,PTHFHGEX,PTFNSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DHFTACT,PHFTACT
           MOVE      DTHFUMTD,PTHFUMTD
@@ -134,7 +138,7 @@ WRFUND1   MOVE      ZERO,OVRCD
                                    DTHFUMTD,DTHFUCMX,PTHFBILN,PTHFFULD,PTHFCARC:
                                    PTHFDFIC,PTHFCNAM,PTHFCTTL,PTHFCEML,PTHFCMOB:
                                    PTHFFACD,PTHFNDFP,PTHFOCGR,PTHFARCE,PTHFIMCD:
-                                   PTHFDPRI,PTFNSPAR
+                                   PTHFDPRI,PTHFHGEX,PTFNSPAR
           TRAPCLR    IO
           RETURN  
 .
@@ -147,7 +151,7 @@ UPFUND1   MOVE      PTHFUMTD,DTHFUMTD
                              DTHFUMTD,DTHFUCMX,PTHFBILN,PTHFFULD,PTHFCARC:
                              PTHFDFIC,PTHFCNAM,PTHFCTTL,PTHFCEML,PTHFCMOB:
                              PTHFFACD,PTHFNDFP,PTHFOCGR,PTHFARCE,PTHFIMCD:
-                             PTHFDPRI,PTFNSPAR
+                             PTHFDPRI,PTHFHGEX,PTFNSPAR
           RETURN  
 .
 ULFUND1   UNLOCK    PATFN1A1
@@ -178,7 +182,7 @@ RDFUND2   MOVE      ZERO,OVRCD
                                    DTHFUMTD,DTHFUCMX,PTHFBILN,PTHFFULD,PTHFCARC:
                                    PTHFDFIC,PTHFCNAM,PTHFCTTL,PTHFCEML,PTHFCMOB:
                                    PTHFFACD,PTHFNDFP,PTHFOCGR,PTHFARCE,PTHFIMCD:
-                                   PTHFDPRI,PTFNSPAR
+                                   PTHFDPRI,PTHFHGEX,PTFNSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DHFTACT,PHFTACT
           MOVE      DTHFUMTD,PTHFUMTD
@@ -193,7 +197,7 @@ RDKFUND2  MOVE      ZERO,OVRCD
                              DTHFUMTD,DTHFUCMX,PTHFBILN,PTHFFULD,PTHFCARC:
                              PTHFDFIC,PTHFCNAM,PTHFCTTL,PTHFCEML,PTHFCMOB:
                              PTHFFACD,PTHFNDFP,PTHFOCGR,PTHFARCE,PTHFIMCD:
-                             PTHFDPRI,PTFNSPAR
+                             PTHFDPRI,PTHFHGEX,PTFNSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DHFTACT,PHFTACT
           MOVE      DTHFUMTD,PTHFUMTD
@@ -208,7 +212,7 @@ RDPFUND2  MOVE      ZERO,OVRCD
                              DTHFUMTD,DTHFUCMX,PTHFBILN,PTHFFULD,PTHFCARC:
                              PTHFDFIC,PTHFCNAM,PTHFCTTL,PTHFCEML,PTHFCMOB:
                              PTHFFACD,PTHFNDFP,PTHFOCGR,PTHFARCE,PTHFIMCD:
-                             PTHFDPRI,PTFNSPAR
+                             PTHFDPRI,PTHFHGEX,PTFNSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DHFTACT,PHFTACT
           MOVE      DTHFUMTD,PTHFUMTD
@@ -236,7 +240,7 @@ RDFUND3   MOVE      ZERO,OVRCD
                                    DTHFUMTD,DTHFUCMX,PTHFBILN,PTHFFULD,PTHFCARC:
                                    PTHFDFIC,PTHFCNAM,PTHFCTTL,PTHFCEML,PTHFCMOB:
                                    PTHFFACD,PTHFNDFP,PTHFOCGR,PTHFARCE,PTHFIMCD:
-                                   PTHFDPRI,PTFNSPAR
+                                   PTHFDPRI,PTHFHGEX,PTFNSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DHFTACT,PHFTACT
           MOVE      DTHFUMTD,PTHFUMTD
@@ -251,7 +255,7 @@ RDKFUND3  MOVE      ZERO,OVRCD
                              DTHFUMTD,DTHFUCMX,PTHFBILN,PTHFFULD,PTHFCARC:
                              PTHFDFIC,PTHFCNAM,PTHFCTTL,PTHFCEML,PTHFCMOB:
                              PTHFFACD,PTHFNDFP,PTHFOCGR,PTHFARCE,PTHFIMCD:
-                             PTHFDPRI,PTFNSPAR
+                             PTHFDPRI,PTHFHGEX,PTFNSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DHFTACT,PHFTACT
           MOVE      DTHFUMTD,PTHFUMTD
@@ -266,7 +270,7 @@ RDPFUND3  MOVE      ZERO,OVRCD
                              DTHFUMTD,DTHFUCMX,PTHFBILN,PTHFFULD,PTHFCARC:
                              PTHFDFIC,PTHFCNAM,PTHFCTTL,PTHFCEML,PTHFCMOB:
                              PTHFFACD,PTHFNDFP,PTHFOCGR,PTHFARCE,PTHFIMCD:
-                             PTHFDPRI,PTFNSPAR
+                             PTHFDPRI,PTHFHGEX,PTFNSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DHFTACT,PHFTACT
           MOVE      DTHFUMTD,PTHFUMTD

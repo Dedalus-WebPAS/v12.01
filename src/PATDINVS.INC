@@ -8,6 +8,8 @@
 .*                  WEB programmers if in doubt.                              *
 .
 . Modifications   :
+.         V12.01.01 01/12/2025 J.Tan             TSK 0946593
+.                   Added MCHGQMT for CMXMATRX - sorting Casemix MBS items
 .         V11.05.03 20/02/2025 Peter Vela        TSK 0939466
 .                   Added DVAWBILL for Eclipse WebServices DVAW
 .         V11.05.02 16/01/2024 J.Tan             TSK 0952533
@@ -286,6 +288,7 @@ MISCOUNT  FORM      6
 MISCDATE  DIM       8
 MCHGARR   DIM       9[999]
 MCHGAMT   FORM      12.2[999]
+MCHGQMT   FORM      12.2[999]
 MVENHOUR  FORM      6
 SORTDONE  FORM      1
 SWAPFLAG  FORM      1
