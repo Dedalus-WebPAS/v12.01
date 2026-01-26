@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 // Program   : patweb98.js
 //
@@ -203,6 +203,7 @@ function validateRecordID() {
 function validateVisit() {
   p=document.UpdateForm
   justifyRight(p.admissno)
+  UpCase(p.admissno);
   validateThis(2,p.admissno,p.fnam,ChkRecrdVis,p.sex,p.dob,p.pce,p.dum1,p.dum2,
   p.dat,p.typ,p.dum2,p.epsflag,p.epsno,p.admstats)
 

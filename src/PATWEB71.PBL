@@ -5,6 +5,9 @@
 .  
 . Modifications  :
 .----------------------------------------------------------------------------
+. V12.01.03 14/01/2025  Bella Turco    TSK 0951679
+.           Fixed LOS calculation to use CURRDATE not DDATE when discharged
+.           Fixed HITH calculation MCHG6800/MCHG6900
 . V12.01.02 11/11/2025  Bella Turco    TSK 0951679
 .           New tags MCHG6800-MCHG7000 for LOS and HITH calculations
 .           New routine CHKUDF00 to update admission/discharge UDF
@@ -3076,7 +3079,7 @@ CFPAYCOD  DIM       3        * 3M Codefinder PAY Code
 .------------------------------------------------------------------------------
 PRGID     INIT      "PATWEB71"
 PRGNAM    INIT      "Patient Invoice Print Server"      
-VERSION   INIT      "V12.01.02"
+VERSION   INIT      "V12.01.03"
 .------------------------------------------------------------------------------
 .
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -15801,6 +15804,11 @@ MCHG6700  WRITE     HTMLFILE;NZITFLAG;  * Item with NOT performed procedure flag
           GOTO      MCHG9999
 .
 MCHG6800  MOVE      ZERO,LOSDAYS
+          COMPARE   THREE,ASTAT
+          IF        !@EQUAL
+            MOVE      CURRDATE,DDATE
+          ENDIF
+.
           DAYSEP    ADATE,DDATE,LOSDAYS
           MOVE      LOSDAYS,KEY9
           SQUEEZE   KEY9
@@ -15813,6 +15821,8 @@ MCHG6900  MOVE      ADATE,FROMDATE
           MOVE      DDATE,TODATE
           CALL      RHIHDAYS                * Get HIH Days
 .
+          MOVE      ZERO,CALDAYS
+          MOVE      HIHLOS,CALDAYS
           MOVE      CALDAYS,KEY9
           SQUEEZE   KEY9
           MOVE      "Days",KEY4

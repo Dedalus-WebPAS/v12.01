@@ -6,6 +6,8 @@
 . Modifications :
 .
 .----------------------------------------------------------------------
+. V12.01.01 16/12/2025  Bella Turco     TSK 0949715
+.           Recompiled for EMRVISTM
 . V12.00.02 03/06/2025  J.Tan          TSK 0955096
 .           Added Alphanumeric visit number changes
 . V12.00.01 30/05/2025  Jacob Jackson   TSK 0955096
@@ -986,7 +988,7 @@ SP100     INIT      "                                   ":
 .
 .---------------------------------------------------------------------
 PRGID     INIT      "EMRWEB06"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Procedures, Diagnoses and Investigations Server"
 .---------------------------------------------------------------------
 .

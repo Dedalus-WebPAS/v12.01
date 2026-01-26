@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //=============================================================================
 // Program   : nhiweb99.js
 //
@@ -89,6 +89,72 @@ function UpdateForm01() {
         "&admissno=" + document.PatientLinks.admissno.value.replace(/ /g,"+") ;
     }
 
+    SubmitHidden(document.NHIUpdate);
+  }
+}//end UpdateForm
+function UpdateForm02() {
+  if(document.NHIUpdate.saveloc2.checked==true || document.NHIUpdate.saveloc3.checked==true) {
+    document.NHIUpdate.savelocl.value="Y";
+  }
+
+  f = document.NHIUpdate;
+  UpCase(document.NHIUpdate.nhmas001)
+  UpCase(document.NHIUpdate.nhmas002)
+  UpCase(document.NHIUpdate.nhmas003)
+  UpCase(document.NHIUpdate.nhmas004)
+  UpCase(document.NHIUpdate.nhmas006)
+  UpCase(document.NHIUpdate.nhmas007)
+  UpCase(document.NHIUpdate.nhmas008)
+  UpCase(document.NHIUpdate.nhmas009)
+  UpCase(document.NHIUpdate.nhmas010)
+
+  if(document.NHIUpdate.ptmas021.value.substr(3,1)=="1") {
+    document.NHIUpdate.nhmas014.value="Y"}
+  else if (document.NHIUpdate.ptmas021.value.substr(3,1)=="2") {
+    document.NHIUpdate.nhmas014.value="N"}
+
+  if (CheckAlias()) {
+    if(document.NHIUpdate.emerflag.value=="4") {
+      document.NHIUpdate.redirect.value="patweb89.pbl?reportno=1&template=005"+
+        "&systflag=1" +
+        "&urnumber=" + document.PatientLinks.urnumber.value.replace(/ /g,"+") +
+        "&admissno=" + document.PatientLinks.admissno.value.replace(/ /g,"+") ;
+    }
+    var skipaliasQues = 0
+    if (VariableNameExists('SaveAliasToTicked')) {
+      if (SaveAliasToTicked == true && f.nhmas019.checked == true) {
+        skipaliasQues = 1
+      }
+    }
+    if (skipaliasQues == 0) {
+      AliasQues();
+      if(!IsDirtyNHI(NHIUpdate)) { NHIUpdate.nzpmichg.value = "1"; }
+    }
+    else {
+      f.nhmas019.value = "1";
+      if(!IsDirtyNHI(NHIUpdate)) { NHIUpdate.nzpmichg.value = "1"; }
+      SubmitHidden(f);
+    }
+  }
+  else {
+    if(document.NHIUpdate.emerflag.value=="1") {
+      document.NHIUpdate.redirect.value="emrweb02.pbl?reportno=1&template=001"+
+        "&urnumber=" + document.PatientLinks.urnumber.value.replace(/ /g,"+") +
+        "&admissno=" + document.PatientLinks.admissno.value.replace(/ /g,"+") ;
+    }
+    if(document.NHIUpdate.emerflag.value=="2") {
+      document.NHIUpdate.redirect.value="emrweb02.pbl?reportno=2&template=002"+
+        "&urnumber=" + document.PatientLinks.urnumber.value.replace(/ /g,"+") +
+        "&admissno=" + document.PatientLinks.admissno.value.replace(/ /g,"+") ;
+    }
+    if(document.NHIUpdate.emerflag.value=="4") {
+      document.NHIUpdate.redirect.value="patweb89.pbl?reportno=1&template=005"+
+        "&systflag=1" +
+        "&urnumber=" + document.PatientLinks.urnumber.value.replace(/ /g,"+") +
+        "&admissno=" + document.PatientLinks.admissno.value.replace(/ /g,"+") ;
+    }
+
+    if(!IsDirtyNHI(NHIUpdate)) { NHIUpdate.nzpmichg.value = "1"; }
     SubmitHidden(document.NHIUpdate);
   }
 }//end UpdateForm
@@ -314,4 +380,51 @@ function SetAliasFlag() {
       f.nhmas019.checked = true;
     }
   }
+}
+//==========================================================================
+// Scan all select lists & checkboxes in form & add selected/checked attributes
+// to all selectedIndexes & checked checkboxes (needed for IsDirtyNHI())
+//==========================================================================
+function addSelectedAttr(eForm) {
+  for (var i=0; i < eForm.length; i++) {
+    var eElem = eForm.elements[i];
+    if (eElem.type == "checkbox" || eElem.type == "radio") {
+      if (eElem.checked) {
+        eElem.setAttribute('checked','true');
+      }
+    }
+    if (eElem.tagName == "SELECT") {
+      for (var j=0; j < eElem.options.length; j++) {
+        var option = eElem.options[j]
+        if (j==eElem.selectedIndex) {
+          option.setAttribute('selected',true);
+        }
+      }
+    }
+  }
+}
+//==========================================================================
+// Scan all elements in form and return true if any elements have been changed
+//==========================================================================
+function IsDirtyNHI(eForm) {
+  if (eForm.nzpmichg.value=="1") { return true; }
+  for (var i=0; i<eForm.length; i++) {
+    var eElem = eForm.elements[i];
+    if (eElem.type == "text" || eElem.type == "textarea") {
+      if(eElem.name) {
+        if(eElem.name=="prcom001") { continue; }
+      }
+      if (trim(eElem.value) != trim(eElem.defaultValue))  {
+        return true; }
+    }
+    if (eElem.type == "checkbox" || eElem.type == "radio") {
+      if (eElem.checked != eElem.defaultChecked && !eElem.disabled) {
+        return true; }
+    }
+    if (eElem.tagName == "SELECT") {
+      if (!eElem[eElem.selectedIndex].defaultSelected) {
+        return true; }
+    }
+  }
+  return false;
 }

@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="nz">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -181,6 +181,7 @@ function UpdatePageNZ() {
       document.UpdateForm.nextpage.value=9
     }
     SetOptOutSMS();
+    if(!IsDirtyNHI(UpdateForm)) { UpdateForm.nzpmichg.value = "1"; }
     setTimeout('document.UpdateForm.UpdateButton.disabled=false',1000);
     document.UpdateForm.submit()
   }
@@ -208,7 +209,8 @@ function validateDemographicsConfirmedDate() {
 %START.OF.PAGE
 <body onLoad="PageLoad(event);valClaimCode();DisplayResidency();
               displayReferralFields();showMobilePhoneDet();DispPrefGivenName();
-              ChkIdentifyGenderPronounTitle(document.UpdateForm);">
+              ChkIdentifyGenderPronounTitle(document.UpdateForm);
+              addSelectedAttr(UpdateForm);">
 <div id=PatientHeading></div>
 <script type="text/javascript">
 PatientURN="%EMRWEB02.01.003";
@@ -292,6 +294,7 @@ InsertEmergencyHeader()
   <input type=hidden name=nhmas003 value="%EMRWEB02.01.070.005">
   <input type=hidden name=nhmas004 value="%EMRWEB02.01.070.006">
   <input type=hidden name=nhmas005 value="%EMRWEB02.01.070.007">
+  <input type=hidden name=nzpmichg value="">
 
 <table align=center width=100% border=0 cellspacing=0 cellpadding=0>
   <tr><td colspan=6 class=HeadingCell align=center>

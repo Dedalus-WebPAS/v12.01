@@ -7,6 +7,8 @@
 . Modifications : 
 .
 .-------------------------------------------------------------------------
+. V12.01.02 14/01/2026  Ebon Clements  TSK 0963446
+.           Display Cab diet description from cat MJ PMNUDTYP - CBEDK000 - 33
 . V12.01.01 15/12/2025  PJ Le Febour   TSK 0963446
 .           Added print Diet desc alongside Diet Icon for CAB        
 . V12.00.08 07/10/2025  Ebon Clements  TSK 0968096
@@ -2504,7 +2506,7 @@ TZFILE    FILE      ASCII, FIXED=256
 .
 .------------------------------------------------------------------------------
 PRGID     INIT      "PATWEB93"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Ward Patient List Server"
 .------------------------------------------------------------------------------
 .
@@ -14974,53 +14976,21 @@ CBEDK815  WRITE     HTMLFILE;"#",";                                     * 15
 .
           WRITE     HTMLFILE;"#"";
 .
-          MOVE      "DC",CATEGORY
-          MOVE      ADIET,CODE
+          MOVE      "MJ",CATEGORY
+          MOVE      PMNUDTYP,CODE
           CALL      GETCOD00
           MOVE      TDESC,DIETDESC
 .
-          IF        EXTRDIET = 1
-            MOVE      "MJ",CATEGORY
-            MOVE      PMNUML01,CODE
-            CALL      GETCOD00
-            MOVE      TDESC,DIETDSC2
-            STRIP     DIETDSC2
-.
-            MOVE      "MJ",CATEGORY
-            MOVE      PMNUML03,CODE
-            CALL      GETCOD00
-            MOVE      TDESC,DIETDSC3
-            STRIP     DIETDSC3
-.
-            MOVE      "MJ",CATEGORY
-            MOVE      PMNUML05,CODE
-            CALL      GETCOD00
-            MOVE      TDESC,DIETDSC4
-            STRIP     DIETDSC4
-.
-            MOVE      "MJ",CATEGORY
-            MOVE      PMNUML07,CODE
-            CALL      GETCOD00
-            MOVE      TDESC,DIETDSC5
-            STRIP     DIETDSC5
-.
+          MATCH     "1",PMNUFAST                                        * 33
+          IF        @EQUAL
+            WRITE    HTMLFILE;"<img src='../images/DietIcon.gif' ":
+                               " class=ListIcon onclick=UpdateDiet('":
+                      URNUMBER,"','",ADMISSNO,"')> ",DIETDESC,"<br>":
+                      "Fasting","#",";
+          ELSE
             WRITE     HTMLFILE;"<img src='../images/DietIcon.gif' ":
                                " class=ListIcon onclick=UpdateDiet('":
-                               URNUMBER,"','",ADMISSNO,"')>";
-.
-            WRITE     HTMLFILE;"#",";
-          ELSE IF
-            MATCH     SP1,PMNUFAST
-            IF        @EQUAL
-              WRITE     HTMLFILE;"<img src='../images/DietIcon.gif' ":
-                                 " class=ListIcon onclick=UpdateDiet('":
-                                 URNUMBER,"','",ADMISSNO,"')> ",DIETDESC,"#",";
-            ELSE
-               WRITE    HTMLFILE;"<img src='../images/DietIcon.gif' ":
-                                 " class=ListIcon onclick=UpdateDiet('":
-                        URNUMBER,"','",ADMISSNO,"')> ",DIETDESC,"<br>":
-                        ",","<br>","Fasting","#",";
-            ENDIF
+                               URNUMBER,"','",ADMISSNO,"')> ",DIETDESC,"#",";
           ENDIF
 .
           WRITE     HTMLFILE;"#"",SP1,"#");"                            * XX

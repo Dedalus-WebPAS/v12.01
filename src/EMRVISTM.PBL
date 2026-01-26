@@ -3,6 +3,8 @@
 .
 . Modifications :
 .--------------------------------------------------------
+. V12.01.01 16.12.2025  Bella Turco    TSK 0949715
+.           Added missing code to select Expected Purchaser dropdown EMRB8102
 . V11.04.01 24.06.2024  DA Sarkies     TSK 0900069
 .           Changed SQUEEZE to STRIP for displaying Drs Name
 . V11.02.01 30/09/2022  Ebon Clements  TSK 0900069
@@ -2150,6 +2152,7 @@ EMRB8101  MOVE      "HP",CATEGORY
           GOTO      EMRB9999
 .
 EMRB8102  MOVE      "HP",CATEGORY
+          MOVE      EMVIPURC,CODE
           CALL      CODSEL00
           GOTO      EMRB9999
 .

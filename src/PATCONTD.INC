@@ -10,6 +10,13 @@
 .  *     Modifications:                                                       *
 .  *                                                                          *
 .  ****************************************************************************
+.  *     V12.01.03  19/12/2025  Davin            TSK 0961944                  *
+.  *                Added PATCN701 - Send/Receive NTE segment in HL7 M02      *
+.  *                07/01/2026  Alina            TSK 0958930                  *
+.  *                Added PATCN702/PTCNBDTE - Added Broadcast a Unique ID in  *
+.  *                PV1.50 for a Bed Transfer Event                           *
+.  *     V12.01.02  18/12/2025  J.Tan            TSK 0956147                  *
+.  *                Added PATCN700 - HAC Flags for Risk Factors Start Date-ABF*
 .  *     V12.01.01  17/12/2025  Zumin Yu         TSK 0968747                  *
 .  *                Added CSURG1, CMURG1, CSURG2, CMURG2, CSURG3, CMURG3,     *
 .  *                CSURG4, CMURG4, CIPRG, COPRG, CAERG, CNBRG, CCNOTES,      *
@@ -1791,6 +1798,10 @@ PATCN696  DIM       1     * CMDISD - Prefix for Disability Disease Codes
 PATCN697  DIM       1     * CMOPRT - Prefix for Post-Surgical Operation Codes
 PATCN698  DIM       1     * CMDISL - Prefix for Length of Stay Disease Codes
 PATCN699  DIM       1     * CMDISM - Prefix for Morphology Disease Codes
+PATCN700  DIM       8     * PTCNHACD -HAC Flags for Risk Factors Start Date(ABF)
+PATCN701  DIM       8     * PTCNNTES - Send/Receive NTE segment in HL7 M02
+PATCN702  DIM       1     * Broadcast a Unique ID in PV1.50 for a Bed Transfer
+.                           Event (0 or Blank = Disabled 1 = Enabled)
 .
 IBACN001  DIM       1     * Multi hospital
 IBACN002  DIM       1     * Using Medclaims (0=No/1=Yes)

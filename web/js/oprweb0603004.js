@@ -1,6 +1,15 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //=============================================================================
 
+function ChkInv() {
+   if(document.UpdateForm.caseinvc!=undefined){
+     if (document.UpdateForm.caseinvc.value == "1") {
+       alert("Theatre Case has been invoiced.")
+       return;
+     }
+   }
+   AddData();
+}
 function AddData() {
     caseKeys=UpdateForm.casekeys.value.replace(/ /g,"+");
     teamNumb=UpdateForm.teamnumb.value

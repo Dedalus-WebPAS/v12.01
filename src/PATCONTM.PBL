@@ -8,6 +8,15 @@
 .  *     Modifications:                                                       *
 .  *                                                                          *
 .  ****************************************************************************
+.  *     V12.01.04  08/01/2026  Bella Turco      TSK 0951679                  *
+.  *                Move PATCN629/630 into field even if ZERO/blank           *
+.  *     V12.01.03  19/12/2025  Davin            TSK 0961944                  *
+.  *                Added PATCN701/PTCNNTES - Send/Receive NTE segment in M02 *
+.  *                07/01/2026  Alina            TSK 0958930                  *
+.  *                Added PATCN702/PTCNBDTE - Added Broadcast a Unique ID in  *
+.  *                PV1.50 for a Bed Transfer Event                           *
+.  *     V12.01.02  18/12/2025  J.Tan            TSK 0956147                  *
+.  *                Added PTCNHACD - HAC Flags for Risk Factors Start Date-ABF*
 .  *     V12.01.01  17/12/2025  Zumin Yu         TSK 0968747                  *
 .  *                Added CSURG1, CMURG1, CSURG2, CMURG2, CSURG3, CMURG3,     *
 .  *                CSURG4, CMURG4, CIPRG, COPRG, CAERG, CNBRG, CCNOTES,      *
@@ -1722,6 +1731,9 @@ CPPT0000  MOVE      Z70,PATCN001
           MOVE      Z70,PATCN697
           MOVE      Z70,PATCN698
           MOVE      Z70,PATCN699
+          MOVE      Z70,PATCN700
+          MOVE      Z70,PATCN701
+          MOVE      Z70,PATCN702
 .
           MOVE      Z70,IBACN001
           MOVE      Z70,IBACN002
@@ -2202,7 +2214,8 @@ PTCO0000  BRANCH    FLDITMNO,PTCO0010,PTCO0020,PTCO0030,PTCO0040,PTCO0050:
                              PTCO5810,PTCO5820,PTCO5830,PTCO5840,PTCO5850: * 585
                              PTCO5860,PTCO5870,PTCO5880,PTCO5890,PTCO5900: * 590
                              PTCO5910,PTCO5920,PTCO5930,PTCO5940,PTCO5950: * 595
-                             PTCO5960,PTCO5970,PTCO5980,PTCO5990
+                             PTCO5960,PTCO5970,PTCO5980,PTCO5990,PTCO6000: * 600
+                             PTCO6010,PTCO6020
 .
           WRITE     HTMLFILE;"Invalid IBA tag";
           GOTO      PTCO9999
@@ -4393,6 +4406,22 @@ PTCO5980  WRITE     HTMLFILE;CMDISL;  * Prefix for Length of Stay Disease Codes
 PTCO5990  WRITE     HTMLFILE;CMDISM;  * Prefix for Morphology Disease Codes
           GOTO      PTCO9999
 .
+PTCO6000  MATCH     SP70,PTCNHACD     * HAC Flags for Risk factor Start date
+          GOTO      PTCO9999 IF EQUAL
+.
+          UNPACK    PTCNHACD,CCENT,CYEAR,CMON,CDAY
+          MOVE      CMON,F2
+          LOAD      MTHNAM3,F2,JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEP,OCT,NOV,DEC
+          WRITE     HTMLFILE;CDAY,SP1,MTHNAM3,SP1,CCENT,CYEAR;
+          GOTO      PTCO9999
+.
+PTCO6010  WRITE     HTMLFILE;PTCNNTES;   * Send/Receive NTE segment in HL7 M02
+          GOTO      PTCO9999
+.
+PTCO6020  WRITE     HTMLFILE;PTCNBDTE;   * Added Broadcast a Unique ID in
+.                                        * PV1.50 for a Bed Transfer Event
+          GOTO      PTCO9999
+.
 PTCO9999  RETURN
 +
 .------------------------------------------------------------
@@ -4809,7 +4838,8 @@ SPPAT000  MOVE      ZERO,EXIT
                        SPPAT681,SPPAT682,SPPAT683,SPPAT684,SPPAT685:
                        SPPAT686,SPPAT687,SPPAT688,SPPAT689,SPPAT690:
                        SPPAT691,SPPAT692,SPPAT693,SPPAT694,SPPAT695:
-                       SPPAT696,SPPAT697,SPPAT698,SPPAT699
+                       SPPAT696,SPPAT697,SPPAT698,SPPAT699,SPPAT700:
+                       SPPAT701,SPPAT702
 .
           MOVE      ONE,EXIT
           GOTO      SPPAT999
@@ -7098,6 +7128,22 @@ SPPAT698  MOVE      QRYDATA,PATCN698
           GOTO      SPPAT999
 .
 SPPAT699  MOVE      QRYDATA,PATCN699
+          GOTO      SPPAT999
+.
+SPPAT700  UNPACK    QRYDATA,CDAY,KEY1,MTHNAM3,KEY1,CCENT,CYEAR
+          MATCH     "99",CCENT
+          IF        @EQUAL
+            MOVE      "99999999",PATCN700
+          ELSE
+            CALL      SETMTH00                *Set CMON from MTHNAM3
+            PACK      PATCN700,CCENT,CYEAR,CMON,CDAY
+          ENDIF
+          GOTO      SPPAT999
+.
+SPPAT701  MOVE      QRYDATA,PATCN701
+          GOTO      SPPAT999
+.
+SPPAT702  MOVE      QRYDATA,PATCN702
           GOTO      SPPAT999
 .
 SPPAT999  RETURN
@@ -10323,15 +10369,9 @@ MVPT0000  MATCH     Z70,PATCN001
             MOVE      PATCN628,PTCNA04E * Receive A04 (New EMR Triage Visit) Msg
           ENDIF
 .
-          COMPARE   ZERO,PATCN629
-          IF        !@EQUAL
-            MOVE      PATCN629,PTCNCMAU * Which Adm UDF for Casemix matrix
-          ENDIF
+          MOVE      PATCN629,PTCNCMAU * Which Adm UDF for Casemix matrix
 .
-          COMPARE   ZERO,PATCN630
-          IF        !@EQUAL
-            MOVE      PATCN630,PTCNCMDU * Which Dis UDF for Casemix matrix
-          ENDIF
+          MOVE      PATCN630,PTCNCMDU * Which Dis UDF for Casemix matrix
 .
           MATCH     Z70,PATCN631
           IF        !@EQUAL
@@ -10679,6 +10719,22 @@ MVPT0000  MATCH     Z70,PATCN001
           MATCH     Z70,PATCN699
           IF        !@EQUAL
             MOVE      PATCN699,CMDISM * Prefix for Morphology Disease Codes
+          ENDIF
+.
+          MATCH     Z70,PATCN700
+          IF        !@EQUAL
+            MOVE      PATCN700,PTCNHACD * HAC Flags for Risk Factors Start date
+          ENDIF
+.
+          MATCH     Z70,PATCN701
+          IF        !@EQUAL
+            MOVE      PATCN701,PTCNNTES * Send/Receive NTE segment in HL7 M02
+          ENDIF
+.
+          MATCH     Z70,PATCN702
+          IF        !@EQUAL
+            MOVE      PATCN702,PTCNBDTE  * Broadcast a Unique ID in PV1.50
+.                                          for a Bed Transfer Event
           ENDIF
 .
           MATCH     Z70,IBACN001

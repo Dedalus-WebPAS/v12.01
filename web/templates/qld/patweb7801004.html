@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.01">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="qld">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -23,6 +23,7 @@ document.write("Sub Acute Episode");
   <input type=hidden name=acuttype value="3">
   <input type=hidden name=admdate  value="%PATWEB78.01.102">
   <input type=hidden name=disdate  value="%PATWEB78.01.301">
+  <input type=hidden name=currdate value="%STANDARD.01.015">
 
 <table cellspacing=0 cellpadding=1 border=0 width=100% align=center>
 <tr><td colspan=2 class=HeadingCell align=center>
@@ -71,7 +72,7 @@ Episode: %PATWEB78.01.220 &nbsp;&nbsp;&nbsp;&nbsp;
                  value="%PATWEB78.01.227" class=""
                  title="Impairment Code"
                  onblur="valImpairmentCode(ptrde021,d_ptrde021);
-                 getDefaultFields(ptrde021,ptrde017);"/>
+                 getDefaultFields(ptrde021,document.AddForm.disdate);"/>
           <input type=text name=d_ptrde021 title="Impairment Code Description"
                  class=readonly size=24 value="%PATWEB78.01.234" 
                  id=d_ptrde021>
@@ -129,8 +130,10 @@ function getDefaultFields(icde,sdat){
       document.AddForm.ptrde025.value="";
       document.AddForm.snapdesc.value="";
       return; }
+
   if (isWhitespace(sdat.value)) {
-      return; }
+      sdat.value=document.AddForm.currdate.value }
+
   var serverURL= "../cgi-bin/patweb78.pbl?reportno=3&remoteno=3" +
        "&valdicde=" + icde.value.substr(0,7).replace(/ /g,"+") +
        "&valdsdat=" + sdat.value.substr(0,11).replace(/ /g,"+");

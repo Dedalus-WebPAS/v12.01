@@ -5,6 +5,8 @@
 .
 . Modifications :
 .----------------------------------------------------------------------
+. V12.01.01 12/01/2026  J.Tan         TSK 0970926
+.           Mod CHGITD00 to use default claim for favourite item description
 . V12.00.01 23/09/2025  J.Tan         TSK 0966921
 .           Mod to create permanent tempfile for NZ Invoice/Revenue breakdown
 . V11.05.03 27/03/2022 Alina Bhari    Task 0957676 
@@ -767,7 +769,7 @@ DDTEDESC  DIM       11
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "PATWEB77"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "General Table Maintenance"
 .----------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -14620,8 +14622,17 @@ WRTROW99  RETURN
 .-------------------------------------------------------------------------------
 CHGITD00  MOVE      PMUFCODE,CHRITMDS 
 .
+          MOVE      PTCNDCLM,DIM3            * use default Claim code
+          IF        IBCNMHOS=1
+            PACK      KEY3,WBSEHOSP,SP70
+            CALL      RDPTHSP1
+            IF        OVRCD=0
+              MOVE      PTHSDCLM,DIM3        * Use Hospital default Claim
+            ENDIF
+          ENDIF
+.
           IF        CFEETYP=FIVE
-            PACK      KEY37,PMUFCODE,SP70
+            PACK      KEY37,PMUFCODE,DIM3,PMUFHOSP,SP70
             CALL      RSNZMCH3
 CHGITD20    CALL      RKNZMCH3
             BRANCH    OVRCD,CHGITD99
@@ -14632,18 +14643,19 @@ CHGITD20    CALL      RKNZMCH3
             MATCH     "1",NZMCACFL
             GOTO      CHGITD20 IF EQUAL
 .
+            MATCH     NZMCEFDT,CURRDATE       * check effective date
+            GOTO      CHGITD20 IF LESS
+.
+            MATCH     SP70,NZMCEEDT
+            IF        !@EQUAL
+              MATCH     CURRDATE,NZMCEEDT
+              GOTO      CHGITD20 IF LESS
+            ENDIF
+.
             MOVE      NZMCDESC,CHRITMDS
           ELSE
             PACK      KEY9,PMUFCODE,SP70
-            IF        IBCNMHOS=1
-              PACK      KEY3,WBSEHOSP,SP70
-              CALL      RDPTHSP1
-              BRANCH    OVRCD,CHGITD30
-              PACK      KEY29,PTHSDCLM,SP6,SP3,KEY9,CURRDATE,SP10
-            ELSE
-CHGITD30      PACK      KEY29,PTCNDCLM,SP6,SP3,KEY9,CURRDATE,SP10
-            ENDIF
-.
+            PACK      KEY29,DIM3,SP6,SP3,KEY9,CURRDATE,SP10
             CALL      PATMCHRD
             IF        EXIT=ZERO
               MOVE      MDESC,CHRITMDS

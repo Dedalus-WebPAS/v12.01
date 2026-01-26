@@ -5,6 +5,8 @@
 .
 . Modifications  :
 .------------------------------------------------------------------------------
+. V12.01.02  13/01/2026  Zumin Yu      TSK 0964889
+.            Added new tag at MISC0380 to check booking instructions comment 
 . V12.01.01  16/12/2025  Ebon Clements TSK 0970431
 .            Default the case end date/time to the close rerral date/time if
 .            auto closing the primary referral - ALLEVT70
@@ -2422,7 +2424,7 @@ SHOWACTV  DIM       1             * Flag for showing active clinics only
 
 .******************************************************************************
 PRGID     INIT      "ALLWEB02"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Allied Health Referral Information Server"
 .******************************************************************************
           CALL      WEBINT00                * Initialise FIFO Etc.
@@ -10740,7 +10742,7 @@ MISC0000  BRANCH    FLDITMNO,MISC0010,MISC0020,MISC0030,MISC0040,MISC0050:
                              MISC0210,MISC0220,MISC0230,MISC0240,MISC0250:
                              MISC0260,MISC0270,MISC0280,MISC0290,MISC0300:
                              MISC0310,MISC0320,MISC0330,MISC0340,MISC0350:
-                             MISC0360,MISC0370
+                             MISC0360,MISC0370,MISC0380
           GOTO      MISC9999
 .
 MISC0010  WRITE     HTMLFILE;PTVITYPE;       * Type of visit
@@ -10999,6 +11001,9 @@ MISC0360  WRITE     HTMLFILE;REFREJCT;
           GOTO      MISC9999
 .
 MISC0370  WRITE     HTMLFILE;VALDTIME;
+          GOTO      MISC9999
+.
+MISC0380  CALL      BICOMM00           * Booking Instructions comment exist?
           GOTO      MISC9999
 .
 MISC9999  RETURN
@@ -12872,6 +12877,27 @@ AVNT9000  PACK      KEY10,USERID,SP70       * Restore logged in user
           CALL      RDWBSE1
 
 AVNT9999  RETURN
++
+.------------------------------------------------------------------------------
+. Output referal booking instruction comments exist flag
+.------------------------------------------------------------------------------
+BICOMM00  PACK      KEY17,ADMISSNO,ZERO,ZERO,FIVE,Z70
+          CALL      RSVSMDT1
+BICOMM20  CALL      RPVSMDT1                * Read last notes header
+          BRANCH    OVRCD,BICOMM99
+.
+          MATCH     ADMISSNO,VSMDVISN       * Correct Visit
+          GOTO      BICOMM99 IF NOT EQUAL
+.
+          MATCH     "005",VSMDTYPE          * Booking instructions
+          GOTO      BICOMM99 IF NOT EQUAL
+.
+          MATCH     "1",VSMDDELT            * Skip if deleted
+          GOTO      BICOMM20 IF EQUAL
+.
+          WRITE     HTMLFILE;ONE;
+.
+BICOMM99  RETURN
 +
 .------------------------------------------------------------
 .         Get default (from PMI) hcp practice provider number

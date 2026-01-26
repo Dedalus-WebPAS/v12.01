@@ -5,6 +5,8 @@
 .
 . Modifications  :
 .----------------------------------------------------------------------
+. V12.01.01 21/01/2026  Alina Bhari    TSK 0946088
+.           Corrected last login for the external password managment
 . V12.00.01 24/09/2025  Alina Bhari    TSK 0946088
 .           Added Functionality to add login cookied in browser
 .           - MAIN2600,COKIEFLG,WEBLOG30
@@ -710,7 +712,7 @@ MENUTA02  INIT      "Pop Up Frame"
 MENUTA03  INIT      "New Window"
 .------------------------------------------------------------
 PRGID     INIT      "WEBSEC01"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Web Security Login Web Server"
 .------------------------------------------------------------
 .         MAIN0000  Mainline
@@ -992,11 +994,11 @@ WEBLOG00  MOVE      ZERO,F1
           REP       " 0",WBSEEXP
           MOVE      WBSEEXP,EXPIRY
 .
-          COMPARE   ONE,COKIEFLG
-          GOTO      WEBLOG30 IF EQUAL
-.
           COMPARE   TODAY,EXPIRY
           IF        @LESS | @EQUAL
+            COMPARE   ONE,COKIEFLG          * Setting login cookies with no redirect
+            GOTO      WEBLOG30 IF EQUAL
+.
             GOTO      WEBLOG60
           ENDIF 
 .
@@ -1010,6 +1012,9 @@ WEBLOG10  PACK      KEY10,WBSEUID
           MOVE      CTIMEIS,WBSELACT
 .
           CALL      UPWBSE1               * Update Date & Time Last Accessed
+.
+          COMPARE   ONE,COKIEFLG          * Setting login cookies with no redirect
+          GOTO      WEBLOG30 IF EQUAL
 .
 WEBLOG11  MATCH     SP70,WBSEDIR
           GOTO      WEBLOG80 IF EQUAL

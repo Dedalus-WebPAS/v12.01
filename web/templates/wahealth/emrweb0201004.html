@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -369,6 +369,7 @@ function readOnlyTreatingNurDateTime() {
   }
 }
 function TreatingDoctorDate() {
+  p=document.UpdateForm;
   if(!checkDate(UpdateForm.emvitrdd,UpdateForm.emvitrdd.title)) {
    return;
   }
@@ -376,8 +377,8 @@ function TreatingDoctorDate() {
     if(isWhitespace(UpdateForm.emvitrdd.value)) {
       alert(UpdateForm.emvitrdd.title + " is a required field.\n" +
            "Please enter it now." )
-      UpdateForm.emvitrdd.value=UpdateForm.emvitrdd.defaultValue;
-      UpdateForm.emvitrdd.focus();
+      p.emvitrdd.value=p.emvitrdd.defaultValue;
+      FocusDelay(p.emvitrdd);
       return;
     }
   }
@@ -421,6 +422,28 @@ function TreatingDoctorDate() {
       }
     }
   }
+  if (!isWhitespace(document.UpdateForm.emviddat.value) &&
+      !isWhitespace(document.UpdateForm.emvitrdd.value)) {
+    if(SetDateYYYYMMDD(document.UpdateForm.emvitrdd.value) >
+       SetDateYYYYMMDD(document.UpdateForm.emviddat.value)) {
+      alert("Treating Doctor Date cannot be after the Discharge Date.");
+      p.emvitrdd.value=p.emvitrdd.defaultValue;
+      FocusDelay(p.emvitrdd);
+      return;
+    } else {
+      if (SetDateYYYYMMDD(document.UpdateForm.emvitrdd.value) ==
+          SetDateYYYYMMDD(document.UpdateForm.emviddat.value) &&
+          !isWhitespace(document.UpdateForm.emvidtim.value) &&
+          !isWhitespace(document.UpdateForm.emvitrdt.value) &&
+          document.UpdateForm.emvitrdt.value >
+          document.UpdateForm.emvidtim.value) {
+        alert("Treating Doctor Time cannot be after the Discharge Time.");
+        p.emvitrdt.value=p.emvitrdt.defaultValue;
+        FocusDelay(p.emvitrdt);
+        return;
+      }
+    }
+  }
   if(document.UpdateForm.emvitrdd.value !=
      document.UpdateForm.emvitrdd.defaultValue) {
     RemoteTreatingDocDateTime();
@@ -429,6 +452,7 @@ function TreatingDoctorDate() {
   }
 }
 function TreatingDoctorTime() {
+  p=document.UpdateForm;
   if(!checkTime(UpdateForm.emvitrdt,UpdateForm.emvitrdt.title)) {
    return;
   }
@@ -436,8 +460,8 @@ function TreatingDoctorTime() {
     if(isWhitespace(UpdateForm.emvitrdt.value)) {
       alert(UpdateForm.emvitrdt.title + " is a required field.\n" +
            "Please enter it now." )
-      UpdateForm.emvitrdt.value=UpdateForm.emvitrdt.defaultValue;
-      UpdateForm.emvitrdd.focus();
+      p.emvitrdt.value=p.emvitrdt.defaultValue;
+      FocusDelay(p.emvitrdt);
       return;
     }
   }
@@ -485,6 +509,29 @@ function TreatingDoctorTime() {
       }
     }
   }
+  if (!isWhitespace(document.UpdateForm.emviddat.value) &&
+      !isWhitespace(document.UpdateForm.emvidtim.value) &&
+      !isWhitespace(document.UpdateForm.emvitrdd.value) &&
+      !isWhitespace(document.UpdateForm.emvitrdt.value)) {
+    if(SetDateYYYYMMDD(document.UpdateForm.emvitrdd.value) >
+       SetDateYYYYMMDD(document.UpdateForm.emviddat.value)) {
+      alert("Treating Doctor Date cannot be after the Discharge Date.");
+      p.emvitrdd.value=p.emvitrdd.defaultValue;
+      return;
+    } else {
+      if (SetDateYYYYMMDD(document.UpdateForm.emviddat.value) ==
+          SetDateYYYYMMDD(document.UpdateForm.emvitrdd.value) &&
+          !isWhitespace(document.UpdateForm.emvidtim.value) &&
+          !isWhitespace(document.UpdateForm.emvitrdt.value) &&
+          document.UpdateForm.emvitrdt.value >
+          document.UpdateForm.emvidtim.value) {
+        alert("Treating Doctor Time cannot be after the Disharge Time.");
+        p.emvitrdt.value=p.emvitrdt.defaultValue;
+        FocusDelay(p.emvitrdt);
+        return;
+      }
+    }
+  }
   SetCurrentDateTimeNoFocus(document.UpdateForm.curdtvar,
                      document.UpdateForm.curtmvar);
   if (!isWhitespace(document.UpdateForm.emvitrdd.value) &&
@@ -506,6 +553,7 @@ function TreatingDoctorTime() {
   }
 }
 function TreatingNurseDate() {
+  p=document.UpdateForm;
   if(!checkDate(UpdateForm.emvitndd,UpdateForm.emvitndd.title)) {
    return;
   }
@@ -514,7 +562,7 @@ function TreatingNurseDate() {
       alert(UpdateForm.emvitndd.title + " is a required field.\n" +
            "Please enter it now." )
       UpdateForm.emvitndd.value=UpdateForm.emvitndd.defaultValue;
-      UpdateForm.emvitndd.focus();
+      FocusDelay(p.emvitndd);
       return;
     }
   }
@@ -558,6 +606,28 @@ function TreatingNurseDate() {
       }
     }
   }
+  if (!isWhitespace(document.UpdateForm.emviddat.value) &&
+      !isWhitespace(document.UpdateForm.emvitndd.value)) {
+    if(SetDateYYYYMMDD(document.UpdateForm.emvitndd.value) >
+       SetDateYYYYMMDD(document.UpdateForm.emviddat.value)) {
+      alert("Treating Nurse Date cannot be after the Discharge Date.");
+      p.emvitndd.value=p.emvitndd.defaultValue;
+      FocusDelay(p.emvitndd);
+      return;
+    } else {
+      if (SetDateYYYYMMDD(document.UpdateForm.emvitndd.value) ==
+          SetDateYYYYMMDD(document.UpdateForm.emviddat.value) &&
+          !isWhitespace(document.UpdateForm.emvidtim.value) &&
+          !isWhitespace(document.UpdateForm.emvitndt.value) &&
+          document.UpdateForm.emvitndt.value >
+          document.UpdateForm.emvidtim.value) {
+        alert("Treating Nurse Time cannot be after the Discharge Time.");
+        p.emvitndt.value=p.emvitndt.defaultValue;
+        FocusDelay(p.emvitndt);
+        return;
+      }
+    }
+  }
   if(document.UpdateForm.emvitndd.value !=
      document.UpdateForm.emvitndd.defaultValue) {
     RemoteTreatingNurDateTime();
@@ -566,6 +636,7 @@ function TreatingNurseDate() {
   }
 }
 function TreatingNurseTime() {
+  p=document.UpdateForm;
   if(!checkTime(UpdateForm.emvitndt,UpdateForm.emvitndt.title)) {
    return;
   }
@@ -573,8 +644,8 @@ function TreatingNurseTime() {
     if(isWhitespace(UpdateForm.emvitndt.value)) {
       alert(UpdateForm.emvitndt.title + " is a required field.\n" +
            "Please enter it now." )
-      UpdateForm.emvitndt.value=UpdateForm.emvitndt.defaultValue;
-      UpdateForm.emvitndt.focus();
+      p.emvitndt.value=p.emvitndt.defaultValue;
+      FocusDelay(p.emvitndt);
       return;
     }
   }
@@ -618,6 +689,31 @@ function TreatingNurseTime() {
           document.UpdateForm.emvitndt.value) {
         alert("Treating Nurse Time cannot be before Previous Nurse Handover Time.");
         document.UpdateForm.emvitndt.value="";
+        return;
+      }
+    }
+  }
+  if (!isWhitespace(document.UpdateForm.emviddat.value) &&
+      !isWhitespace(document.UpdateForm.emvidtim.value) &&
+      !isWhitespace(document.UpdateForm.emvitndd.value) &&
+      !isWhitespace(document.UpdateForm.emvitndt.value)) {
+    if(SetDateYYYYMMDD(document.UpdateForm.emvitndd.value) >
+       SetDateYYYYMMDD(document.UpdateForm.emviddat.value)) {
+      alert("Treating Nurse Date cannot be after the Discharge Date.");
+      document.UpdateForm.emvitndd.value=
+      document.UpdateForm.emvitndd.defaultValue;
+      FocusDelay(p.emvitndd);
+      return;
+    } else {
+      if (SetDateYYYYMMDD(document.UpdateForm.emviddat.value) ==
+          SetDateYYYYMMDD(document.UpdateForm.emvitndd.value) &&
+          !isWhitespace(document.UpdateForm.emvidtim.value) &&
+          !isWhitespace(document.UpdateForm.emvitndt.value) &&
+          document.UpdateForm.emvitndt.value >
+          document.UpdateForm.emvidtim.value) {
+        alert("Treating Nurse Time cannot be after the Discharge Time.");
+        p.emvitndt.value=p.emvitndt.defaultValue;
+        FocusDelay(p.emvitndt);
         return;
       }
     }
@@ -803,6 +899,8 @@ InsertEmergencyHeader()
  <input type=hidden name=emviprnd value="%EMRWEB02.01.577.1">
  <input type=hidden name=emviprnt value="%EMRWEB02.01.577.2">
  <input type=hidden name=patlocot value="%EMRWEB02.01.580">
+ <input type=hidden name=emviddat value="%EMRWEB02.01.124.0">
+ <input type=hidden name=emvidtim value="%EMRWEB02.01.125">
  <input type=hidden name=nurupind value="1">
  <input type=hidden name=d_emvitrdt value="%EMRWEB02.01.162.0">
  <input type=hidden name=d_emvitrtm value="%EMRWEB02.01.163">

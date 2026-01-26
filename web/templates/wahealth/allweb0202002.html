@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -46,6 +46,7 @@ InsertPatientHeader()
 <input type=hidden name=d_refcon value="%ALLWEB02.02.523.005">
 <input type=hidden name=ptcolumn id=ptcolumn value="%ALLWEB02.02.272">
 <input type=hidden name=deptindc value="%ALLWEB02.02.125.3">
+<input type=hidden name=existcom value="%ALLWEB02.02.938">
 </form>
  
 <table width=100% cellspacing=0 cellpadding=1 border=0>
@@ -151,7 +152,7 @@ InsertPatientHeader()
     <td>
       <span id=eRefButtons style="display:none">
         <input type=button class="button" value="Booking Instructions" 
-         style="width:120px" onclick="BookingInstr();">
+         id=eRefbutt style="width:120px" onclick="BookingInstr();">
         <input type=button class="button" value="Link to Referral"
          style="width:120px" onclick="LinkToRef();">
       </span>
@@ -450,7 +451,7 @@ function CheckBookings() {
 
 CommentIndicator="%ALLWEB02.02.218";
 if ( CommentIndicator =="1" ) {
-   document.all.comtbutt.className="RedButton";
+  document.all.comtbutt.className="RedButton";
 }
 IssueIndicator="%ALLWEB02.02.229";
 if ( IssueIndicator =="1" ) {
@@ -522,8 +523,13 @@ spExtRefApp.innerHTML = document.HiddenFields.d_extapp.value.substring(0,50);
 spServLine.innerHTML = document.HiddenFields.d_servce.value;
 
 if (trim(document.HiddenFields.d_extapp.value) == "eReferrals") {
+  if (document.HiddenFields.existcom.value=="1") {
+    document.getElementById('eRefbutt').className="RedButton";
+  }
   document.getElementById('eRefButtons').style.display = "";
 }
+
+
 
 function SetFormFocus() {
   if (document.activeElement && (document.activeElement.type == undefined)) {

@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser"      content="true">
@@ -26,6 +26,7 @@ function proTrkOption() {
 function validateVisit() {
  p=document.SelectPeriod;
  justifyRight(p.admissno);
+ UpCase(p.admissno);
  validateCode(12,p.admissno,p.fnam,p.sex,p.dob,p.pce,p.urnumber,p.dum,p.dat,p.typ);
    document.SelectPeriod.submit(); 
 }

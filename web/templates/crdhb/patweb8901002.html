@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="crdhb">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -44,6 +44,7 @@ function updatePatDetails() {
   SetOptOutSMS();
   UpCase(document.getElementById('ptmas007'));
   UpdHealthFund();
+  if(!IsDirtyNHI(UpdateForm)) { UpdateForm.nzpmichg.value = "1"; }
 
   document.UpdateForm.submit();
 }
@@ -105,6 +106,9 @@ function PageLoadExtended() {
   ConfirmPMI();
   DispMailingAddress();
   DispPrefGivenName();
+  setGPBlank();
+  ChkIdentifyGenderPronounTitle(document.UpdateForm);
+  addSelectedAttr(UpdateForm);
 }
 function updateNHI22() {
   urno = trim(PatientLinks.urnumber.value)
@@ -239,8 +243,7 @@ function checkMobilePhone(theField) {
 </script>
 </head>
 %START.OF.PAGE
-<body onload="PageLoadExtended();setGPBlank();
-              ChkIdentifyGenderPronounTitle(document.UpdateForm);">
+<body onload="PageLoadExtended();">
 <div id=PatientHeading></div>
 <script type="text/javascript">
 PatientURN="%PATWEB89.01.003";
@@ -318,6 +321,7 @@ InsertPatientHeader()
   <input type=hidden name=nhmas003 value="%PATWEB89.01.070.005">
   <input type=hidden name=nhmas004 value="%PATWEB89.01.070.006">
   <input type=hidden name=nhmas005 value="%PATWEB89.01.070.007">
+  <input type=hidden name=nzpmichg value="">
 
 <table border=0 width=100% cellspacing=0 cellpadding=1>
 <tr><td colspan=7 class=HeadingCell align=center>Demographic Details</td></tr>

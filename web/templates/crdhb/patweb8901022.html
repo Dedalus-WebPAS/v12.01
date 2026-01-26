@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="crdhb">
 <meta name="HelpFileName" content="NoContextSet.html">
 <script type="text/javascript" src="../js/patweb89.js"> </script>
@@ -201,7 +201,7 @@ function GoClinicList() {
   }
 }
 </script>
-<BODY onLoad="PageLoad(event);ConfirmPMI();">
+<BODY onLoad="PageLoad(event);ConfirmPMI();addSelectedAttr(UpdateForm);">
 <div id=PageBodySection style="overflow: auto;">
 <div id=PatientHeading></div>
 <script type="text/javascript">
@@ -271,6 +271,8 @@ InsertPatientHeader()
 <input type=hidden name=pmpmi067 value="%PATWEB89.01.867.0">
 <input type=hidden name=pmpmi068 value="%PATWEB89.01.868.0">
 <input type=hidden name=emerflag value="%PATWEB89.01.999.059">
+<input type=hidden name=nzpmichg value="">
+
 <tr valign=top>
     <td class=HeadingCell align=center>Contact 1</td>
     <td class=HeadingCell align=center>Contact 2</td></tr>
@@ -661,7 +663,10 @@ if (intdet==1) {
         "&cpmiskey=" + document.PatientLinks.cpmiskey.value.replace(/ /g,"+");
 
  }
- if(validateMandatory(UpdateForm)){UpdateForm.submit();}
+ if(validateMandatory(UpdateForm)){
+   if(!IsDirtyNHI(UpdateForm)) { UpdateForm.nzpmichg.value = "1"; }
+   UpdateForm.submit();
+ }
 }
 function chkCancel() {
   var emerflag="%PATWEB89.01.999.059"

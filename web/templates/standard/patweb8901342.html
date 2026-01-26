@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.03">
+<meta name="TemplateVersion" content="V12.01.08">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -217,6 +217,20 @@ function SubmitClaim() {
        UpdateForm.reaschng.value=document.UpdateForm.reasonchange.value.substr(0,3);
      }
 
+     if(isWhitespace(document.UpdateForm.pmext012.value)){
+       var insLength = document.UpdateForm.pmext012.options.length;
+       for (var x=0;x<insLength;x++){
+         if (trim(document.UpdateForm.pmext012.options[x].value) ==
+             trim(document.UpdateForm.d_pmext012.value)) {
+           document.UpdateForm.pmext012.options[x].selected = true;
+         }
+       }
+
+     } else {
+       document.UpdateForm.pmext034.value="";
+       document.UpdateForm.pmext031.value="";
+     }
+
      UpdateForm.updatety.value="5";
      document.UpdateForm.submit();
    }
@@ -294,6 +308,23 @@ InsertPatientHeader()
   <input type=hidden name=ccvisbok value="%PATWEB89.01.999.128">
   <input type=hidden name=visitty value="%PATWEB89.01.999.129.0">
   <input type=hidden name=visitst value="%PATWEB89.01.999.129.1">
+  <input type=hidden name=d_pmext012 value="%PATWEB89.01.384.012.1">
+  <input type=hidden name=pmext030 value="%PATWEB89.01.384.030">
+  <input type=hidden name=pmext031 value="%PATWEB89.01.384.031">
+  <input type=hidden name=pmext032 value="%PATWEB89.01.384.032">
+  <input type=hidden name=pmext034 value="%PATWEB89.01.384.034">
+  <input type=hidden name=pmext072 value="%PATWEB89.01.384.072.1">
+  <input type=hidden name=pmext073 value="%PATWEB89.01.384.073">
+  <input type=hidden name=pmext074 value="%PATWEB89.01.384.074">
+  <input type=hidden name=pmext075 value="%PATWEB89.01.384.075.1">
+  <input type=hidden name=pmext078 value="%PATWEB89.01.384.078">
+  <input type=hidden name=pmext080 value="%PATWEB89.01.384.080">
+  <input type=hidden name=pmext081 value="%PATWEB89.01.384.081">
+  <input type=hidden name=pmext082 value="%PATWEB89.01.384.082">
+  <input type=hidden name=pmext083 value="%PATWEB89.01.384.083">
+  <input type=hidden name=pmext084 value="%PATWEB89.01.384.084">
+  <input type=hidden name=pmext142 value="%PATWEB89.01.384.099.044">
+  <input type=hidden name=newMVIT  value="%PATWEB89.01.384.099.042.1">
 
 <table align=center width=100% border=1 cellspacing=0 cellpadding=2>
 <tr><td class=HeadingCell align=center>
@@ -620,22 +651,28 @@ if(document.UpdateForm.pmext138.value=="1"){
   }
 
 function SetCancel() {
- if(!confirm("Warning: Motor Vehicle data will not be updated and\n" +
-             "answer to motor vehicle accident question will revert\n"+
-             "to 'No'! Ok to Continue ?")){
-   return;
- } 
+ if (document.UpdateForm.newMVIT.value=="") {
+   if(!confirm("Warning: Motor Vehicle data will not be updated and\n" +
+               "answer to motor vehicle accident question will revert\n"+
+               "to 'No'! Ok to Continue ?")){
+     return;
+   } 
+   var admissno = document.PatientLinks.admissno.value.replace(/ /g,"+");
+   var serverURL = "../cgi-bin/comweb81.pbl?reportno=74&valdadmn="+admissno;
+   var returnValue = RSExecute(serverURL);
+ } else {
+   if(!confirm("Warning: Motor Vehicle data will not be saved\n" +
+               "do you wish to continue?")){
+     return;
+   } 
 
- var admissno = document.PatientLinks.admissno.value.replace(/ /g,"+");
- var serverURL = "../cgi-bin/comweb81.pbl?reportno=74&valdadmn="+admissno;
- var returnValue = RSExecute(serverURL);
+ }
 
  ReturnPath=GetCookieData('InvoiceReturn');
  if (!isWhitespace(ReturnPath) && ReturnPath!='unknown') {
    document.cookie="InvoiceReturn=;" // clear cookie
    var link=ReturnPath;              // return to invoice scr
- }
- else {
+ } else {
    var urnumber ="%PATWEB89.01.003";
    var admissno ="%PATWEB89.01.101";
    var link = "patweb98.pbl?reportno=01&template=001&urnumber="+urnumber

@@ -5,6 +5,9 @@
 .
 . Modifications :
 .
+.     V12.01.01   14/01/2026  Ebon Clements   TSK 0971380
+.                 Added dummy DB read to ensure DB connectivity to
+.                 prevent loss of sent SMS details - SENT0000
 .     V11.04.02   14/10/2024  J.Tan           TSK 0951331
 .                 Mod to update Quote Accepted/Patient Contacted
 .     V11.04.01   21/12/2023  Don Nguyen      TSK 0893290
@@ -82,7 +85,7 @@ VISITKEY  DIM       30
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "PATWEB65"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "SMS Polling Server"
 .----------------------------------------------------------------------
 .
@@ -116,7 +119,10 @@ INIT9999  RETURN
 .------------------------------------------------------------
 . Check for any sms sent details
 .------------------------------------------------------------
-SENT0000  MOVE      ZERO,OVRCD
+SENT0000  PACK      KEY16,SP70
+          CALL      RAPMSMH1                * Dummy call to test DB active
+.
+          MOVE      ZERO,OVRCD
           TRAP      OVERCOND IF IO
           OPEN      SENTNAME,"sentsms1"     * See if old sent text
           TRAPCLR   IO                      * file exists

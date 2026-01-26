@@ -95,6 +95,8 @@
 .***************************************************************************
 .*  Mod's     :                                                            *
 .***************************************************************************
+.*        V12.01.02 11/12/2025  Bella Turco    TSK 0949715                 *
+.*                  Recompiled for UPDUR - added NZPMICHG                  *
 .*        V12.01.01 04/12/2025  Davin          TSK 0970365                 *
 .*                  Replace " with ' for ZTR.2/3/4/5/6/7 (RZTR0000)        *
 .*        V12.00.10 18/11/2025  Davin          TSK 0968897                 *
@@ -2713,6 +2715,7 @@ MULTFLAG  FORM      1             * multihospital staff record found flag
 .                                     1 = record not found
 .
 NWAUFLAG  FORM      "0"
+NZPMICHG  DIM       1
 NBRDAYS   FORM      4
 NCCURNO   DIM       8
 NDEXPIRY  DIM       8             * NDIS expiry date
@@ -5721,7 +5724,7 @@ DEC       INIT      "December"
 .-----------------------------------------------------------------------
 PRGID     INIT      "HL7RECVR"
 PRGNAM    INIT      "HL7 General Receiving Server"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.02"
 .-----------------------------------------------------------------------
 +
 .*************************************************************************
@@ -5747,7 +5750,9 @@ MAIN9999  STOP
 .*               Initialisation routine                                      *
 .*****************************************************************************
 .
-INIT0000  CALL      DISPHEAD                     * display screen header
+INIT0000  MOVE      SP70,NZPMICHG
+.
+          CALL      DISPHEAD                     * display screen header
 .
           DISPLAY   *P1:24,*EL,*P54:24,"Opening":
                     *P64:24,"controlf"

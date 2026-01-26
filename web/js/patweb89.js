@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 // Program   : patweb89.js
 //
@@ -2339,4 +2339,48 @@ function displayPrefNames(ptcnnmpr) {
     document.getElementById('PrefSurname').style.display="none";
     document.getElementById('PrefGivenName').style.display="none";
   }
+}
+//==========================================================================
+// Scan all select lists & checkboxes in form & add selected/checked attributes
+// to all selectedIndexes & checked checkboxes (needed for IsDirtyNHI())
+//==========================================================================
+function addSelectedAttr(eForm) {
+  for (var i=0; i < eForm.length; i++) {
+    var eElem = eForm.elements[i];
+    if (eElem.type == "checkbox" || eElem.type == "radio") {
+      if (eElem.checked) {
+        eElem.setAttribute('checked','true');
+      }
+    }
+    if (eElem.tagName == "SELECT") {
+      for (var j=0; j < eElem.options.length; j++) {
+        var option = eElem.options[j]
+        if (j==eElem.selectedIndex) {
+          option.setAttribute('selected',true);
+        }
+      }
+    }
+  }
+}
+//==========================================================================
+// Scan all elements in form and return true if any elements have been changed
+//==========================================================================
+function IsDirtyNHI(eForm) {
+  if (UpdateForm.nzpmichg.value=="1") { return true; }
+  for (var i=0; i<eForm.length; i++) {
+    var eElem = eForm.elements[i];
+    if (eElem.type == "text" || eElem.type == "textarea") {
+      if (trim(eElem.value) != trim(eElem.defaultValue))  {
+        return true; }
+    }
+    if (eElem.type == "checkbox" || eElem.type == "radio") {
+      if (eElem.checked != eElem.defaultChecked && !eElem.disabled) {
+        return true; }
+    }
+    if (eElem.tagName == "SELECT") {
+      if (!eElem[eElem.selectedIndex].defaultSelected) {
+        return true; }
+    }
+  }
+  return false;
 }

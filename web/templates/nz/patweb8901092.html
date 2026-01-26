@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="nz">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -27,6 +27,7 @@ function updatePatDetails() {
 
   SetOptOutSMS();
   validateDeath01();
+  if(!IsDirtyNHI(UpdateForm)) { UpdateForm.nzpmichg.value = "1"; }
   document.UpdateForm.submit();
 }
 function setNotForResus() {
@@ -63,6 +64,10 @@ function PageLoadExtended() {
   DisplayResidency();
   checkAllEthnicityField();
   defaultSmokerField();
+  setDeathfields();
+  showMobilePhoneDet();
+  ChkIdentifyGenderPronounTitle(document.UpdateForm);
+  addSelectedAttr(UpdateForm);
 }
 function updateNHI22() {
   urno = trim(PatientLinks.urnumber.value)
@@ -121,8 +126,7 @@ function showMobilePhoneDet() {
 </script>
 </head>
 %START.OF.PAGE
-<body onload="PageLoadExtended();setDeathfields();showMobilePhoneDet();
-              ChkIdentifyGenderPronounTitle(document.UpdateForm);">
+<body onload="PageLoadExtended()">
 <div id=PatientHeading></div>
 <script type="text/javascript">
 PatientURN="%PATWEB89.01.003";
@@ -175,6 +179,7 @@ InsertPatientHeader()
         value="%STANDARD.01.025.120.243.0.1">
  <input type=hidden name=ptmsx050 id=ptmsx050
         value="%PATWEB89.01.085.066.1">
+ <input type=hidden name=nzpmichg value="">
 
  <table border=0 width=100% cellspacing=0 cellpadding=0>
   <tr><td colspan=7 class=HeadingCell align=center>Demographic Details</td></tr>

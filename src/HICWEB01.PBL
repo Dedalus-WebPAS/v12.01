@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .----------------------------------------------------------------------
+. V12.01.01 15.01.2026  Zumin Yu       TSK 0971345
+.           Updated CLMLST00 & CLMM1810 to call RDPMPX21 to read all PMI files
 . V11.04.02 27.06.2024  DA Sarkies     TSK 0948535
 .           Recompiled for PATMSXTM    
 . V11.04.01 18/12/2023  Thanh T        TSK 0906342
@@ -642,7 +644,7 @@ COMFILAF  FILE      ASCII, FIXED=127
 .QUOTE     INIT      "#""
 .----------------------------------------------------------------------
 PRGID     INIT      "HICWEB01"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "HIC Claims Web Server"
 .----------------------------------------------------------------------
 .
@@ -2937,6 +2939,12 @@ CLMLST00  MOVE      URNUMBER,KEY8
             CALL      CLPATMAS
           ENDIF
 .
+          MOVE      URNUMBER,KEY8
+          CALL      RDPMPX21
+          IF        OVRCD=1
+            CALL      CLPMSPX2
+          ENDIF
+.
 CLMLST90  CLEAR     WEBTITLE
           MOVE      "Claims List",WEBTITLE
           RESET     WEBTITLE
@@ -3116,6 +3124,11 @@ CLMM1810  MOVE      "&nbsp;",PATFNAME
           PACK      KEY8,URNUMBER,SP70
           CALL      RDMAST1
           BRANCH    OVRCD,CLMM1820
+.
+          PACK      KEY8,URNUMBER,SP70
+          CALL      RDPMPX21
+          BRANCH    OVRCD,CLMM1820
+.
           CALL      PATNAM00
 CLMM1820  WRITE     HTMLFILE;PATFNAME;
           GOTO      CLMM9999

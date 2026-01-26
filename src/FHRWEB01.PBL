@@ -6,6 +6,8 @@
 . Modifications :
 .
 .----------------------------------------------------------------------
+. V12.01.01 11/12/2025  Bella Turco    TSK 0949715
+.           Recompiled for UPDUR - added NZPMICHG
 . V12.00.01 30/05/2025  Jacob Jackson    TSK 0955096
 .           Alphanumeric changes
 . V11.04.01 27/11/2023  Peter Vela       TSK 0935874
@@ -261,6 +263,7 @@ MEDNOTES  DIM       70
 TEMPDATE  DIM       12
 .
 NEWCOUNT  FORM      10
+NZPMICHG  DIM       1
 .
 WTCNUSBC  FORM      1
 .
@@ -674,7 +677,7 @@ ALRCOMM   DIM       100
 MULTILIN  FORM      1  
 .-------------------------------------------------------------------------------
 PRGID     INIT      "FHRWEB01"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "FHIR Patient Resource Inbound Server"
 .-------------------------------------------------------------------------------
 .
@@ -770,6 +773,8 @@ INIT0000  MOVE      ONE,EMRFLAG
             MOVE      ZERO,EMRFLAG
           ENDIF
           OPEN      EMRCLIA1,"emrcliaf"
+.
+          MOVE      SP70,NZPMICHG
 .
           OPEN      EMRHISA1,"emrhisaf"
           OPEN      EMRDCMA1,"emrdcmaf"

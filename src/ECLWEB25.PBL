@@ -8,6 +8,8 @@
 . Modifications : 
 .
 .-------------------------------------------------------------------------
+. V12.01.01 19/01/2026  Peter Vela     TSK 0945442
+.           Fixed Suspense rcpdteaf details in WRRDTU00 and WRRDTD00
 . V12.00.04 21/10/2025  Peter Vela     TSK 0945442
 .           Added functionality to process underpayment and overpayment
 .           in RPAY0000 (IHCW) and RPAM0000 (IMCW)
@@ -1062,7 +1064,7 @@ RPYERRIN  DIM       1
 .
 .------------------------------------------------------------------------------
 PRGID     INIT      "ECLWEB25"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "WebServices ERAW/BPYW Enquiry/Reciepting Release Server"
 .------------------------------------------------------------------------------
 .
@@ -34849,7 +34851,7 @@ WRRDTU00  CALL      IBACLOCK
           MOVE      SP70,RCDTVIST
           MOVE      SP70,RCDTURNO
 .
-          MOVE      SP70,RCDTNAME
+          MOVE      "Dep Amt is less than Tot Ben Amt",RCDTNAME
           MOVE      SP70,RCDTADD1
           MOVE      SP70,RCDTADD2
           MOVE      SP70,RCDTADD3
@@ -34860,22 +34862,22 @@ WRRDTU00  CALL      IBACLOCK
           MOVE      WBEIPREF,RCDTREFR
           MOVE      WBEIHOSP,RCDTMHOS
 .
-          MOVE      RCCNERRE,RCDTREGI
-          IF        IBCNMHOS=1
-.
-            MATCH     SP70,RCDTMHOS
-            IF        !@EQUAL & !@EOS
-              PACK      KEY3,RCDTMHOS,SP70
-              CALL      RDPTHSP1
-              IF        OVRCD=0
-                MATCH     SP70,PTHSERRE
-                IF        !@EQUAL & !@EOS
-                  MOVE      PTHSERRE,RCDTREGI
-                ENDIF
-              ENDIF
-            ENDIF
-.
-          ENDIF
+          MOVE      RCCNERRS,RCDTREGI
+.          IF        IBCNMHOS=1
+..
+.            MATCH     SP70,RCDTMHOS
+.            IF        !@EQUAL & !@EOS
+.              PACK      KEY3,RCDTMHOS,SP70
+.              CALL      RDPTHSP1
+.              IF        OVRCD=0
+.                MATCH     SP70,PTHSERRE
+.                IF        !@EQUAL & !@EOS
+.                  MOVE      PTHSERRE,RCDTREGI
+.                ENDIF
+.              ENDIF
+.            ENDIF
+..
+.          ENDIF
 .
           MOVE      SP70,RCDTGSTC
           CALL      GTACCT00
@@ -34898,7 +34900,7 @@ WRRDTU00  CALL      IBACLOCK
           MOVE      ZERO,RCDTDISC
           MOVE      CHOSPNUM,RCDTMDHS
           MOVE      SP70,RCDTGSTA
-          MOVE      SP70,RCDTALLO
+          MOVE      "2",RCDTALLO
           CALL      IBACLOCK
 .         PACK      RCDTRELD,CCC,CYY,CMM,CDD
 .         REP       " 0",RCDTRELD
@@ -34936,7 +34938,7 @@ WRRDTD00  CALL      IBACLOCK
           MOVE      SP70,RCDTVIST
           MOVE      SP70,RCDTURNO
 .
-          MOVE      SP70,RCDTNAME
+          MOVE      "Dep Amt is more than Tot Ben Amt",RCDTNAME
           MOVE      SP70,RCDTADD1
           MOVE      SP70,RCDTADD2
           MOVE      SP70,RCDTADD3
@@ -34947,22 +34949,22 @@ WRRDTD00  CALL      IBACLOCK
           MOVE      WBEIPREF,RCDTREFR
           MOVE      WBEIHOSP,RCDTMHOS
 .
-          MOVE      RCCNERRE,RCDTREGI
-          IF        IBCNMHOS=1
-.
-            MATCH     SP70,RCDTMHOS
-            IF        !@EQUAL & !@EOS
-              PACK      KEY3,RCDTMHOS,SP70
-              CALL      RDPTHSP1
-              IF        OVRCD=0
-                MATCH     SP70,PTHSERRE
-                IF        !@EQUAL & !@EOS
-                  MOVE      PTHSERRE,RCDTREGI
-                ENDIF
-              ENDIF
-            ENDIF
-.
-          ENDIF
+          MOVE      RCCNERRS,RCDTREGI
+.          IF        IBCNMHOS=1
+..
+.            MATCH     SP70,RCDTMHOS
+.            IF        !@EQUAL & !@EOS
+.              PACK      KEY3,RCDTMHOS,SP70
+.              CALL      RDPTHSP1
+.              IF        OVRCD=0
+.                MATCH     SP70,PTHSERRE
+.                IF        !@EQUAL & !@EOS
+.                  MOVE      PTHSERRE,RCDTREGI
+.                ENDIF
+.              ENDIF
+.            ENDIF
+..
+.          ENDIF
 .
           MOVE      SP70,RCDTGSTC
           CALL      GTACCT00
@@ -34972,7 +34974,7 @@ WRRDTD00  CALL      IBACLOCK
           MOVE      ZERO,RCDTDISC
           MOVE      CHOSPNUM,RCDTMDHS
           MOVE      SP70,RCDTGSTA
-          MOVE      SP70,RCDTALLO
+          MOVE      "2",RCDTALLO
           CALL      IBACLOCK
 .         PACK      RCDTRELD,CCC,CYY,CMM,CDD
 .         REP       " 0",RCDTRELD

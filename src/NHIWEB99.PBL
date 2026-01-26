@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .----------------------------------------------------------------------
+. V12.01.01 11/12/2025  Bella Turco    TSK 0949715
+.           Recompiled for UPDUR - added NZPMICHG
 . V12.00.03 04/09/2025  Zumin Yu  TSK 0939593
 .           Added update type display tag - RESI0160
 . V12.00.02 30.05.2025  DA Sarkies      TSK 0955096
@@ -593,6 +595,7 @@ EMERFLAG  DIM       1                      * Emergency Flag(1-From Emr screen)
 MURNUMBR  DIM       8
 NEWREG    FORM      1
 NEXTPAGE  DIM       1
+NZPMICHG  DIM       1
 .
 NHALI001  DIM       25                      * Alias - Surname
 NHALI002  DIM       20                      * Alias - Given Name 1
@@ -802,7 +805,7 @@ SEC1      FORM      "00001"
 .
 .------------------------------------------------------------------------------
 PRGID     INIT      "NHIWEB99"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "NHI/MWS Update Interface"
 .------------------------------------------------------------------------------
 .
@@ -1226,6 +1229,7 @@ CLRPAR00  MOVE      ZERO,REPORTNO
           MOVE      SP70,NEXTPAGE
           PACK      REDIRECT,SP70,SP70,SP70,SP70
           MOVE      SP70,MURNUMBR
+          MOVE      SP70,NZPMICHG
           MOVE      SP70,SUPERLEV
 .
           MOVE      SP70,NZIBPANO
@@ -1576,6 +1580,13 @@ SETPAR00  MATCH     "reportno=",QRYNAME
           MATCH     "superlev=",QRYNAME
           IF        @EQUAL
             PACK      SUPERLEV,QRYDATA,SP70
+            GOTO      SETPAR99
+          ENDIF
+.
+          MATCH     "nzpmichg=",QRYNAME
+          IF        @EQUAL
+            MOVE      QRYDATA,NZPMICHG
+            PACK      NZPMICHG,NZPMICHG,SP70
             GOTO      SETPAR99
           ENDIF
 .

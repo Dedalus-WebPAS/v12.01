@@ -5,6 +5,9 @@
 .
 . Modifications : 
 .----------------------------------------------------------------------
+. V12.01.01 21/01/2026  Zumin Yu       TSK 0971864
+.           Mod FACRW000 to show correct createdby in patient future
+.           action list
 . V12.00.01 24/07/2025  J.Tan          TSK 0962500
 .           Mod GCSH1000 to check for U/R number
 . V11.04.03 29.01.2024 dasarkies     TSK 0916369
@@ -174,7 +177,7 @@ PRIFA007  DIM       8       * Date Action Completed
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "PRIWEB03"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Private Practice Patient Server"
 .----------------------------------------------------------------------
 .
@@ -1030,10 +1033,10 @@ FACRW000  UNPACK    PRFADATE,CCENT,CYEAR,CMON,CDAY  * Future Action Date
                              "<td>",PRPRDESC,"</td>":
                              "<td>",PRFACOMM,"</td>":
                              "<td>",DATECOMP,"</td>" 
-         PACK       KEY10,USERID,SP70
+         PACK       KEY10,PRFACUID,SP70
          CALL       RDWBSE1
          IF         OVRCD=1
-           MOVE       USERID,WBSENAM 
+           MOVE       PRFACUID,WBSENAM 
          ENDIF
          WRITE      HTMLFILE;"<td>",WBSENAM,"<br>" 
          MATCH      SP70,CREATDAT

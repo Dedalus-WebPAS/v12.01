@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.03
+//jsVersion  : V12.01.04
 //========================================================================
 // Global Variables
 //========================================================================
@@ -152,6 +152,7 @@ var OPMultiSessionShowUnavail=true;      //Display Unavailable Slots on the
 var OTMandatoryonRequest=true;                                               
 var MyWardColumnHeadingA="Acuity Considerations/Risk";
 var MyWardColumnHeadingB="Waiting for What";
+var AllowTSFClinicalDocs=false;
 //=============================================================================
 // Variables for Theatre Hover Icons (moved from TheatreScreensHoverInfo.js)
 //

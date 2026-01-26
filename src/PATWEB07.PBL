@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .----------------------------------------------------------------------
+. V12.01.01 21/01/2026  Ebon Clements  TSK 0961702
+.           Fixed watespaf read that caused infinite loop - WESIS000
 . V12.00.06 19/11/2025  J.Tan          TSK 0968928
 .           Mod Payers for Admission (APBR0000) to check for Effective dates
 .           prior checking for Default payer field
@@ -1055,7 +1057,7 @@ ISERASE   INIT      "iserase "
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "PATWEB07"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Alternate ID Maintenance"
 .----------------------------------------------------------------------
 .
@@ -15807,7 +15809,7 @@ WESIS000  READ      CONTROLF,EIGHTY;*250,PTCNHDPS
           PACK      KEY16,PURNO,Z70
           CALL      RSWTESP1   
           CALL      RPWTESP1   
-          BRANCH    OVRCD,WESIS000
+          BRANCH    OVRCD,WESIS999
 .
           MATCH     PURNO,WTEPURNO
           GOTO      WESIS999 IF NOT EQUAL

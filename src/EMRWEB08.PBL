@@ -5,6 +5,9 @@
 .
 . Modifications : 
 .------------------------------------------------------------------------------
+. V12.01.01 21/01/2026  PJ Le Febour   TSK 0966798
+.           DOSEEN10 change default from Current to Discharge date
+.           NUSEEN10 change default from Current to Discharge date
 . V12.00.01 14/05/2025  J.Tan          TSK 0955096
 .           Added alpanumeric visit number generation
 . V11.05.04 01/05/2025  Nikitha B      TSK 0956437
@@ -616,6 +619,7 @@ REASONFC  DIM       3          * emrchaaf reason for change
 RETURNFM  FORM      1          * Return Format 0=Default
 RECCOUNT  FORM      5
 HISTTYPE  DIM       5
+FORM8     FORM      8
 HOUR      DIM       2
 MIN       DIM       2
 NEWDOCTO  DIM       10
@@ -928,7 +932,7 @@ ZERO20    INIT      "00000000000000000000"
 .
 .------------------------------------------------------------
 PRGID     INIT      "EMRWEB08"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "XML Remote Code Validation Service"
 .------------------------------------------------------------
 .
@@ -1742,10 +1746,17 @@ DOSEEN05  CALL      RLEMVIS1
 DOSEEN10  MATCH     SP70,EMVIDRDT          * Do not change if date exists
           GOTO      DOSEEN20 IF NOT EQUAL
 .
-          PACK      KEY8,CCC,CYY,CMM,CDD
-          REP       " 0",KEY8
-          MOVE      KEY8,EMVIDRDT                * System date
-          CLOCK     TIME,EMVIDRTM                * System Time
+          IF        EMVISTAT=2|EMVISTAT=3
+            MOVE      EMVIDDAT,EMVIDRDT          *  set to discharge date
+            MOVE      EMVIDTIM,EMVIDRTM          *  set to discharge time
+            MOVE      EMVIDDAT,EMHIDSD           *  set to discharge date
+            MOVE      EMVIDTIM,EMHIDST           *  set to discharge time
+          ELSE
+            PACK      KEY8,CCC,CYY,CMM,CDD
+            REP       " 0",KEY8
+            MOVE      KEY8,EMVIDRDT                * System date
+            CLOCK     TIME,EMVIDRTM                * System Time
+          ENDIF
 .
 DOSEEN20  MATCH     SP70,DOCTCODE
           GOTO      DOSEEN50 IF NOT EQUAL
@@ -1934,10 +1945,18 @@ NUSEEN05  CALL      RLEMVIS1
 NUSEEN10  MATCH     SP70,EMVINSDT
           GOTO      NUSEEN20 IF NOT EQUAL
 .
-          PACK      KEY8,CCC,CYY,CMM,CDD
-          REP       " 0",KEY8
-          MOVE      KEY8,EMVINSDT                * System date
-          CLOCK     TIME,EMVINSTM                * System Time
+          IF        EMVISTAT=2|EMVISTAT=3
+            MOVE      EMVIDDAT,EMVINSDT          *  set to discharge date
+            MOVE      EMVIDTIM,EMVINSTM          *  set to discharge time
+            MOVE      EMVIDDAT,EMHINSD           *  set to discharge date
+            MOVE      EMVIDTIM,EMHINST           *  set to discharge time
+            REP       " 0",EMHINST
+          ELSE
+            PACK      KEY8,CCC,CYY,CMM,CDD
+            REP       " 0",KEY8
+            MOVE      KEY8,EMVINSDT                * System date
+            CLOCK     TIME,EMVINSTM                * System Time
+          ENDIF
 .
 NUSEEN20  MATCH     DOCTCODE,SP70
           GOTO      NUSEEN50 IF NOT EQUAL
@@ -2764,7 +2783,8 @@ WRTHIS05  CALL      RPEMHIS1
           MOVE      EMHIDOC,SAVEDOCT
           MOVE      EMHINUR,SAVENURS
 .
-WRTHIS10  MOVE      EMVIADMN,EMHIVIS
+WRTHIS10  MOVE      EMVIADMN,FORM8 
+          MOVE      FORM8,EMHIVIS 
           CLOCK     TIME,CTIMEIS
 .
           PACK      EMHIDAT,CCC,CYY,CMM,CDD
@@ -2787,20 +2807,42 @@ WRTHIS10  MOVE      EMVIADMN,EMHIVIS
                 PACK      EMHIDST,HOUR,MIN,SEC        * first doctor
                 REP       " 0",EMHIDST
               ELSE
-                PACK      EMHIDSD,CCC,CYY,CMM,CDD * New doctor so seen date/time
+                MATCH     SP8,EMVIDDAT
+                GOTO      WRTHIS15 IF EQUAL
+.
+                MOVE      EMVIDDAT,EMHIDSD
+                REP       " 0",EMHIDSD
+                UNPACK    EMVIDTIM,HOUR,D1,MIN,D1,SEC
+                PACK      EMHIDST,HOUR,MIN,SEC
+                REP       " 0",EMHIDST
+                GOTO      WRTHIS30
+.
+WRTHIS15        PACK      EMHIDSD,CCC,CYY,CMM,CDD * New doctor so seen date/time
                 REP       " 0",EMHIDSD            * are set the current/time
                 PACK      EMHIDST,HOUR,MIN,SEC
                 REP       " 0",EMHIDST
+                GOTO      WRTHIS30
               ENDIF
             ELSE
-              PACK      EMHIDSD,CCC,CYY,CMM,CDD * New doctor so seen date/time
+              MATCH     SP8,EMVIDDAT
+              GOTO      WRTHIS18 IF EQUAL
+.
+              MOVE      EMVIDDAT,EMHIDSD            *New nurse seen date/time
+              REP       " 0",EMHIDSD                *set discharge date/time
+              UNPACK    EMVIDTIM,HOUR,D1,MIN,D1,SEC
+              PACK      EMHIDST,HOUR,MIN,SEC
+              REP       " 0",EMHIDST
+              GOTO      WRTHIS30
+.
+WRTHIS18      PACK      EMHIDSD,CCC,CYY,CMM,CDD * New doctor so seen date/time
               REP       " 0",EMHIDSD            * are set the current/time
               PACK      EMHIDST,HOUR,MIN,SEC
               REP       " 0",EMHIDST
+              GOTO      WRTHIS30
             ENDIF
           ENDIF
 .
-          MATCH     SAVENURS,EMVIATNS       * Is this a new nurse?
+WRTHIS30  MATCH     SAVENURS,EMVIATNS       * Is this a new nurse?
           IF        @EQUAL
             MOVE      SAVENRDT,EMHINSD      * Restore current nurse date and
             MOVE      SAVENRTM,EMHINST      * time
@@ -2814,18 +2856,68 @@ WRTHIS10  MOVE      EMVIADMN,EMHIVIS
                 PACK      EMHINST,HOUR,MIN,SEC        * first doctor
                 REP       " 0",EMHINST
               ELSE
-                PACK      EMHINSD,CCC,CYY,CMM,CDD *New nurse so seen date/time
+                MATCH     SP8,EMVIDDAT                 * Check Discharged
+                GOTO      WRTHIS35 IF EQUAL            * yes
+.
+                MOVE      EMVIDDAT,EMHINSD            *New nurse seen date/time
+                REP       " 0",EMHINSD                *set discharge date/time  
+.
+                UNPACK    EMVIDTIM,HOUR,D1,MIN,D1,SEC
+                PACK      EMHINST,HOUR,MIN,SEC
+                REP       " 0",EMHINST
+                GOTO      WRTHIS40
+
+WRTHIS35        PACK      EMHINSD,CCC,CYY,CMM,CDD *New nurse so seen date/time
                 REP       " 0",EMHINSD            *are set the current and time
                 PACK      EMHINST,HOUR,MIN,SEC
                 REP       " 0",EMHINST
+                GOTO      WRTHIS40
               ENDIF
             ELSE
-              PACK      EMHINSD,CCC,CYY,CMM,CDD *New nurse so seen date and time
+              MATCH     SP8,EMVIDDAT                 * Check Discharged
+              GOTO      WRTHIS38 IF EQUAL            * not discharged
+.
+              MOVE      EMVIDDAT,EMHINSD            *New nurse seen date/time
+              REP       " 0",EMHINSD                *set discharge date/time
+              UNPACK    EMVIDTIM,HOUR,D1,MIN,D1,SEC
+              PACK      EMHINST,HOUR,MIN,SEC
+              REP       " 0",EMHINST
+              GOTO      WRTHIS40
+.
+WRTHIS38      PACK      EMHINSD,CCC,CYY,CMM,CDD *New nurse so seen date and time
               REP       " 0",EMHINSD            *are set the current and time
               PACK      EMHINST,HOUR,MIN,SEC
               REP       " 0",EMHINST
+              GOTO      WRTHIS40
             ENDIF
           ENDIF
+.
+..        MATCH     SAVENURS,EMVIATNS       * Is this a new nurse?
+..        IF        @EQUAL
+..          MOVE      SAVENRDT,EMHINSD      * Restore current nurse date and
+..          MOVE      SAVENRTM,EMHINST      * time
+..        ELSE
+..          MATCH     "1",EMVITRIG          * Triage cat of RED
+..          IF        @EQUAL
+..            MATCH     SP70,SAVENURS
+..            IF        @EQUAL
+..              MOVE      EMVIDATE,EMHINSD   * Make seen date/time the same as
+..              UNPACK    EMVITIME,HOUR,D1,MIN,D1,SEC * arrival date/time if
+..              PACK      EMHINST,HOUR,MIN,SEC        * first doctor
+..              REP       " 0",EMHINST
+..            ELSE
+..              PACK      EMHINSD,CCC,CYY,CMM,CDD *New nurse so seen date/time
+..              REP       " 0",EMHINSD            *are set the current and time
+..              PACK      EMHINST,HOUR,MIN,SEC
+..              REP       " 0",EMHINST
+..            ENDIF
+..          ELSE
+..            PACK      EMHINSD,CCC,CYY,CMM,CDD *New nurse so seen date and time
+..            REP       " 0",EMHINSD            *are set the current and time
+..            PACK      EMHINST,HOUR,MIN,SEC
+..            REP       " 0",EMHINST
+..          ENDIF
+..        ENDIF
 .
 WRTHIS40  MOVE      UPDTTYPE,EMHIUPT
 .
@@ -2844,6 +2936,7 @@ WRTHIS40  MOVE      UPDTTYPE,EMHIUPT
           PACK      EMHIDST,EMHIDST,SP70
           PACK      EMHINSD,EMHINSD,SP70
           PACK      EMHINST,EMHINST,SP70
+          REP       " 0",EMHINST
 .
           MOVE      REASONHO,EMHIRHND
 .
@@ -6833,7 +6926,8 @@ WRTHS205  CALL      RPEMHIS1
           MOVE      EMHIDOC,SAVEDOCT
           MOVE      EMHINUR,SAVENURS
 .
-WRTHS210  MOVE      EMVIADMN,EMHIVIS
+WRTHS210  MOVE      EMVIADMN,FORM8   
+          MOVE      FORM8,EMHIVIS
           CLOCK     TIME,CTIMEIS
 .
           PACK      EMHIDAT,CCC,CYY,CMM,CDD
@@ -9198,7 +9292,8 @@ WDHIST05  CALL      RPEMHIS1                * There will always be a previous
 .
           MOVE      EMHIDOC,SAVEDOCT
 .
-WDHIST10  MOVE      EMVIADMN,EMHIVIS
+WDHIST10  MOVE      EMVIADMN,FORM8  
+          MOVE      FORM8,EMHIVIS
           CLOCK     TIME,CTIMEIS
 .
           PACK      EMHIDAT,CCC,CYY,CMM,CDD

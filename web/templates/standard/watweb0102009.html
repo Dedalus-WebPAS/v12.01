@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -294,7 +294,8 @@ Waiting List Procedure Supervisor Update
     <class=DataLabel>&nbsp;&nbsp;&nbsp;Visit Number
     <class=DataField align=left colspan=4>
     <input type=text name=wattr049 size=10 maxlength=8 value="%WATWEB01.02.125" 
-     title="Visit Number" onblur="justifyRight(this);ValidateAdm();">
+     title="Visit Number" 
+     onblur="UpCaseSearch(this);justifyRight(this);ValidateAdm();">
     </td>
     </tr>
 

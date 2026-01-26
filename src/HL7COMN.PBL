@@ -2,6 +2,9 @@
 .*                              HL7COMN.PBL                                  *
 .*        Contains common HL7 routines used by both HL7CISIN and HL7QUERY    *
 .* Mods:                                                                     *
+.*        V12.01.02 08/01/2026  Alina Bhari      TSK 0958930                 *
+.*                  Added Broadcast a Unique ID in PV1.50 for a Bed Transfer *
+.*                  Event. - OTHVIS20                                        * 
 .*        V12.01.01 11/12/2025  Nikitha B        TSK 0958929                 *
 .*                  Stripped leading white spaces of PV1.17.                 *
 .*                  Added check for EMCNDCLI - YES(1) for PV1.10 and PV1.17  *
@@ -9747,6 +9750,40 @@ OTHVIS15  IF        PV150CNT = 0
           RESET     PV1050
 .
           ADD       ONE,PV150CNT                 * increment repeat count
+.
+.         Now check the patient transfer record with TMOVE = A,C,L OR R and
+.         generate the unique ID (MESSNUMB =2,14,18,19)
+.         TDATETIME^^^webPAS-BT^VN (the colons will be removed from the time)
+OTHVIS20  MATCH     "1",PTCNBDTE                 * parameter on ?
+          IF        @EQUAL
+            IF        MESSNUMB = 2 | MESSNUMB = 14 | MESSNUMB = 18 | MESSNUMB=19
+              UNPACK    TTIME,CHOUR,D1,CMIN,D1
+.
+              IF        PV150CNT = 0
+                MOVE      TDATE,PV1050                * load Date and time
+                APPEND    CHOUR,PV1050
+                APPEND    CMIN,PV1050
+                ENDSET    PV1050
+              ELSE
+                ENDSET    PV1050
+                APPEND    TILDA,PV1050
+                APPEND    TDATE,PV1050
+                APPEND    CHOUR,PV1050
+                APPEND    CMIN,PV1050
+              ENDIF
+              APPEND    CARET,PV1050
+              APPEND    CARET,PV1050
+              APPEND    CARET,PV1050
+              APPEND    "webPAS-BT",PV1050
+              APPEND    CARET,PV1050
+              APPEND    ANSV,PV1050
+              APPEND    ANSN,PV1050
+              RESET     PV1050
+.
+              ADD       ONE,PV150CNT                 * increment repeat count
+.
+            ENDIF
+          ENDIF
 .
 OTHVIS99  CALL      CLEMRVIS
           RETURN

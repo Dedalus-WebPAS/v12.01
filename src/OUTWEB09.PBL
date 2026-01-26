@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .----------------------------------------------------------------------
+. V12.01.01 11/12/2025  Bella Turco    TSK 0949715
+.                       Recompiled for UPDUR - added NZPMICHG
 . V12.00.01 19/05/2025  J.Tan          TSK 0955096
 .           Added alpanumeric visit number generation
 . V11.05.02 06.03.2025  DA Sarkies     TSK 0955909
@@ -405,6 +407,7 @@ SAVPPOST  DIM       8             * postcode
 SAVPMEDI  DIM       10            * medicare number
 SAVPMCCD  DIM       2             * medicare code
 SELECHOS  DIM       3
+NZPMICHG  DIM       1
 .
 SCNDGNAM  DIM       40
 SHOWFLAG  FORM      1
@@ -426,7 +429,7 @@ WEBWARNG  DIM       127[12]
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "OUTWEB09"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Outpatient Direct Processing"
 .----------------------------------------------------------------------
 .
@@ -718,6 +721,7 @@ CLRPAR00  MOVE      ZERO,REPORTNO
           MOVE      SP70,FILTADAT
           MOVE      SP70,FILTVDAT
           MOVE      ZERO,SHOWFLAG
+          MOVE      SP70,NZPMICHG
 .
           MOVE      ONE,OTDFLAG
           MOVE      ZERO,OTDWEND

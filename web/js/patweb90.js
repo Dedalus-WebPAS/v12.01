@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 // Patient Search Functions
 //------------------------------------------------------------
@@ -274,6 +274,7 @@ function setAdm() {
       if (document.search.srchtype.options[i].value=="4") {
           document.search.srchtype.selectedIndex=i } };
     justifyRight(p.admissno)
+    UpCase(document.search.admissno);
 
     var sPad = "        ";
     // Right justify Admission  Number in the 8 character variable

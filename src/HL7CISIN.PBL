@@ -13,6 +13,9 @@
 .******************************************************************************
 .* Mods      :                                                                *
 .******************************************************************************
+.*       V12.01.02 08/01/2026  Alina Bhari      TSK 0958930                   *
+.*                 Recompiled for HL7COMN - Sending unique ID as part of bed  *
+.*                 transfer process when PTCNBDTE is turned on.               *
 .*       V12.01.01 11/12/2025  Nikitha B        TSK 0958928                   *
 .*                 Recompiled for HL7COMN - Sending HCP code from EMCNDCLI    *
 .*                 when EMCNEDCL is on.                                       *
@@ -1672,7 +1675,7 @@ ZEROURNO  INIT      "       0"
 .-----------------------------------------------------------------------
 PRGID     INIT      "HL7CISIN"
 PRGNAM    INIT      "HL7 Broadcast Message Server"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.02"
 .-----------------------------------------------------------------------
 +
 .******************************************************************************
@@ -1840,7 +1843,8 @@ INIT0300  MOVE      ZERO,NUMRETRY                * initialise retry counter
                                     *115,PTCNDBVC:
                                     *116,PTCNDBVP:
                                     *117,PTCNSAPC:
-                                    *120,PTCNEDDT
+                                    *120,PTCNEDDT:
+                                    *173,PTCNBDTE
 .
 .         Get multi-hospital parameter & health care establishment
 .

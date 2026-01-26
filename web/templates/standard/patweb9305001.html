@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -147,6 +147,10 @@ if ("%PATWEB93.05.106.2" == "1")
 }
 
 function checkFields() {
+  if(!isWhitespace(PatCondPopup.ptatr014.value)){
+    PatCondPopup.ptatr014.focus();
+    PatCondPopup.ptatr014.blur();
+  }
   if ( validateMandatory(PatCondPopup) && validateExpDiscDate() ) {
     PatCondPopup.submit();
   }

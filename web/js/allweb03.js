@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 
 //Ajax Call retrieving data based on UR number
@@ -140,6 +140,7 @@ function ValidateVisit(ValidateV,ValidateUR,ReturnName) {
     else {
       ValidateVisit.arguments[i].value=""; }  }
   if (isWhitespace(ValidateV.value)) return;;
+  UpCase(ValidateV);
   var serverURL = "../cgi-bin/allweb03.pbl?reportno=10&valdcode=" +
                     ValidateV.value.replace(/ /g,"+") +
                     "&valdurno=" + ValidateUR.value.replace(/ /g,"+")

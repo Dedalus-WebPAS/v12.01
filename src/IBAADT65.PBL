@@ -9,6 +9,8 @@
 .* Modifications  :                                                            *
 .*                                                                             *
 .*******************************************************************************
+.* V12.01.01 11/12/2025  Bella Turco    TSK 0949715
+.*           Recompiled for UPDUR - added NZPMICHG
 .* V11.03.01 12.07.2023  DA Sarkies    TSK 0927256                             *
 .*           Added ACODETMP to hold ACODE value for RGO Death updates          *
 .*******************************************************************************
@@ -297,6 +299,7 @@ MATCHFND  FORM      1             * Matching PMI Record Found
 .                                                  1 = Yes
 .                                                  2 = Irregularity
 NMPNUMB   DIM       20
+NZPMICHG  DIM       1
 .
 OPERCODE  DIM       4
 .
@@ -435,7 +438,7 @@ URWTARAY  INIT      "234567"
 PRGID     INIT      "IBAADT65"
 .                   ****************** NB Spaces at end of PRGNAM are deliberate
 PRGNAM    INIT      "Upload RGO Birth/Deaths              "
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .******************************************************************************
 .*                                  MAIN0000                                  *
@@ -567,6 +570,8 @@ INIT0000  CALL      DISPHEAD                     * Display screen heading
             DISPLAY   *P64:24,"patam1af";
             OPEN      PATAM1A1,"patam1af"
           ENDIF
+.
+          MOVE      SP70,NZPMICHG
 .
 INIT9999  RETURN
 +

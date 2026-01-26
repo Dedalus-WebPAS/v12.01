@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -81,7 +81,7 @@ function validateVisit() {
   x=p.urnumber.value;
   y=p.fnam.value;
   justifyRight(p.admissno);
-
+  UpCase(p.admissno);
   // Right justify Admission Number in the 8 character variable
   var sPad = "        ";
   var sAdmNo = p.admissno.value;

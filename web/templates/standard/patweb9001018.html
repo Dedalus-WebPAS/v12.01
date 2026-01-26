@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome"    content="standard">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser"      content="true">
@@ -23,6 +23,7 @@ function CheckAdm() {
   var p=search
   if (!isWhitespace(search.admissno.value)) {
     justifyRight(document.search.admissno);
+    UpCase(document.search.admissno);
     if(validateCode(12,p.admissno,p.dummy,p.dummy,p.dummy,p.dummy,p.urnumber,p.dummy,p.dummy,p.dummy,p.dummy)) {
 
     updateParent(p.patfname.value,p.urnumber.value,p.admissno.value);

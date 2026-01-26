@@ -5,6 +5,9 @@
 .
 . Modifications  :
 .------------------------------------------------------------------------------
+. V12.01.02 16/01/2026  Ebon Clements TSK 0971243
+.           Added clear of GRPSWICH in CLRPAR00. Set GRPSWICH at SUMCOD40
+.           to set coding dates for the grouper
 . V12.01.01 08/12/2025  Thanh T        TSK 0953127
 .           Recompiled for MRTAUCFD changes
 . V12.00.11 27/10/2025  Ebon Clements TSK 0964542
@@ -2540,7 +2543,7 @@ CCFLAG02  INIT      "AB - Care provided by hospital A and hospital"
 .
 .---------------------------------------------------------------------------
 PRGID     INIT      "MRTWEB02"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Medical Record Coding"
 .---------------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -4503,6 +4506,7 @@ CLRPAR00  MOVE      ZERO,STARTNUM
 .
           MOVE      SP70,UCDSCHRG
           MOVE      SP70,CLUSTERV
+          MOVE      SP70,GRPSWICH
 .
           CALL      CLRVXD00             * Visit Extra data
 .
@@ -7603,6 +7607,8 @@ SUMCOD40  MATCH     "D",SETFUNCT
             CALL      SWPOPR00    * Swap Procedure Codes
             CALL      PROSQE00    * Resequence Procedure Codes & MDS Data
           ENDIF
+.
+          MOVE      "Y",GRPSWICH    * Switch on CPDATS00 in SETGRP00
 .
 .    Run UNIX or PC Grouper Depending on PARAMETER
 .

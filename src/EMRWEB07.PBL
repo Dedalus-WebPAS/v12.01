@@ -4,6 +4,8 @@
 . Function      : Emergency Table Maintenance
 .
 . Modifications : 
+. V12.01.01 16/12/2025  Bella Turco     TSK 0949715
+.           Recompiled for EMRVISTM
 . V11.04.02 23/05/2024 Nikitha B        TSK 0946810 
 .           Modified CHKBYP00 & CHKBYU00 to limit display of bypass records for
 .           just 30 days period and modified PRDS0000 to display records only 
@@ -198,7 +200,7 @@ CODEDESC  DIM       127
 DISPPDG   DIM       6
 .
 PRGID     INIT      "EMRWEB07"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Emergency Table Maintenance"
 .
           CALL      WEBINT00       * Initialise Fifo Etc.

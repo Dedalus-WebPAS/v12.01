@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 // Program   : emrweb02.js
 //
@@ -123,6 +123,48 @@ function UpdatePageNZ() {
     document.UpdateForm.nextpage.value=9
   }
   SetOptOutSMS();
+  setTimeout('document.UpdateForm.UpdateButton.disabled=false',1000);
+  document.UpdateForm.submit()
+  }
+}
+function UpdatePageNZ1() {
+  if (validateMandatory(UpdateForm)) {
+    if (document.UpdateForm.preaddset.value==1) {
+      ans=confirm("Do you want to update the Previous Address details?");
+      if (ans) {
+        document.UpdateForm.prevaddr.value="1";
+      }
+      document.UpdateForm.preaddset.value=1;
+    }
+  UpdInterpreter();
+//
+  if (document.UpdateForm.aliasset.value==1) {
+    ans=confirm("Save as an Alias ?");
+    if (ans) {
+      document.UpdateForm.savealia.value="1";
+    }
+    document.UpdateForm.aliasset.value="1";
+  }
+  if (document.UpdateForm.redirect.value.substr(0,12)!=="nhiweb99.pbl") {
+    setRedirectAdmNZ();
+  }
+  document.UpdateForm.UpdateButton.disabled=true;
+  document.UpdateForm.formactn.value="C1"
+  document.UpdateForm.updttype.value="TRIAG"
+//  UpdateWin=window.open("","HideUpdateWindow",
+//  "width=10,height=10,top=1024,directories=no,location=no" +
+//  ",scrollbars=no,status=no,toolbar=no,menubar=no,resizeable=no")
+//  document.UpdateForm.target="HideUpdateWindow";
+  document.UpdateForm.target="PopUpFrame";
+
+// this checks to see if it is being used outside the MAPVIEW
+  if (isWhitespace(top.menu.location.search)) {
+    document.UpdateForm.nextpage.value=9
+  }
+  SetOptOutSMS();
+  if(!IsDirtyNHI1('PatDemo','ResDet')) {
+      UpdateForm.nzpmichg.value = '1';
+  }
   setTimeout('document.UpdateForm.UpdateButton.disabled=false',1000);
   document.UpdateForm.submit()
   }
@@ -739,4 +781,34 @@ function displayPrefNames(ptcnnmpr) {
     document.getElementById('PrefSurname').style.display="none";
     document.getElementById('PrefGivenName').style.display="none";
   }
+}
+//==========================================================================
+// Scan all elements in table and return true if any elements have been changed
+//==========================================================================
+function IsDirtyNHI1() {
+  if (UpdateForm.nzpmichg.value=="1") { return true; }
+
+  for (const arg of arguments) { // loop through function arguments (table ids)
+    var table = document.getElementById(arg);
+    elements = table.getElementsByTagName('*');
+    for (var i=0; i < elements.length; i++) {
+      var eElem = elements[i];
+      if (eElem.type == "text" || eElem.type == "textarea") {
+        if(eElem.name) {
+          if(eElem.name=="prcom001") { continue; }
+        }
+        if (trim(eElem.value) != trim(eElem.defaultValue))  {
+          return true; }
+      }
+      if (eElem.type == "checkbox" || eElem.type == "radio") {
+        if (eElem.checked != eElem.defaultChecked && !eElem.disabled) {
+          return true; }
+      }
+      if (eElem.tagName == "SELECT") {
+        if (!eElem[eElem.selectedIndex].defaultSelected) {
+          return true; }
+      }
+    }
+  }
+  return false;
 }

@@ -8,6 +8,9 @@
 .* Mods    :                                                                  *
 .*                                                                            *
 .******************************************************************************
+.*        V12.01.01 19.01.2026  Zumin Yu       TSK 0969764                    *
+.*                  Updated the warning message in DIDV2000 for the PRS/2     *
+.*                  Extracts report                                           *
 .*        V12.00.04 23.10.2025  Alina Bhari    TSK 0937787                    *
 .*                  Correctly Opened PATPTDA1,PATMTDA1 after isbuild -OYTD0000*
 .*        V12.00.03 24.09.2025  Alina Bhari    TSK 0962345                    *
@@ -2540,7 +2543,7 @@ YEARNAME  INIT      "patytd"
 .
 PRGID     INIT      "IBAPMS49"
 PRGNAM    INIT      "Process Data For PRS/2"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .******************************************************************************
 .*                                   ML0000                                   *
@@ -5201,7 +5204,8 @@ DIDV2000  IF        (PTICUINT-TOTBEDHR) > 1
             COMPARE   "60",CLNO
             CALL      HEAD0000 IF NOT LESS  * Line count >= 60
 .
-            PRINT     "### Warning: CPAP Duration > Total Stay ",*N  *I-60167
+            PRINT     "### Warning: CPAP Duration > Total ICU/CCU Stay ":
+                      "",*N                                          *I-60167
             ADD       TWO,CLNO                                       *I-60167
             ADD       ONE,NUMWARN                                    *I-60167
             MOVE      ONE,WRNFLG                                     *I-60167

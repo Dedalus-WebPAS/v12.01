@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="crdhb">
 <meta name="HelpFileName" content="NoContextSet.html">
 <script type="text/javascript" src="../js/nhiweb99.js"></script>
@@ -151,7 +151,7 @@ function postUpdate()
   }
 // 02 : Add value to check NHI duplicate
   document.NHIUpdate.searchpf.value="0";
-  UpdateForm01();
+  UpdateForm02();
 }
 // 02 : Task 0848444 : New function for task
 function submitSearch(){
@@ -193,7 +193,7 @@ function checkAddressChangedNHIMAS() {
 <body onload="PageLoad(event);
               DisplayResidency();matchNHIResidentStatusToLocal();
               checkAddressChangedNHIMAS();
-              SetAliasFlag();"
+              SetAliasFlag();addSelectedAttr(NHIUpdate);"
       onclick="clearEsam()">
 <div id="PatientHeading"></div>
 <script type="text/javascript">
@@ -269,6 +269,7 @@ InsertPatientHeader()
 <input type=hidden name="ptcnnewc" id=ptcnnewc
    value="%STANDARD.01.025.118.138.0.1">
 <input type=hidden name=d_updttype value="%NHIWEB99.01.316">
+<input type=hidden name=nzpmichg value="">
    
 <table border=1 width="100%" cellspacing="0" cellpadding="1">
 <tr><td class=HeadingCell align=center>NHI/MWS Patient Basic Details</td>

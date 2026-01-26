@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .----------------------------------------------------------------------
+. V12.01.01 16/12/2025  Bella Turco     TSK 0949715
+.           Recompiled for EMRVISTM
 . V12.00.01 30/05/2025  Don Nguyen     TSK 0955096
 .           Alphanumeric visit number changes
 . V11.02.02 10/02/2022  Thanh T          TSK 0905641
@@ -398,7 +400,7 @@ ISBUILD   INIT      "isbuild "
 ISERASE   INIT      "iserase "
 .----------------------------------------------------------------------
 PRGID     INIT      "PATWEB11"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Multi Database Server"
 .----------------------------------------------------------------------
 .

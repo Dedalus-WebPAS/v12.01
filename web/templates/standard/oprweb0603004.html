@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -217,6 +217,7 @@ InsertTheatreCaseHead()
 <input type=hidden name=showprov value="%OPRWEB06.03.213">
 <input type=hidden name=opcnicom value="%STANDARD.01.025.113.010.0.1">
 <input type=hidden name=noofitem value="%OPRWEB06.03.225">
+<input type=hidden name=caseinvc value="%OPRWEB06.03.228">
 <input type=hidden name=opcncons id=opcncons
  value="%STANDARD.01.025.113.050.0.1">
 <input type=hidden name=nowarnfl id=nowarnfl value="%OPRWEB06.03.226">
@@ -245,7 +246,7 @@ InsertTheatreCaseHead()
       onclick="showImplant();">&nbsp;
     </span>
     <input type=button value="Add MBS" class="button" id="opr06sub" 
-     onclick="tempDisable(this);AddData();">
+     onclick="tempDisable(this);ChkInv();">
     <input type=button value="All MBS Items" class="button" id="allmbs" 
      onclick="AllMBS();">
     </td></tr>

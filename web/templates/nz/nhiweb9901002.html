@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="nz">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -140,7 +140,7 @@ function postUpdate() {
   }
 
   document.NHIUpdate.searchpf.value="0";
-  UpdateForm01();
+  UpdateForm02();
 }
 
 function submitSearch(){
@@ -184,7 +184,8 @@ label {margin-left: 5px;}
 %START.OF.PAGE
 <body onload="PageLoad(event);DisplayResidency();
               matchNHIResidentStatusToLocal();
-              checkAddressChangedNHIMAS();SetAliasFlag();"
+              checkAddressChangedNHIMAS();SetAliasFlag();
+              addSelectedAttr(NHIUpdate);"
       onclick="clearEsam()">
 <div id="PatientHeading"></div>
 <script type="text/javascript">
@@ -257,6 +258,7 @@ InsertPatientHeader()
 <input type=hidden name="ptcnnewc" id=ptcnnewc
    value="%STANDARD.01.025.118.138.0.1">
 <input type=hidden name=d_updttype value="%NHIWEB99.01.316">
+<input type=hidden name=nzpmichg value="">
 
 <table border=1 width="100%" cellspacing="0" cellpadding="1">
 <tr><td class=HeadingCell align=center>NHI/MWS Patient Basic Details</td>

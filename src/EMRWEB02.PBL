@@ -15,6 +15,9 @@
 . Modifications :
 .
 .----------------------------------------------------------------------
+. V12.01.02 11/12/2025  Bella Turco    TSK 0949715
+.           Recompiled for UPDUR - added NZPMICHG
+.           Recompiled for EMRVISTM
 . V12.01.01 02.12.2025  DA Sarkies     TSK 0968888
 .           Added note to advise dev not to add new file opens to INIT0000   
 . V12.00.10 16/10/2025  Nikitha B      TSK 0967649
@@ -3005,6 +3008,7 @@ MANDINUR  FORM      1
 MASUPDFL  FORM      1
 MEDNOTES  DIM       100
 NLOCACOD  DIM       3        * Location Code
+NZPMICHG  DIM       1
 NLOCADAT  DIM       8
 NLOCATIM  DIM       8
 MIN       DIM       2
@@ -3743,7 +3747,7 @@ SVCRCNTR  FORM      3       Count
 .
 .-----------------------------------------------------------
 PRGID     INIT      "EMRWEB02"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Emergency Details Server"
 .-----------------------------------------------------------
 .
@@ -8749,6 +8753,7 @@ CLRPAR00  MOVE      ZERO,PRECOMFL
           MOVE      SP70,INVADMNO
           MOVE      SP70,VISDHOSP
           MOVE      ZERO,USEINVAD
+          MOVE      SP70,NZPMICHG
 .
           MOVE      SP70,REPORTNO
           MOVE      ZERO,PRAUPDFL
@@ -9910,6 +9915,13 @@ SETPAR00  MATCH     "reportno=",QRYNAME
           MATCH     "selprint=",QRYNAME
           IF        @EQUAL
             MOVE      QRYDATA,SELPRINT
+            GOTO      SETPAR99
+          ENDIF
+.
+          MATCH     "nzpmichg=",QRYNAME
+          IF        @EQUAL
+            MOVE      QRYDATA,NZPMICHG
+            PACK      NZPMICHG,NZPMICHG,SP70
             GOTO      SETPAR99
           ENDIF
 .
@@ -17876,8 +17888,14 @@ STVIS500  MATCH     PTMAS086,Z70
             PACK      PTMADCDT,PTMAS086,SP70
           ENDIF
 .
-          CLOCK     TIME,PTMAUTIM
-          MOVE      USERID,PTMAUUID
+.         If NZ PMI details have not been changed do not update
+.         'Demographics Last Updated' details
+.
+          MATCH     "1",NZPMICHG                  * "1" means no change
+          IF        !@EQUAL
+            CLOCK     TIME,PTMAUTIM
+            MOVE      USERID,PTMAUUID
+          ENDIF
 .
           CALL      UPMSX000
 .

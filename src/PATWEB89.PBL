@@ -7,13 +7,20 @@
 .      *                                                      *
 .      *    NB: DO NOT ADD ANY NEW FILE OPENS IN INIT0000     *
 .      *        IF YOU NEED TO OPEN A NEW FILE OPEN IN FILE   *
-.      *        WHERE IS IS REQUIRED AND CLOSE IT STRAIGHT    *
+.      *        WHERE IT IS REQUIRED AND CLOSE IT STRAIGHT    *
 .      *        AFTER.                                        *
 .      *                                                      *
 .      ********************************************************
 .
 . Modifications :
 .------------------------------------------------------------------------
+. V12.01.05 11/12/2025  Bella Turco    TSK 0949715
+.           Added NZPMICHG cgi - check if NZ PMI details have been changed
+.           Don't update 'Demographics Last Updated' if no change (UPDMAS3)
+.           Recompiled for EMRVISTM
+. V12.01.04 13.01.2026  DA Sarkies     TSK 0970538 & 0970539
+.           Added "CL" variable and added check in LINS3000 to exclude
+.           inactive insurers from the list
 . V12.01.03 03/12/2025  J.Tan          TSK 0946593
 .           Recompiled for CMXMATRX -Sort Casepayment Theatre fee items
 .           03/12/2025 J.Tan             TSK 0968040
@@ -33,7 +40,14 @@
 .           - MLTHCPA1 - moved to ACTDOC00
 . V12.01.01 25/11/2025 J.Tan             TSK 0968040
 .           Mod VALDWB00 to check for PTMIS027
-. V12.00.28 03/12/2025  DA Sarkies     TSK 0968888
+. V12.00.26 13.01.2026  DA Sarkies     TSK 0970538 & 0970539
+.           Added "CL" variable and added check in LINS3000 to exclude
+.           inactive insurers from the list
+. V12.00.25 03/12/2025  J.Tan          TSK 0946593
+.           Recompiled for CMXMATRX -Sort Casepayment Theatre fee items
+.           03/12/2025 J.Tan             TSK 0968040
+.           Mod VALDWB00 to check for template 032
+. V12.00.24 03/12/2025  DA Sarkies     TSK 0968888
 .           Removed following files from INIT0000 due to over 255 files open
 .           - ACCAUDA1 - moved to WRTACAUD
 .           - OPRARDA1 - moved to NZPR0000 and CHKTIM00
@@ -108,6 +122,11 @@
 .           secondary insurer
 .           28/05/2025  Nikitha        TSK 0955096
 .           Alphanumeric changes.
+. V11.05.40 13.01.2026  DA Sarkies     TSK 0970538 & 0970539
+.           Added "CL" variable and added check in LINS3000 to exclude
+.           inactive insurers from the list
+. V11.05.39 19/12/2025  Jacob Jackson  TSK 0970532
+.           Add REFERDEP & REFERADM
 . V11.05.38 03/12/2025  DA Sarkies     TSK 0968888
 .           Removed following files from INIT0000 due to over 255 files open
 .           - ACCAUDA1 - moved to WRTACAUD
@@ -4144,6 +4163,7 @@ BEDRWARD  INIT      "~~B"
 .XCNTRCEFR  FORM      1
 .XCEFFDATE  DIM       8
 BMIINDIC  DIM       1
+CATCL     INIT      "CL"
 CNTRFLAG  FORM      1
 CNTITEM   FORM      3
 CALCTOTD  FORM      4
@@ -4400,6 +4420,7 @@ SBBED     DIM       3
 SBWARD    DIM       3
 SCNDGNAM  DIM       40
 SJOGAUDT  DIM       1
+NZPMICHG  DIM       1
 ADDRAUDT  DIM       1
 ALIASSTS  DIM       1
 STATADMN  FORM      1
@@ -5222,7 +5243,7 @@ AUTOMVMR  DIM       1        * Auto move (track) MR to Admitting Ward
 .
 .---------------------------------------------------------------------------
 PRGID     INIT      "PATWEB89"
-VERSION   INIT      "V12.01.03"
+VERSION   INIT      "V12.01.05"
 PRGNAM    INIT      "Admissions Web Server"
 .---------------------------------------------------------------------------
 .
@@ -6950,6 +6971,7 @@ CLRPAR00  READ      CONTROLF,TEN;*196,CGENRUR
           MOVE      SP70,UPINSPID
 .
           MOVE      SP70,SJOGAUDT
+          MOVE      SP70,NZPMICHG
           MOVE      SP70,ADDRAUDT
           MOVE      SP70,ALIASSTS
           MOVE      SP70,SCANNEDM
@@ -8676,6 +8698,13 @@ SETPAT50    MOVE      QRYDATA,FORM1
             GOTO      SETPAR99
           ENDIF
 .
+          MATCH     "nzpmichg=",QRYNAME
+          IF        @EQUAL
+            MOVE      QRYDATA,NZPMICHG
+            PACK      NZPMICHG,NZPMICHG,SP70
+            GOTO      SETPAR99
+          ENDIF
+.
           MATCH     "addraudt=",QRYNAME
           IF        @EQUAL
             MOVE      QRYDATA,ADDRAUDT
@@ -9272,6 +9301,8 @@ LINS3000  PACK      KEY8,QUOTE,ICODE,QUOTE
             WRITE     HTMLFILE;"<option value=",KEY8," selected>":
                                INAME,"</option>"
           ELSE
+            MATCH     "1",PTINACTV
+            GOTO      LINS2000 IF EQUAL
             WRITE     HTMLFILE;"<option value=",KEY8,">",INAME,"</option>"
           ENDIF
           GOTO      LINS2000
@@ -19320,8 +19351,15 @@ UPDMAS3   MATCH     Z70,PTMAS069
             MOVE      PTMAS069,PTMADCDT
           ENDIF
 .
-          CLOCK     TIME,PTMAUTIM
-          MOVE      USERID,PTMAUUID
+.
+.         If NZ PMI details have not been changed do not update
+.         'Demographics Last Updated' details
+.
+          MATCH     "1",NZPMICHG                  * "1" means no change
+          IF        !@EQUAL
+            CLOCK     TIME,PTMAUTIM
+            MOVE      USERID,PTMAUUID
+          ENDIF
 .
           MATCH     PTMAS070,Z70                  * Additional HCP 1
           IF        !@EQUAL

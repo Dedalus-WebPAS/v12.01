@@ -1,8 +1,49 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="CrossBrowser" content="true">
 <meta name="HelpFileName" content="NoContextSet.html">
 <script type="text/javascript">
+
+function validateItemCode(OptionNumber,ReturnCode,ReturnName) {
+  ReturnFunction="" ;
+  ReturnName.value="";
+  ArgCount=3;
+  for (var i=ArgCount; i < validateItemCode.arguments.length; i++) {
+    if (typeof(validateItemCode.arguments[i]) == 'function') {
+      ReturnFunction=validateItemCode.arguments[i] }
+    else {
+      validateItemCode.arguments[i].value=""; }  }
+  if (isWhitespace(ReturnCode.value)) return;;
+
+  if (document.UpdateForm.ibcnmhos.value != "1") {
+    document.UpdateForm.fvgrp001.value="";
+  }
+    var serverURL   = "../cgi-bin/patweb80.pbl?reportno=" + OptionNumber +
+          "&valdhosp=" + document.UpdateForm.fvgrp001.value.replace(/ /g,"+") +
+              "&valdcode=" + ReturnCode.value.replace(/ /g,"+") +
+              "&valdtype=4"
+
+  var returnValue = RSExecute(serverURL);
+  if (returnValue.status==0) {
+    ReturnValue=returnValue.return_value.split("|")
+    ReturnName.value=trim(ReturnValue[0])
+    j=0
+    for (var i=ArgCount; i < validateItemCode.arguments.length; i++) {
+       if (typeof(validateItemCode.arguments[i]) != 'function') {
+         j++
+         validateItemCode.arguments[i].value=ReturnValue[j] } }
+    if (typeof(ReturnFunction) == 'function') {
+       ReturnFunction() }
+    return true;
+    }
+  else {
+    ReturnCode.value="";
+    ReturnCode.select();
+    ReturnCode.focus();
+    return false;
+     }
+}
+
 function UpdateFavItem() {
   f = document.UpdateForm;
   if(f.d_fvgrp005.checked == true) {
@@ -106,7 +147,7 @@ function DisplayHospIdDetail() {
               DisplayHospIdDetail();
               checkUser(document.UpdateForm.fvgrp003,
                         document.UpdateForm.d_fvgrp003);
-              validateCode(40,document.UpdateForm.fvgrp007,
+              validateItemCode(40,document.UpdateForm.fvgrp007,
                            document.UpdateForm.d_fvgrp007);
               if(document.UpdateForm.d_fvgrp005.checked==true)
               {document.UpdateForm.defchval.value='1';}">

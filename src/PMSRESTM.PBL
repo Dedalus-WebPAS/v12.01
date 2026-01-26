@@ -1,6 +1,15 @@
 .----------------------------------------------------------------------
 . Modifications
 .
+. V12.01.01  13.01.2025  DA Sarkies    TSK 0970538 & 0970539
+.            Added exclusion for non-active insurers in RESD1100
+.            Added exclusion for non-OS student/visitor insurers
+. V12.00.01  13.01.2025  DA Sarkies    TSK 0970538 & 0970539
+.            Added exclusion for non-active insurers in RESD1100
+.            Added exclusion for non-OS student/visitor insurers
+. V11.05.01  13.01.2025  DA Sarkies    TSK 0970538 & 0970539
+.            Added exclusion for non-active insurers in RESD1100
+.            Added exclusion for non-OS student/visitor insurers
 . V10.02.01  20/07/2011  J.Tan         CAR 239592
 .            Added free format Name of school
 . V10.02.00  07/06/2011  J.Tan      CAR 239592
@@ -127,7 +136,7 @@ RESD1000  MOVE      "C ",CATEGORY
 RESD1100  UNPACK    DIM127,D1,KEY1,DIM127
           MOVE      ZERO,F1
           MOVE      KEY1,F1
-          BRANCH    F1,RESD1110,RESD1120
+          BRANCH    F1,RESD1110,RESD1120,RESD1130,RESD1140
 .
           WRITE     HTMLFILE;PMRSINCD;      * Insurance code
           GOTO      RESD9999
@@ -156,9 +165,95 @@ RESD1122  CALL      RDKINSR1
             WRITE     HTMLFILE;"<option value=",KEY8," selected>":
                                INAME,"</option>"
           ELSE
+            MATCH     "1",PTINACTV
+            GOTO      RESD1122 IF EQUAL
             WRITE     HTMLFILE;"<option value=",KEY8,">",INAME,"</option>"
           ENDIF
           GOTO      RESD1122
+.
+RESD1130  PACK      KEY3,SP70
+          PACK      KEY5,CATCL,SP70
+          CALL      RDSCODE1
+RESD1132  CALL      RDKCODE1
+          BRANCH    OVRCD,RESD1134
+.
+          MATCH     CATCL,TCODE
+          GOTO      RESD9999 IF NOT EQUAL
+.
+          MATCH     ANSE,TCINDC1
+          IF        @EQUAL
+            PACK      KEY3,ACODE,SP70
+            GOTO      RESD1134
+          ENDIF
+          GOTO      RESD1132
+.
+RESD1134  PACK      KEY6,SP70
+          CALL      RDSINSR1
+RESD1136  CALL      RDKINSR1
+          BRANCH    OVRCD,RESD9999
+.
+          MATCH     SP70,ICODE
+          GOTO      RESD1136 IF EQUAL
+.
+          MATCH     SP70,KEY3
+          IF        !@EQUAL
+            MATCH     KEY3,PTINCLAI
+            GOTO      RESD1136 IF NOT EQUAL
+          ENDIF
+.
+          PACK      KEY8,QUOTE,ICODE,QUOTE
+          MATCH     ICODE,PMRSINCD
+          IF        @EQUAL
+            WRITE     HTMLFILE;"<option value=",KEY8," selected>":
+                               INAME,"</option>"
+          ELSE
+            MATCH     "1",PTINACTV
+            GOTO      RESD1136 IF EQUAL
+            WRITE     HTMLFILE;"<option value=",KEY8,">",INAME,"</option>"
+          ENDIF
+          GOTO      RESD1136
+.
+RESD1140  PACK      KEY3,SP70
+          PACK      KEY5,CATCL,SP70
+          CALL      RDSCODE1
+RESD1142  CALL      RDKCODE1
+          BRANCH    OVRCD,RESD1144
+.
+          MATCH     CATCL,TCODE
+          GOTO      RESD9999 IF NOT EQUAL
+.
+          MATCH     ANSG,TCINDC1
+          IF        @EQUAL
+            PACK      KEY3,ACODE,SP70
+            GOTO      RESD1144
+          ENDIF
+          GOTO      RESD1142
+.
+RESD1144  PACK      KEY6,SP70
+          CALL      RDSINSR1
+RESD1146  CALL      RDKINSR1
+          BRANCH    OVRCD,RESD9999
+.
+          MATCH     SP70,ICODE
+          GOTO      RESD1146 IF EQUAL
+.
+          MATCH     SP70,KEY3
+          IF        !@EQUAL
+            MATCH     KEY3,PTINCLAI
+            GOTO      RESD1146 IF NOT EQUAL
+          ENDIF
+.
+          PACK      KEY8,QUOTE,ICODE,QUOTE
+          MATCH     ICODE,PMRSINCD
+          IF        @EQUAL
+            WRITE     HTMLFILE;"<option value=",KEY8," selected>":
+                               INAME,"</option>"
+          ELSE
+            MATCH     "1",PTINACTV
+            GOTO      RESD1146 IF EQUAL
+            WRITE     HTMLFILE;"<option value=",KEY8,">",INAME,"</option>"
+          ENDIF
+          GOTO      RESD1146
 .
 RESD1200  WRITE     HTMLFILE;PMRSINFM;      * Fund membership no
           GOTO      RESD9999

@@ -11,6 +11,11 @@
 .*     Mods.        :             look for (spare) or (moved) for free space  *
 .*                                                                            *
 .******************************************************************************
+.*       V12.01.03  19/12/2025  Davin            TSK 0961944                  *
+.*                  Added PTCNNTES - Send/Receive NTE segment in HL7 M02      *
+.*                  07/01/2026  Alina            TSK 0958930                  *
+.*                  Added PATCN702/PTCNBDTE - Added Broadcast a Unique ID in  *
+.*                  PV1.50 for a Bed Transfer Event                           *
 .*       V12.01.02  17/12/2025  J.Tan            TSK 0956147                  *
 .*                  Added PTCNHACD - HAC Flags for Risk Factors Start Date-ABF*
 .*       V12.01.01  15/12/2025  Zumin Yu         TSK 0968747                  *
@@ -2427,7 +2432,7 @@ PTCNDEFT  FORM      1         56       Default Surname Search Param for new U/R
 PTCNUAHS  FORM      1         57       Using Waiting list ad-hoc selection 
 .                                      routine in OPR40 & WAT30
 .                                         0 = No, 1 = Yes
-PTCNHACD  DIM       1         58       HAC Flags for Risk Factors Start Date-ABF
+........  DIM       1         58       Spare
 .
 PTCNWRDS  FORM      1         59       Ward specialities in IBAPAT13       
 .                                         0 = No, 1 = Yes
@@ -3120,7 +3125,7 @@ PTCNHADF  DIM       3        56       Default Health Agency (Cat HA)
 PTCNI10D  DIM       8        59       Go-Live Date for ICD10 Codes and Mapping
 .                                     (CCYYMMDD)
 ..(moved) DIM       3         67    was - (spare)
-..(moved) DIM       8         70    was CSTRTYR - Start of Year (CCYYMMDD)
+PTCNHACD  DIM       8         70       HAC Flags for Risk Factors Start Date-ABF
 .
 CGADMNO   FORM      8         78      Starting Govern Discharge Admission No.
 CDAILYDT  DIM       8         86      Last Date Govt Subsidy Rept run (CCYYMMDD)
@@ -4817,7 +4822,6 @@ PTCNVIMS  DIM       1        119   Verify Inbound SIU^12 Inpatient Message
 .                                  Segment SCH.22 to
 .                                  0 = Approval Number
 .                                  1 = Hospital Code
-.
 PTCNEDDT  DIM       1        120   Broadcast Outpatient Expected Discharge Date
 .                                  and Time in PV2.9
 .                                  0 or Blank = Disabled
@@ -4826,7 +4830,15 @@ PTCNB08E  DIM       1        121   Broadcast HL7 EMR A08 from HL7RECVR
 .                                  0 or blank = No
 .                                  1 = Yes
 PTCNMSH3  DIM       50       122   Sending application MSH.3 for EMR A08
+PTCNNTES  DIM       1        172   Send/Receive NTE segment in HL7 M02
+.                                  0 or blank = No
+.                                  1 = Yes
+.                                  2 = Yes - send with linebreaks
+PTCNBDTE  DIM       1        173   Broadcast a Unique ID in PV1.50 for a Bed
+.                                  Transfer Event
+.                                  0 or Blank = Disabled
+.                                  1 = Enabled
 .
-.End of Record               172
+.End of Record               174
 +
 

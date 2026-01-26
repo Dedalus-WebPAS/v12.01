@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.01">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -284,6 +284,11 @@ function PostForm() {
   } else {
      document.UpdateForm.patcn662.value="1";
   }
+  if(document.UpdateForm.d_patcn702.checked==false) {
+     document.UpdateForm.patcn702.value="0";
+  } else {
+     document.UpdateForm.patcn702.value="1";
+  }
 
   setFormactn('U');
 }
@@ -365,6 +370,7 @@ function CheckSite(){
 <input type=hidden name=patcn658 value=" ">
 <input type=hidden name=patcn659 value=" ">
 <input type=hidden name=patcn662 value=" ">
+<input type=hidden name=patcn702 value=" ">
 <input type=hidden name=viewonly value="%COMWEB98.07.007">
 
 <table align=center width=100% border=0 cellspacing=0 cellpadding=0>
@@ -706,7 +712,14 @@ function CheckSite(){
     <td class=DataItem><input type=checkbox name=d_patcn281
      title="Replace A08 with A38/A05 for rescheduled O/P Appointments Messages"
      value="1">
-    </td></tr>
+    </td>
+    <td class=DataLabel>
+        Broadcast a Unique ID in PV1.50 for a Bed Transfer Event    </td>
+    <td class=DataItem><input type=checkbox name=d_patcn702
+     title="Broadcast Outpatient Expected Discharge Date and Time in PV2.9"
+     value="1">
+    </td>    
+</tr>
 
 <tr><td class=DataLabel>
        Send extra diet codes in ZXV.31</td>
@@ -1133,6 +1146,10 @@ function CheckSite(){
    if (document.UpdateForm.patcn701.options[i].value==PTCNNTES) {
       document.UpdateForm.patcn701.selectedIndex=i;
    }
+ }
+ PTCNBDTE="%COMWEB98.07.199.602"
+ if(PTCNBDTE=="1") {
+   document.UpdateForm.d_patcn702.checked=1;
  }
 //
 </script>

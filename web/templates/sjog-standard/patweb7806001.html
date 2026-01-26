@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="sjog-standard">
 <meta name="CrossBrowser" content="true">
 <meta name="HelpFileName" content="NoContextSet.html">
@@ -444,47 +444,47 @@ function SetFocus(elName) {
   if (el != undefined) el.focus();
 }
 
-function validateMisc(ReturnCode,ReturnName,GSTAppl,GSTCode,KeyAmt,Amount) {
-  if (isWhitespace(ReturnCode.value)) {
-    return;;
-  }
-  if (document.UpdateForm.pmsfd004!=undefined) {
-   var serverURL   = "../cgi-bin/patweb80.pbl?reportno=4" +
-                 "&valdcode=" + ReturnCode.value.replace(/ /g,"+") +
-                 "&returndt=" + UpdateForm.pmsfd004.value.replace(/ /g,"+") +
-                 "&valdadno=" + UpdateForm.admissno.value.replace(/ /g,"+") +
-                 "&valdtype=5"
-   } else {
-   var serverURL   = "../cgi-bin/patweb80.pbl?reportno=4" +
-                 "&valdcode=" + ReturnCode.value.replace(/ /g,"+") +
-                 "&valdadno=" + UpdateForm.admissno.value.replace(/ /g,"+") +
-                 "&valdtype=5"
-   }
-
-  KeyAmt.value="0";
-  var returnValue = RSExecute(serverURL);
-  if (returnValue.status==0) {
-    ReturnValue=returnValue.return_value.split("|");
-    ReturnName.value=trim(ReturnValue[0]);
-    GSTAppl.value=ReturnValue[10];
-    GSTCode.value=ReturnValue[11];
-    if ((ReturnValue[15]=="Y") && (Amount.value!="zzz")) {
-      KeyAmt.value="1";
-      window.Amount=Amount;
-      window.Itemn=ReturnName;
-      linkURL="patweb76.pbl?reportno=01&template=051" +
-              "&urnumber=" + UpdateForm.urnumber.value.replace(/ /g,"+") +
-              "&admissno=" + UpdateForm.admissno.value.replace(/ /g,"+")
-      Left=(document.body.clientWidth-350)/2
-      DFrameLink(linkURL,250,Left,350,120)
-    }
-    return true;
-  }
-  else {
-    FocusDelay(ReturnCode);
-    return false;
-  }
-}
+//function validateMisc(ReturnCode,ReturnName,GSTAppl,GSTCode,KeyAmt,Amount) {
+//  if (isWhitespace(ReturnCode.value)) {
+//    return;;
+//  }
+//  if (document.UpdateForm.pmsfd004!=undefined) {
+//   var serverURL   = "../cgi-bin/patweb80.pbl?reportno=4" +
+//                 "&valdcode=" + ReturnCode.value.replace(/ /g,"+") +
+//                 "&returndt=" + UpdateForm.pmsfd004.value.replace(/ /g,"+") +
+//                 "&valdadno=" + UpdateForm.admissno.value.replace(/ /g,"+") +
+//                 "&valdtype=5"
+//   } else {
+//   var serverURL   = "../cgi-bin/patweb80.pbl?reportno=4" +
+//                 "&valdcode=" + ReturnCode.value.replace(/ /g,"+") +
+//                 "&valdadno=" + UpdateForm.admissno.value.replace(/ /g,"+") +
+//                 "&valdtype=5"
+//   }
+//
+//  KeyAmt.value="0";
+//  var returnValue = RSExecute(serverURL);
+//  if (returnValue.status==0) {
+//    ReturnValue=returnValue.return_value.split("|");
+//    ReturnName.value=trim(ReturnValue[0]);
+//    GSTAppl.value=ReturnValue[10];
+//    GSTCode.value=ReturnValue[11];
+//    if ((ReturnValue[15]=="Y") && (Amount.value!="zzz")) {
+//      KeyAmt.value="1";
+//      window.Amount=Amount;
+//      window.Itemn=ReturnName;
+//      linkURL="patweb76.pbl?reportno=01&template=051" +
+//              "&urnumber=" + UpdateForm.urnumber.value.replace(/ /g,"+") +
+//              "&admissno=" + UpdateForm.admissno.value.replace(/ /g,"+")
+//      Left=(document.body.clientWidth-350)/2
+//      DFrameLink(linkURL,250,Left,350,120)
+//    }
+//    return true;
+//  }
+//  else {
+//    FocusDelay(ReturnCode);
+//    return false;
+//  }
+//}
 
 </script>
 </head>
@@ -1691,6 +1691,12 @@ InsertPatientHeader()
  <input type=hidden name="cmxxflag" value="%PATWEB78.06.501">
  <input type=hidden name="itgsttot" value="%PATWEB78.06.499.573.0">
  <input type=hidden name="acgsttot" value="%PATWEB78.06.499.573.1">
+
+ <input type=hidden name="itpatgst" value="%PATWEB78.06.499.573.2">
+ <input type=hidden name="itfndgst" value="%PATWEB78.06.499.573.3">
+ <input type=hidden name="acpatgst" value="%PATWEB78.06.499.573.4">
+ <input type=hidden name="acfndgst" value="%PATWEB78.06.499.573.5">
+
  <input type=hidden name="hospcpay" value="">
  <input type=hidden name="estcostt" value="">
  <input type=hidden name="estrebtt" value="">

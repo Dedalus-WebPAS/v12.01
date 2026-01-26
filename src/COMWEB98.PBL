@@ -5,6 +5,15 @@
 .
 . Modifications : 
 .-----------------------------------------------------------------------------
+. V12.01.06 08/01/2026  Bella Turco      TSK 0951679
+.           Recompiled for PATCONTM
+. V12.01.05 19/12/2025  Davin            TSK 0961944
+.           Added PATCN701/PTCNNTES - Send/Receive NTE segment in HL7 M02
+.           17/12/2025  J.Tan            TSK 0956147
+.           Added PATCN700/PTCNHACD - HAC Flags for Risk Factors Start Date-ABF
+.           07/01/2026  Alina            TSK 0958930                      
+.           Added PATCN702/PTCNBDTE - Added Broadcast a Unique ID in     
+.           PV1.50 for a Bed Transfer Event                             
 . V12.01.04 19/12/2025  Zumin Yu         TSK 0968747
 .           Added MEHCN022/MHCNMINH - Min. no. of days for Holiday Leave
 .           Added MEHCN023/MHCNMINT - Min. no. of days for Trial Leave
@@ -1776,7 +1785,7 @@ ZERO6     INIT      "000000"
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "COMWEB98"
-VERSION   INIT      "V12.01.04"
+VERSION   INIT      "V12.01.06"
 PRGNAM    INIT      "Parameter Maintenance"
 .----------------------------------------------------------------------
 .
@@ -3351,7 +3360,7 @@ RPAT0000  READ      CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                  *144,PTCNU52G,*145,PTCNC52C:
                                  *152,PTCNU62G,*153,PTCNC62C,*157,PTCNC70C
           READ      CONTROLF,EIGHTY8;*43,PTCNACCF,*56,PTCNHADF,*59,PTCNI10D:
-                                     *124,CHCSST,*132,CHCSED                                 
+                                     *70,PTCNHACD,*124,CHCSST,*132,CHCSED
           READ      CONTROLF,NINTY8;*124,PTCNHPCD,*149,PTCNGDV2
           READ      CONTROLF,HUND05;*104,PTCNDGET,*158,PTCNDGPV:
                                     *162,PTCNU41G,*163,PTCNU42G,*217,PTCNGDV4:
@@ -3406,7 +3415,7 @@ RPAT0000  READ      CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                     *113,PTCNFNM2,*114,PTCNABTS,*115,PTCNDBVC:
                                     *116,PTCNDBVP,*117,PTCNSAPC,*118,PTCNSDTY:
                                     *119,PTCNVIMS,*120,PTCNEDDT,*121,PTCNB08E:
-                                    *122,PTCNMSH3
+                                    *122,PTCNMSH3,*172,PTCNNTES,*173,PTCNBDTE
 .
 RPAT9999  RETURN
 .
@@ -3441,7 +3450,7 @@ UPAT0000  WRITAB    CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
           WRITAB    CONTROLF,TWENTY;*53,PTCNPRS1,*63,PTCNPRS2,*77,PT3BHOSP:
                                     *91,PTCNHSEM:
                                     *166,PTCNTACP,*191,PTCECODE
-          WRITAB    CONTROLF,TWENTY1;*45,PTCNDRSM,*51,PTCNINVL:
+          WRITAB    CONTROLF,TWENTY1;*45,PTCNDRSM,*51,PTCNINVL,*58,PTCNHACD:
                                      *105,PTCNIDTH,*111,PTCNBDTH:
                                      *138,PTCNNHII,PTCNNHID:
                                      *191,PTCNNHIF,*204,PTCNAWRN:
@@ -3635,7 +3644,7 @@ UPAT0000  WRITAB    CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                  *144,PTCNU52G,*145,PTCNC52C:
                                  *152,PTCNU62G,*153,PTCNC62C,*157,PTCNC70C
           WRITAB    CONTROLF,EIGHTY8;*43,PTCNACCF,*56,PTCNHADF,*59,PTCNI10D:
-                                     *124,CHCSST,*132,CHCSED
+                                     *70,PTCNHACD,*124,CHCSST,*132,CHCSED
           WRITAB    CONTROLF,NINTY8;*124,PTCNHPCD,*149,PTCNGDV2
           WRITAB    CONTROLF,HUND05;*104,PTCNDGET,*158,PTCNDGPV:
                                     *162,PTCNU41G,*163,PTCNU42G,*217,PTCNGDV4:
@@ -3689,7 +3698,7 @@ UPAT0000  WRITAB    CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                     *113,PTCNFNM2,*114,PTCNABTS,*115,PTCNDBVC:
                                     *116,PTCNDBVP,*117,PTCNSAPC,*118,PTCNSDTY:
                                     *119,PTCNVIMS,*120,PTCNEDDT,*121,PTCNB08E:
-                                    *122,PTCNMSH3
+                                    *122,PTCNMSH3,*172,PTCNNTES,*173,PTCNBDTE
 .
 UPAT9999  RETURN
 .

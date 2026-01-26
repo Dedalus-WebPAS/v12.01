@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -212,6 +212,7 @@ function IsEReferral() {
 <input type=hidden name=d_extapp value="%ALLWEB02.02.523.002">
 <input type=hidden name=ptcnhdps id=ptcnhdps 
        value="%STANDARD.01.025.080.250.1.1">
+<input type=hidden name=existcom value="%ALLWEB02.02.938">
 
 <table align=center cellspacing=0 cellpadding=1 border=0 width=95%>
 <tr><td class=DataLabel width=15%>Department Code</td>
@@ -433,7 +434,7 @@ function IsEReferral() {
     <td>
       <span id=eRefButtons style="display:none">
         <input type=button class="button" value="Booking Instructions"
-         style="width:120px" onclick="BookingInstr();">
+         id=eRefbutt style="width:120px" onclick="BookingInstr();">
         <input type=button class="button" value="Link to Referral"
          style="width:120px" onclick="LinkToRef();">
       </span>
@@ -618,6 +619,9 @@ Disaster Identification #
  }
 
  if (trim(document.UpdateForm.d_extapp.value) == "eReferrals") {
+  if (document.UpdateForm.existcom.value=="1") {
+    document.getElementById('eRefbutt').className="RedButton";
+  }
   document.getElementById('eRefButtons').style.display = "";
  }
 

@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="nz">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -8,6 +8,58 @@
 <script type="text/javascript" src="../js/emrweb0202002.js"></script>
 <script type="text/javascript" src="../js/emrweb0201102.js"></script>
 <script type="text/javascript">
+//==========================================================================
+// Scan all select lists & checkboxes in form & add selected/checked attributes
+// to all selectedIndexes & checked checkboxes (needed for IsDirtyNHI())
+//==========================================================================
+function addSelectedAttr1(eForm) {
+  for (var i=0; i < eForm.length; i++) {
+    var eElem = eForm.elements[i];
+    if (eElem.type == "checkbox" || eElem.type == "radio") {
+      if (eElem.checked) {
+        eElem.setAttribute('checked','true');
+      }
+    }
+    if (eElem.tagName == "SELECT") {
+      for (var j=0; j < eElem.options.length; j++) {
+        var option = eElem.options[j]
+        if (j==eElem.selectedIndex) {
+          option.setAttribute('selected',true);
+        }
+      }
+    }
+  }
+}
+//==========================================================================
+// Scan all elements in table and return true if any elements have been changed
+//==========================================================================
+function IsDirtyNHI1() {
+  if (UpdateForm.nzpmichg.value=="1") { return true; }
+
+  for (const arg of arguments) { // loop through function arguments (table ids)
+    var table = document.getElementById(arg);
+    elements = table.getElementsByTagName('*');
+    for (var i=0; i < elements.length; i++) {
+      var eElem = elements[i];
+      if (eElem.type == "text" || eElem.type == "textarea") {
+        if(eElem.name) {
+          if(eElem.name=="prcom001") { continue; }
+        }
+        if (trim(eElem.value) != trim(eElem.defaultValue))  {
+          return true; }
+      }
+      if (eElem.type == "checkbox" || eElem.type == "radio") {
+        if (eElem.checked != eElem.defaultChecked && !eElem.disabled) {
+          return true; }
+      }
+      if (eElem.tagName == "SELECT") {
+        if (!eElem[eElem.selectedIndex].defaultSelected) {
+          return true; }
+      }
+    }
+  }
+  return false;
+}
 function DisplayPresentComplaintAddInfo() {
   f = document.UpdateForm;
   if (f.emcprcmp.value == "1") {
@@ -54,6 +106,11 @@ function UpdateThisVisit() {
 function UpdateVisit() {
   if (validateMandatory(UpdateForm)) {
     validateDemographicsConfirmedDate();
+
+    if(!IsDirtyNHI1('PatDemo','PMIDet','ResDet')) {
+      UpdateForm.nzpmichg.value = '1';
+    }
+
     if (document.UpdateForm.redirect.value.substr(0,12)!=="nhiweb99.pbl") {
       setRedirect();
     }
@@ -114,7 +171,8 @@ function showMobilePhoneDet() {
 <body onLoad="PageLoad(event);checkReferred();DisplayResidency();
               showMobilePhoneDet();DispPrefGivenName();
               ChkIdentifyGenderPronounTitle(document.UpdateForm);
-              DisplayPresentComplaintAddInfo();">
+              DisplayPresentComplaintAddInfo();
+              addSelectedAttr1(UpdateForm);">
 <div id=PatientHeading></div>
 <script type="text/javascript">
 PatientURN="%EMRWEB02.02.003";
@@ -181,8 +239,9 @@ InsertEmergencyHeader();
 <input type=hidden name=nhmas005 value="%EMRWEB02.02.070.007">
 <input type=hidden name=emcprcmp id=emcprcmp
  value="%STANDARD.01.025.122.051.1.1">
+<input type=hidden name=nzpmichg value="">
 
-<table align=center width=100% border=0 cellspacing=0 cellpadding=0>
+<table id=PatDemo align=center width=100% border=0 cellspacing=0 cellpadding=0>
 <tr><td class=HeadingCell colspan=6 width=100% align=center>
      Patient Demographics</td></tr>
 <tr>
@@ -312,7 +371,7 @@ InsertEmergencyHeader();
 </tr>
 </table>
 
-<table align=center width=100% border=0 cellspacing=0 cellpadding=0>
+<table id=PMIDet align=center width=100% border=0 cellspacing=0 cellpadding=0>
 <tr><td colspan=6 class=HeadingCell align=center>
     PMI Details</td></tr>
 <tr><td>
@@ -427,7 +486,7 @@ InsertEmergencyHeader();
 </tr>
 </table>
 
-<table border=0 width=100% cellspacing=0 cellpadding=0>
+<table id=ResDet border=0 width=100% cellspacing=0 cellpadding=0>
   <tr><td colspan=8 class=HeadingCell align=center>Residency Details</td></tr>
 
   <tr><td class=DataLabel width=11%>Country of Birth</td>

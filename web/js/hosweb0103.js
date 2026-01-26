@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 // Program   : hosweb0103.js
 //
@@ -202,6 +202,7 @@ function Resubmit(Item) {
 }
 function checkAdmiss(admiss) {
   if(isWhitespace(admiss.value)) { return; }
+  UpCase(admiss);
   if ((event.keyCode == 13) || (event.keyCode == 9)) {  // Carriage Return
     if (validateMandatory(BatchForm)) {
       justifyRight(admiss)

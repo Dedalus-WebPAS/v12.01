@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="crdhb">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -335,6 +335,7 @@ function UpdatePageNZ() {
       document.UpdateForm.nextpage.value=9
     }
     SetOptOutSMS();
+    if(!IsDirtyNHI(UpdateForm)) { UpdateForm.nzpmichg.value = "1"; }
     setTimeout('document.UpdateForm.UpdateButton.disabled=false',1000);
     document.UpdateForm.submit()
   }
@@ -367,7 +368,8 @@ function validateDemographicsConfirmedDate() {
 <body onLoad="PageLoad(event);valClaimCode();DisplayResidency();
         DispPrefGivenName();
 	setPurchaser();setClaimType();setInformGP();displayReferralFields();
-	showMobilePhoneDet();ChkIdentifyGenderPronounTitle(document.UpdateForm);">
+	showMobilePhoneDet();ChkIdentifyGenderPronounTitle(document.UpdateForm);
+        addSelectedAttr(UpdateForm);">
 <!-- end of change -->
 <div id=PatientHeading></div>
 <script type="text/javascript">
@@ -426,6 +428,7 @@ InsertEmergencyHeader()
   <input type="hidden" name="claimc">
   <input type="hidden" name=deftclam value="%EMRWEB02.01.108.1">
   <input type="hidden" name="ptcnrerd" value="%STANDARD.01.025.118.250.0.1">
+  <input type=hidden name=nzpmichg value="">
  <!-- 03 : TAS : 12-MAR-2018 : Add department/specialty field --> 
 	<input type=hidden name=emvis009 value="%EMRWEB02.01.109.0"> 
  <!-- 01 : CTAS : add custom hidden fields to UpdateForm -->
@@ -934,7 +937,7 @@ checkTATime(UpdateForm,UpdateForm.emvis165.value,UpdateForm.emvis166.value);">
   <td>
     <select name=emvis067>
       <option value=""></option>
-      %EMRWEB02.01.227.2
+      EMRWEB02.01.227.2
     </select>
   </td>
 -->

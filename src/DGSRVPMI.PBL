@@ -6,6 +6,8 @@
 .*                                                                        *
 .*  Mod's     :                                                           *
 .**************************************************************************
+.* V12.01.01 11/12/2025  Bella Turco    TSK 0949715                       *
+.*           Recompiled for UPDUR - added NZPMICHG                        *
 .* V12.00.02 27/07/2025  Nikitha B      TSK 0963585                       *
 .*           Recompiled for WEBCHGUR                                      *
 .* V12.00.01 16/05/2025  Bella Turco    TSK 0955096                       *
@@ -484,6 +486,7 @@ NZIBOLDA  FORM      1
 NZIBVNEW  FORM      1
 NZIBDOBS  FORM      1
 NZOPTION  FORM      1
+NZPMICHG  DIM       1
 OLDURNO   DIM       8
 OPERCODE  DIM       4
 PMEDIXX   DIM       12                      * Composite of PMEDI+PTMXMCCD
@@ -600,7 +603,7 @@ DEC       INIT      "December"
 .-----------------------------------------------------------------------
 PRGID     INIT      "DGSRVPMI"                                           * C900
 PRGNAM    INIT      "PROCESS DATAGATE MESSAGE REQUESTS"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 .-----------------------------------------------------------------------
 +
 .*************************************************************************
@@ -784,6 +787,7 @@ DGINI000  DISPLAY   *P1:4,*EF
           MOVE      ZERO,DGNUMSER
           MOVE      ZERO,DGNUMALR
           MOVE      ZERO,DGNUMMRG
+          MOVE      SP70,NZPMICHG
 .
           MOVE      CDATE,APSTDATE                * application start date
           CLOCK     TIME,APSTTIME                 * application start time

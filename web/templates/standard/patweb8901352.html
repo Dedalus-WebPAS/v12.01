@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.01">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -275,6 +275,7 @@ function SubmitClaim() {
   <input type=hidden name=ccvisbok value="%PATWEB89.01.999.128">
   <input type=hidden name=visitty value="%PATWEB89.01.999.129.0">
   <input type=hidden name=visitst value="%PATWEB89.01.999.129.1">
+  <input type=hidden name=newMVIT  value="%PATWEB89.01.384.099.042.1">
 
 <table align=center width=100% border=1 cellspacing=0 cellpadding=2>
 <tr><td class=HeadingCell align=center>
@@ -601,10 +602,22 @@ if(document.UpdateForm.pmext138.value=="1"){
   } 
 
 function SetCancel() {
- if(!confirm("Warning: Motor Vehicle data will not be updated and\n" +
-             "answer to motor vehicle accident question will revert\n" +
-             "to 'No!' Ok to Continue ?")){
-   return;
+
+ if (document.UpdateForm.newMVIT.value=="") {
+   if(!confirm("Warning: Motor Vehicle data will not be updated and\n" +
+               "answer to motor vehicle accident question will revert\n"+
+               "to 'No'! Ok to Continue ?")){
+     return;
+   }
+   var admissno = document.PatientLinks.admissno.value.replace(/ /g,"+");
+   var serverURL = "../cgi-bin/comweb81.pbl?reportno=74&valdadmn="+admissno;
+   var returnValue = RSExecute(serverURL);
+ } else {
+   if(!confirm("Warning: Motor Vehicle data will not be saved\n" +
+               "do you wish to continue?")){
+     return;
+   }
+
  }
 
  var admissno = document.PatientLinks.admissno.value.replace(/ /g,"+");

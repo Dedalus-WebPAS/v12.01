@@ -5,6 +5,8 @@
 .*                                                                            *
 .* Date          :  V5.01.00  09/09/1993                                      *
 .* Modifications :                                                            *
+.*       V12.01.01  11/12/2025  Bella Turco       TSK 0949715                 *
+.*                  Added NZPMICHG - check if NZ PMI details have been changed*
 .*       V12.00.01  26/05/2025  Bella Turco       TSK 0955096                 *
 .*                  Alphanumeric changes                                      *
 .*       V11.04.01  11.10.2024  Alina Bhari       TSK 0946636                 *
@@ -274,8 +276,14 @@ UPDUR     OPEN      CONTROLF,"controlf"
             ENDIF
             RESET     PRGID
 .
-            CLOCK     TIME,PTMAUTIM
-            MOVE      USERID,PTMAUUID
+.         If NZ PMI details have not been changed do not update
+.         'Demographics Last Updated' details
+.
+            MATCH     "1",NZPMICHG                  * "1" means no change
+            IF        !@EQUAL
+              CLOCK     TIME,PTMAUTIM
+              MOVE      USERID,PTMAUUID
+            ENDIF
 .
             CALL      UDPMI000               * Update PMI alterations file
             CALL      UDMAS000               * Update master/pram file & surn
@@ -532,12 +540,24 @@ UDPMI200  CALL      IBACLOCK
           MOVE      SURSYST,URSYST           * Yes. Restore Originating System
           CALL      UPURAD1                  * Update UR.
 .
-          MOVE      URDATE,PCHGDTE
+.         If NZ PMI details have not been changed do not update
+.         'Demographics Last Updated' details
+.
+          MATCH     "1",NZPMICHG             * "1" means no change
+          IF        !@EQUAL
+            MOVE      URDATE,PCHGDTE
+          ENDIF
           GOTO      UDPMI999
 .
 UDPMI400  CALL      WRURAD1                 * Write Record
 .
-          MOVE      URDATE,PCHGDTE
+.         If NZ PMI details have not been changed do not update
+.         'Demographics Last Updated' details
+.
+          MATCH     "1",NZPMICHG            * "1" means no change
+          IF        !@EQUAL
+            MOVE      URDATE,PCHGDTE
+          ENDIF
 .
 UDPMI999  RETURN
 +
