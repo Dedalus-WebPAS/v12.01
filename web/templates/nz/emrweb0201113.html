@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="nz">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -15,6 +15,7 @@ function DisplayPresentComplaintAddInfo() {
   else {
     document.getElementById('PresentComplaintAddInfo').style.display = "none";
   }
+  f.vicmt023.value=trim(f.pcompadd.value)
 }
 function SplitComplaint()  {
 words=triage.comptext.value.split(/\s+/);
@@ -216,6 +217,7 @@ InsertEmergencyHeader()
 <input type=hidden name=savelocd value="%EMRWEB02.01.106.0">
 <input type=hidden name=emcprcmp id=emcprcmp
  value="%STANDARD.01.025.122.051.1.1">
+<input type=hidden name=pcompadd value="%EMRWEB02.01.955.023.0">
 
 <table width=100% border=0 cellspacing=0 cellpadding=1>
 <tr><td class=DataLabel width=20%>Presenting Complaint </td>

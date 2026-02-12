@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.08">
+<meta name="TemplateVersion" content="V12.01.11">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -226,7 +226,9 @@ function SubmitClaim() {
          }
        }
 
-     } else {
+     } 
+
+     if(isWhitespace(document.UpdateForm.pmext012.value)){
        document.UpdateForm.pmext034.value="";
        document.UpdateForm.pmext031.value="";
      }
@@ -236,9 +238,25 @@ function SubmitClaim() {
    }
  }
 }
+
+function getDefaultInsurance() {
+  if((document.UpdateForm.claimcod.value[3]=="E" ||
+      document.UpdateForm.claimcod.value[3]=="G") &&
+      trim(document.UpdateForm.d_pmext012.value) != "") {
+    document.UpdateForm.pmext012.value = document.UpdateForm.d_pmext012.value;
+    if (trim(document.UpdateForm.pmext012.value) == "") {
+      GetDefaultIns();
+    } else {
+      DisplayIns();
+    }
+  } else {
+    GetDefaultIns();
+  }
+}
+
 </script>
 %START.OF.PAGE
-<body onLoad="PageLoad(event);GetDefaultIns();
+<body onLoad="PageLoad(event);getDefaultInsurance();
               prtFormCheckType();">
 <div id=PageHeadingSection>
 <div id=PatientHeading></div>
@@ -308,7 +326,6 @@ InsertPatientHeader()
   <input type=hidden name=ccvisbok value="%PATWEB89.01.999.128">
   <input type=hidden name=visitty value="%PATWEB89.01.999.129.0">
   <input type=hidden name=visitst value="%PATWEB89.01.999.129.1">
-  <input type=hidden name=d_pmext012 value="%PATWEB89.01.384.012.1">
   <input type=hidden name=pmext030 value="%PATWEB89.01.384.030">
   <input type=hidden name=pmext031 value="%PATWEB89.01.384.031">
   <input type=hidden name=pmext032 value="%PATWEB89.01.384.032">
@@ -325,6 +342,12 @@ InsertPatientHeader()
   <input type=hidden name=pmext084 value="%PATWEB89.01.384.084">
   <input type=hidden name=pmext142 value="%PATWEB89.01.384.099.044">
   <input type=hidden name=newMVIT  value="%PATWEB89.01.384.099.042.1">
+  <input type=hidden name=pmext083 value="%PATWEB89.01.384.083">
+  <input type=hidden name=d_pmext012 value="%PATWEB89.01.384.012.0">
+  <input type=hidden name=d_pmext030 value="%PATWEB89.01.384.030">
+  <input type=hidden name=d_pmext031 value="%PATWEB89.01.384.031">
+  <input type=hidden name=d_pmext032 value="%PATWEB89.01.384.032">
+  <input type=hidden name=d_pmext034 value="%PATWEB89.01.384.034">
 
 <table align=center width=100% border=1 cellspacing=0 cellpadding=2>
 <tr><td class=HeadingCell align=center>

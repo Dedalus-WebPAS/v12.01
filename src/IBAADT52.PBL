@@ -8,6 +8,8 @@
 .* Function       :  Upload program to Map HAC to ICD10 from ASCII file       *
 .* Modifications  :                                                           *
 .*----------------------------------------------------------------------------*
+.* V12.01.01 11/12/2025  J.Tan         TSK 0956147                            *
+.*           Mod for HAF (HAC Flags)                                          *
 .* V12.00.01 13/08/2025  J.Tan         TSK 0964813                            *
 .*           Added ICD10 Ed13                                                 *
 .* V11.03.01 15/02/2023  Bella Turco   TSK 0929362                            *
@@ -24,14 +26,14 @@
           INC       PATICDFD/INC
           INC       PATCONFD/INC
 .
-.         Mapping HAC to ICD10 Upload file
+.         Mapping HAC or HAF to ICD10 Upload file
 .
-HACICTXT  FILE       HL7, FIXED=1000   * Upload file for mapping HAC to ICD10
+HACICTXT  FILE       HL7, FIXED=1000  * Upload file for mapping HAC/HAF to ICD10
 .
 .Name     Type     Size     Start
 .----     ----     ----     -----
 XICDCD    DIM         9     ICD10 Disease Code
-XHACCD    DIM         3     HAC Group
+XHACCD    DIM         3     HAC or HAF Group
 .
 . ----- Program Variables -----
 .
@@ -41,7 +43,9 @@ ERRFLAG   FORM      1
 ERRNUMB   FORM      6
 FNAMEI    DIM       150
 FORM12P2  FORM      12.2
+HACFLAG   DIM       3
 HACCODE   INIT      "HAC"
+HAFCODE   INIT      "HAF"
 ICD10EDT  DIM        8
 RECNUMB   FORM       6
 RECWRDT   FORM       6
@@ -55,7 +59,7 @@ XFLD0002  DIM       30
 .
 PRGID     INIT      "IBAADT52"
 PRGNAM    INIT      "Mapping HAC to ICD10 Upload Program"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .******************************************************************************
 .*                                  ML0000                                    *
@@ -116,11 +120,13 @@ KOPT0000  MOVE      ZERO,EXIT
           MOVE      ZERO,COPTION
           DISPLAY   *P1:6,*EF:
                     *P1:6,*V2LON,"0",*HOFF," = Exit":
-                    *P1:7,*V2LON,"1",*HOFF," = Upload Mapping HAC to ICD10":
+                    *P1:7,*V2LON,"1",*HOFF," = Mapping HAC to ICD10":
+                    *P1:8,*V2LON,"2",*HOFF," = ":
+                         "Mapping HAF (HAC Flags) to ICD10":
                     *P1:10,"Select Option : ";
 .
 KOPT1000  KEYIN     *P17:10,*V2LON,COPTION;
-          BRANCH    COPTION,KOPT9999
+          BRANCH    COPTION,KOPT9999,KOPT9999
 .
           COMPARE   ZERO,COPTION
           GOTO      KOPT9000 IF EQUAL
@@ -220,8 +226,8 @@ KPTH9999  RETURN
 KEDT0000  DISPLAY   *P1:24,*EL,"Edition 10, 11, 12 or 13";
 .
           PACK      KEY2,SP70
-          KEYIN     *P1:18,*EL,"Keyin ICD10 Edition: ":
-                    *P26:18,*V2LON,*JR,KEY2;
+          KEYIN     *P1:19,*EL,"Keyin ICD10 Edition: ":
+                    *P26:19,*V2LON,*JR,KEY2;
           ENDSET    KEY2
           APPEND    SP70,KEY2
           RESET     KEY2
@@ -290,6 +296,11 @@ POST0000  MATCH     "patd11af",ICD10EDT
               ENDIF
             ENDIF
           ENDIF
+.
+.         COPTION 1=HAC, 2=HAF
+.
+          MOVE      HACCODE,HACFLAG
+          LOAD      HACFLAG,COPTION,HACCODE,HAFCODE
 .
           MOVE      ZERO,RECNUMB
           OPEN      HACICTXT,FNAMEI
@@ -366,7 +377,7 @@ VALC2000  MATCH     SP70,XHACCD
           MATCH     "A",PTCOACTV
           GOTO      VALC8600 IF NOT EQUAL       * Not active
 .
-          PACK      KEY33,HACCODE,XHACCD,SP70
+          PACK      KEY33,HACFLAG,XHACCD,SP70
           CALL      RDPMVSC1
           BRANCH    OVRCD,VALC8500
 .
@@ -389,15 +400,27 @@ VALC8300  CALL      PREC0000                  * Print record details
           GOTO      VALC9000
 .
 VALC8400  CALL      PREC0000                  * Print record details
-          PRINT     *40,"HAC Group Code must not be blank"
+          IF        COPTION=2
+            PRINT     *40,"HAF Group Code must not be blank"
+          ELSE
+            PRINT     *40,"HAC Group Code must not be blank"
+          ENDIF
           GOTO      VALC9000
 .
 VALC8500  CALL      PREC0000                  * Print record details
-          PRINT     *40,"Invalid HAC Group Code"
+          IF        COPTION=2
+            PRINT     *40,"Invalid HAF Group Code"
+          ELSE
+            PRINT     *40,"Invalid HAC Group Code"
+          ENDIF
           GOTO      VALC9000
 .
 VALC8600  CALL      PREC0000                  * Print record details
-          PRINT     *40,"Invalid or Inactive HAC Group Code"
+          IF        COPTION=2
+            PRINT     *40,"Invalid or Inactive HAF Group Code"
+          ELSE
+            PRINT     *40,"Invalid or Inactive HAC Group Code"
+          ENDIF
           GOTO      VALC9000
 .
 VALC9000  MOVE      ONE,EXIT
@@ -405,14 +428,14 @@ VALC9000  MOVE      ONE,EXIT
 VALC9999  RETURN
 +
 .----------------------------------------------------------------------
-. Subroutine to post mapping HAC to ICD10 
+. Subroutine to post mapping HAC or HAF to ICD10 
 .----------------------------------------------------------------------
-UICD0000  PACK      KEY33,HACCODE,XHACCD,SP70
+UICD0000  PACK      KEY33,HACFLAG,XHACCD,SP70
           CALL      RDPMVSC1
           BRANCH    OVRCD,UICD9999
 .
           PACK      PMVMTIDX,XICDCD,SP70
-          PACK      KEY41,ICD10EDT,PMVMTIDX,HACCODE,SP70
+          PACK      KEY41,ICD10EDT,PMVMTIDX,HACFLAG,SP70
           CALL      RDPMVMT1
           IF        OVRCD=1
             UNPACK    KEY41,PMVMTNAM,PMVMTIDX,PMVMMVSI
@@ -441,10 +464,15 @@ PREC9999  RETURN
 .*                        Print the selection details                         *
 .******************************************************************************
 PRHD0000  CALL      HEAD132
+          MOVE      "HAC to ICD10             ",KEY25
+          IF        COPTION=2
+            MOVE      "HAF (HAC Flags) to ICD10 ",KEY25
+          ENDIF
+.
           PRINT     *N,"Date               : ",CDATE:
                     *N,"Time               : ",CTIMEIS:
-                    *N,"User ID            : ",USERID
-.
+                    *N,"User ID            : ",USERID:
+                    *N,"Load Option        : ",KEY25
 .
           MATCH     "patd11af",ICD10EDT
           IF        @EQUAL
@@ -466,9 +494,13 @@ PRHD0000  CALL      HEAD132
             ENDIF
           ENDIF
 .
-          PRINT     "Mapping Load file   : ",PATHNAME:
-                    *N,*N,*1," Line No.",*12,"ICD10 Code",*27,"HAC Code":
-                    *40,"Error Description":
+          PRINT     "Mapping Load file   : ",PATHNAME;
+          IF        COPTION=2
+            PRINT     *N,*N,*1," Line No.",*12,"ICD10 Code",*27,"HAF Code";
+          ELSE
+            PRINT     *N,*N,*1," Line No.",*12,"ICD10 Code",*27,"HAC Code";
+          ENDIF
+          PRINT     *40,"Error Description":
                     *N,*1,"----------------------------------":
                     "--------------------------------------"
 PRHD9999  RETURN

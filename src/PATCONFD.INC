@@ -11,15 +11,22 @@
 .*     Mods.        :             look for (spare) or (moved) for free space  *
 .*                                                                            *
 .******************************************************************************
-.*       V12.01.03  19/12/2025  Davin            TSK 0961944                  *
-.*                  Added PTCNNTES - Send/Receive NTE segment in HL7 M02      *
-.*                  07/01/2026  Alina            TSK 0958930                  *
-.*                  Added PATCN702/PTCNBDTE - Added Broadcast a Unique ID in  *
-.*                  PV1.50 for a Bed Transfer Event                           *
-.*       V12.01.02  17/12/2025  J.Tan            TSK 0956147                  *
-.*                  Added PTCNHACD - HAC Flags for Risk Factors Start Date-ABF*
-.*       V12.01.01  15/12/2025  Zumin Yu         TSK 0968747                  *
-.*                  Updated CPMIAD, CURDEL and CURCHG option to 0 = No        *
+.* V12.01.04 04/02/2026  Thanh T                 TSK 0961944                  *
+.*           Added PTCNUMOP - If Home Phone is blank, use Mobile Phone        *
+.*                 PTCNLBNB - Leave pttybedn blank                            *
+.*                 PTCNPPNT - populate Patient Notes (pttynote) with          *
+.*                            Admission Date & Admission Diagnosis            * 
+.*                 PTCNDIAD - Number of Days in advance to include            * 
+.* V12.01.03 19/12/2025  Davin            TSK 0961944                         *
+.*           Added PTCNNTES - Send/Receive NTE segment in HL7 M02             *
+.*           07/01/2026  Alina            TSK 0958930                         *
+.*           Added PATCN702/PTCNBDTE - Added Broadcast a Unique ID in         *
+.*           PV1.50 for a Bed Transfer Event                                  *
+.* V12.01.02 17/12/2025  J.Tan            TSK 0956147                         *
+.*           Added PTCNHACD - HAC Flags for Risk Factors Start Date-ABF       *
+.* V12.01.01 15/12/2025  Zumin Yu         TSK 0968747                         *
+.*           Updated CPMIAD, CURDEL and CURCHG option to 0 = No               *
+.******************************************************************************
 .*       V12.00.07  19/11/2025  Davin            TSK 0968897                  *
 .*                  Added PTCNB08E - Broadcast HL7 EMR A08 from HL7RECVR      *
 .*                  Added PTCNMSH3 - Sending application MSH.3 for EMR A08    *
@@ -4838,7 +4845,18 @@ PTCNBDTE  DIM       1        173   Broadcast a Unique ID in PV1.50 for a Bed
 .                                  Transfer Event
 .                                  0 or Blank = Disabled
 .                                  1 = Enabled
+PTCNUMOP  DIM       1        174   If Home Phone is blank, use Mobile Phone
+.                                  0 or Blank = No
+.                                  1 = Yes
+PTCNLBNB  DIM       1        175   Leave pttybedn blank
+.                                  0 or Blank = No
+.                                  1 = Yes
+PTCNPPNT  DIM       1        176   Populate Patient Notes (pttynote) with
+.                                  Admission Date & Admission Diagnosis        
+.                                  0 or Blank = No
+.                                  1 = Yes
+PTCNDIAD  DIM       3        177   Number of Days in advance to include
 .
-.End of Record               174
+.End of Record               180
 +
 

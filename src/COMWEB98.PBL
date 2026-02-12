@@ -5,6 +5,17 @@
 .
 . Modifications : 
 .-----------------------------------------------------------------------------
+. V12.01.08 04/02/2026  Thanh T                 TSK 0961944            
+.           Added PTCNUMOP - If Home Phone is blank, use Mobile Phone
+.                 PTCNLBNB - Leave pttybedn blank 
+.                 PTCNPPNT - populate Patient Notes (pttynote) with
+.                            Admission Date & Admission Diagnosis
+.                 PTCNDIAD - Number of Days in advance to include
+. V12.01.07 02/02/2026  Zumin Yu         TSK 0972011                          
+.           Added HTLNUM, MRCNFUTD, HTNUMDAY, MRCNOIDM, MRCNPDST, MRCNSOMV, 
+.           MRCNMOVR, MRCNMOVP, MRCNMOVT, MRCNMECH, MRCNMSCD, MRCNTDAD, 
+.           MRCNWNHL, MRCNACRR, MRCNACRV, MRCNUSRD, MRCNAMTR, MRCNSLCM, 
+.           MRCNNOHS, MRCNUCRG and MRCNUFTY from IBAMRT98    
 . V12.01.06 08/01/2026  Bella Turco      TSK 0951679
 .           Recompiled for PATCONTM
 . V12.01.05 19/12/2025  Davin            TSK 0961944
@@ -1725,6 +1736,7 @@
           INC       MEHCONTD/INC
           INC       MRTCONFD/INC
           INC       MRTCONTD/INC
+          INC       MRTMOVFD/INC
 .
           INC       SINWARFD/INC
 .
@@ -1785,7 +1797,7 @@ ZERO6     INIT      "000000"
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "COMWEB98"
-VERSION   INIT      "V12.01.06"
+VERSION   INIT      "V12.01.08"
 PRGNAM    INIT      "Parameter Maintenance"
 .----------------------------------------------------------------------
 .
@@ -1970,6 +1982,7 @@ INIT0000  OPEN      CONTROLF,"controlf"
           OPEN      PMSVSTA1,"pmsvstaf"
           OPEN      SINWARA1,"sinwaraf"
           OPEN      IBAPRTA1,"ibaprtaf"
+          OPEN      MRTMOVA1,"mrtmovaf"
 .
           READ      CONTROLF,ZERO;*43,IBCNMHOS
 .
@@ -3415,7 +3428,9 @@ RPAT0000  READ      CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                     *113,PTCNFNM2,*114,PTCNABTS,*115,PTCNDBVC:
                                     *116,PTCNDBVP,*117,PTCNSAPC,*118,PTCNSDTY:
                                     *119,PTCNVIMS,*120,PTCNEDDT,*121,PTCNB08E:
-                                    *122,PTCNMSH3,*172,PTCNNTES,*173,PTCNBDTE
+                                    *122,PTCNMSH3,*172,PTCNNTES,*173,PTCNBDTE:
+                                    *174,PTCNUMOP,*175,PTCNLBNB,*176,PTCNPPNT:
+                                    *177,PTCNDIAD
 .
 RPAT9999  RETURN
 .
@@ -3698,7 +3713,9 @@ UPAT0000  WRITAB    CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                     *113,PTCNFNM2,*114,PTCNABTS,*115,PTCNDBVC:
                                     *116,PTCNDBVP,*117,PTCNSAPC,*118,PTCNSDTY:
                                     *119,PTCNVIMS,*120,PTCNEDDT,*121,PTCNB08E:
-                                    *122,PTCNMSH3,*172,PTCNNTES,*173,PTCNBDTE
+                                    *122,PTCNMSH3,*172,PTCNNTES,*173,PTCNBDTE:
+                                    *174,PTCNUMOP,*175,PTCNLBNB,*176,PTCNPPNT:
+                                    *177,PTCNDIAD
 .
 UPAT9999  RETURN
 .
@@ -4011,7 +4028,11 @@ MCON9999  RETURN
 .------------------------------------------------------------
 RMRT0000  READ      CONTROLF,NINTY7;*145,MRCNGRUP,*156,MRCNCDOP:
                                     *157,MRCNINCP,MRCNALHL
-          READ      CONTROLF,NINTY7;*160,MRCNDISA,MRCNTRAK,MRCNPBLK:
+          READ      CONTROLF,NINTY7;*102,MRCNPDST:
+                                    *146,MRCNMECH,*147,MRCNUFTY,*148,MRCNMSCD:
+                                    *151,MRCNTDAD,*152,MRCNACRR,*153,MRCNACRV:
+                                    *154,MRCNUSRD,*155,MRCNAMTR:
+                                    *160,MRCNDISA,MRCNTRAK,MRCNPBLK:
                                     *163,MRCNLINK,*164,MRCNUREQ,*165,MRCNIBAP:
                                     *166,MRCNRRED,*167,MRCNCROS,*168,MRCNLZER:
                                     *169,MRCNEMRT,*170,MRCNTDAY,*172,MRCNNOMR:
@@ -4023,15 +4044,20 @@ RMRT0000  READ      CONTROLF,NINTY7;*145,MRCNGRUP,*156,MRCNCDOP:
                                     *249,MRCNICCT,*250,MRCNACDA,*251,MRCNSCTC
           READ      CONTROLF,SIXTY;*79,MRCNLAYT,*81,MRCNTLOC,*84,MRCNHLOC:
                                    *88,MRCNRCTY,*91,MRCNVOLM,*95,MRCNUKEY:
-                                   *105,MRCNHMTY,*108,MRCNSTAT,*127,MRCNAUTO:
-                                   *133,MRCNEPSC,*149,MRCNBCHI,*150,MRCNECOD:
+                                   *105,MRCNHMTY,*108,MRCNSTAT,*111,HTLNUM:
+                                   *114,MRCNFUTD,*115,HTNUMDAY,*118,MRCNSLCM:
+                                   *119,MRCNOIDM,*127,MRCNAUTO,*129,MRCNNOHS:
+                                   *133,MRCNEPSC,*135,MRCNMOVR,*139,MRCNMOVP:
+                                   *143,MRCNMOVT,*147,MRCNSOMV,*148,MRCNWNHL:
+                                   *149,MRCNBCHI,*150,MRCNECOD:
                                    *151,MRCNDCDT,*155,MRCNDCUD,*156,MRCNREQC:
                                    *247,MRCNAUTG,*248,MRCN3MCD,*249,MRCN3MCG
           READ      CONTROLF,FIFTY9;*85,CMORBDTM,*218,PTMORBDT
           READ      CONTROLF,SIXTY;*157,MRCNWURL,*237,MRCNWSES
           READ      CONTROLF,SEVENTY9;*92,PTCNOENC
           READ      CONTROLF,HUND05;*173,PTCNICUT
-          READ      CONTROLF,SIXTY1;*220,MRCNNBMN,*230,MRCNTUSR,*240,MRCNUNWA:
+          READ      CONTROLF,SIXTY1;*219,MRCNUCRG:
+                                    *220,MRCNNBMN,*230,MRCNTUSR,*240,MRCNUNWA:
                                     *241,MRCNENWA,*249,MRCNPIGP
           READ      CONTROLF,HUND31;*1,MRCNDCID
 .
@@ -4042,7 +4068,11 @@ RMRT9999  RETURN
 .------------------------------------------------------------
 UMRT0000  WRITAB    CONTROLF,NINTY7;*145,MRCNGRUP,*156,MRCNCDOP:
                                     *157,MRCNINCP,MRCNALHL
-          WRITAB    CONTROLF,NINTY7;*160,MRCNDISA,MRCNTRAK,MRCNPBLK:
+          WRITAB    CONTROLF,NINTY7;*102,MRCNPDST:
+                                    *146,MRCNMECH,*147,MRCNUFTY,*148,MRCNMSCD:
+                                    *151,MRCNTDAD,*152,MRCNACRR,*153,MRCNACRV:
+                                    *154,MRCNUSRD,*155,MRCNAMTR:
+                                    *160,MRCNDISA,MRCNTRAK,MRCNPBLK:
                                     *163,MRCNLINK,*164,MRCNUREQ,*165,MRCNIBAP:
                                     *166,MRCNRRED,*167,MRCNCROS,*168,MRCNLZER:
                                     *169,MRCNEMRT,*170,MRCNTDAY,*172,MRCNNOMR:
@@ -4054,17 +4084,23 @@ UMRT0000  WRITAB    CONTROLF,NINTY7;*145,MRCNGRUP,*156,MRCNCDOP:
                                     *249,MRCNICCT,*250,MRCNACDA,*251,MRCNSCTC
           WRITAB    CONTROLF,SIXTY;*79,MRCNLAYT,*81,MRCNTLOC,*84,MRCNHLOC:
                                    *88,MRCNRCTY,*91,MRCNVOLM,*95,MRCNUKEY:
-                                   *105,MRCNHMTY,*108,MRCNSTAT,*127,MRCNAUTO:
-                                   *133,MRCNEPSC,*149,MRCNBCHI,*150,MRCNECOD:
+                                   *105,MRCNHMTY,*108,MRCNSTAT,*111,HTLNUM:
+                                   *114,MRCNFUTD,*115,HTNUMDAY,*118,MRCNSLCM:
+                                   *119,MRCNOIDM,*127,MRCNAUTO,*129,MRCNNOHS:
+                                   *133,MRCNEPSC,*135,MRCNMOVR,*139,MRCNMOVP:
+                                   *143,MRCNMOVT,*147,MRCNSOMV,*148,MRCNWNHL:
+                                   *149,MRCNBCHI,*150,MRCNECOD:
                                    *151,MRCNDCDT,*155,MRCNDCUD,*156,MRCNREQC:
                                    *247,MRCNAUTG,*248,MRCN3MCD,*249,MRCN3MCG
           WRITAB    CONTROLF,FIFTY9;*85,CMORBDTM,*218,PTMORBDT
           WRITAB    CONTROLF,SIXTY;*157,MRCNWURL,*237,MRCNWSES
           WRITAB    CONTROLF,SEVENTY9;*92,PTCNOENC
           WRITAB    CONTROLF,HUND05;*173,PTCNICUT
-          WRITAB    CONTROLF,SIXTY1;*220,MRCNNBMN,*230,MRCNTUSR,*240,MRCNUNWA:
+          WRITAB    CONTROLF,SIXTY1;*219,MRCNUCRG:
+                                    *220,MRCNNBMN,*230,MRCNTUSR,*240,MRCNUNWA:
                                     *241,MRCNENWA,*249,MRCNPIGP
           WRITAB    CONTROLF,HUND31;*1,MRCNDCID
+u
 .
 UMRT9999  RETURN
 .
@@ -5106,6 +5142,7 @@ HPLS9999  RETURN
           INC       PATMCHIO/INC
           INC       PMSVSTIO/INC
           INC       SINWARIO/INC
+          INC       MRTMOVIO/INC
 .
           INC       IBAWEBCD
           INC       NAMSTRCD

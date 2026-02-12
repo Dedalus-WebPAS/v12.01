@@ -14,6 +14,10 @@
 .
 . Modifications :
 .------------------------------------------------------------------------
+. V12.01.06 04.02.2025  DA Sarkies     TSK 0878522
+.           Added wahealth only updates to MHRI0300 for EMR and OP
+.           Added UPMHR000 for updating MyHR consent for current and
+.           future Outpatient appointments.
 . V12.01.05 11/12/2025  Bella Turco    TSK 0949715
 .           Added NZPMICHG cgi - check if NZ PMI details have been changed
 .           Don't update 'Demographics Last Updated' if no change (UPDMAS3)
@@ -5187,6 +5191,7 @@ EXPDATE   DATE      8
 MEDRTYPE  DIM       3
 EMADMISS  DIM       8
 FIRSTADM  DIM       8                  * This CGI contains the parent admission
+WAHEALTH  DIM       1
 .                                        number for multiple HCP bookings
 TRANDTTM  DIM       16
 .
@@ -5243,7 +5248,7 @@ AUTOMVMR  DIM       1        * Auto move (track) MR to Admitting Ward
 .
 .---------------------------------------------------------------------------
 PRGID     INIT      "PATWEB89"
-VERSION   INIT      "V12.01.05"
+VERSION   INIT      "V12.01.06"
 PRGNAM    INIT      "Admissions Web Server"
 .---------------------------------------------------------------------------
 .
@@ -6888,6 +6893,7 @@ CLRPAR00  READ      CONTROLF,TEN;*196,CGENRUR
           MOVE      SP70,SCHDPRNT
           MOVE      ZERO,SCHDCOPY
           MOVE      SP70,UPDATPMI
+          MOVE      ZERO,WAHEALTH
 .
           MOVE      SP70,SAVTDEPT
 .
@@ -7585,6 +7591,12 @@ SETPAT50    MOVE      QRYDATA,FORM1
           MATCH     "srchsnam=",QRYNAME
           IF        @EQUAL
             PACK      SRCHSNAM,QRYDATA,SP70
+            GOTO      SETPAR99
+          ENDIF
+.
+          MATCH     "wahealth=",QRYNAME
+          IF        @EQUAL
+            PACK      WAHEALTH,QRYDATA,SP70
             GOTO      SETPAR99
           ENDIF
 .
@@ -16465,6 +16477,18 @@ UPMAD210  MATCH      SAVEUSR9,PMPXUSR9
                   CALL      RDVISA1
                   CALL      RDMISS1
                 ENDIF
+              ELSE
+                MATCH     "1",WAHEALTH
+                IF        @EQUAL
+                  CALL      MHRI0000   * Update current/future episodes with
+                  CALL      UPMHRI00   * Update already admitted patient visit
+                  MATCH     SP70,ADMISSNO
+                  IF        !@EQUAL
+                    PACK      KEY8,ADMISSNO
+                    CALL      RDVISA1
+                    CALL      RDMISS1
+                  ENDIF
+                ENDIF
               ENDIF
             ENDIF
           ENDIF 
@@ -16902,13 +16926,13 @@ MHRI0000  CALL      IBACLOCK                * get TODAY's date
           PACK      KEY24,URNUMBER,TODAY,SP70
           CALL      RSPTVIS2
 MHRI0100  CALL      RKPTVIS2
-          BRANCH    OVRCD,MHRI9999
+          BRANCH    OVRCD,MHRI0300
 .
           MATCH     URNUMBER,PVIURNO
-          GOTO      MHRI9999 IF NOT EQUAL
+          GOTO      MHRI0300 IF NOT EQUAL
 .
           COMPARE   THREE,PVITYPE
-          GOTO      MHRI0100 IF NOT EQUAL   * visit type is not inpatient
+          GOTO      MHRI0100 IF NOT EQUAL   * visit type is inpatient
 .
 MHRI0200  PACK      KEY8,DPVIBILL,SP70
           CALL      RDPMVX11
@@ -16921,7 +16945,112 @@ MHRI0200  PACK      KEY8,DPVIBILL,SP70
           ENDIF
           GOTO      MHRI0100
 .
+MHRI0300  MATCH     "1",WAHEALTH
+          IF        @EQUAL
+            PACK      KEY16,URNUMBER,Z70
+            CALL      RSEMVIS3
+MHRI0310    CALL      RPEMVIS3
+            BRANCH    OVRCD,MHRI0399
+.
+            MATCH     URNUMBER,EMVIURNO
+            GOTO      MHRI0399 IF NOT EQUAL
+.
+            COMPARE   ONE,EMVISTAT
+            GOTO      MHRI0310 IF NOT EQUAL
+.
+MHRI0350    PACK      KEY8,DEMVIADM,SP70
+            CALL      RDPMVX11
+            BRANCH    OVRCD,MHRI0310
+.
+            MATCH     PMPXI110,Z70
+            IF        !@EQUAL
+              MOVE      PMPXI110,PMVXUDF7
+              CALL      UPPMVX11
+            ENDIF
+            GOTO      MHRI0310
+.          
+MHRI0399    CALL      UPMHR000 
+          ENDIF
+.
 MHRI9999  RETURN
++
+.------------------------------------------------------------------------------
+. UPMHR000 - Update My HR Consent for current & future OP appointments
+.------------------------------------------------------------------------------
+.
+UPMHR000  CLOSE     OUTSITA1
+          OPEN      OUTSITA3,"outsitaf"
+          OPEN      OUTARTA1,"outartaf"
+          CLOSE     ALLREFA1
+          OPEN      ALLREFA2,"allrefaf"
+.
+UPMHR100  PACK      CURDTE8,CCC,CYY,CMM,CDD
+          REP       " 0",CURDTE8
+.
+          MOVE      SP70,SAVESITE
+.
+          PACK      KEY9,SP70
+          CALL      RDSSITA3               * Loop all site file prefixes
+UPMHR200  CALL      RDKSITA3
+          BRANCH    OVRCD,UPMHR900
+.
+          MATCH     SP70,SAVESITE
+          GOTO      UPMHR300 IF EQUAL
+.
+          MATCH     SAVESITE,OSTFILE
+          GOTO      UPMHR200 IF EQUAL
+.
+UPMHR300  MOVE      OSTFILE,SAVESITE      * Save current site file prefix
+.
+          MATCH     OSTFILE,CFILEPRE
+          IF        !@EQUAL
+            MOVE      OSTFILE,CFILEPRE    * Save current file prefix
+            CALL      OPNOUT00            * Open prefixed outpatient files
+          ENDIF
+.
+          PACK      KEY36,URNUMBER,CURDTE8,SP70
+          CALL      RDSBOKA3
+UPMHR400  CALL      RDKBOKA3
+          BRANCH    OVRCD,UPMHR200
+.
+          MATCH     OBAURNO,URNUMBER
+          GOTO      UPMHR200 IF NOT EQUAL
+.
+          COMPARE   ONE,OBASTAT
+          GOTO      UPMHR400 IF NOT EQUAL
+.
+          PACK      KEY8,DOBAOUTN,SP70
+          CALL      RDPMVX11
+.
+          MATCH     PMPXI110,Z70
+          IF        !@EQUAL
+            MOVE      PMPXI110,PMVXUDF7
+            CALL      UPPMVX11
+          ENDIF
+          GOTO      UPMHR400
+.
+UPMHR900  MATCH     SP70,ADMISSNO
+          IF        !@EQUAL
+            PACK      KEY8,ADMISSNO,SP70
+            CALL      RDPMVX11
+            IF        OVRCD=1
+              CALL      CLPMSVX1
+            ENDIF
+          ENDIF
+.
+          CLOSE     OUTSITA3            * Close files only used by this label
+          OPEN      OUTSITA1,"outsitaf" * and re open original indexes
+          CLOSE     OUTARTA1 
+          CLOSE     ALLREFA2
+          OPEN      ALLREFA1,"allrefaf"
+.
+          CALL      OUTFIL00            * Restore correct OP files that are open
+          BRANCH    EXIT,UPMHR999
+.
+UPMHR950  MOVE      ZERO,EXIT
+          GOTO      UPMHR999
+.
+UPMHR999  RETURN
 +
 .------------------------------------------------------------------------------
 . UPMHRI00 - Update already admitted patient visit  

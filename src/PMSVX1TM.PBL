@@ -11,6 +11,8 @@
 .                    WEBSECFD
 . Maintenance :-
 .-----------------------------------------------------------------------------
+. V11.05.02 23.01.2025 David S        TSK 0875822
+.                      Added tag for MyHR consent at VXTX1000
 . V11.05.01 16/12/2024 Thanh T        TSK 0940638
 .                      Added VXTX2400 for History comments
 . V11.03.01 24/07/2023 Thanh T        TSK 0930508
@@ -1131,7 +1133,9 @@ VXTX0900  MOVE      "cx",CATEGORY
           CALL      CODITM00
           GOTO      VXTX9999
 . 
-VXTX1000
+VXTX1000  WRITE     HTMLFILE;PMVXUDF7;
+          GOTO      VXTX9999
+.
 VXTX1100
 VXTX1200
 VXTX1300

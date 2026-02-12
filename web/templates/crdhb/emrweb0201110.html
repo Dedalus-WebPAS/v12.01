@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="crdhb">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <!-- 01 : CTAS : link to custom javascript -->
@@ -336,20 +336,21 @@ InsertEmergencyHeader()
             </textarea>
      <!-- disabled -->
         </td></tr>
+
+      <tr valign=top id=PresentComplaintAddInfo>
+        <td></td><td></td>
+        <td>
+          <textarea type=text name=vicmt023 id=vicmt023 wrap=hard
+           cols=50 rows=6 class=AsciiOnly
+           title="Triage Notes - Additional Information"
+           onkeydown="CheckPresentCompAddInfoTextLimit(this);"
+           onblur="TextareaBlurHandler(this);SavePresComplAddInfoBLANK(this);">
+          </textarea>
+        </td>
+      </tr>
+
     </table>
     </td></tr>
-
-<tr valign=top id=PresentComplaintAddInfo>
-  <td></td>
-  <td style="padding-left:539px">
-    <textarea type=text name=vicmt023 id=vicmt023 wrap=hard
-     cols=50 rows=6 class=AsciiOnly
-     title="Triage Notes - Additional Information"
-     onkeydown="CheckPresentCompAddInfoTextLimit(this);"
-     onblur="TextareaBlurHandler(this);SavePresComplAddInfoBLANK(this);">
-    </textarea>
-  </td>
-</tr>
 
 <!-- 01 : CTAS : rearrange notes fields
 <tr valign=top><td class=DataLabel>Medical History </td>

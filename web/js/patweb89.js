@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.01
+//jsVersion  : V12.01.02
 //========================================================================
 // Program   : patweb89.js
 //
@@ -2381,6 +2381,39 @@ function IsDirtyNHI(eForm) {
       if (!eElem[eElem.selectedIndex].defaultSelected) {
         return true; }
     }
+  }
+  return false;
+}
+//==========================================================================
+// Validate contact postcode suburb and state combination
+//==========================================================================
+function CheckValPostCodeContact(suburb,state,postcode,contact) {
+  if (isWhitespace(suburb.value) && isWhitespace(postcode.value)) {
+      return true;
+  }
+  if (trim(postcode.value)=="8888") {
+    if (confirm("Click OK to confirm an Overseas Address")) {
+       return true;
+    }
+  }
+  var fulladdress = trim(postcode.value) + "," +
+                   trim(suburb.value) + "," +
+                   trim(state.value);
+  var tmp1 = fulladdress.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, " ");
+  for (var i =0; i<PC.length ; i++) {
+      var tmp2 = PC[i].replace(/[-[\]{}()*+?.,\\^$|#\s]/g, " ");
+      if (tmp2.match(tmp1)) {
+         SelectPC[SelectPC.length] = PC[i]
+         return true;
+      }
+  }
+  if(isWhitespace(state.value))
+  {
+    alert("Invalid " + trim(contact) + " Suburb/Post Code Combination");
+  }
+  else
+  {
+    alert("Invalid " + trim(contact) + " Suburb/State/Post Code Combination");
   }
   return false;
 }

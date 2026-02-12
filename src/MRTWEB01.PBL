@@ -6,6 +6,8 @@
 .                     
 . Modifications  :
 .-------------------------------------------------------------------------------
+. V12.01.01 22/01/2026  PJ Le Febour   TSK 0971772
+.           HISTAB00 test of RECCOUNT < 150 for Limit Reached deleted
 . V12.00.01 14/08/2025  Thanh T        TSK 0963125
 .           Changed XMLMRT72 to add retrieve the correct currect loction
 .           when Visit Number is selected
@@ -1118,7 +1120,7 @@ BACKSLSH  INIT      "\"
 .
 .---------------------------------------------------------------------------
 PRGID     INIT      "MRTWEB01"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Medical Record Tracking Maintenance"
 .---------------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -2458,12 +2460,7 @@ HISTAB10  CALL      RKMRHIS3                    * read key sequenti
 .
           BRANCH    EXIT,HISTAB10              * Skip record and do not count it
 .
-          ADD       ONE,RECCOUNT
-          IF        RECCOUNT<150
-            GOTO      HISTAB10 
-          ELSE
-            WRITE     HTMLFILE;"LimitReached();" * I CAR 48031
-          ENDIF
+          GOTO      HISTAB10 
 .
 HISTAB99  RETURN
 .------------------------------------------------------------

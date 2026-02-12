@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .------------------------------------------------------------------------------
+. V12.01.01 02/02/2026  Thanh T        TSK 0964924
+.           Changed EMERGV00 to add field 67 for pmpxucc4 gender data 
 . V12.00.02 11/09/2025  Nikitha B      TSK 0965462
 .           Recomplied for EMRCHMAN.PBL
 . V12.00.01 30/05/2025  Don Nguyen     TSK 0955096
@@ -1343,7 +1345,7 @@ DASH      INIT      "-"
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "EMRWEB01"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Emergency List Server"
 .----------------------------------------------------------------------
 .
@@ -1983,21 +1985,21 @@ PROFLD99  RETURN
 . Emergency List
 .------------------------------------------------------------
 EMRF0000  BRANCH    FLDITMNO,EMRF0100,EMRF0200,EMRF0300,EMRF0400,EMRF0500:
-                             EMRF0600,EMRF0700,EMRF0800,EMRF0900,EMRF1000:
+                             EMRF0600,EMRF0700,EMRF0800,EMRF0900,EMRF1000:  *10
                              EMRF1100,EMRF1200,EMRF1300,EMRF1400,EMRF1500:
-                             EMRF1600,EMRF1700,EMRF1800,EMRF1900,EMRF2000:
+                             EMRF1600,EMRF1700,EMRF1800,EMRF1900,EMRF2000:  *20
                              EMRF2100,EMRF2200,EMRF2300,EMRF2400,EMRF2500:
-                             EMRF2600,EMRF2700,EMRF2800,EMRF2900,EMRF3000:
+                             EMRF2600,EMRF2700,EMRF2800,EMRF2900,EMRF3000:  *30
                              EMRF3100,EMRF3200,EMRF3300,EMRF3400,EMRF3500:
-                             EMRF3600,EMRF3700,EMRF3800,EMRF3900,EMRF4000:
+                             EMRF3600,EMRF3700,EMRF3800,EMRF3900,EMRF4000:  *40
                              EMRF4010,EMRF4020,EMRF4030,EMRF4040,EMRF4050:
-                             EMRF4060,EMRF4070,EMRF4080,EMRF4090,EMRF5000:
+                             EMRF4060,EMRF4070,EMRF4080,EMRF4090,EMRF5000:  *50
                              EMRF5100,EMRF5200,EMRF5300,EMRF5400,EMRF5500:
-                             EMRF5600,EMRF5700,EMRF5800,EMRF5900,EMRF6000:
+                             EMRF5600,EMRF5700,EMRF5800,EMRF5900,EMRF6000:  *60
                              EMRF6100,EMRF6200,EMRF6300,EMRF6400,EMRF6500:
-                             EMRF6600,EMRF6700,EMRF6800,EMRF6900,EMRF7000:
-                             EMRF7100,EMRF7200,EMRF7300,EMRF7400,EMRF7500:
-                             EMRF7600,EMRF7700,EMRF7800,EMRF7900,EMRF8000:
+                             EMRF6600,EMRF6700,EMRF6800,EMRF6900,EMRF7000:  *70
+                             EMRF7100,EMRF7200,EMRF7300,EMRF7400,EMRF7500:  
+                             EMRF7600,EMRF7700,EMRF7800,EMRF7900,EMRF8000:  *80
                              EMRF8100,EMRF8200,EMRF8300,EMRF8400,EMRF8500:
                              EMRF8600
           GOTO      EMRF9999
@@ -5472,7 +5474,8 @@ EMERGV40  MOVE      ZERO,EXIT
 .
           WRITE     HTMLFILE;"#"",IPBEDREQ,"#",":                   *64
                              "#"",LASTIPOP,"#",":                   *65
-                             "#"",EMVIYN03,"#"":                    *66
+                             "#"",EMVIYN03,"#",":                   *66
+                             "#"",PMPXUCC4,"#"":                    *67
                              ");"
 .
           SFORMAT   FORMATNM,127

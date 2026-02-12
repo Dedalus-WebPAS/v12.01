@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -714,11 +714,12 @@ Reschedule Appointment - %OUTWEB02.03.618.1 - %OUTWEB02.03.002
     </td>
 </tr>
 
-<tr><td class=DataLabel>Consent MyHR upload?</td>
-    <td><select name=outbb017 tabindex=10 title="Consent MyHR Upload"
-         class=DataField>
-         <option></option>
-         %OUTWEB02.03.336.2
+<tr><td class=DataLabel id="MyHRConsentTitle"></td>
+    <td><select name=pmsvx125 id=pmsvx125 tabindex=10 class=DataField  
+                title="Consent MyHR Upload">
+           <option value=" "></option>
+           <option value="0">No</option>
+           <option value="1">Yes</option>
          </select>&nbsp;(<a href="javascript:patientMyhrConsentForm();">form</a>)
     </td>
     <td></td>
@@ -852,6 +853,17 @@ Reschedule Appointment - %OUTWEB02.03.618.1 - %OUTWEB02.03.002
       UpdateForm.d_pmsvx093.checked = true;
    }
  }
+
+document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;
+document.getElementById("pmsvx125").title = ScreenLabelMyHRConsent;
+patientConsentMyHR = trim("%OUTWEB02.03.086.099.046");
+visitConsentMyHR   = trim("%OUTWEB02.03.899.010");
+
+if (visitConsentMyHR == "") {
+  document.getElementById("pmsvx125").value = patientConsentMyHR;
+} else {
+  document.getElementById("pmsvx125").value = visitConsentMyHR;
+}
 
 function ValVisitType() {
   if (UpdateForm.outbb047.value.substr(10,1) == "C") {

@@ -1,0 +1,273 @@
+<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateHome" content="evonz">
+<meta name="HelpFileName"    content="NoContextSet.html">
+<meta name="CrossBrowser" content="true"> 
+<script type="text/javascript">
+function submitPregnancy(){
+ if(!validateMandatory(document.AddForm)){
+   return;
+ }
+ SubmitHidden(AddForm);
+}
+function getDueDate(){
+//pmrgn022
+  p=document.AddForm
+  mon='';
+  checkDate(p.pmrgn022);
+  datefield=p.pmrgn022;
+  date = new Date();
+  date.setFullYear(datefield.value.substring(6,11));
+  monstr= datefield.value.substring(3,6)
+  if (monstr=="Jan" || monstr=="JAN" || monstr=="jan") mon=00
+  if (monstr=="Feb" || monstr=="FEB" || monstr=="feb") mon=01
+  if (monstr=="Mar" || monstr=="MAR" || monstr=="mar") mon=02
+  if (monstr=="Apr" || monstr=="APR" || monstr=="apr") mon=03
+  if (monstr=="May" || monstr=="MAY" || monstr=="may") mon=04
+  if (monstr=="Jun" || monstr=="JUN" || monstr=="jun") mon=05
+  if (monstr=="Jul" || monstr=="JUL" || monstr=="jul") mon=06
+  if (monstr=="Aug" || monstr=="AUG" || monstr=="aug") mon=07
+  if (monstr=="Sep" || monstr=="SEP" || monstr=="sep") mon=08
+  if (monstr=="Oct" || monstr=="OCT" || monstr=="oct") mon=09
+  if (monstr=="Nov" || monstr=="NOV" || monstr=="nov") mon=10
+  if (monstr=="Dec" || monstr=="DEC" || monstr=="dec") mon=11
+  date.setMonth(mon);
+  date.setDate(datefield.value.substring(0,2));
+  weeks = new Date(date.getTime() + (280 * 24 * 60 * 60 * 1000)); 
+  p.pmrgn023.value = weeks.getDate() + '/' + eval(weeks.getMonth() +1 )+ '/' + weeks.getFullYear();
+  checkDate(p.pmrgn023);
+
+}
+</script>
+</head>
+%START.OF.PAGE
+<script>
+var mandatoryFields = [];
+
+%PATWEB08.01.200
+
+function checkDynamicMandatoryFields() {
+   for(i = 0; i < mandatoryFields.length; i++) {
+      var field = mandatoryFields[i].field.replace(/ /g,"");
+      var isMandatory = mandatoryFields[i].isMandatory.replace(/ /g,"");
+      var fieldByName = AddForm[field];
+     if(typeof fieldByName != 'undefined' ) {
+        if(isMandatory === "1") {
+          fieldByName.style.backgroundColor = "#FFFFE0";
+        }
+     }
+   }
+}
+</script>
+<body onload="PageLoad(event);document.AddForm.pmrgn005.focus();
+              checkDynamicMandatoryFields();">
+<div id=PatientHeading></div>
+<script type="text/javascript">
+PatientURN="%PATWEB08.01.003";
+PatientVIS="%PATWEB08.01.081";
+PatientNAM="%PATWEB08.01.002";
+PatientSTA="%PATWEB08.01.086.078";
+PatientALT="%PATWEB08.01.084";
+PatientSEX="%PATWEB08.01.019";
+PatientDOB="%PATWEB08.01.020";
+PatientAGE="%PATWEB08.01.021";
+PatientLOC="%PATWEB08.01.083";
+PatientPRI="%PATWEB08.01.086.066.1";
+PatientUNT="%PATWEB08.01.066.0";
+DoctorCOD="%PATWEB08.01.082.003";
+DoctorNAM="%PATWEB08.01.082.002";
+PatientAID="%PATWEB08.01.086.090";
+PatientIND="%PATWEB08.01.086.091";
+PatientCUR="%PATWEB08.01.086.092";
+PatientCLC="%PATWEB08.01.086.093.1";
+PatientCLH="%STANDARD.01.017.CL";
+PatientHFT="%PATWEB08.01.086.094";
+PatientCDM="%PATWEB08.01.086.095";
+PatientVDH="%PATWEB08.01.086.099.015";
+InsertPatientHeader()
+</script>
+<div id=PatientMenu></div>
+<div id=PageBodySection>
+<form name="AddForm" method="post" action="patweb08.pbl">
+<input type="hidden" name="urnumber" value="%PATWEB08.01.003">
+<input type="hidden" name="pmrgn001" value="%PATWEB08.01.003">
+<input type="hidden" name="admissno" value="%PATWEB08.01.081">
+<input type="hidden" name="reportno" value="1">
+<input type="hidden" name="template" value="001">
+<input type="hidden" name="updttype" value="A">
+<input type="hidden" name="nextpage" value="4">
+<input type="hidden" name="redirect" value="%PATWEB08.01.001.patweb08.01.003">
+
+<table width=100% cellspacing=0 cellpadding=0>
+<tr><td align=center class=Headingcell colspan=4>Add Pregnancy Detail</td></tr>
+<tr>
+    <td colspan="2">&nbsp;</td>
+</tr>
+<tr><td class=DataLabel>Total # Previous Pregnancies</td>
+    <td><input type=text size=5 maxlength=2 class=Integer
+        name="pmrgn005" id="pmrgn005" title="Total Previous" tabindex=10></td>
+    <td class=DataLabel>Place of Birth - Intended</td>
+    <td><select  name=pmrgn021 title="Intended Place of Birth"  tabindex=120>
+        <option></option>
+         %STANDARD.01.007.PJ
+        </select></td>
+</tr>
+<tr><td class=DataLabel style="color: red;">Gravida</td>
+    <td><input type=text size=5 maxlength=2 class=Integer
+        name="pmrgn006" id="pmrgn006" title="Gravida" tabindex=20></td>
+	<td class=DataLabel>Patient Height(cm)</td>
+    <td><input type=text name=pmrgn025 title="Patient Height"  tabindex=140>
+    </td>
+</tr>
+<tr><td class=DataLabel style="color: red;">Parity</td>
+    <td><input type=text size=5 maxlength=2 class=Integer tabindex=25
+        name="pmrgn007" title="Parity"></td>
+    <td class=DataLabel>Patient Weight(kg)</td>
+    <td><input type=text name=pmrgn026 title="Patient Weight"  tabindex=145></td>
+</tr>
+
+<tr><td class=DataLabel>Current # of Live Children </td>
+    <td><input type=text size=5 maxlength=2 class=Integer
+        name="pmrgn008" title="Total Previous" tabindex=30></td>
+    <td class=DataLabel>Estimated Gestation Age</td>
+    <td><input type=text  name=pmrgn027 title="Est Gest Age" maxlength=3
+         size=3  tabindex=150>
+        <input type=text size=12 maxlength=12
+        name="pmrgn028" id="pmrgn028" title="Est Gest Date" tabindex=155>
+        <img notab src=../images/DateLookup.gif border=0 hspace=4
+        align=absmiddle onclick="DateLookupFrame(pmrgn028);">
+        </td>
+</tr>
+
+<tr><td class=DataLabel>Total # of Previous Stillbirths (Fetal Deaths)</td>
+    <td><input type=text size=5 maxlength=2 class=Integer
+        name="pmrgn009" title="Previous Stillbirths" tabindex=35></td>
+		
+    <td class=DataLabel style="color: red;">Place of Birth - Actual</td>
+    <td><select name=pmrgn037 title="Place of Birth - Actual" tabindex=160>
+        <option></option>
+         %PATWEB08.01.137.2
+        </select></td>
+</tr>
+
+<tr><td class=DataLabel>Total # Previous Neonatal Deaths</td>
+    <td><input type=text size=5 maxlength=2 class=Integer tabindex=40
+        name="pmrgn010" id="pmrgn010" title="Total Previous Neonatal Deaths">
+    </td>
+    <td class=DataLabel style="color: red;">Discharge Place</td>
+    <td><select  name=pmrgn039 title="Change of Intent"  tabindex=180>
+        <option></option>
+         %STANDARD.01.007.SV
+        </select></td>
+
+</tr>
+<tr><td class=DataLabel>Total # Previous Abortions</td>
+    <td><input type=text size=5 maxlength=2 class=Integer tabindex=45
+        name="pmrgn011" title="Total Previous Abortions"></td>
+    <td class="DataLabel">Postnatal Care Provider</td>
+    <td><input type="text" size="10" maxlength="10" name="pmrgn036"
+         id="pmrgn036"
+         onblur="ValidateHCP(18,0,pmrgn036,doctnam1);"  tabindex=190>
+         <input type="text" size="25" notab readonly name="doctnam1" 
+               id="doctnam1">
+         <img src="../images/SearchIcon.gif" class="Icon"
+         onclick="HCPSearchFrame(AddForm.pmrgn036,AddForm.doctnam1,0);">
+    <td></tr>
+
+<tr><td class=DataLabel>Total # Previous Caesareans</td>
+    <td><input type=text size=5 maxlength=2 class=Integer tabindex=50
+        name="pmrgn019" title="Total Previous Caesareans"></td>
+    <td></td>
+</tr>
+
+<tr>	  
+   <td>&nbsp;</td>
+   <td>&nbsp;</td>
+</tr>
+
+<tr><td colspan=2 class=DataLabel align=center><b>Screening</b></td>
+    <td colspan=1 class=DataLabel align=center><b>Administration</b></td> 
+</tr>
+
+<tr><td class=DataLabel style="color: red;">Smoking Cessation</td>
+    <td><select  name=pmrgn020 title="Smoking Cessation" tabindex=300>
+	<option></option>
+	%STANDARD.01.007.PB
+    </select></td>
+    <td class=DataLabel style="color: red;">Class</td>
+    <td><select  name=pmrgn040 title="Class"  tabindex=400>
+        <option></option>
+        %STANDARD.01.007.SX
+    </select></td>
+</tr>
+
+<tr><td class=DataLabel style="color: red;">F/V</td>
+    <td><select  name=pmrgn016 title="F/V"  tabindex=310>
+        <option></option>
+         %STANDARD.01.007.PA
+        </select></td>
+    <td class=DataLabel style="color: red;">Registration Number</td>
+    <td><input type=text name=pmrgn038 title="Registration Number" 
+        maxlength=50 size=30  tabindex=410></td> 
+</tr>
+
+<tr><td class=DataLabel style="color: red;">Safe Sleep</td>
+    <td><select  name=pmrgn017 title="Safe Sleep"  tabindex=320>
+        <option></option>
+        %STANDARD.01.007.PM
+    </select></td>
+    <td class=DataLabel style="color: red;">Registered/Unregistered</td>
+    <td><select  name=pmrgn018 title="Registered/Unregistered"  tabindex=420>
+        <option></option>
+        <option value=0>Registered</option>
+        <option value=1>Unregistered</option>
+    </select></td>
+</tr>
+
+<tr>
+    <td></td>
+    <td></td>
+    <td class=DataLabel>%STANDARD.01.017.FB</td>
+    <td><select  name=pmrgn052 title="%STANDARD.01.017.FB"  tabindex=440>
+        <option></option>
+        %STANDARD.01.007.FB
+    </select></td>
+</tr>
+
+<tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr>
+    <td colspan=2 class=DataLabel align=left style="color:Red;"><b>* Required fields for all Clients</b></td>
+</tr>
+
+<tr><td colspan="4" align="center"><br>
+       <input type="button" value="Ok" class="button"
+        onClick="submitPregnancy();"  tabindex=500>
+       <input type="button" value="Cancel" class="button" tabindex=510
+             onclick="PatientLinkTo('patweb98.pbl',1,1,0);" /></td>
+</tr>
+
+</table>
+</div>
+</form>
+
+<tr><td>
+<script type="text/javascript">
+Ageless="%PATWEB08.01.160";
+if(Ageless=="1"){
+  alert("Warning: Patient is less than 10 years old.")
+}
+</script>
+<form name=PatientLinks method=get>
+<input type=hidden name=reportno value=1>
+<input type=hidden name=template value=017>
+<input type=hidden name=urnumber value="%PATWEB08.01.003">
+<input type=hidden name=admissno value="%PATWEB08.01.081">
+<input type=hidden name=MenuType value="%PATWEB08.01.088">
+</form>

@@ -5,6 +5,9 @@
 .
 . Modifications :
 .----------------------------------------------------------------------
+. V12.01.01 23/01/2026 Alina Bhari            TSK 0958594
+.            Displayed table of HCPs for a Practice in descending order
+.            - GPPF1700,GGHCPD00
 . V12.00.02 09/10/2025 Alina Bhari            TSK 0967846
 .            Added menuflag functionality - LNKPRO00
 . V12.00.01 07/07/2025 Alina Bhari            TSK 0961176
@@ -1147,7 +1150,7 @@ ZERO6     INIT      "000000"
 .
 .---------------------------------------------------------------------
 PRGID     INIT      "PATWEB99"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Doctor Enquiries Template Server"
 .---------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -5080,7 +5083,7 @@ DOCA9999  RETURN
 GPPF0000  BRANCH    FLDITMNO,GPPF0100,GPPF0200,GPPF0300,GPPF0400,GPPF0500:
                              GPPF0600,GPPF0700,GPPF0800,GPPF0900,GPPF1000:
                              GPPF1100,GPPF1200,GPPF1300,GPPF1400,GPPF1500:
-                             GPPF1600
+                             GPPF1600,GPPF1700
           GOTO      GPPF9999
 .
 GPPF0100  MOVE      ZERO,LNK2PRT * Table of GP Practices 
@@ -5147,6 +5150,10 @@ GPPF1600  PACK      KEY20,PMHCG001,SP70
           GOTO      GPPF9999
 .
 GPPF1610  WRITE     HTMLFILE;ZERO;          * No, there is no linked practice
+          GOTO      GPPF9999
+.
+GPPF1700  MOVE      ZERO,LNK2PRT * Update Parent
+          CALL      GGHCPD00  * Display table of HCPs for practice in desc order
           GOTO      GPPF9999
 .
 GPPF9999  RETURN
@@ -6904,6 +6911,73 @@ GGHCP100  CALL      RKPMHCL2                * loop through link table
           GOTO      GGHCP100 IF NOT EQUAL
 .
 GGHCP999  RETURN
++
+.------------------------------------------------------------
+. Table of HCPs for a Practice in Descending order
+.------------------------------------------------------------
+GGHCPD00  UNPACK    DIM127,D1,LINKPRG,DIM127
+          UNPACK    DIM127,D1,LINKREP,DIM127
+          UNPACK    DIM127,D1,LINKTEM,DIM127
+.
+          MOVE      PTCNHCPI,HCPFORM
+.
+          CALL      GGHCH000      * Output Table Heading
+.
+          IF        NORECORD=0
+            MOVE      "13",NORECORD       * Set Default No Records to Display
+          ENDIF
+          MOVE      ZERO,RECNUMB
+          MOVE      ZERO,DISNUMB
+.
+          PACK      KEY20,PMHCG001,Z70
+          CALL      RSPMHCL2
+GGHCPD10  CALL      RPPMHCL2                * loop through link table
+          BRANCH    OVRCD,GGHCPD99
+.
+          MATCH     PMHCG001,PMHLHCPR
+          GOTO      GGHCPD99 IF NOT EQUAL
+.
+          IF        PTCNACGP=1
+            MATCH     "0",PMHLSTAT
+            IF        !@EQUAL
+              GOTO      GGHCPD10            * link not active for this hcp
+            ENDIF
+          ENDIF
+.
+          PACK      KEY10,PMHLHCPC
+          CALL      RDPMHCP1                * get hcp details (name)
+          BRANCH    OVRCD,GGHCPD10
+.
+          IF        PTCNACGP=1
+            MATCH     "0",PMHCSTTS
+            IF        !@EQUAL
+              GOTO      GGHCPD10            * this hcp not active
+            ENDIF
+          ENDIF
+.
+          IF        HCPFORM=1 | HCPFORM=4 | HCPFORM=5
+            CALL      GHCPTYPE                              * Get HCP Type
+          ENDIF
+.
+          IF        HCPFORM=2 | HCPFORM=4 | HCPFORM=6
+            CALL      GHCPSPEC                              * Get HCP Specialty
+          ENDIF
+.
+          IF        HCPFORM=3 | HCPFORM=5 | HCPFORM=6
+            CALL      GHCPROLE                              * Get HCP ROLE
+          ENDIF
+.
+          ADD       ONE,RECNUMB
+          IF        STARTNUM>=RECNUMB
+            GOTO      GGHCPD10
+          ENDIF
+.
+          CALL      GGHRW000      * HCP's Details Row
+          ADD       ONE,DISNUMB
+          COMPARE   NORECORD,DISNUMB
+          GOTO      GGHCPD10 IF NOT EQUAL
+.
+GGHCPD99  RETURN
 +
 .------------------------------------------------------------
 . Get HCP Type(pmshcpaf.pmhchcst) & display its description

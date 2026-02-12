@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -38,7 +38,7 @@ PatientSEX="%PATWEB98.01.019";
 PatientDOB="%PATWEB98.01.020";
 PatientAGE="%PATWEB98.01.021";
 PatientLOC="%PATWEB98.01.083";
-PatientMyHR=trim("%PATWEB98.01.043.0");
+//PatientMyHR=trim("%PATWEB98.01.043.0");
 PatientPRI="%PATWEB98.01.086.066.1";
 PatientUNT="%PATWEB98.01.066.0";
 DoctorCOD="%PATWEB98.01.082.003";
@@ -188,8 +188,8 @@ InsertPatientHeader()
        <td class=DataField>%PATWEB98.01.702.0</td>
        <td class=DataLabel>Folder Selection</td>
        <td class=DataField>%PATWEB98.01.779.0</td>
-       <td class=DataLabel>Consent upload to My Health Record?</td>
-       <td class=DataField id="ausr1">%PATWEB98.01.043.0</td></tr>
+       <td class=DataLabel id="MyHRConsentTitle"></td>
+       <td class=DataField id="ausr1"></td></tr>
 
    <tr><td class=DataLabel>Ancestry/Ethnicity 1</td>
        <td class=DataField>%PATWEB98.01.799.082.9.3</td>
@@ -420,9 +420,16 @@ PageLocation="?reportno=1&template=4" +
  if ( EmergeIndicator =="1" ) {
     document.getElementById("conttitl").className="HeadingCell RedText";
  }
-  
-  PatientConsentMyHR = trim("%PATWEB98.01.043.0");
-  document.getElementById("ausr1").innerHTML = PatientConsentMyHR || "Yes (implied)";
+ document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;  
+ PatientConsentMyHR = trim("%PATWEB98.01.799.046");
+ 
+ if (PatientConsentMyHR == "0") {
+   document.getElementById("ausr1").innerHTML = "No";
+ } else if (PatientConsentMyHR == "1") {
+   document.getElementById("ausr1").innerHTML = "Yes";
+ } else {
+   document.getElementById("ausr1").innerHTML = "Yes (implied)";
+ }
 
   ptcnemph = "%STANDARD.01.025.128.227.1.1";
 

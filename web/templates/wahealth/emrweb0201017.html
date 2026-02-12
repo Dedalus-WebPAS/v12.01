@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -398,15 +398,8 @@ InsertEmergencyHeader()
     </td>
   </tr>
 
-  <tr><td class=DataLabel>Consent upload to My Health Record?</td>
-      <td class=DataField>
-        <script type="text/javascript">
-            patientConsentMyHR = trim("%EMRWEB02.01.043.0");
-            visitConsentMyHR   = trim("%EMRWEB02.01.290.0");
-            visitConsent = visitConsentMyHR || patientConsentMyHR || "Yes (implied)";
-            document.writeln(visitConsent);
-        </script>
-      </td>
+  <tr><td class=DataLabel id="MyHRConsentTitle"></td>
+      <td class=DataField id="ausr1"></td>
       <td class=DataLabel></td>
       <td class=DataField></td>
   </tr>
@@ -565,6 +558,17 @@ InsertEmergencyHeader()
   if(document.UpdateForm.d_emvis061.value.substr(5,1) != "1") {
     document.getElementById("tranhead").style.visibility="hidden";
     document.getElementById("transrce").style.visibility="hidden";
+  }
+
+  document.getElementById("MyHRConsentTitle").innerHTML=ScreenLabelMyHRConsent;
+  PatientConsentMyHR = trim("%EMRWEB02.01.599.001");
+
+  if (PatientConsentMyHR == "0") {
+    document.getElementById("ausr1").innerHTML = "No";
+  } else if (PatientConsentMyHR == "1") {
+    document.getElementById("ausr1").innerHTML = "Yes";
+  } else {
+    document.getElementById("ausr1").innerHTML = "Yes (implied)";
   }
 </script>
 

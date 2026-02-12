@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome"    content="standard">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser"    content="true">
@@ -153,6 +153,23 @@ function NRClear() {
 }
 function PostUpdate() {
   if(!validateMandatory(UpdateForm)) {
+    return;
+  }
+  p=document.UpdateForm;
+  if(!CheckValPostCodeContact(p.ptmas052,p.ptmas053,p.ptmas054,ContactName1)) {
+    return;
+  }
+  if(!CheckValPostCodeContact(p.ptmsx013,p.ptmsx014,p.ptmsx015,ContactName2)) {
+    return;
+  }
+  if(!CheckValPostCodeContact(p.ptmsx022,p.ptmsx023,p.ptmsx024,ContactName3)) {
+    return;
+  }
+  PRFADesc="Person Responsible for Account";
+  if(!CheckValPostCodeContact(p.ptpra004,p.ptpra005,p.ptpra006,PRFADesc)) {
+    return;
+  }
+  if(!CheckValPostCodeContact(p.ptmsx042,p.ptmsx043,p.ptmsx044,ContactName6)) {
     return;
   }
   if(document.getElementById("ptcnepis").value=="1") {
@@ -468,6 +485,7 @@ InsertPatientHeader()
     <tr valign=top>
         <td class=DataLabel>Suburb</td>
         <td><input type="text" size="33" maxlength="35" name="ptmas052"
+         title="Suburb"
          value="%PATWEB89.01.056" onchange="UpCase(this);" 
          onblur="SetFields2();"></td>
         <td>Mobile</td>
@@ -518,6 +536,7 @@ InsertPatientHeader()
          value="%PATWEB89.01.618"></td></tr>
     <tr><td class=DataLabel>Suburb</td>
         <td><input type="text" size="33" maxlength="35" name="ptmsx013"
+         title="Suburb"
          value="%PATWEB89.01.614" onchange="UpCase(this);"
          onblur="SetFields1();">
         <td>Mobile</td>
@@ -577,6 +596,7 @@ InsertPatientHeader()
          value="%PATWEB89.01.627" ></td></tr>
     <tr><td class=DataLabel>Suburb</td>
         <td><input type="text" size="33" maxlength="35" name="ptmsx022"
+         title="Suburb"
          value="%PATWEB89.01.623" onchange="UpCase(this);" 
         onblur="SetFieldsNRL();">
         <td class=DataLabel>Mobile</td>
@@ -627,6 +647,7 @@ InsertPatientHeader()
     <tr><td class=DataLabel>Suburb</td>
         <td>
         <input type="text" size="33" maxlength="35" name="ptpra004"
+         title="Suburb"
          value="%PATWEB89.01.169" onblur="SetFieldsPRA();"></td>
         <td class=DataLabel>Work Ph</td>
         <td><input type="text" size="15" maxlength="20" name="ptpra008"
@@ -678,6 +699,7 @@ InsertPatientHeader()
         <td class=DataLabel width=12%>Suburb</td>
         <td class=DataField width=43%>
           <input type="text" size="33" maxlength="35" name="ptmsx042"
+           title="Suburb"
            value="%PATWEB89.01.646" onchange="UpCase(this);"
            onblur="SetFieldsPOST();">
         <td class=DataLabel width=12%>Post code</td>

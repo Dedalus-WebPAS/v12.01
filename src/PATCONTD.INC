@@ -10,20 +10,27 @@
 .  *     Modifications:                                                       *
 .  *                                                                          *
 .  ****************************************************************************
-.  *     V12.01.03  19/12/2025  Davin            TSK 0961944                  *
-.  *                Added PATCN701 - Send/Receive NTE segment in HL7 M02      *
-.  *                07/01/2026  Alina            TSK 0958930                  *
-.  *                Added PATCN702/PTCNBDTE - Added Broadcast a Unique ID in  *
-.  *                PV1.50 for a Bed Transfer Event                           *
-.  *     V12.01.02  18/12/2025  J.Tan            TSK 0956147                  *
-.  *                Added PATCN700 - HAC Flags for Risk Factors Start Date-ABF*
-.  *     V12.01.01  17/12/2025  Zumin Yu         TSK 0968747                  *
-.  *                Added CSURG1, CMURG1, CSURG2, CMURG2, CSURG3, CMURG3,     *
-.  *                CSURG4, CMURG4, CIPRG, COPRG, CAERG, CNBRG, CCNOTES,      *
-.  *                CPMIAD, CURDEL, CURCHG, CSRCHDRG, CSRCHYRG, CFFMORB,      *
-.  *                PTCNURCF, PTCNRQCF, PTCNDPCF, PTCNRLAY, PTCNUCOD,         *
-.  *                PTCNMRPN, PTCNUDRN, PTCECODE, CMDISP, CMDISS, CMDISC,     *
-.  *                CMDISA, CMDISD, CMOPRT, CMDISL and CMDISM from IBAHOS93   *
+.  * V12.01.04 04/02/2026  Thanh T                 TSK 0961944                *
+.  *           Added PATCN703 - If Home Phone is blank, use Mobile Phone      *
+.  *                 PATCN704 - Leave pttybedn blank                          *
+.  *                 PATCN705 - populate Patient Notes (pttynote) with        *
+.  *                            Admission Date & Admission Diagnosis          *
+.  *                 PATCN706 - Number of Days in advance to include          *
+.  * V12.01.03  19/12/2025  Davin            TSK 0961944                      *
+.  *            Added PATCN701 - Send/Receive NTE segment in HL7 M02          *
+.  *            07/01/2026  Alina            TSK 0958930                      *
+.  *            Added PATCN702/PTCNBDTE - Added Broadcast a Unique ID in      *
+.  *            PV1.50 for a Bed Transfer Event                               *
+.  * V12.01.02  18/12/2025  J.Tan            TSK 0956147                      *
+.  *            Added PATCN700 - HAC Flags for Risk Factors Start Date-ABF    *
+.  * V12.01.01  17/12/2025  Zumin Yu         TSK 0968747                      *
+.  *            Added CSURG1, CMURG1, CSURG2, CMURG2, CSURG3, CMURG3,         *
+.  *            CSURG4, CMURG4, CIPRG, COPRG, CAERG, CNBRG, CCNOTES,          *
+.  *            CPMIAD, CURDEL, CURCHG, CSRCHDRG, CSRCHYRG, CFFMORB,          *
+.  *            PTCNURCF, PTCNRQCF, PTCNDPCF, PTCNRLAY, PTCNUCOD,             *
+.  *            PTCNMRPN, PTCNUDRN, PTCECODE, CMDISP, CMDISS, CMDISC,         *
+.  *            CMDISA, CMDISD, CMOPRT, CMDISL and CMDISM from IBAHOS93       *
+.  ****************************************************************************
 .  *     V12.00.05  19/11/2025  Davin            TSK 0968897                  *
 .  *                Added PATCN663 - Broadcast HL7 EMR A08 from HL7RECVR      *
 .  *                Added PATCN664 - Sending application MSH.3 for EMR A08    *
@@ -1802,6 +1809,14 @@ PATCN700  DIM       8     * PTCNHACD -HAC Flags for Risk Factors Start Date(ABF)
 PATCN701  DIM       8     * PTCNNTES - Send/Receive NTE segment in HL7 M02
 PATCN702  DIM       1     * Broadcast a Unique ID in PV1.50 for a Bed Transfer
 .                           Event (0 or Blank = Disabled 1 = Enabled)
+PATCN703  DIM       1     * If Home Phone is blank, use Mobile Phone 
+.                           0 or blank = No, 1 = Yes 
+PATCN704  DIM       1     * Leave pttybedn blank
+.                           0 or blank = No, 1 = Yes 
+PATCN705  DIM       1     * Populate Patient Notes (pttynote) with
+.                           Admission Date & Admission Diagnosis 
+.                           0 or blank = No, 1 = Yes 
+PATCN706  DIM       3     *  Number of Days in advance to include 
 .
 IBACN001  DIM       1     * Multi hospital
 IBACN002  DIM       1     * Using Medclaims (0=No/1=Yes)

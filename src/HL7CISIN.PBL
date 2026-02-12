@@ -13,6 +13,9 @@
 .******************************************************************************
 .* Mods      :                                                                *
 .******************************************************************************
+.*       V12.01.03 19/12/2025  Davin          TSK 0961944                     *
+.*                 Send NTE segment in M02 messages based on PTCNNTES         *
+.*                 (M02P0000/WNTE0000/GTTCO000)                               *
 .*       V12.01.02 08/01/2026  Alina Bhari      TSK 0958930                   *
 .*                 Recompiled for HL7COMN - Sending unique ID as part of bed  *
 .*                 transfer process when PTCNBDTE is turned on.               *
@@ -1284,6 +1287,7 @@
 .
           INC       PMSQDRFD/INC
           INC       PMSQVIFD/INC
+          INC       PMSTCOFD/INC
           INC       PMSTMDFD/INC
           INC       PMSWORFD/INC
           INC       TFILEVAR/INC
@@ -1419,6 +1423,7 @@ A44WRJCT  FORM      8
 BOOKDTTM  DIM       13
 .
 CDDRCTRY  DIM       80
+COMMTYPE  DIM       3
 CONNFLAG  FORM      1             * connect flag
 .                                    0 = connection failed - first time
 .                                    1 = connection failed - not first time
@@ -1548,7 +1553,7 @@ SEGMENT   DIM       3             * 3 character HL7 segment code
 SEGNUMBR  FORM      2             * segment number
 .                                         1 = MSH
 .                                         2 = MSA
-SIDCOUNT  FORM      3
+SIDCOUNT  FORM      4
 SNDCOUNT  FORM      3
 STATDESC  DIM       8
 STATDSC2  DIM       12
@@ -1602,6 +1607,7 @@ ENVVNAME  INIT      "DPATH"
 FORM3     FORM      3
 FORM17P2  FORM      17.2
 FRM4      FORM      4
+FORMNTES  FORM      1
 FORMZNT4  FORM      1
 FORMZNT5  FORM      1
 FORMZNT6  FORM      1
@@ -1675,7 +1681,7 @@ ZEROURNO  INIT      "       0"
 .-----------------------------------------------------------------------
 PRGID     INIT      "HL7CISIN"
 PRGNAM    INIT      "HL7 Broadcast Message Server"
-VERSION   INIT      "V12.01.02"
+VERSION   INIT      "V12.01.03"
 .-----------------------------------------------------------------------
 +
 .******************************************************************************
@@ -1844,6 +1850,7 @@ INIT0300  MOVE      ZERO,NUMRETRY                * initialise retry counter
                                     *116,PTCNDBVP:
                                     *117,PTCNSAPC:
                                     *120,PTCNEDDT:
+                                    *172,PTCNNTES:
                                     *173,PTCNBDTE
 .
 .         Get multi-hospital parameter & health care establishment
@@ -2211,6 +2218,9 @@ INIT0600  MOVE      ZERO,HEROTABL
 .
           DISPLAY   *P64:24,"pmsrelaf";
           OPEN      PMSRELA1,"pmsrelaf"
+.
+          DISPLAY   *P64:24,"pmstcoaf";
+          OPEN      PMSTCOA1,"pmstcoaf"
 .
           DISPLAY   *P64:24,"pmstemaf";
           OPEN      PMSTEMA1,"pmstemaf"
@@ -7193,6 +7203,9 @@ M02P0000  PACK      KEY20,H7CIMESI
           BRANCH    EXIT,M02P9100:               * connection lost
                          M02P9200                * timeout
           CALL      WZST0000                     * format ZST segment
+          BRANCH    EXIT,M02P9100:               * connection lost
+                         M02P9200                * timeout
+          CALL      WNTE0000                     * format NTE segment
           BRANCH    EXIT,M02P9100:               * connection lost
                          M02P9200                * timeout
 .
@@ -18579,6 +18592,231 @@ CLBKD100  MOVE      KEY2,HOUR               * HH to Form
 CLBKD999  RETURN
 +
 .*****************************************************************************
+.*                           WNTE0000                                        *
+.*          Write Note details to the NTE segment                            *
+.* Returns:  EXIT  0 = Segment sent ok                                       *
+.*                 1 = Connection lost                                       *
+.*                 2 = Timeout                                               *
+.*****************************************************************************
+.
+WNTE0000  MOVE      ZERO,FORMNTES
+          MOVE      PTCNNTES,FORMNTES            * sending NTE segment ?
+.
+          IF        FORMNTES < 1
+            GOTO      WNTE9000                   * no
+          ENDIF
+.
+          MOVE      "NTE",SEGMENT
+          MOVE      TWO,MLOGFLAG
+          IF        DISPFLAG = 1
+            DISPLAY   "Formatting [NTE] segment",*R,*N;
+          ENDIF
+.
+.         Send a "delete" segment first
+.
+          MOVE      BLANKSTR,NTE001              * set all fields to null
+          MOVE      BLANKSTR,NTE002
+          MOVE      BLANKSTR,NTE003
+          MOVE      BLANKSTR,NTE004
+.
+          PACK      SEGSTRNG,ANSN,ANST,ANSE,PIPE:
+                             NTE001,PIPE,NTE002,PIPE,NTE003,PIPE,NTE004,CRETURN
+.
+          CALL      SENDM000                     * send message
+          BRANCH    EXIT,WNTE9100:               * connection lost
+                         WNTE9200                * timeout
+.
+.         Send NTE segment(s)
+.
+          CALL      CLNTE000                     * clear all NTE fields
+          MOVE      ZERO,SIDCOUNT                * initialise set id count
+          MOVE      SP3,COMMTYPE                 * initialise hcp comment type
+.
+WNTE8000  COMPARE   ZERO,FORMNTES
+          GOTO      WNTE9000 IF EQUAL            * not sending NTE segment
+.
+.         Get and send each HCP comment type
+.
+          PACK      KEY16,PMHCHCPC,SP20
+          CALL      RSPMTCO1                     * position on visit
+WNTE8100  CALL      RKPMTCO1                     * read next record
+          BRANCH    OVRCD,WNTE9000               * eof - finished
+.
+          MATCH     PMHCHCPC,PMTCCODE            * same hcp still ?
+          GOTO      WNTE9000 IF NOT EQUAL        * no - finished
+.
+          MATCH     COMMTYPE,PMTCTCOM            * same hcp comment type ?
+          GOTO      WNTE8100 IF EQUAL
+.
+          PACK      KEY5,ANST,ANSZ,PMTCTCOM
+          CALL      RDCODE1
+          BRANCH    OVRCD,WNTE8100               * not on patcodes
+.
+          MATCH     ANSS,TCINDC5                 * sending this type ?
+          IF        !@EQUAL
+            MATCH     ANSB,TCINDC5               * sending/receiving this type ?
+            GOTO      WNTE8100 IF NOT EQUAL      * no
+          ENDIF
+.
+          MOVE      PMTCTCOM,COMMTYPE            * process hcp comment type
+.
+          CALL      GTTCO000                     * get HCP comments
+          BRANCH    EXIT,WNTE9100:               * connection lost
+                         WNTE9200                * timeout
+.
+          GOTO      WNTE8100                     * get next comment type
+.
+WNTE9000  MOVE      ZERO,EXIT
+          GOTO      WNTE9999
+.
+WNTE9100  MOVE      ONE,EXIT
+          GOTO      WNTE9999
+.
+WNTE9200  MOVE      TWO,EXIT
+.
+WNTE9999  RETURN
++
+.*****************************************************************************
+.*                           GTTCO000                                        *
+.* Get and send HCP Comments from pmstcoaf                                   *
+.*****************************************************************************
+GTTCO000  MOVE      ZERO,COUNTER                 * initialise line counter
+          MOVE      ZERO,SNDCOUNT                * initialise send count
+.
+          PACK      KEY16,PMHCHCPC,COMMTYPE,SP20
+          CALL      RSPMTCO1                     * position on visit
+GTTCO100  CALL      RKPMTCO1                     * read next record
+          BRANCH    OVRCD,GTTCO500               * eof - finished
+.
+          MATCH     PMHCHCPC,PMTCCODE            * same hcp still ?
+          GOTO      GTTCO500 IF NOT EQUAL        * no - finished
+.
+          MATCH     COMMTYPE,PMTCTCOM            * same hcp comment type ?
+          GOTO      GTTCO500 IF NOT EQUAL        * no - finished
+.
+.         We have a comment record for the HCP
+.
+          IF        COUNTER <> 0
+            IF        FORMNTES = 2
+              RESET     NTE003
+              STRIP     NTE003
+              ENDSET    NTE003
+              APPEND    LINBREAK,NTE003          * include line break
+            ELSE
+              APPEND    SP1,NTE003               * delimit by 1 space
+            ENDIF
+          ENDIF
+          MOVE      PMTCCOMM,FIELDSTR
+          CALL      SPCHR000
+          APPEND    FIELDSTR,NTE003              * append comment line
+.
+          MOVE      "1",NTE002                   * HCP Comment
+          SQUEEZE   NTE002
+.
+          MOVE      BLANKSTR,NTE004              * set default value
+          MATCH     SP70,PMTCTCOM                * HCP Comment Type populated ?
+          GOTO      GTTCO150 IF EQUAL            * no
+.
+          MOVE      PMTCTCOM,FIELDSTR
+          CALL      SPCHR000                     * convert special characters
+          MOVE      FIELDSTR,NTE004
+          ENDSET    NTE004
+.
+          MOVE      "Unknown Code",FIELDSTR
+          MOVE      BLANKSTR,D2
+          PACK      KEY5,ANST,ANSZ,PMTCTCOM
+          CALL      RDCODE1
+          IF        OVRCD = 0
+            MOVE      TDESC,FIELDSTR
+            CALL      SPCHR000                   * convert special characters
+            PACK      D2,TCINDC3,SP1
+          ENDIF
+          APPEND    CARET,NTE004
+          APPEND    FIELDSTR,NTE004
+          APPEND    CARET,NTE004
+          STRIP     D2
+          APPEND    D2,NTE004                    * comment type indicator 3
+          RESET     NTE004
+.
+GTTCO150  STRIP     NTE004
+.
+.         We are sending a maximum of 50 lines of comments at any one time
+.         i.e. maximum of 3700 bytes of comments = 50 x (70+4 per linebreak)
+.
+          IF        COUNTER = 50
+GTTCO200    RESET     NTE003
+            STRIP     NTE003
+            IF        SNDCOUNT = 0
+              ADD       ONE,SIDCOUNT                 * increment Set ID count
+              MOVE      SIDCOUNT,NTE001              * set ID
+              SQUEEZE   NTE001
+.
+              PACK      SEGSTRNG,ANSN,ANST,ANSE,PIPE:
+                                   NTE001,PIPE,NTE002,PIPE,NTE003
+            ELSE
+              IF        FORMNTES = 2
+                PACK      SEGSTRNG,LINBREAK,NTE003
+              ELSE
+GTTCO300        PACK      SEGSTRNG,SP1,NTE003
+              ENDIF
+            ENDIF
+            CALL      SENDM000                   * send message
+            BRANCH    EXIT,GTTCO910:             * connection lost
+                           GTTCO920              * timeout
+.
+            CALL      CLNTE000                   * clear all NTE fields
+            MOVE      ZERO,COUNTER               * reset counter
+            ADD       ONE,SNDCOUNT               * increment send count
+          ELSE
+            ADD       ONE,COUNTER                * increment line counter
+          ENDIF
+.
+          GOTO      GTTCO100                     * get next record
+.
+.         There are no more matching records for the HCP,
+.         so check if we need to send the end of segment.
+.
+GTTCO500  IF        COUNTER > 0
+            RESET     NTE003
+            STRIP     NTE003
+.
+            IF        SNDCOUNT = 0
+              ADD       ONE,SIDCOUNT             * increment Set ID count
+              MOVE      SIDCOUNT,NTE001          * set ID
+              SQUEEZE   NTE001
+.
+              PACK      SEGSTRNG,ANSN,ANST,ANSE,PIPE:
+                                   NTE001,PIPE,NTE002,PIPE,NTE003,PIPE,NTE004:
+                                   CRETURN
+            ELSE
+              IF        FORMNTES = 2
+                PACK      SEGSTRNG,LINBREAK,NTE003,PIPE,NTE004,CRETURN
+              ELSE
+GTTCO600        PACK      SEGSTRNG,SP1,NTE003,PIPE,NTE004,CRETURN
+              ENDIF
+            ENDIF
+            CALL      SENDM000                   * send message
+            BRANCH    EXIT,GTTCO910:             * connection lost
+                           GTTCO920              * timeout
+          ENDIF
+.
+          CALL      CLNTE000                     * clear all NTE fields
+          MOVE      ZERO,COUNTER                 * reset line counter
+          MOVE      ZERO,SNDCOUNT                * reset send count
+.
+.         The HCP comments have been completed, so finish.
+.
+GTTCO900  MOVE      ZERO,EXIT
+          GOTO      GTTCO999
+.
+GTTCO910  MOVE      ONE,EXIT
+          GOTO      GTTCO999
+.
+GTTCO920  MOVE      TWO,EXIT
+.
+GTTCO999  RETURN
++
+.*****************************************************************************
 .*        I/O Includes                                                       *
 .*****************************************************************************
 .
@@ -18704,6 +18942,7 @@ CLBKD999  RETURN
           INC       PMSQPTIO/INC
           INC       PMSQVIIO/INC
           INC       PMSRELIO/INC
+          INC       PMSTCOIO/INC
           INC       PMSTEMIO/INC
           INC       PMSTMDIO/INC
           INC       PMSVX1IO/INC

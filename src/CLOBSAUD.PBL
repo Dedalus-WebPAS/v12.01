@@ -1,0 +1,24 @@
+.---------------------------------------------------------------------------
+. Include Name : CLOBSAUD.PBL
+. Function     : Clear function for OBSAUDFD
+.---------------------------------------------------------------------------
+. Modifications :
+.---------------------------------------------------------------------------
+. V12.01.00  23/01/2026  Thanh T       TSK 0930214
+.            Initial Version
+.---------------------------------------------------------------------------
+.
+CLOBSAUD  MOVE      SP70,OBAUURNO      . U/R Number     
+          MOVE      SP70,OBAUVISN      . Visit Number     
+          MOVE      SP70,OBAUCORR      . Correspondence ID     
+          MOVE      SP70,OBAUDATE      . Date of Access (ccyymmdd)   
+          MOVE      SP70,OBAUTIME      . Time of Access (hh:mm:ss)   
+          MOVE      SP70,OBAUWEBU      . Web User ID (websecaf)   
+          MOVE      SP70,OBAUTYPE      . Audit Type     
+          MOVE      SP70,OBAUREAS      . Update Reason (Cat wo)   
+          MOVE      SP70,OBAUORNO      . Original U/R Number    
+          MOVE      SP70,OBAUOVIS      . Original Visit Number    
+          MOVE      SP70,OBAUOCOR      . Original Corresponence ID    
+          MOVE      SP70,OBAUSPAR      . Spare Variable     
+.
+          RETURN

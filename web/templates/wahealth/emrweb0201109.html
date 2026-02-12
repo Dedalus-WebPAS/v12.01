@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -662,8 +662,8 @@ InsertEmergencyHeader()
 </tr>
 
 <tr>
-  <td class=DataLabel>Consent upload to MyHR?</td>
-  <td class="DataField">%EMRWEB02.01.290.0</td>
+  <td class=DataLabel id="MyHRConsentTitle"></td>
+  <td class="DataField" id="ausr1"></td>
   <td>&nbsp;</td>
   <td>&nbsp;</td>
 </tr>
@@ -858,6 +858,18 @@ if(document.getElementById('S01YV')) {
   document.getElementById('S01YV').tabIndex="12";
   document.getElementById('S01YV').onchange=MandatoryMeth;
 }
+
+document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;
+PatientConsentMyHR = trim("%EMRWEB02.01.599.001");
+
+if (PatientConsentMyHR == "0") {
+  document.getElementById("ausr1").innerHTML = "No";
+} else if (PatientConsentMyHR == "1") {
+  document.getElementById("ausr1").innerHTML = "Yes";
+} else {
+  document.getElementById("ausr1").innerHTML = "Yes (implied)";
+}
+
 function MethDiag() {
  p=document.UpdateForm;
  MethDiagnosis(p.admissno,"2",p.emvcd005,p.d_methdiag);

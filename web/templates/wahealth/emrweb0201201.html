@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -298,10 +298,12 @@ value="%EMRWEB02.01.175%EMRWEB02.01.176%EMRWEB02.01.177">
 </tr>
 
 <tr>
-  <td class=DataLabel>Consent MyHR upload?</td>
-  <td><select name=emvis169 id=myhrc tabindex=5 title="Consent upload to MyHR?" class="DataField">
-      <option></option>
-      %EMRWEB02.01.290.2
+  <td class=DataLabel id=MyHRConsentTitle></td>
+  <td><select name=pmsvx125 id=pmsvx125 tabindex=5 class="DataField" 
+              title="Consent upload to MyHR?"> 
+           <option value=" "></option>
+           <option value="0">No</option>
+           <option value="1">Yes</option>
       </select>&nbsp;(<a href="javascript:patientMyhrConsentForm();">form</a>)
   </td>
 </tr>
@@ -375,16 +377,20 @@ if ( document.UpdateForm.deptdate.value == "") {
 
 // Convert a blank visit-level consent to the implied consent from patient level
 function setMyHRConsent() {
-  patientConsentMyHR = "%EMRWEB02.01.043.3";
-  visitConsentMyHR   = document.getElementById("myhrc").value;
-  yesConsentMyHR     = "%STANDARD.01.018.YP.001.3";
+  patientConsentMyHR = trim("%EMRWEB02.01.699.046");
+  visitConsentMyHR   = trim("%EMRWEB02.01.599.001");
+  currentConsentMyHR = trim(document.getElementById("pmsvx125").value);
 
-  if (visitConsentMyHR=="") {
-    if (patientConsentMyHR.substring(0,3)=="   ") {
-      document.getElementById("myhrc").value = yesConsentMyHR.substring(0,43);
-    } else {
-      document.getElementById("myhrc").value = patientConsentMyHR.substring(0,43); 
-    }
+  if (visitConsentMyHR=="" && currentConsentMyHR == "") {
+      document.getElementById("pmsvx125").value =
+          patientConsentMyHR;
+  } else if (currentConsentMyHR == "") {
+      document.getElementById("pmsvx125").value =
+          visitConsentMyHR;
   }
 }
+document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;
+document.getElementById("pmsvx125").title = ScreenLabelMyHRConsent;
+document.getElementById("pmsvx125").value = trim("%EMRWEB02.01.599.001");
+
 </script>

@@ -1,3 +1,4 @@
+. V12.01.01 11/12/2025 JTA C-0956147 Added HAF (HAC Flag) Type of Adjustment
 . V10.14.01 28/03/2019 JT C-0857392 Created ABF HAC Details table               
 . *----------------------------------------------------------------------
 . * Include Name  :   PMSHDEFD.INC
@@ -40,6 +41,7 @@ PMHEHACT  DIM       3      3        10    HAC Complexity Type
 .                                         001 - Charlson                       
 .                                         002 - Age                            
 .                                         003 - MDC                            
+.                                         004 - HAC Flag
 PMHEHACF  DIM       3      3        13    HAC Complexity Field               
 .
 .         001 - Charlson - 009 - Charlson Score 1
@@ -58,6 +60,8 @@ PMHEHACF  DIM       3      3        13    HAC Complexity Field
 .         001 - Charlson - 022 - Charlson Score 14
 .         001 - Charlson - 023 - Charlson Score 15
 .         001 - Charlson - 024 - Charlson Score 16
+.
+.         001 - Charlson - 066 - Charlson Score 0
 .
 .         002 - Age - 025 - Age Range 1 (000-004)
 .         002 - Age - 026 - Age Range 2 (005-009)
@@ -113,7 +117,23 @@ PMHEHACF  DIM       3      3        13    HAC Complexity Field
 .                                        Other Contacts with Health Services)
 .         003 - MDC - 070 - MDC 24       Unknown
 .
-.         001 - Charlson - 066 - Charlson Score 0
+.         004 – HAC Flag - AMI - Acute myocardial infarction
+.         004 – HAC Flag – CAN - Cancer
+.         004 – HAC Flag – CHF – Congestive heart failure
+.         004 - HAC Flag - CTD - Connective Tissue Disorder
+.         004 - HAC Flag - CVA - Cerebral vascular accident
+.         004 - HAC Flag - DBC - Diabetes complications
+.         004 - HAC Flag - DEM - Dementia
+.         004 - HAC Flag - DIA - Diabetes
+.         004 - HAC Flag - HIV – HIV
+.         004 - HAC Flag - LIV – Liver Disease
+.         004 - HAC Flag - MCA – Metastatic Cancer
+.         004 - HAC Flag - PAR - Paraplegia
+.         004 - HAC Flag - PEP – Peptic Ulcer
+.         004 - HAC Flag - PUL - Pulmonary disease
+.         004 - HAC Flag - PVD - Peripheral vascular disease
+.         004 - HAC Flag - REN – Renal Disease
+.         004 - HAC Flag - SLD – Severe Liver Disease
 .
 PMHECOMV  FORM      10.4   8        16    Complexity Value                   
 PMHECDAT  DIM       8      8        24    Date record created                

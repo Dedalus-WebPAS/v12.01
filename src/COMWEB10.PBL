@@ -5,6 +5,8 @@
 .
 . Modifications :
 .----------------------------------------------------------------------
+. V12.01.01 29/01/2026  Thanh T        TSK 0930214
+.           Recompiled for UPEREFVS changes
 . V12.00.01 14/05/2025  J.Tan          TSK 0955096
 .           Added alpanumeric visit number generation
 . V11.04.01 08.01.2024  DA Sarkies       TSK 0941573
@@ -237,7 +239,7 @@ TOLOCASE  INIT      "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "COMWEB10"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "eReferral Web Server"
 .----------------------------------------------------------------------
 .

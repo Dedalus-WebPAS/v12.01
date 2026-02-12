@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 // Program   : cliweb08.js
 //
@@ -28,8 +28,8 @@ function showSummary(linkurl) {
   "left=100 top=100 width=830,height=600,scrollbars=yes,status=no,toolbar=no,menubar=no");
 }
 function ViewDoc(linkurl) {
-  Left=(document.body.clientWidth-480)/2
-  DFrameLink(linkurl,0,Left,480,500)
+  Left=(document.body.clientWidth-1100)/2
+  DFrameLink(linkurl,0,Left,1100,550)
 }
 function SendDoc(linkurl) {
   Left=(document.body.clientWidth-680)/2

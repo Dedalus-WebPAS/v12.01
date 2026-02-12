@@ -8,6 +8,8 @@
 .* Function  :   This program will create the NSW EDW Extract              *
 .* Modifications  :                                                        *
 .***************************************************************************
+.* V12.01.01  23/01/2026 Ebon Clements  Task 0969838                       *
+.*            Recompiled for EDWADMPT - Obj 60 Attribute 01                *
 .* V12.00.07  09/09/2025 Ebon Clements  Task 0960807                       *
 .*            Recompiled for EDWADMPT - Obj 60 Attribute 01 - Babies       *
 .* V12.00.06  25/08/2025 Ebon Clements  Task 0959908 0960807               *
@@ -2263,7 +2265,7 @@ HEADFILE  FILE      ASCII, FIXED=1000
 .  
 PRGID     INIT      "IBAPMS40"
 PRGNAM    INIT      "NSW EDWARD Extract "
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .**************************************************************************
 .*                              ML0000                                    *

@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 // Program   : oprweb06.js
 //
@@ -2593,6 +2593,55 @@ function showDelayHEA() {
       document.getElementById('DelayReason').innerHTML=
       document.getElementById('ShowDelayReason').innerHTML
     } else {
+      document.getElementById('DelayReason').innerHTML=
+      document.getElementById('NoDelayReason').innerHTML
+    }
+  }
+}
+function showDelayHEA2() {
+
+  if (parseInt(document.getElementById('opcnsetr').value) == 0) {
+    document.getElementById('DelayReasonTitle').innerHTML="";
+    document.getElementById('DelayReason').innerHTML=
+    document.getElementById('NoDelayReason').innerHTML
+    return;
+  }
+
+  if(isWhitespace(document.UpdateForm.opard077.value)) {
+     document.getElementById('DelayReasonTitle').innerHTML="";
+     document.getElementById('DelayReason').innerHTML=
+     document.getElementById('NoDelayReason').innerHTML
+  } else {
+
+    if (document.UpdateForm.opard084 != undefined &&
+        !isWhitespace(document.UpdateForm.opard084.value)) {
+      return;
+    }
+
+    var endtime = trim(UpdateForm.suentime.value.replace(/:/g,""));
+    endtime=endtime.substr(0,4)
+    endtime=endtime - 0;
+
+    var rectime = trim(UpdateForm.opard077.value.replace(/:/g,""));
+    rectime=rectime.substr(0,4)
+    rectime=rectime - 0;
+
+    var MaxDelay=(parseInt(endtime) +
+                  parseInt(document.getElementById('opcnsetr').value))
+    var Minutes=parseInt(MaxDelay) % 100
+    var Hour=parseInt(MaxDelay) / 100
+    if (Minutes>=60) {
+        Minutes=Minutes - 60
+      Hour=parseInt(Hour) + 1
+      MaxDelay = (Hour*100) + Minutes
+    }
+    if (MaxDelay <= rectime) {
+      document.getElementById('DelayReasonTitle').innerHTML=
+      document.getElementById('TitleDelayReason').innerHTML;
+      document.getElementById('DelayReason').innerHTML=
+      document.getElementById('ShowDelayReason').innerHTML
+    } else {
+      document.getElementById('DelayReasonTitle').innerHTML="";
       document.getElementById('DelayReason').innerHTML=
       document.getElementById('NoDelayReason').innerHTML
     }

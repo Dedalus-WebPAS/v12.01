@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="crdhb">
 <meta name="HelpFileName" content="NoContextSet.html">
 <script type="text/javascript" src="../js/emrweb0201101.js"></script>
@@ -463,14 +463,15 @@ InsertEmergencyHeader();
 	<!-- 07 : TAS : Make triage notes display as ready-only -->
 	<td class=DataLabel>Triage Notes</td>
     <td><textarea name=brcom001 class=Readonly readonly cols=50 rows=6
-         title="Triage Notes"></textarea>
+         title="Triage Notes" style="overflow-y:hidden"></textarea>
 	<!-- end of change -->
     </td></tr>
 <tr valign=top id=PresentComplaintAddInfo><td></td>
     <td></td>
     <td></td>
     <td colspan=2><textarea name=prcompad readonly cols=50 rows=6
-     class="Readonly" title="Triage Notes - Additional Information">
+     class="Readonly" title="Triage Notes - Additional Information"
+     style="overflow-y:hidden">
     </textarea>
     </td></tr>
 <!-- 01 : CTAS : Move Primary Diagnosis, rename -->

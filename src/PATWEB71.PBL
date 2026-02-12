@@ -5,6 +5,10 @@
 .  
 . Modifications  :
 .----------------------------------------------------------------------------
+. V12.01.05 28/01/2026  J.Tan          TSK 0959998
+.           Mod Phase of Care (POCROW00) to display Cat CC, UDF6 value
+. V12.01.04 22/01/2025  J.Tan          TSK 0956147
+.           Recompiled for ABFPTINV - Added HAC Flags to replace Charlson score
 . V12.01.03 14/01/2025  Bella Turco    TSK 0951679
 .           Fixed LOS calculation to use CURRDATE not DDATE when discharged
 .           Fixed HITH calculation MCHG6800/MCHG6900
@@ -3079,7 +3083,7 @@ CFPAYCOD  DIM       3        * 3M Codefinder PAY Code
 .------------------------------------------------------------------------------
 PRGID     INIT      "PATWEB71"
 PRGNAM    INIT      "Patient Invoice Print Server"      
-VERSION   INIT      "V12.01.03"
+VERSION   INIT      "V12.01.05"
 .------------------------------------------------------------------------------
 .
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -15804,12 +15808,12 @@ MCHG6700  WRITE     HTMLFILE;NZITFLAG;  * Item with NOT performed procedure flag
           GOTO      MCHG9999
 .
 MCHG6800  MOVE      ZERO,LOSDAYS
-          COMPARE   THREE,ASTAT
-          IF        !@EQUAL
-            MOVE      CURRDATE,DDATE
+          MOVE      CURRDATE,TODATE
+          IF        ASTAT=3
+            MOVE      DDATE,TODATE
           ENDIF
 .
-          DAYSEP    ADATE,DDATE,LOSDAYS
+          DAYSEP    ADATE,TODATE,LOSDAYS
           MOVE      LOSDAYS,KEY9
           SQUEEZE   KEY9
           MOVE      "Days",KEY4
@@ -15818,7 +15822,10 @@ MCHG6800  MOVE      ZERO,LOSDAYS
           GOTO      MCHG9999
 .
 MCHG6900  MOVE      ADATE,FROMDATE
-          MOVE      DDATE,TODATE
+          MOVE      CURRDATE,TODATE
+          IF        ASTAT=3
+            MOVE      DDATE,TODATE
+          ENDIF
           CALL      RHIHDAYS                * Get HIH Days
 .
           MOVE      ZERO,CALDAYS
@@ -16704,12 +16711,30 @@ POCROW00  CLEAR     HTMLLINK
             PACK      TDESC,SP70
           ENDIF
 .
+          MOVE      ZERO,FORM1
+          PACK      KEY5,ANSC,ANSC,CHCODE
+          CALL      RDCODE1
+          IF        OVRCD=0
+            SQUEEZE   PTCDUDF6
+            MOVE      PTCDUDF6,FORM1
+          ENDIF
+.
+          CLEAR     KEY7
+          APPEND    PRDCCLSS,KEY7
+          IF        FORM1<>0
+            APPEND    " (",KEY7
+            APPEND    FORM1,KEY7
+            APPEND    ")",KEY7
+          ENDIF
+          APPEND    SP70,KEY7
+          RESET     KEY7
+.
           WRITE     HTMLFILE;"t.addRow(#"",HTMLLINK,"#",":      * 0
                              "#"",DPTRDEPN,"#",":               * 1
                              "#"",PRDSDATE,"#",":               * 2
                              "#"",PRDEDATE,"#",":               * 3
                              "#"",TDESC,"#",":                  * 4
-                             "#"",PRDCCLSS,"#")"                * 5
+                             "#"",KEY7,"#")"                    * 5
 .
 POCROW99  RETURN
 +

@@ -36,7 +36,7 @@ PMAGFADM  DIM       1      1        58    First Admission for this Impairment
 PMAGTIMP  DIM       1      1        59    Current Impairment due to Trauma   
 PMAGDADM  DIM       8      8        60    Date of relevant acute admission   
 PMAGTOCC  DIM       3      3        68    Time since onset of chronic conditi
-PMAGEMOR  DIM       1      1        71    Existing Co-morbility              
+PMAGEMOR  DIM       1      1        71    Existing Co-morbidity              
 PMAGCMR1  DIM       3      3        72    Co-morbidity 1                     
 PMAGCMR2  DIM       3      3        75    Co-morbidity 2                     
 PMAGCMR3  DIM       3      3        78    Co-morbidity 3                     
@@ -45,7 +45,7 @@ PMAGCMP1  DIM       3      3        84    Complication 1
 PMAGCMP2  DIM       3      3        87    Complication 2                     
 PMAGCMP3  DIM       3      3        90    Complication 3                     
 PMAGCMP4  DIM       3      3        93    Complication 4                     
-PMAGASSO  DIM       1      1        96    Assesment Only                     
+PMAGASSO  DIM       1      1        96    Assessment Only                     
 PMAGACPA  DIM       3      3        97    Accomm Prior to Impairment (Cat py)
 PMAGACPD  DIM       3      3        100   Final Destination (Cat pz)         
 PMAGLSPA  DIM       3      3        103   Carer Status Prior (Cat ar)        

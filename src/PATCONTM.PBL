@@ -8,22 +8,30 @@
 .  *     Modifications:                                                       *
 .  *                                                                          *
 .  ****************************************************************************
-.  *     V12.01.04  08/01/2026  Bella Turco      TSK 0951679                  *
-.  *                Move PATCN629/630 into field even if ZERO/blank           *
-.  *     V12.01.03  19/12/2025  Davin            TSK 0961944                  *
-.  *                Added PATCN701/PTCNNTES - Send/Receive NTE segment in M02 *
-.  *                07/01/2026  Alina            TSK 0958930                  *
-.  *                Added PATCN702/PTCNBDTE - Added Broadcast a Unique ID in  *
-.  *                PV1.50 for a Bed Transfer Event                           *
-.  *     V12.01.02  18/12/2025  J.Tan            TSK 0956147                  *
-.  *                Added PTCNHACD - HAC Flags for Risk Factors Start Date-ABF*
-.  *     V12.01.01  17/12/2025  Zumin Yu         TSK 0968747                  *
-.  *                Added CSURG1, CMURG1, CSURG2, CMURG2, CSURG3, CMURG3,     *
-.  *                CSURG4, CMURG4, CIPRG, COPRG, CAERG, CNBRG, CCNOTES,      *
-.  *                CPMIAD, CURDEL, CURCHG, CSRCHDRG, CSRCHYRG, CFFMORB,      *
-.  *                PTCNURCF, PTCNRQCF, PTCNDPCF, PTCNRLAY, PTCNUCOD,         *
-.  *                PTCNMRPN, PTCNUDRN, PTCECODE, CMDISP, CMDISS, CMDISC,     *
-.  *                CMDISA, CMDISD, CMOPRT, CMDISL and CMDISM from IBAHOS93   *
+.  * V12.01.05 04/02/2026  Thanh T                 TSK 0961944                *
+.  *           Added PATCN703/PTCNUMOP - If Home Phone is blank, use Mobile   *
+.  *                 Phone                                                    *
+.  *                 PATCN704/PTCNLBNB - Leave pttybedn blank                 *
+.  *                 PATCN705/PTCNPPNT - populate Patient Notes (pttynote)    *
+.  *                 with Admission Date & Admission Diagnosis                *
+.  *                 PATCN706/PTCNDIAD - Number of Days in advance to include *
+.  * V12.01.04  08/01/2026  Bella Turco      TSK 0951679                      *
+.  *            Move PATCN629/630 into field even if ZERO/blank               *
+.  * V12.01.03  19/12/2025  Davin            TSK 0961944                      *
+.  *            Added PATCN701/PTCNNTES - Send/Receive NTE segment in M02     *
+.  *            07/01/2026  Alina            TSK 0958930                      *
+.  *            Added PATCN702/PTCNBDTE - Added Broadcast a Unique ID in      *
+.  *            PV1.50 for a Bed Transfer Event                               *
+.  * V12.01.02  18/12/2025  J.Tan            TSK 0956147                      *
+.  *            Added PTCNHACD - HAC Flags for Risk Factors Start Date-ABF    *
+.  * V12.01.01  17/12/2025  Zumin Yu         TSK 0968747                      *
+.  *            Added CSURG1, CMURG1, CSURG2, CMURG2, CSURG3, CMURG3,         *
+.  *            CSURG4, CMURG4, CIPRG, COPRG, CAERG, CNBRG, CCNOTES,          *
+.  *            CPMIAD, CURDEL, CURCHG, CSRCHDRG, CSRCHYRG, CFFMORB,          *
+.  *            PTCNURCF, PTCNRQCF, PTCNDPCF, PTCNRLAY, PTCNUCOD,             *
+.  *            PTCNMRPN, PTCNUDRN, PTCECODE, CMDISP, CMDISS, CMDISC,         *
+.  *            CMDISA, CMDISD, CMOPRT, CMDISL and CMDISM from IBAHOS93       *
+.  ****************************************************************************
 .  *     V12.00.05  19/11/2025  Davin            TSK 0968897                  *
 .  *                Added PATCN663/PTCNB08E - Broadcast EMR A08 from HL7RECVR *
 .  *                Added PATCN664/PTCNMSH3 - Sending appli MSH.3 for EMR A08 *
@@ -1734,6 +1742,10 @@ CPPT0000  MOVE      Z70,PATCN001
           MOVE      Z70,PATCN700
           MOVE      Z70,PATCN701
           MOVE      Z70,PATCN702
+          MOVE      Z70,PATCN703
+          MOVE      Z70,PATCN704
+          MOVE      Z70,PATCN705
+          MOVE      Z70,PATCN706
 .
           MOVE      Z70,IBACN001
           MOVE      Z70,IBACN002
@@ -2215,7 +2227,8 @@ PTCO0000  BRANCH    FLDITMNO,PTCO0010,PTCO0020,PTCO0030,PTCO0040,PTCO0050:
                              PTCO5860,PTCO5870,PTCO5880,PTCO5890,PTCO5900: * 590
                              PTCO5910,PTCO5920,PTCO5930,PTCO5940,PTCO5950: * 595
                              PTCO5960,PTCO5970,PTCO5980,PTCO5990,PTCO6000: * 600
-                             PTCO6010,PTCO6020
+                             PTCO6010,PTCO6020,PTCO6030,PTCO6040,PTCO6050: * 605
+                             PTCO6060
 .
           WRITE     HTMLFILE;"Invalid IBA tag";
           GOTO      PTCO9999
@@ -4422,6 +4435,20 @@ PTCO6020  WRITE     HTMLFILE;PTCNBDTE;   * Added Broadcast a Unique ID in
 .                                        * PV1.50 for a Bed Transfer Event
           GOTO      PTCO9999
 .
+PTCO6030  WRITE     HTMLFILE;PTCNUMOP;   * If Home Phone is blank, use Mobile
+.                                        * Phone
+          GOTO      PTCO9999
+.
+PTCO6040  WRITE     HTMLFILE;PTCNLBNB;   * Leave pttybedn blank
+          GOTO      PTCO9999
+.
+PTCO6050  WRITE     HTMLFILE;PTCNPPNT;   * Populate Patient Notes(pttynote) with
+.                                        * Admission Date & Admission Diagnosis
+          GOTO      PTCO9999
+.
+PTCO6060  WRITE     HTMLFILE;PTCNDIAD;   * Number of Days in advance to include
+          GOTO      PTCO9999
+.
 PTCO9999  RETURN
 +
 .------------------------------------------------------------
@@ -4838,8 +4865,9 @@ SPPAT000  MOVE      ZERO,EXIT
                        SPPAT681,SPPAT682,SPPAT683,SPPAT684,SPPAT685:
                        SPPAT686,SPPAT687,SPPAT688,SPPAT689,SPPAT690:
                        SPPAT691,SPPAT692,SPPAT693,SPPAT694,SPPAT695:
-                       SPPAT696,SPPAT697,SPPAT698,SPPAT699,SPPAT700:
-                       SPPAT701,SPPAT702
+                       SPPAT696,SPPAT697,SPPAT698,SPPAT699,SPPAT700:    *700
+                       SPPAT701,SPPAT702,SPPAT703,SPPAT704,SPPAT705:
+                       SPPAT706
 .
           MOVE      ONE,EXIT
           GOTO      SPPAT999
@@ -7144,6 +7172,18 @@ SPPAT701  MOVE      QRYDATA,PATCN701
           GOTO      SPPAT999
 .
 SPPAT702  MOVE      QRYDATA,PATCN702
+          GOTO      SPPAT999
+.
+SPPAT703  MOVE      QRYDATA,PATCN703
+          GOTO      SPPAT999
+.
+SPPAT704  MOVE      QRYDATA,PATCN704
+          GOTO      SPPAT999
+.
+SPPAT705  MOVE      QRYDATA,PATCN705
+          GOTO      SPPAT999
+.
+SPPAT706  MOVE      QRYDATA,PATCN706
           GOTO      SPPAT999
 .
 SPPAT999  RETURN
@@ -10735,6 +10775,30 @@ MVPT0000  MATCH     Z70,PATCN001
           IF        !@EQUAL
             MOVE      PATCN702,PTCNBDTE  * Broadcast a Unique ID in PV1.50
 .                                          for a Bed Transfer Event
+          ENDIF
+.
+          MATCH     Z70,PATCN703
+          IF        !@EQUAL
+            MOVE      PATCN703,PTCNUMOP  * If Home Phone is blank, use Mobile
+.                                        * Phone
+          ENDIF
+.
+          MATCH     Z70,PATCN704
+          IF        !@EQUAL
+            MOVE      PATCN704,PTCNLBNB  * Leave pttybedn blank
+          ENDIF
+.
+          MATCH     Z70,PATCN705
+          IF        !@EQUAL
+            MOVE      PATCN705,PTCNPPNT  * Populate Patient Notes(pttynote) with
+.                                        * Admission Date & Admission Diagnosis
+          ENDIF
+.
+          MATCH     Z70,PATCN706
+          IF        !@EQUAL
+            SQUEEZE   PATCN706
+            MOVE      PATCN706,F3
+            MOVE      F3,PTCNDIAD        * Number of Days in advance to include
           ENDIF
 .
           MATCH     Z70,IBACN001

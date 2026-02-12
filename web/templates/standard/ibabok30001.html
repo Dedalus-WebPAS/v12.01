@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -225,7 +225,7 @@ function ProcessReport() {
 function DisableFields() {
   var p = document.ReportForm;
   
-  if (p.ptcnsmsn.value != "1" || p.ptcnnewc.value != "1") {
+  if (p.ptcnsmsn.value != "1") {
     p.keystr02.disabled = true;  // SMS Message Type
     document.getElementById('datran01').disabled = true;
     document.getElementById('datran02').disabled = true;

@@ -12,6 +12,8 @@
 .* Modifications  :                                                           *
 .*                                                                            *
 .******************************************************************************
+.*       V12.01.01  19/01/2026  Ebon Clements  TSK 0966067                    *
+.*                  Read MRCNPIGP - Send I prefix codes to grouping products  *
 .*       V12.00.04  27/10/2025  Ebon Clements  TSK 0964542                    *
 .*                  Recompiled for WEBGROUP - Load Codefinder clinician date  *
 .*                  and time                                                  *
@@ -940,7 +942,7 @@ OBB       INIT      "("
 .---------------------------------------------------------------------
 PRGID     INIT      "IBAPMS99"
 PRGNAM    INIT      "DRG Grouper Interface"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 .---------------------------------------------------------------------
 .
 +
@@ -1099,7 +1101,7 @@ INIT0000  CALL      DISPHEAD
           READ      CONTROLF,TWENTY1;*45,PTCNDRSM
           READ      CONTROLF,FORTY;*111,OPCNCLSU
           READ      CONTROLF,SIXTY;*133,MRCNEPSC,*248,MRCN3MCD,*249,MRCN3MCG
-          READ      CONTROLF,SIXTY1;*240,MRCNUNWA,*241,MRCNENWA
+          READ      CONTROLF,SIXTY1;*240,MRCNUNWA,*241,MRCNENWA,*249,MRCNPIGP
           READ      CONTROLF,EIGHTY;*243,PTCNODRG,*250,PTCNHDPS
           READ      CONTROLF,SEVENTY7;*220,PTCNEDRG
           READ      CONTROLF,SEVENTY9;*82,PTCNDSCI

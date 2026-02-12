@@ -8,6 +8,8 @@
 .* Function       :  Upload ABF Weights                                       *
 .* Modifications  :                                                           *
 .******************************************************************************
+.* V12.01.01 11/12/2025  J.Tan         TSK 0956147                            *
+.*           Added Upload  HAC Flag Complexity Values                         *
 .* V11.03.07 12/07/2021  J.Tan     TSK 0923703                                *
 .*           Mod Upload MHC value set record to write to keyword file pmsukiaf*
 .* V11.03.06 23/05/2023 Thanh T    TSK 0923703                                *
@@ -175,6 +177,7 @@ XMDDHACT  DIM       3      3        10    HAC Complexity Type
 .                                         001 - Charlson
 .                                         002 - Age
 .                                         003 - MDC
+.                                         004 - HAC Flag
 XMDDHACF  DIM       3      3        13    HAC Complexity Field
 XMDDCOMV  FORM      10.4   8        16    Complexity Value
 .
@@ -190,6 +193,7 @@ XAGEHACT  DIM       3      3        10    HAC Complexity Type
 .                                         001 - Charlson
 .                                         002 - Age
 .                                         003 - MDC
+.                                         004 - HAC Flag
 XAGEHACF  DIM       3      3        13    HAC Complexity Field
 XAGECOMV  FORM      10.4   8        16    Complexity Value
 .
@@ -205,8 +209,25 @@ XCHAHACT  DIM       3      3        10    HAC Complexity Type
 .                                         001 - Charlson
 .                                         002 - Age
 .                                         003 - MDC
+.                                         004 - HAC Flag
 XCHAHACF  DIM       3      3        13    HAC Complexity Field
 XCHACOMV  FORM      10.4   8        16    Complexity Value
+.
+.         HAC Flag Complexity Upload file
+.
+HFLHDTXT  FILE       HL7, FIXED=1000        * Upload file for HAC Flag Detail
+.
+.Name     Type      Length Physical Start Description
+.----     ----      ------ -------- ----- -----------
+XHFLCNTR  DIM       6      6        1     Contract ID
+XHFLHACG  DIM       3      3        7     HAC Group 01-16 Cat Ha
+XHFLHACT  DIM       3      3        10    HAC Complexity Type
+.                                         001 - Charlson
+.                                         002 - Age
+.                                         003 - MDC
+.                                         004 - HAC Flag
+XHFLHACF  DIM       3      3        13    HAC Complexity Field
+XHFLCOMV  FORM      10.4   8        16    Complexity Value
 .
 .         ABF EMR URG Classification Upload file
 .
@@ -330,6 +351,25 @@ VPMHHACV  DIM       15
 VMDDCOMV  DIM       15
 VAGECOMV  DIM       15
 VCHACOMV  DIM       15
+VHFLCOMV  DIM       15
+.
+AMIFLAG   INIT      "AMI"
+CANFLAG   INIT      "CAN"
+CHFFLAG   INIT      "CHF"
+CTDFLAG   INIT      "CTD"
+CVAFLAG   INIT      "CVA"
+DBFFLAG   INIT      "DBC"
+DEMFLAG   INIT      "DEM"
+DIAFLAG   INIT      "DIA"
+HIVFLAG   INIT      "HIV"
+LIVFLAG   INIT      "LIV"
+MCAFLAG   INIT      "MCA"
+PARFLAG   INIT      "PAR"
+PEPFLAG   INIT      "PEP"
+PULFLAG   INIT      "PUL"
+PVDFLAG   INIT      "PVD"
+RENFLAG   INIT      "REN"
+SLDFLAG   INIT      "SLD"
 .
 ALPHANUM  INIT      "a~b~c~d~e~f~g~h~i~j~k~l~m~n~o~p~q~r~s~t~u~v~w~x~y~z~A~B~C~D~E~F~G~H~I~J~K~L~M~N~O~P~Q~R~S~T~U~V~W~X~Y~Z~1~2~3~4~5~6~7~8~9~0~ ~"
 MDBALNUM  INIT      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -341,7 +381,7 @@ HYPHEN    INIT      "-"
 .
 PRGID     INIT      "IBAPMS52"
 PRGNAM    INIT      "Upload & Update ABF Weights"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .******************************************************************************
 .*                                  ML0000                                    *
@@ -352,7 +392,8 @@ ML0000    CALL      INIT0000                * Initailize variables & open files
           BRANCH    EXIT,ML9999
 .
           BRANCH    COPTION,ML1000,ML1000,ML1000,ML1000,ML1000:
-                            ML1000,ML1000,ML1000,ML1000,ML1000
+                            ML1000,ML1000,ML1000,ML1000,ML1000:
+                            ML1000
           GOTO      ML9999
 .
 ML1000    CALL      KASC0000                * Keyin file
@@ -447,9 +488,8 @@ KOPT0000  MOVE      ZERO,EXIT
                     *P1:6,*V2LON,"2",*HOFF," = Upload Non-Admitted Weights":
                     *P1:7,*V2LON,"3",*HOFF," = Upload Emergency Department":
                     *P1:8,*V2LON,"4",*HOFF," = Upload HAC Baseline Complexity":
-                                           " Scores":
-                    *P1:9,*V2LON,"5",*HOFF," = Upload HAC Detail Complexity":
-                                           " Scores":
+.                   *P1:9,*V2LON,"5",*HOFF," = Upload HAC Detail Complexity":
+.                                          " Scores":
                     *P1:9,*V2LON,"5",*HOFF," = Upload MDC Complexity Scores":
                     *P1:10,*V2LON,"6",*HOFF," = Upload Age Complexity Scores":
                     *P1:11,*V2LON,"7",*HOFF," = Upload Charlson Complexity":
@@ -458,13 +498,16 @@ KOPT0000  MOVE      ZERO,EXIT
                     *P1:13,*V2LON,"9",*HOFF," = Upload Admitted Sub-Acute":
                                             " Price Weights":   
                     *P1:14,*V2LON,"10",*HOFF," = Upload Admitted Mental":
-                                            " Health Price Weights";   
+                                            " Health Price Weights":
+                    *P1:15,*V2LON,"11",*HOFF," = Upload HAC Flag":
+                                            " Complexity Values";   
 .
-          DISPLAY   *P1:16,"Select Option : ";
+          DISPLAY   *P1:17,"Select Option : ";
 .
-KOPT1000  KEYIN     *P17:16,*V2LON,COPTION;
+KOPT1000  KEYIN     *P17:17,*V2LON,COPTION;
           BRANCH    COPTION,KOPT9999,KOPT9999,KOPT9999,KOPT9999,KOPT9999:
-                            KOPT9999,KOPT9999,KOPT9999,KOPT9999,KOPT9999
+                            KOPT9999,KOPT9999,KOPT9999,KOPT9999,KOPT9999:
+                            KOPT9999
 .
           COMPARE   ZERO,COPTION
           GOTO      KOPT9000 IF EQUAL
@@ -510,6 +553,9 @@ KASC0000  MOVE      ZERO,EXIT
           ENDIF
           IF        COPTION=10
             DISPLAY   *P20:17,*EF,"Admitted Mental Health Price Weights Load File";
+          ENDIF
+          IF        COPTION=11
+            DISPLAY   *P20:17,*EF,"HAC Flags Complexity Values Load File";
           ENDIF
 .
           KEYIN     *P1:18,*EL,"Keyin Path & File Name : ",*V2LON,FNAMEI
@@ -619,6 +665,15 @@ KASC0000  MOVE      ZERO,EXIT
             BRANCH    OVRCD,KASC8000
           ENDIF
 .
+          IF        COPTION=11
+            DISPLAY   *P26:18,*V2LON,*EL,FNAMEI;
+            MOVE      ZERO,OVRCD
+            TRAP      OVERCOND IF IO
+            OPEN      HFLHDTXT,FNAMEI
+            TRAPCLR   IO
+            BRANCH    OVRCD,KASC8000
+          ENDIF
+.
           CALL      KOUT0000                * Keyin output file
           BRANCH    EXIT,KASC9000
 .
@@ -724,7 +779,8 @@ SFLD9999  RETURN
 PRHD0000  CALL      HEAD132
 .
           BRANCH    COPTION,PRHD1000,PRHD2000,PRHD3000,PRHD4000,PRHD5000:
-                            PRHD6000,PRHD7000,PRHD8000,PRHD8100,PRHD8200
+                            PRHD6000,PRHD7000,PRHD8000,PRHD8100,PRHD8200:
+                            PRHD8300
           GOTO      PRHD9999
 .
 PRHD1000  PRINT     *N,"Upload Admitted Acute Price Weights"
@@ -892,6 +948,23 @@ PRHD8200  PRINT     *N,"Upload ABF Mental Health Price Weights"
 .
           GOTO      PRHD9000
 .
+PRHD8300  PRINT     *N,"Upload HAC Flag Complexity"
+.
+          PRINT     *N,"Date     : ",CDATE:
+                    *N,"Time     : ",CTIMEIS:
+                    *N,"User ID  : ",USERID
+.
+          PRINT     *N,"HAC Flag Complexity Load file         : ":
+                    *N,"     ",PATHNAME
+          CALL      UND132
+.
+          PRINT     *1,"| Line No.",*12,"|Error Messages",*59,"|Contract ID":
+                    *71,"|HAC Grp",*80,"|HAC Cm Ty":
+                    *90,"| HAC Cmp":
+                    *100,"| Complexity Val":
+                    *132,"|"
+          GOTO      PRHD9000
+.
 PRHD9000  CALL      UND132
           GOTO      PRHD9999
 .
@@ -904,7 +977,8 @@ PRHD9999  RETURN
 PROC0000  MOVE      ZERO,LINECNTR
 .
           BRANCH    COPTION,PROC1000,PROC2000,PROC3000,PROC4000,PROC5000:
-                            PROC6000,PROC7000,PROC8000,PROC8100,PROC8200
+                            PROC6000,PROC7000,PROC8000,PROC8100,PROC8200:
+                            PROC8300
 .
 PROC1000  CALL      ADMA0000         * Process Admitted Acute Price weight
           GOTO      PROC9999
@@ -934,6 +1008,9 @@ PROC8100  CALL      SAPW0000         * Process Admitted Sub-Acute Price Weights
           GOTO      PROC9999
 .
 PROC8200  CALL      MHPW0000         * Process Admitted MH Price Weights
+          GOTO      PROC9999
+.
+PROC8300  CALL      HACF0000         * Process HAC Flags Complexity values
           GOTO      PROC9999
 .
 PROC9999  RETURN
@@ -3674,10 +3751,519 @@ MHPW9000  CLOSE     AMHPWTXT
 MHPW9999  RETURN
 +
 .******************************************************************************
+.*                                  HACF0000                                  *
+.*                        Generate HAC Flags Complexity values
+.******************************************************************************
+HACF0000  OPEN      HFLHDTXT,FNAMEI
+
+          MOVE      ZERO,CMPCOUNT
+.
+HACF1000  READ      HFLHDTXT,SEQ;XFLD0001,XFLD0002,XFLD0003,XFLD0004,XFLD0005:
+                                 XFLD0006,XFLD0007,XFLD0008,XFLD0009,XFLD0010:
+                                 XFLD0011,XFLD0012,XFLD0013,XFLD0014,XFLD0015:
+                                 XFLD0016
+          GOTO      HACF9000 IF OVER
+.
+          PACK      WORKLINE,XFLD0001,XFLD0002,XFLD0003,XFLD0004,XFLD0005:
+                             SP70,SP70,SP70
+          MATCH     SPACLINE,WORKLINE
+          GOTO      HACF1000 IF EQUAL
+.
+          ADD       ONE,CMPCOUNT
+          COMPARE   "18",CMPCOUNT
+          GOTO      HACF9000 IF NOT LESS
+.
+          LOAD      DIM3,CMPCOUNT,AMIFLAG,CANFLAG,CHFFLAG,CTDFLAG,CVAFLAG:
+                                  DBFFLAG,DEMFLAG,DIAFLAG,HIVFLAG,LIVFLAG:
+                                  MCAFLAG,PARFLAG,PEPFLAG,PULFLAG,PVDFLAG:
+                                  RENFLAG,SLDFLAG
+.
+          PACK      XHFLCNTR,XFLD0002,SP70
+          MOVE      "004",XHFLHACT        * HAC Complexity Type
+          PACK      XHFLHACF,DIM3,SP70    * HAC Complexity field
+          ADD       ONE,LINECNTR            * Text file line counter for error
+.
+.
+. HAC Flag Group 01
+.
+HACF1010  PACK      XHFLHACG,ZERO,ONE,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0003
+          MOVE      XFLD0003,XHFLCOMV
+          MOVE      XFLD0003,VHFLCOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1020
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+. HAC Flag Group 02
+.
+HACF1020  PACK      XHFLHACG,ZERO,TWO,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0004
+          MOVE      XFLD0004,XHFLCOMV
+          MOVE      XFLD0004,VHFLCOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1030
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+. HAC Flag Group 03
+.
+HACF1030  PACK      XHFLHACG,ZERO,THREE,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0005
+          MOVE      XFLD0005,XHFLCOMV
+          MOVE      XFLD0005,VHFLCOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1040
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+. HAC Flag Group 04
+.
+HACF1040  PACK      XHFLHACG,ZERO,FOUR,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0006
+          MOVE      XFLD0006,XHFLCOMV
+          MOVE      XFLD0006,VHFLCOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1060
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+. HAC Flag Group 06
+.
+HACF1060  PACK      XHFLHACG,ZERO,SIX,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0007
+          MOVE      XFLD0007,XHFLCOMV
+          MOVE      XFLD0007,VHFLCOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1070
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+. HAC Flag Group 07
+.
+HACF1070  PACK      XHFLHACG,ZERO,SEVEN,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0008
+          MOVE      XFLD0008,XHFLCOMV
+          MOVE      XFLD0008,VHFLCOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1080
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+. HAC Flag Group 08
+.
+HACF1080  PACK      XHFLHACG,ZERO,EIGHT,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0009
+          MOVE      XFLD0009,XHFLCOMV
+          MOVE      XFLD0009,VHFLCOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1090
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+. HAC Flag Group 09
+.
+HACF1090  PACK      XHFLHACG,ZERO,NINE,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0010
+          MOVE      XFLD0010,XHFLCOMV
+          MOVE      XFLD0010,VCHACOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1100
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+. HAC Flag Group 10
+.
+HACF1100  PACK      XHFLHACG,ONE,ZERO,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0011
+          MOVE      XFLD0011,XHFLCOMV
+          MOVE      XFLD0011,VHFLCOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1110
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+. HAC Flag Group 11
+.
+HACF1110  PACK      XHFLHACG,ONE,ONE,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0012
+          MOVE      XFLD0012,XHFLCOMV
+          MOVE      XFLD0012,VHFLCOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1120
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+. HAC Flag Group 12
+.
+HACF1120  PACK      XHFLHACG,ONE,TWO,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0013
+          MOVE      XFLD0013,XHFLCOMV
+          MOVE      XFLD0013,VHFLCOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1130
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+. HAC Flag Group 13
+.
+HACF1130  PACK      XHFLHACG,ONE,THREE,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0014
+          MOVE      XFLD0014,XHFLCOMV
+          MOVE      XFLD0014,VHFLCOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1140
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+. HAC Flag Group 14
+.
+HACF1140  PACK      XHFLHACG,ONE,FOUR,SP70
+.
+          MOVE      ZERO,XHFLCOMV
+          SQUEEZE   XFLD0015
+          MOVE      XFLD0015,XHFLCOMV
+          MOVE      XFLD0015,VHFLCOMV
+.
+          CALL      VALD0000              * Validate fields
+          BRANCH    ERRFLAG,HACF1000
+.
+          CALL      CLPMSHDE                 * clear fields
+.
+          PACK      KEY15,XHFLCNTR,XHFLHACG,XHFLHACT,XHFLHACF,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=1
+            CALL      SETF0000
+            ADD       ONE,ADDCOUNT       * Total records added
+            MOVE      USERID,PMHECUID
+            CALL      IBACLOCK
+            PACK      PMHECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHECDAT
+            MOVE      CTIMEIS,PMHECTIM
+            CALL      WRPMHDE1
+          ELSE
+            CALL      SETF0000
+            ADD       ONE,UPDCOUNT       * Total records updated
+            MOVE      USERID,PMHEUUID
+            CALL      IBACLOCK
+            PACK      PMHEUDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMHEUDAT
+            MOVE      CTIMEIS,PMHEUTIM
+            CALL      UPPMHDE1
+          ENDIF
+.
+          GOTO      HACF1000
+.
+HACF9000  CLOSE     HFLHDTXT
+
+HACF9999  RETURN
++
+.******************************************************************************
 .*                             Set fields                                     *
 .******************************************************************************
 SETF0000  BRANCH   COPTION,SETF1000,SETF2000,SETF3000,SETF4000,SETF5000:
-                           SETF6000,SETF7000,SETF8000,SETF8100,SETF8200
+                           SETF6000,SETF7000,SETF8000,SETF8100,SETF8200:
+                           SETF8300
           GOTO     SETF9999
 .
 SETF1000  MOVE     XADMCNTR,PMPWCNTR  *  Contract ID
@@ -3824,6 +4410,13 @@ SETF8200  MOVE      XMHWCNTR,PMMHCNTR
 .
           GOTO      SETF9999
 .
+SETF8300  MOVE     XHFLCNTR,PMHECNTR  * Contract ID
+          MOVE     XHFLHACG,PMHEHACG  * HAC Group 01-16 Cat Ha
+          MOVE     XHFLHACT,PMHEHACT  * HAC Complexity Type
+          MOVE     XHFLHACF,PMHEHACF  * HAC Complexity Field
+          MOVE     XHFLCOMV,PMHECOMV  * Complexity Value
+          GOTO     SETF9999
+.
 SETF9999  RETURN
 +
 .******************************************************************************
@@ -3846,7 +4439,8 @@ EXCUS999  RETURN
 VALD0000  MOVE      ZERO,EXIT
           MOVE      ZERO,ERRFLAG
           BRANCH    COPTION,VALD1000,VALD2000,VALD3000,VALD4000,VALD5000:
-                            VALD6000,VALD7000,VALD8000,VALD8100,VALD8200
+                            VALD6000,VALD7000,VALD8000,VALD8100,VALD8200:
+                            VALD8300
           GOTO      VALD9999
 .
 VALD1000  CALL      VPWA0000           * Validate Admitted acute PW
@@ -3877,6 +4471,9 @@ VALD8100  CALL      VSPW0000           * Validate Sub-Acute Price Weights
           GOTO      VALD9999
 .
 VALD8200  CALL      VMHPW000           * Validate MH Price Weights
+          GOTO      VALD9999
+.
+VALD8300  CALL      VHAFL000           * Validate HAC Flags
           GOTO      VALD9999
 .
 VALD9999  RETURN
@@ -4829,6 +5426,74 @@ VMHPW000  MOVE      XFLD0001,XMHWCNTR        * Contract ID
 .
 VMHPW999  RETURN
 .
+.******************************************************************************
+. Validate HAC Flags input text file fields
+.******************************************************************************
+VHAFL000  MATCH     SP70,XHFLCNTR
+          IF        @EQUAL
+            MOVE      "HAC Flag Contract ID is blank",ERRORMSG
+            CALL      PERR0000
+            MOVE      ONE,EXIT
+          ELSE
+            PACK      KEY6,XHFLCNTR,SP70
+            CALL      RDPMCID1
+            IF        OVRCD=0
+              MATCH     "1",PMCIDELE
+              IF        @EQUAL
+                MOVE      "HAC Flag Contract Id is deleted",ERRORMSG
+                CALL      PERR0000
+                MOVE      ONE,EXIT
+              ENDIF
+            ELSE
+              MOVE      "Invalid HAC Flag Contract Id",ERRORMSG
+              CALL      PERR0000
+              MOVE      ONE,EXIT
+            ENDIF
+          ENDIF
+.
+          MATCH     SP70,XHFLHACG
+          IF        @EQUAL
+            MOVE      "HAC Flag HAC Group is blank",ERRORMSG
+            CALL      PERR0000
+            MOVE      ONE,EXIT
+          ELSE
+            MOVE      "Ha",KEY2
+            UNPACK    XHFLHACG,KEY3
+            PACK      KEY5,KEY2,KEY3,SP70
+            CALL      RDCODE1
+            IF        OVRCD=1
+              MOVE      "Invalid HAC Flag HAC Group Code",ERRORMSG
+              CALL      PERR0000
+              MOVE      ONE,EXIT
+            ENDIF
+          ENDIF
+.
+          MATCH     SP70,XHFLHACT
+          IF        @EQUAL
+            MOVE      "HAC Flag HAC Complexity Type is blank",ERRORMSG
+            CALL      PERR0000
+            MOVE      ONE,EXIT
+          ENDIF
+.
+          MATCH     SP70,XHFLHACF
+          IF        @EQUAL
+            MOVE      "HAC Flag HAC Complexity Field is blank",ERRORMSG
+            CALL      PERR0000
+            MOVE      ONE,EXIT
+          ENDIF
+.
+          MOVE      SP70,DIM15
+          MOVE      VHFLCOMV,DIM15
+
+          TYPE      DIM15
+          IF        !@EQUAL | @EOS
+            MOVE      "HAC Flag Invalid Complexity Value",ERRORMSG
+            CALL      PERR0000
+            MOVE      ONE,EXIT
+          ENDIF
+.
+VHAFL999  RETURN
++
 .------------------------------------------------------------------------------
 . Validate a character field total Size
 . Requires:  DINFIEL1 - Charcater field
@@ -5069,7 +5734,8 @@ PERR0000  ADD       ONE,ERRCOUNT            * Total error count
           MOVE      ONE,ERRFLAG
 .
           BRANCH    COPTION,PERR1000,PERR2000,PERR3000,PERR4000,PERR5000:
-                            PERR6000,PERR7000,PERR8000,PERR8100,PERR8200
+                            PERR6000,PERR7000,PERR8000,PERR8100,PERR8200:
+                            PERR8300
           GOTO      PERR9999
 .
 .         Admitted Acute PW
@@ -5165,6 +5831,14 @@ PERR8200  PRINT     *1,"|",LINECNTR,*12,"|",ERRORMS1,*89,"|":
                     *113,ERRAMHD,*132,"|"
           GOTO      PERR9999
 .
+.         HAC Flags Complexity
+.
+PERR8300  PRINT     *1,"|",LINECNTR,*12,"|",ERRORMSG,*59,"|":
+                    XHFLCNTR,*71,"|",XHFLHACG,*80,"|",XHFLHACT:
+                    *90,"|",XHFLHACF,*100,"|",VHFLCOMV:
+                    *132,"|"
+          GOTO      PERR9999
+.
 PERR9999  RETURN
 +
 .******************************************************************************
@@ -5208,7 +5882,7 @@ PTOT0000  CALL      UND132
           PRINT     *1,"| Total Records In File  : ",LINECNTR,*132,"|"
           PRINT     *1,"| Total Errors Found     : ",ERRCOUNT,*132,"|"
 .
-          IF        COPTION <> 4 & COPTION <> 5 & COPTION <> 6 & COPTION <> 7
+          IF        COPTION <> 4 & COPTION <> 5 & COPTION <> 6 & COPTION <> 7 & COPTION <>11
             PRINT     *1,"| Total Records Added    : ",ADDCOUNT,*132,"|"
             PRINT     *1,"| Total Records Updated  : ",UPDCOUNT,*132,"|"
           ENDIF

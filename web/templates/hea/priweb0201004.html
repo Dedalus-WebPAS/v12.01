@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome"    content="hea">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser"    content="true">
@@ -598,10 +598,15 @@ InsertPatientHeader()
 
     <tr><td class="DataLabel">Referral Period</td>
         <td><select name="prhre025" id="prhre025" tabindex="-1"
-             title="Referral Period">
+             title="Referral Period"
+             onchange="displayReferralPeriodMonths();">
               <option> </option>
                 %PRIWEB02.01.125.2
             </select></td>
+    </tr>
+
+    <tr><td class="DataLabel"><div id="referralperiodtitleDIV"></div></td>
+        <td><div id="referralperiodfieldDIV"></div></td>
     </tr>
 
     <tr><td class="DataLabel">Message Code</td>
@@ -906,4 +911,26 @@ function validateIMC() {
     }
   }
 }
+function displayReferralPeriodMonths() {
+  if (document.getElementById('prhre025').value.substr(3,1)=="N") {
+    document.getElementById('referralperiodtitleDIV').innerHTML=
+    referralperiodtitleSPAN.innerHTML;
+    document.getElementById('referralperiodfieldDIV').innerHTML=
+    referralperiodfieldSPAN.innerHTML;
+  } else {
+    document.getElementById('referralperiodtitleDIV').innerHTML="";
+    document.getElementById('referralperiodfieldDIV').innerHTML="";
+  }
+}
 </script>
+
+<span id="referralperiodtitleSPAN" style="display:none">
+Referral Period (Months)
+</span>
+
+<span id="referralperiodfieldSPAN" style="display:none">
+<input type="text" size="10" maxlength="2" name="prhre036" id="prhre036"
+ title="Referral Period (Months)" tabindex="-1"
+ class="Number Mandatory JustifyRight"
+ min="1" max="98" >
+</span>

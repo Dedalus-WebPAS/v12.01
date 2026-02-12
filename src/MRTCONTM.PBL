@@ -8,6 +8,11 @@
 .  *     Modifications:                                                       *
 .  *                                                                          *
 .  *--------------------------------------------------------------------------*
+.  *      V12.01.01 02/02/2026  Zumin Yu         TSK 0972011                  *
+.  *                Added HTLNUM, MRCNFUTD, HTNUMDAY, MRCNOIDM, MRCNPDST,     *
+.  *                MRCNSOMV, MRCNMOVR, MRCNMOVP, MRCNMOVT, MRCNMECH, MRCNMSCD*
+.  *                MRCNTDAD, MRCNWNHL, MRCNACRR, MRCNACRV, MRCNUSRD, MRCNAMTR*
+.  *                MRCNSLCM, MRCNNOHS, MRCNUCRG and MRCNUFTY from IBAMRT98   *
 .  *      V11.05.03 01/04/2025  Ebon Clements    TSK 0950532                  *
 .  *                Added MRTCN064/MRCNDCID - Using diagnosis cluster id      *
 .  *      V11.05.02 21/03/2025  Alina Bhari      TSK 0951723                  *
@@ -214,6 +219,27 @@ CPMR0000  MOVE      Z70,MRTCN001
           MOVE      Z70,MRTCN062
           MOVE      Z70,MRTCN063
           MOVE      Z70,MRTCN064
+          MOVE      Z70,MRTCN065
+          MOVE      Z70,MRTCN066
+          MOVE      Z70,MRTCN067
+          MOVE      Z70,MRTCN068
+          MOVE      Z70,MRTCN069
+          MOVE      Z70,MRTCN070
+          MOVE      Z70,MRTCN071
+          MOVE      Z70,MRTCN072
+          MOVE      Z70,MRTCN073
+          MOVE      Z70,MRTCN074
+          MOVE      Z70,MRTCN075
+          MOVE      Z70,MRTCN076
+          MOVE      Z70,MRTCN077
+          MOVE      Z70,MRTCN078
+          MOVE      Z70,MRTCN079
+          MOVE      Z70,MRTCN080
+          MOVE      Z70,MRTCN081
+          MOVE      Z70,MRTCN082
+          MOVE      Z70,MRTCN083
+          MOVE      Z70,MRTCN084
+          MOVE      Z70,MRTCN085
 .
 CPMR9999  RETURN
 .
@@ -232,7 +258,11 @@ MRCN0000  BRANCH    FLDITMNO,MRCN1010,MRCN1020,MRCN1030,MRCN1040,MRCN1050:
                              MRCN1460,MRCN1470,MRCN1480,MRCN1490,MRCN1500:
                              MRCN1510,MRCN1520,MRCN1530,MRCN1540,MRCN1550:
                              MRCN1560,MRCN1570,MRCN1580,MRCN1590,MRCN1600:
-                             MRCN1610,MRCN1620,MRCN1630,MRCN1640
+                             MRCN1610,MRCN1620,MRCN1630,MRCN1640,MRCN1650:
+                             MRCN1660,MRCN1670,MRCN1680,MRCN1690,MRCN1700:
+                             MRCN1710,MRCN1720,MRCN1730,MRCN1740,MRCN1750:
+                             MRCN1760,MRCN1770,MRCN1780,MRCN1790,MRCN1800:
+                             MRCN1810,MRCN1820,MRCN1830,MRCN1840,MRCN1850
 .
           WRITE     HTMLFILE;"Invalid IBA Tag MRCN0000";
           GOTO      MRCN9999
@@ -447,8 +477,102 @@ MRCN1630  WRITE     HTMLFILE;MRCNPIGP;  * Send the Procedure Prefix Code I
 MRCN1640  WRITE     HTMLFILE;MRCNDCID;  * Using Diagnosis Cluster Identifier
           GOTO      MRCN9999
 .
+MRCN1650  WRITE     HTMLFILE;HTLNUM;    * Default Number of Labels to print
+          GOTO      MRCN9999
+.
+MRCN1660  WRITE     HTMLFILE;MRCNFUTD;  * Allow Future Dates in Record Movements
+          GOTO      MRCN9999
+.
+MRCN1670  WRITE     HTMLFILE;HTNUMDAY;  * How many Future Days in Record Movemts
+          GOTO      MRCN9999
+.
+MRCN1680  WRITE     HTMLFILE;MRCNOIDM;  * Operator Id Mandatory
+          GOTO      MRCN9999
+.
+MRCN1690  MOVE      "CP",CATEGORY
+          MOVE      MRCNPDST,CODE     * Default Post Discharge Status (MRTCN069)
+          CALL      CODITM00
+          GOTO      MRCN9999
+.
+MRCN1700  WRITE     HTMLFILE;MRCNSOMV;  * Send Hrs MV to Grouper
+          GOTO      MRCN9999
+.
+MRCN1710  MOVE      MRCNMOVR,D4
+          CALL      MRMVRE00
+          GOTO      MRCN9999
+.
+MRCN1720  MOVE      MRCNMOVP,D4
+          CALL      MRMVRE00
+          GOTO      MRCN9999
+.
+MRCN1730  MOVE      MRCNMOVT,D4
+          CALL      MRMVRE00
+          GOTO      MRCN9999
+.
+MRCN1740  WRITE     HTMLFILE;MRCNMECH;  * Mechanical Ventilation Check
+          GOTO      MRCN9999
+.
+MRCN1750  MOVE      "RS",CATEGORY
+          MOVE      MRCNMSCD,CODE       * Microfilmed Record Status (MRTCN075)
+          CALL      CODITM00
+          GOTO      MRCN9999
+.
+MRCN1760  WRITE     HTMLFILE;MRCNTDAD;  * Use Facility addr for Treat Dr addr
+          GOTO      MRCN9999
+.
+MRCN1770  WRITE     HTMLFILE;MRCNWNHL;  * Display Home Location Warning message
+          GOTO      MRCN9999
+.
+MRCN1780  WRITE     HTMLFILE;MRCNACRR;  * Auto create MR on PMI registration
+          GOTO      MRCN9999
+.
+MRCN1790  WRITE     HTMLFILE;MRCNACRV;  * Auto create MR all visit creations
+          GOTO      MRCN9999
+.
+MRCN1800  WRITE     HTMLFILE;MRCNUSRD;  * Use websecaf defaults in AutoMR creat
+          GOTO      MRCN9999
+.
+MRCN1810  WRITE     HTMLFILE;MRCNAMTR;  * Auto move records on bed transer
+          GOTO      MRCN9999
+.
+MRCN1820  WRITE     HTMLFILE;MRCNSLCM;  * Security Level for creating a MR
+          GOTO      MRCN9999
+.
+MRCN1830  WRITE     HTMLFILE;MRCNNOHS;  * Hospital Number for Data Directory
+          GOTO      MRCN9999
+.
+MRCN1840  WRITE     HTMLFILE;MRCNUCRG;  * Type of Cancer Register
+          GOTO      MRCN9999
+.
+MRCN1850  WRITE     HTMLFILE;MRCNUFTY;  * Microfilm Upload File Format
+          GOTO      MRCN9999
+.
 MRCN9999  RETURN
 .
+.----------------------------------------------------------------
+.  Outputs a selection list of MRT Movement Reason 
+.                   ******** MRMVRE00 ********
+.----------------------------------------------------------------
+MRMVRE00  PACK      KEY4,SP70
+          CALL      RSMRMOV1
+MRMVRE10  CALL      RKMRMOV1
+          BRANCH    OVRCD,MRMVRE99
+.
+          MATCH     D4,MRMOREAS
+          IF        @EQUAL
+            WRITE     HTMLFILE;"<option value=#"",MRMOREAS,"#" selected>":
+                                 MRMODESC,"</option>"
+          ELSE
+            COMPARE   ONE,MRMOSTAT            * Active?
+            GOTO      MRMVRE10 IF EQUAL
+.
+            WRITE     HTMLFILE;"<option value=#"",MRMOREAS,"#">":
+                                 MRMODESC,"</option>"
+          ENDIF
+.
+          GOTO      MRMVRE10
+.
+MRMVRE99  RETURN
 .------------------------------------------------------------
 .   Set Parameters for MRTCONFD
 .------------------------------------------------------------
@@ -467,7 +591,11 @@ SPMRT000  MOVE      ZERO,EXIT
                        SPMRT046,SPMRT047,SPMRT048,SPMRT049,SPMRT050:
                        SPMRT051,SPMRT052,SPMRT053,SPMRT054,SPMRT055:
                        SPMRT056,SPMRT057,SPMRT058,SPMRT059,SPMRT060:
-                       SPMRT061,SPMRT062,SPMRT063,SPMRT064
+                       SPMRT061,SPMRT062,SPMRT063,SPMRT064,SPMRT065:
+                       SPMRT066,SPMRT067,SPMRT068,SPMRT069,SPMRT070:
+                       SPMRT071,SPMRT072,SPMRT073,SPMRT074,SPMRT075:
+                       SPMRT076,SPMRT077,SPMRT078,SPMRT079,SPMRT080:
+                       SPMRT081,SPMRT082,SPMRT083,SPMRT084,SPMRT085
 .
           MOVE      ONE,EXIT
           GOTO      SPMRT999
@@ -664,6 +792,69 @@ SPMRT063  MOVE      QRYDATA,MRTCN063
           GOTO      SPMRT999
 .
 SPMRT064  MOVE      QRYDATA,MRTCN064
+          GOTO      SPMRT999
+.
+SPMRT065  MOVE      QRYDATA,MRTCN065
+          GOTO      SPMRT999
+.
+SPMRT066  MOVE      QRYDATA,MRTCN066
+          GOTO      SPMRT999
+.
+SPMRT067  MOVE      QRYDATA,MRTCN067
+          GOTO      SPMRT999
+.
+SPMRT068  MOVE      QRYDATA,MRTCN068
+          GOTO      SPMRT999
+.
+SPMRT069  MOVE      QRYDATA,MRTCN069
+          GOTO      SPMRT999
+.
+SPMRT070  MOVE      QRYDATA,MRTCN070
+          GOTO      SPMRT999
+.
+SPMRT071  MOVE      QRYDATA,MRTCN071
+          GOTO      SPMRT999
+.
+SPMRT072  MOVE      QRYDATA,MRTCN072
+          GOTO      SPMRT999
+.
+SPMRT073  MOVE      QRYDATA,MRTCN073
+          GOTO      SPMRT999
+.
+SPMRT074  MOVE      QRYDATA,MRTCN074
+          GOTO      SPMRT999
+.
+SPMRT075  MOVE      QRYDATA,MRTCN075
+          GOTO      SPMRT999
+.
+SPMRT076  MOVE      QRYDATA,MRTCN076
+          GOTO      SPMRT999
+.
+SPMRT077  MOVE      QRYDATA,MRTCN077
+          GOTO      SPMRT999
+.
+SPMRT078  MOVE      QRYDATA,MRTCN078
+          GOTO      SPMRT999
+.
+SPMRT079  MOVE      QRYDATA,MRTCN079
+          GOTO      SPMRT999
+.
+SPMRT080  MOVE      QRYDATA,MRTCN080
+          GOTO      SPMRT999
+.
+SPMRT081  MOVE      QRYDATA,MRTCN081
+          GOTO      SPMRT999
+.
+SPMRT082  MOVE      QRYDATA,MRTCN082
+          GOTO      SPMRT999
+.
+SPMRT083  MOVE      QRYDATA,MRTCN083
+          GOTO      SPMRT999
+.
+SPMRT084  MOVE      QRYDATA,MRTCN084
+          GOTO      SPMRT999
+.
+SPMRT085  MOVE      QRYDATA,MRTCN085
           GOTO      SPMRT999
 .
 SPMRT999  RETURN
@@ -1000,6 +1191,111 @@ MVMR0000  MATCH     Z70,MRTCN001
           MATCH     Z70,MRTCN064
           IF        !@EQUAL
             MOVE      MRTCN064,MRCNDCID
+          ENDIF
+.
+          MATCH     Z70,MRTCN065
+          IF        !@EQUAL
+            MOVE      MRTCN065,HTLNUM
+          ENDIF
+.
+          MATCH     Z70,MRTCN066
+          IF        !@EQUAL
+            MOVE      MRTCN066,MRCNFUTD
+          ENDIF
+.
+          MATCH     Z70,MRTCN067
+          IF        !@EQUAL
+            MOVE      MRTCN067,HTNUMDAY
+          ENDIF
+.
+          MATCH     Z70,MRTCN068
+          IF        !@EQUAL
+            MOVE      MRTCN068,MRCNOIDM
+          ENDIF
+.
+          MATCH     Z70,MRTCN069
+          IF        !@EQUAL
+            MOVE      MRTCN069,MRCNPDST
+          ENDIF
+.
+          MATCH     Z70,MRTCN070
+          IF        !@EQUAL
+            MOVE      MRTCN070,MRCNSOMV
+          ENDIF
+.
+          MATCH     Z70,MRTCN071
+          IF        !@EQUAL
+            MOVE      MRTCN071,MRCNMOVR
+          ENDIF
+.
+          MATCH     Z70,MRTCN072
+          IF        !@EQUAL
+            MOVE      MRTCN072,MRCNMOVP
+          ENDIF
+.
+          MATCH     Z70,MRTCN073
+          IF        !@EQUAL
+            MOVE      MRTCN073,MRCNMOVT
+          ENDIF
+.
+          MATCH     Z70,MRTCN074
+          IF        !@EQUAL
+            MOVE      MRTCN074,MRCNMECH    * Mechanical Ventilation Check
+          ENDIF
+.
+          MATCH     Z70,MRTCN075
+          IF        !@EQUAL
+            MOVE      MRTCN075,MRCNMSCD    * Microfilmed Record Status
+          ENDIF
+.
+          MATCH     Z70,MRTCN076
+          IF        !@EQUAL
+            MOVE      MRTCN076,MRCNTDAD  * Use Facility addr for Treat Dr addr
+          ENDIF
+.
+          MATCH     Z70,MRTCN077
+          IF        !@EQUAL
+            MOVE      MRTCN077,MRCNWNHL  * Display Home Location Warning message
+          ENDIF
+.
+          MATCH     Z70,MRTCN078
+          IF        !@EQUAL
+            MOVE      MRTCN078,MRCNACRR  * Auto create MR on PMI registration
+          ENDIF
+.
+          MATCH     Z70,MRTCN079
+          IF        !@EQUAL
+            MOVE      MRTCN079,MRCNACRV  * Auto create MR all visit creations
+          ENDIF
+.
+          MATCH     Z70,MRTCN080
+          IF        !@EQUAL
+            MOVE      MRTCN080,MRCNUSRD  * Use websecaf defaults in AutoMR creat
+          ENDIF
+.
+          MATCH     Z70,MRTCN081
+          IF        !@EQUAL
+            MOVE      MRTCN081,MRCNAMTR  * Auto move records on bed transer
+          ENDIF
+.
+          MATCH     Z70,MRTCN082
+          IF        !@EQUAL
+            MOVE      MRTCN082,MRCNSLCM  * Security Level for creating a MR
+          ENDIF
+.
+          MATCH     Z70,MRTCN083
+          IF        !@EQUAL
+            MOVE      MRTCN083,MRCNNOHS  * Hospital Number for Data Directory
+          ENDIF
+.
+          MATCH     Z70,MRTCN084
+          IF        !@EQUAL
+            MOVE      MRTCN084,MRCNUCRG  * Type of Cancer Register
+          ENDIF
+.
+          MATCH     Z70,MRTCN085
+          IF        !@EQUAL
+            MOVE      MRTCN085,MRCNUFTY  * Microfilm Upload File Format
           ENDIF
 .
 MVMR9999  RETURN

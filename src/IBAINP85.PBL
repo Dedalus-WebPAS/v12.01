@@ -11,6 +11,10 @@
 .* Modifications  :                                                           *
 .*                                                                            *
 .******************************************************************************
+.* V12.01.02 27/01/2026  PJ Le Febour  TSK 0960253a                           *
+.*            TEMPCSVF CXTCANFL amend FIXED=2747 due to increase XURNUMBR to 8* 
+.* V12.01.01 22/01/2026  PJ Le Febour  TSK 0960253                            *
+.*            Correction of XURNUMBR length from 7 to 8                       *
 .* V12.00.01 22/05/2025  Alina Bhari   TSK 0955096                            *
 .*            Added alpanumeric visit number generation -CLRCRD00,GCAN5000    *
 .* V11.04.02 04/06/2024  Thanh T        TSK 0944479                           *
@@ -42,6 +46,8 @@
 .* V10.11.04 26/09/2017  Richa Phogat   TSK 0845455                           *
 .*           Added Quotes in DREX0000 while generating CSV extract file       *
 .* V10.11.03 20/09/2017  Ken Bell       TSK 0845465                           *
+.*           Remove date check extracting post 2010 Registration No XTRDOCRG  *
+.* V10.11.02 31/07/2017  Ebon Clements  TSK 0842287                           *
 .*           Remove date check extracting post 2010 Registration No XTRDOCRG  *
 .* V10.11.02 31/07/2017  Ebon Clements  TSK 0842287                           *
 .*           Use HDP if PTCDSTAG and PTCDBSDG if populated.                   *
@@ -312,147 +318,149 @@ XSEX      DIM       1    198  Sex
 XINDIGST  DIM       1    199  Indig. Status    see IBAPAT98.IBA Scr4.7 for UDF
 .                             1=Abor. 2=TorresSt.Island 3=Both 4=Neither
 .                             8=Declined 9=Not Stated
-XURNUMBR  DIM       7    200  Medical record number.                 (dpurno)
-XDOB      DIM       8    207  Date of birth. (yyyymmdd)              (bdate)
-XFLATNO   DIM       5    215  Flat number
-XSTRTNO   DIM       4    220  Street number
-XSTRTNAM  DIM       24   224  Street name                            (padd1)
-XSTRTTYP  DIM       2    248  AR = Arcade
-XLOCATN   DIM       24   250  Town/Suburb                   (padd2) or (psubrb)
-XPOSTCOD  DIM       4    274  Postcode                          patmastf.ppost
-XCOUNTRY  DIM       4    278  Country of birth.                 patmastf.pcont
-XMEDICAR  DIM       10   282  Medicare number                   patmastf.pmedi
-XDOCNAM   DIM       24   292  Name of doctor in charge of case  patmissf.adocta
-XGPNAME   DIM       24   316  Name of GP (or referring doctor)
-XGPADDR   DIM       40   340  Address of GP (or referring doctor)
-XADMDATE  DIM       8    380  Date of admission (yyyymmdd)    (adate or pvidate)
-XSEPDATE  DIM       8    388  Date of separation (yyyymmdd)          (ddate)
-XSEPSTAT  DIM       2    396  For PUBLIC notifiers-             (dstat or ddest)
+XURNUMBR  DIM       8    200  Medical record number.                 (dpurno)
+XDOB      DIM       8    208  Date of birth. (yyyymmdd)              (bdate)
+XFLATNO   DIM       5    216  Flat number
+XSTRTNO   DIM       4    221  Street number
+XSTRTNAM  DIM       24   225  Street name                            (padd1)
+XSTRTTYP  DIM       2    249  AR = Arcade
+XLOCATN   DIM       24   251  Town/Suburb                   (padd2) or (psubrb)
+XPOSTCOD  DIM       4    275  Postcode                          patmastf.ppost
+XCOUNTRY  DIM       4    279  Country of birth.                 patmastf.pcont
+XMEDICAR  DIM       10   283  Medicare number                   patmastf.pmedi
+XDOCNAM   DIM       24   293  Name of doctor in charge of case  patmissf.adocta
+XGPNAME   DIM       24   317  Name of GP (or referring doctor)
+XGPADDR   DIM       40   341  Address of GP (or referring doctor)
+XADMDATE  DIM       8    381  Date of admission (yyyymmdd)    (adate or pvidate)
+XSEPDATE  DIM       8    389  Date of separation (yyyymmdd)          (ddate)
+XSEPSTAT  DIM       2    397  For PUBLIC notifiers-             (dstat or ddest)
 .                             For PRIVATE notifiers - Alive=01 Dead=07
-XMULTPRI  DIM       1    398  Multiple Primaries - 1=Yes 2=No     (MULTCCNT)
-XDIAGDTE  DIM       6    399  Date of first diagnosis (yyyymm)
+XMULTPRI  DIM       1    399  Multiple Primaries - 1=Yes 2=No     (MULTCCNT)
+XDIAGDTE  DIM       6    400  Date of first diagnosis (yyyymm)
 .                                                          (ptcddgpr & ptrgddte)
-XDIAGLOC  DIM       2    405  Resid.State when Diagnosed 1=NSW 2=Vic
-XLATERY   DIM       1    406  Cancer of paired organs:            (ptcdlatr)
+XDIAGLOC  DIM       2    406  Resid.State when Diagnosed 1=NSW 2=Vic
+XLATERY   DIM       1    407  Cancer of paired organs:            (ptcdlatr)
 .                             1=Left 2=Right 3=N/A 9=Unknown
-XLABNAM   DIM       25   407  Name of Lab for Pathology            (ptcdbdd1-9)
-XBASDIAG  DIM       1    432  Best basis for diagnosis at this admission:
+XLABNAM   DIM       25   408  Name of Lab for Pathology            (ptcdbdd1-9)
+XBASDIAG  DIM       1    433  Best basis for diagnosis at this admission:
 .                                                                  (ptcdbdc1-9)
 .                             1=Histology 2=Cytology 3=Other
-XDRGSPRD  DIM       1    433  Degree of spread of cancer           (ptcdstag)
+XDRGSPRD  DIM       1    434  Degree of spread of cancer           (ptcdstag)
 .                             1=Local 2= Invasive 3=Reg.Nodes etc
-XREASADM  DIM       1    434  Was this admission for Cancer?
+XREASADM  DIM       1    435  Was this admission for Cancer?
 .                                                     (dptecode & dptetype='P')
 .                             1 = Yes 2 = No
-XTRGPRIM  DIM       8    435  Valid topography code                (ptrgprim)
-XTRGMORP  DIM       8    443  Valid morphology code                (ptrghist)
-XTRGCOD1  DIM       8    451  Valid diagnosis code(s)
+XTRGPRIM  DIM       8    436  Valid topography code                (ptrgprim)
+XTRGMORP  DIM       8    444  Valid morphology code                (ptrghist)
+XTRGCOD1  DIM       8    452  Valid diagnosis code(s)
 .                                                    (dptecode & dptetype!='P')
-XTRGCOD2  DIM       8    459  Valid diagnosis code(s)
-XTRGCOD3  DIM       8    467  Valid diagnosis code(s)
-XTRGCOD4  DIM       8    475  Valid diagnosis code(s)
-XTRGCOD5  DIM       8    483  Valid diagnosis code(s)
-XTRGCOD6  DIM       8    491  Valid diagnosis code(s)
-XTRGCOD7  DIM       8    499  Valid diagnosis code(s)
-XTRGCOD8  DIM       8    507  Valid diagnosis code(s)
-XPRMDIAG  DIM       8    515  Principal diagnosis this admission.
+XTRGCOD2  DIM       8    460  Valid diagnosis code(s)
+XTRGCOD3  DIM       8    468  Valid diagnosis code(s)
+XTRGCOD4  DIM       8    476  Valid diagnosis code(s)
+XTRGCOD5  DIM       8    484  Valid diagnosis code(s)
+XTRGCOD6  DIM       8    492  Valid diagnosis code(s)
+XTRGCOD7  DIM       8    500  Valid diagnosis code(s)
+XTRGCOD8  DIM       8    508  Valid diagnosis code(s)
+XPRMDIAG  DIM       8    516  Principal diagnosis this admission.
 .                                 patecdaf.dptecode where patecdaf.ptetype!='P'
-XPRMPROC  DIM       8    523  Valid Procedure code
+XPRMPROC  DIM       8    524  Valid Procedure code
 .                                  patecoaf.dptecode where patecoaf.ptocnt='1'.
-XSPARE    DIM       60   531  Unused OR histology text
+XSPARE    DIM       60   532  Unused OR histology text
 .
-.         End of Record  591
+.         End of Record  592
 .
-TEMPCSVF  IFILE     SQL, FIXED=2746, KEY="U1-11"
+..TEMPCSVF  IFILE     SQL, FIXED=2747, KEY="U1-11"
+TEMPCSVF  IFILE     SQL, FIXED=2747, KEY="U1-11"
 .
 . Details record for CSV format
 .
-CXTCANFL  FILE      ASCII, FIXED=2746    * Comma delimited Extract File 
+..CXTCANFL  FILE      ASCII, FIXED=2747    * Comma delimited Extract File 
+CXTCANFL  FILE      ASCII, FIXED=2747    * Comma delimited Extract File 
 .
 XCOUNTER  DIM       11   1    Counter
 .XHOSPNO  DIM       4    12   Facility code (as for header record)    (PTCNESTB)
 .XMEDICAR DIM       10   16   Medicare number                   patmastf.pmedi
-.XURNUMBR DIM       7    26   Medical record number.                 (dpurno)
-.XPSNAME  DIM       24   33   Surname                                 (psname)
-XFRSNAME  DIM       40   57   First given name                        (pgname)
-XGIVNAME  DIM       40   97   Second given name                       (pgname)
-XAS1SNAM  DIM       40   137  Alias 1: Surname (Max. 3 Aliases)
-XAS1FNAM  DIM       40   177  Alias 1: First given name
-XAS1GNAM  DIM       40   217  Alias 1: Second given name
-XAS2SNAM  DIM       40   257  Alias 2: Surname
-XAS2FNAM  DIM       40   297  Alias 2: First given name
-XAS2GNAM  DIM       40   337  Alias 2: Second given name
-XAS3SNAM  DIM       40   377  Alias 3: Surname
-XAS3FNAM  DIM       40   417  Alias 3: First given name
-XAS3GNAM  DIM       40   457  Alias 3: Second given name
-.XSEX     DIM       1    497  Sex
-.XDOB     DIM       8    498  Date of birth. (ddmmyyyy)              (bdate)
-.XCOUNTRY DIM       4    506  Country of birth.                 patmastf.pcont
-.XINDIGST DIM       1    510  Indig. Status    see IBAPAT98.IBA Scr4.7 for UDF
+.XURNUMBR DIM       8    26   Medical record number.                 (dpurno)
+.XPSNAME  DIM       24   34   Surname                                 (psname)
+XFRSNAME  DIM       40   58   First given name                        (pgname)
+XGIVNAME  DIM       40   98   Second given name                       (pgname)
+XAS1SNAM  DIM       40   138  Alias 1: Surname (Max. 3 Aliases)
+XAS1FNAM  DIM       40   178  Alias 1: First given name
+XAS1GNAM  DIM       40   218  Alias 1: Second given name
+XAS2SNAM  DIM       40   258  Alias 2: Surname
+XAS2FNAM  DIM       40   298  Alias 2: First given name
+XAS2GNAM  DIM       40   338  Alias 2: Second given name
+XAS3SNAM  DIM       40   378  Alias 3: Surname
+XAS3FNAM  DIM       40   418  Alias 3: First given name
+XAS3GNAM  DIM       40   458  Alias 3: Second given name
+.XSEX     DIM       1    498  Sex
+.XDOB     DIM       8    499  Date of birth. (ddmmyyyy)              (bdate)
+.XCOUNTRY DIM       4    507  Country of birth.                 patmastf.pcont
+.XINDIGST DIM       1    511  Indig. Status    see IBAPAT98.IBA Scr4.7 for UDF
 .                             1=Abor. 2=TorresSt.Island 3=Both 4=Neither
 .                             8=Declined 9=Not Stated
-XAFLATNO  DIM       14   511  Flat number
-XURASNUM  DIM       6    525  Street number
-XURASNAM  DIM       20   531  Street name                            (padd1)
-XURARTYP  DIM       20   551  Street type
-XURARSUB  DIM       40   571  Town/Suburb                   (padd2) or (psubrb)
-.XPOSTCOD DIM       4    611  URA Postcode          patmastf.ppost
-XURASTAT  DIM       2    615  URA State
-.XGPNAME  DIM       24   617  Registration number of GP
-XDOCNAMR  DIM       250  641  GP Doctor's name
-XGPDOCAD  DIM       512  891  GP Doctor's address
-XTRDOCRG  DIM       20  1403  Treating Doctor Registration name
-XTRDOCNM  DIM       250 1423  Treating Doctor's name
-XTRDOCAD  DIM       512 1673  Treating Doctor's address
-.XADMDATE DIM       8   2185  Date of admission (ddmmyyyy)
-.XSEPDATE DIM       8   2193  Date of separation (ddmmyyyy)
-.XSEPSTAT DIM       2   2201  Status of Separation 1-Disc.7-Died
-.XDIAGLOC DIM       2   2203  Resid.State when Diagnosed 1=NSW 2=Vic..
-XPATHLAB  DIM       100 2204  Name of Pathology Laboratory
-XDIAGDAT  DIM       8   2304  Date of first diagnosis (yyyymm)
-.XTRGPRIM DIM       8   2312  Primary Site of Cancer code
-.XTRGMORP DIM       8   2320  Valid morphology code
-.XLATERY  DIM       1   2328  Cancer of paired organs:            (ptcdlatr)
+XAFLATNO  DIM       14   512  Flat number
+XURASNUM  DIM       6    526  Street number
+XURASNAM  DIM       20   532  Street name                            (padd1)
+XURARTYP  DIM       20   552  Street type
+XURARSUB  DIM       40   572  Town/Suburb                   (padd2) or (psubrb)
+.XPOSTCOD DIM       4    612  URA Postcode          patmastf.ppost
+XURASTAT  DIM       2    616  URA State
+.XGPNAME  DIM       24   618  Registration number of GP
+XDOCNAMR  DIM       250  642  GP Doctor's name
+XGPDOCAD  DIM       512  892  GP Doctor's address
+XTRDOCRG  DIM       20  1404  Treating Doctor Registration name
+XTRDOCNM  DIM       250 1424  Treating Doctor's name
+XTRDOCAD  DIM       512 1674  Treating Doctor's address
+.XADMDATE DIM       8   2186  Date of admission (ddmmyyyy)
+.XSEPDATE DIM       8   2194  Date of separation (ddmmyyyy)
+.XSEPSTAT DIM       2   2202  Status of Separation 1-Disc.7-Died
+.XDIAGLOC DIM       2   2204  Resid.State when Diagnosed 1=NSW 2=Vic..
+XPATHLAB  DIM       100 2206  Name of Pathology Laboratory
+XDIAGDAT  DIM       8   2306  Date of first diagnosis (yyyymm)
+.XTRGPRIM DIM       8   2314  Primary Site of Cancer code
+.XTRGMORP DIM       8   2322  Valid morphology code
+.XLATERY  DIM       1   2330  Cancer of paired organs:            (ptcdlatr)
 .                             1=Left 2=Right 3=N/A 9=Unknown
-.XBASDIAG DIM       1   2329  Best basis for diagnosis at this admission:-9)
-.XDRGSPRD DIM       1   2330  Degree of spread of cancer           (ptcdstag)
-.XREASADM DIM       1   2331  Reason for Admission
-XTRGPRID  DIM       8   2332  Principal Diagnosis
-.XTRGCOD1 DIM       8   2340  Additional Diagnosis 1
-.XTRGCOD2 DIM       8   2348  Additional Diagnosis 2
-.XTRGCOD3 DIM       8   2356  Additional Diagnosis 3
-.XTRGCOD4 DIM       8   2364  Additional Diagnosis 4
-.XTRGCOD5 DIM       8   2372  Additional Diagnosis 5
-.XTRGCOD6 DIM       8   2380  Additional Diagnosis 6
-.XTRGCOD7 DIM       8   2388  Additional Diagnosis 7
-.XTRGCOD8 DIM       8   2396  Additional Diagnosis 8
-.XPRMPROC DIM       8   2404  Valid Procedure 1
-XADPROC1  DIM       8   2412  Additional Procedure 2
-XADPROC2  DIM       8   2420  Additional Procedure 3
-XADPROC3  DIM       8   2428  Additional Procedure 4
-XADPROC4  DIM       8   2436  Additional Procedure 5
-XADPROC5  DIM       8   2444  Additional Procedure 6
-XADPROC6  DIM       8   2452  Additional Procedure 7
-XADPROC7  DIM       8   2460  Additional Procedure 8
-XADPROC8  DIM       8   2468  Additional Procedure 9
-XTSTAGEN  DIM       2   2476  TNM State Edition Number - ptcdcscm
-XTSTAGEC  DIM       50  2478  T Stage                  - ptcdcsgt
-XNSTAGEC  DIM       50  2528  N Stage                  - ptcdcsgn
-XMSTAGEC  DIM       50  2578  M Stage                  - ptcdcsgm
-XTSTAGEG  DIM       50  2628  TNM Stage Group          - ptcdcssg
-XTSTAGEB  DIM       1   2678  TNM Staging group basis  - ptcdbsdg
-XOSTAGES  DIM       2   2679  Other Staging Scheme     - ptcdstag
-XOSTAGEG  DIM       14  2681  Other Staging Grouping   - ptcdcssg
-XOSTAGEB  DIM       1   2695  Other Staging Basis      - ptcdbsdg
-XSURGFLG  DIM       1   2696  Surgery flag             - ptcdtsur
-XSYSTFLG  DIM       1   2697  Systemic Therapy flag    - ptcdtchm
-XSYSTID1  DIM       15  2698  <next release>
-XSYSTID2  DIM       15  2713  <next release>
-XRADIFLG  DIM       1   2728  Radiotherapy flag        - ptcdtrad
-XRADIEID  DIM       15  2729  <next release>
-XOTHRFLG  DIM       1   2744  Other flag               - ptcdtbio
-XNOTRFLG  DIM       1   2745  No Treatment flag        - ptcdtnon
-.EOR                    2746
+.XBASDIAG DIM       1   2331  Best basis for diagnosis at this admission:-9)
+.XDRGSPRD DIM       1   2332  Degree of spread of cancer           (ptcdstag)
+.XREASADM DIM       1   2333  Reason for Admission
+XTRGPRID  DIM       8   2334  Principal Diagnosis
+.XTRGCOD1 DIM       8   2342  Additional Diagnosis 1
+.XTRGCOD2 DIM       8   2350  Additional Diagnosis 2
+.XTRGCOD3 DIM       8   2358  Additional Diagnosis 3
+.XTRGCOD4 DIM       8   2366  Additional Diagnosis 4
+.XTRGCOD5 DIM       8   2374  Additional Diagnosis 5
+.XTRGCOD6 DIM       8   2382  Additional Diagnosis 6
+.XTRGCOD7 DIM       8   2390  Additional Diagnosis 7
+.XTRGCOD8 DIM       8   2398  Additional Diagnosis 8
+.XPRMPROC DIM       8   2406  Valid Procedure 1
+XADPROC1  DIM       8   2414  Additional Procedure 2
+XADPROC2  DIM       8   2422  Additional Procedure 3
+XADPROC3  DIM       8   2430  Additional Procedure 4
+XADPROC4  DIM       8   2438  Additional Procedure 5
+XADPROC5  DIM       8   2446  Additional Procedure 6
+XADPROC6  DIM       8   2454  Additional Procedure 7
+XADPROC7  DIM       8   2462  Additional Procedure 8
+XADPROC8  DIM       8   2470  Additional Procedure 9
+XTSTAGEN  DIM       2   2478  TNM State Edition Number - ptcdcscm
+XTSTAGEC  DIM       50  2480  T Stage                  - ptcdcsgt
+XNSTAGEC  DIM       50  2530  N Stage                  - ptcdcsgn
+XMSTAGEC  DIM       50  2580  M Stage                  - ptcdcsgm
+XTSTAGEG  DIM       50  2630  TNM Stage Group          - ptcdcssg
+XTSTAGEB  DIM       1   2680  TNM Staging group basis  - ptcdbsdg
+XOSTAGES  DIM       2   2681  Other Staging Scheme     - ptcdstag
+XOSTAGEG  DIM       14  2683  Other Staging Grouping   - ptcdcssg
+XOSTAGEB  DIM       1   2697  Other Staging Basis      - ptcdbsdg
+XSURGFLG  DIM       1   2698  Surgery flag             - ptcdtsur
+XSYSTFLG  DIM       1   2699  Systemic Therapy flag    - ptcdtchm
+XSYSTID1  DIM       15  2700  <next release>
+XSYSTID2  DIM       15  2715  <next release>
+XRADIFLG  DIM       1   2730  Radiotherapy flag        - ptcdtrad
+XRADIEID  DIM       15  2731  <next release>
+XOTHRFLG  DIM       1   2746  Other flag               - ptcdtbio
+XNOTRFLG  DIM       1   2747  No Treatment flag        - ptcdtnon
+.EOR                    2747
 .
 HOMESTTE  DIM       3         State code  
 .
@@ -488,7 +496,7 @@ INP85B    INIT      "inp85b"
 .
 PRGID     INIT      "IBAINP85"
 PRGNAM    INIT      "NSW Cancer Register Extract"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 .
 .*********************************************************************
 .         mainline code
@@ -2282,7 +2290,7 @@ CRTM0000  MOVE      ZERO,EXIT
             EXECUTE   CMDLINE,TASKID
             OPEN      TEMPCANF,FNAMEB
           ELSE
-            APPEND    " 2746 U1-11",CMDLINE
+            APPEND    " 2747 U1-11",CMDLINE
             RESET     CMDLINE
             EXECUTE   CMDLINE,TASKID
             OPEN      TEMPCSVF,FNAMEB

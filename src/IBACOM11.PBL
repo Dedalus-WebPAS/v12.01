@@ -8,6 +8,9 @@
 .* Function  :   This program will open an eReferral XML doc File and        *
 .*               load the details into obsecoaf or obspcoaf                  *
 .* Mods      :                                                               *
+.*****************************************************************************
+.* V12.01.01     29/01/2026  Thanh T        TSK 0930214                      *
+.*               Move SP70 to OBAUORNO, OBAUOVIS and OBAUOCOR fields         *
 .* V12.00.02     29/10/2025 Ebon Clements    TSK 0968424                     *
 .*               Set value of OBECURNO when eAdmission is not linked to      *
 .*               to a visit - RDHD2000                                       *
@@ -108,7 +111,7 @@ DASH      INIT      "-"
 .
 PRGID     INIT      "IBACOM11"
 PRGNAM    INIT      "eReferral document history XML load"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .*****************************************************************************
 .*                              MAIN0000                                     *
@@ -567,6 +570,9 @@ OBSAUD00  MOVE      OBPCURNO,OBAUURNO
           PACK      OBAUTIME,CTIMEIS
           MOVE      SP70,OBAUWEBU
           MOVE      SP70,OBAUREAS
+          MOVE      SP70,OBAUORNO
+          MOVE      SP70,OBAUOVIS
+          MOVE      SP70,OBAUOCOR
           PACK      OBAUSPAR,SP70
 .
           MATCH     ANSU,OBAUTYPE

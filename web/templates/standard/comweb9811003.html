@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.01">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -240,6 +240,46 @@ function GoBack() {
     </td>
     </tr>
 
+<tr>
+    <td class=DataLabel>Security Level for creating a Medical Record</td>
+    <td class=DataItem><input type=text name=mrtcn082
+        class="Number JustifyRight Integer" min=0 max=9
+        title="Security Level for creating a Medical Record"
+        size=2 maxlength=1 value="%COMWEB98.11.182">
+    </td>
+</tr>
+
+<tr><td class=Datalabel>Number of Hospitals for Data Directories</td>
+    <td><select name=mrtcn083 id=mrtcn083
+         title="Number of Hospitals for Data Directories">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        </select></td>
+</tr>
+
+<tr><td class=Datalabel>Type of Cancer Register</td>
+    <td><select name=mrtcn084 id=mrtcn084
+         title="Type of Cancer Register">
+        <option value="0">Not Used</option>
+        <option value="1">Australian</option>
+        <option value="2">New Zealand</option>
+        </select></td>
+</tr>
+
+<tr><td class=Datalabel>Microfilm Upload File Format</td>
+    <td><select name=mrtcn085 id=mrtcn085
+         title="Microfilm Upload File Format">
+        <option value="0">Not Used</option>
+        <option value="1">8-character U/R Number</option>
+        <option value="2">6-character U/R Number</option>
+        </select></td>
+</tr>
+
 <tr><td width=10% class=DataLabel>&nbsp;</td>
     <td width=10% class=DataItem>&nbsp;</td>
     </tr>
@@ -325,4 +365,25 @@ function GoBack() {
    document.UpdateForm.d_mrtcn057.checked=1;
  }
  DispNWAU();
+
+ NumberOfHospitalsForDataDirectories="%COMWEB98.11.183";
+ for (var i =0 ; i < document.UpdateForm.mrtcn083.length; i++) {
+  if (document.UpdateForm.mrtcn083.options[i].value==
+      NumberOfHospitalsForDataDirectories) {
+    document.UpdateForm.mrtcn083.selectedIndex=i;
+  }
+ }
+ TypeOfCancerRegister="%COMWEB98.11.184";
+ for (var i =0 ; i < document.UpdateForm.mrtcn084.length; i++) {
+  if (document.UpdateForm.mrtcn084.options[i].value==TypeOfCancerRegister) {
+    document.UpdateForm.mrtcn084.selectedIndex=i;
+  }
+ }
+ MicrofilmUploadFileFormat="%COMWEB98.11.185";
+ for (var i =0 ; i < document.UpdateForm.mrtcn085.length; i++) {
+  if (document.UpdateForm.mrtcn085.options[i].value==MicrofilmUploadFileFormat)   {
+    document.UpdateForm.mrtcn085.selectedIndex=i;
+  }
+ }
+
 </script>

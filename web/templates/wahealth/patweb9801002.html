@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <!-- $Id: patweb9801002.html 4155 2018-11-06 03:33:54Z  $ -->
 <!-- $URL: http://lxfm700sub/svn/webpas/trunk/web/custom/patweb9801002.html $ -->
@@ -212,8 +212,8 @@ function generatePrintURL() {
 
 <tr><td class=DataLabel>Primary Reason for Discharge Delay</td>
     <td class=DataField>%PATWEB98.01.659.2 </td>
-    <td class=DataLabel>Consent upload to My Health Record?</td>
-    <td class=DataField id="ausr1">%PATWEB98.01.133.0</td>
+    <td class=DataLabel id="MyHRConsentTitle"></td>
+    <td class=DataField id="ausr1"></td></tr>
 </tr>
 
 <tr><td class=DataLabel>Secondary Reason for Discharge Delay</td>
@@ -332,11 +332,17 @@ Admission Weight
       MentalHealth.innerHTML="";
     }
   }
-  
-  PatientConsentMyHR = trim("%PATWEB98.01.043.0") || "Yes (implied)" ;
-  DischargeConsentMyHR = trim("%PATWEB98.01.207.0");
-  VisitConsentMyHR   = DischargeConsentMyHR || trim("%PATWEB98.01.133.0") ;
-  document.getElementById("ausr1").innerHTML = VisitConsentMyHR || PatientConsentMyHR ;
+
+ document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;
+ PatientConsentMyHR = trim("%PATWEB98.01.998.037");
+
+ if (PatientConsentMyHR == "0") {
+   document.getElementById("ausr1").innerHTML = "No";
+ } else if (PatientConsentMyHR == "1") {
+   document.getElementById("ausr1").innerHTML = "Yes";
+ } else {
+   document.getElementById("ausr1").innerHTML = "Yes (implied)";
+ }
 
 //Primary Reason for Discharge Delay - patatraf.PTARCOD1
 

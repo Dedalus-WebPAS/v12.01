@@ -5,6 +5,10 @@
 .
 . Modifications  :
 .------------------------------------------------------------------------------
+. V12.01.02 23.01.2026  DA Sarkies     TSK 0875822
+.           Recompiled for PMXVX1TM
+. V12.01.01 22/01/2026  Jacob Jackson  TSK 0970532
+.           Added parameters to ensure referral can be cancelled
 . V12.00.10 11/11/2025  Zumin Yu       TSK 0969239
 .           Modified CASTIT00 & FMTTIM00 & SCSTAB20 to resolve 
 .           the 12PM time display issue
@@ -3470,6 +3474,8 @@ FORM6     FORM      6
 FLTRTRGS  DIM       3              * Filter Triage status
 TRGSDESC  DIM       20
 OPWAMVNY  DIM       1
+REFERADM  DIM       8
+REFERDEP  DIM       3
 .
 CHWCURNO  DIM       8        * Check UR Number (Workers Compensation)
 CHWCADMN  DIM       8        * Check Admission Number (Workers Compensation)
@@ -3503,7 +3509,7 @@ ATTEXT    INIT      "at"
 .
 .*******************************************************************************
 PRGID     INIT      "OUTWEB02"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Outpatient Processing"
 .*******************************************************************************
 .
@@ -4473,6 +4479,8 @@ CLRPAR00
           MOVE      SP70,FHIRLOCH
 .
           MOVE      ZERO,CREFFLAG
+          MOVE      SP70,REFERADM
+          MOVE      SP70,REFERDEP
 .
 CLRPAR99  RETURN
 .*******************************************************************************
@@ -5529,6 +5537,18 @@ SETPAR50    MOVE      QRYDATA,VIEWOPCL
           MATCH     "shwunavl=",QRYNAME
           IF        @EQUAL
             MOVE      QRYDATA,SHWUNAVL
+            GOTO      SETPAR99
+          ENDIF
+.
+          MATCH     "referadm=",QRYNAME
+          IF        @EQUAL
+            MOVE      QRYDATA,REFERADM
+            GOTO      SETPAR99
+          ENDIF
+.
+          MATCH     "referdep=",QRYNAME
+          IF        @EQUAL
+            MOVE      QRYDATA,REFERDEP
             GOTO      SETPAR99
           ENDIF
 .
@@ -8182,7 +8202,7 @@ OEXT9999  RETURN
 .------------------------------------------------------------
 OEXB0000  BRANCH    FLDITMNO,OEXB0100,OEXB0200,OEXB0300,OEXB0400,OEXB0500:
                              OEXB0600,OEXB0700,OEXB0800,OEXB0900,OEXB1000:
-                             OEXB1100,OEXB1200,OEXB1300
+                             OEXB1100,OEXB1200,OEXB1300,OEXB1400,OEXB1500
 .
           WRITE     HTMLFILE;"Invalid Tag - OEXB0000"
           GOTO      OEXB9999
@@ -8397,6 +8417,12 @@ OEXB1300  UNPACK    DIM127,D1,KEY1,DIM127
               WRITE     HTMLFILE;OTCPDESC; * Clinic type procedure desc
             ENDIF
           ENDIF
+          GOTO      OEXB9999
+.
+OEXB1400  WRITE     HTMLFILE;REFERADM;
+          GOTO      OEXB9999
+.
+OEXB1500  WRITE     HTMLFILE;REFERDEP;
           GOTO      OEXB9999
 .
 OEXB9999  RETURN

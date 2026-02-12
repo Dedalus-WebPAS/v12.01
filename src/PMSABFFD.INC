@@ -1,3 +1,4 @@
+. V12.01.01 11/12/2025 JTA C-0956147 Added HAF (HAC Flag) Type of Adjustment
 . V11.04.01 11/07/2024 JTA C-0947315 Added 074 Patient LOS ICU Adjusted
 . V11.03.01 04/09/2023 JTA C-0931613 Removed Sub Acute Palliative care          
 . V11.03.01 22/05/2023 JT C-0923703 Added MH Events
@@ -125,6 +126,24 @@ PMABADJT  DIM       3      3        17    Type of Adjustment
 .         072 = Rehab.Episode number (Sub-Acute)
 .         073 = AMHCC End Class Code (Mental Health)
 .         074 = Patient LOS ICU Adjusted
+.
+.         075 = HAC Flag AMI - Acute myocardial infarction
+.         076 = HAC Flag CAN - Cancer
+.         077 = HAC Flag CHF – Congestive heart failure
+.         078 = HAC Flag CTD - Connective Tissue Disorder
+.         079 = HAC Flag CVA - Cerebral vascular accident
+.         080 = HAC Flag DBC - Diabetes complications
+.         081 = HAC Flag DEM - Dementia
+.         082 = HAC Flag DIA - Diabetes
+.         083 = HAC Flag HIV - HIV
+.         084 = HAC Flag LIV – Liver Disease
+.         085 = HAC Flag MCA – Metastatic Cancer
+.         086 = HAC Flag PAR - Paraplegia
+.         087 = HAC Flag PEP – Peptic Ulcer
+.         088 = HAC Flag PUL - Pulmonary disease
+.         089 = HAC Flag PVD - Peripheral vascular disease
+.         090 = HAC Flag REN – Renal Disease
+.         091 = HAC Flag SLD – Severe Liver Disease
 .
 PMABINVC  DIM       1      1        20    Invoice Cancelled (Y/N)            
 .                                         1 = Yes, blank or 0 = No             

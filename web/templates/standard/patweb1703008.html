@@ -1,0 +1,231 @@
+<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateHome" content="standard">
+<meta name="CrossBrowser" content="true">
+<meta name="HelpFileName"    content="NoContextSet.html">
+<script type="text/javascript">
+function init() {
+
+//  document.getElementById('pmadj001').value=
+//  parent.document.getElementById('srchcntr').value;
+
+  validateCID(UpdateForm.pmhde001,UpdateForm.d_pmhde001);
+  ContractIDDIV.innerHTML=UpdateForm.d_pmhde001.value;
+
+}
+function SubmitForm() {
+
+ if(validateMandatory(UpdateForm)) UpdateForm.submit();
+
+}
+function ShowDetail01(linkurl) {
+  Left=(document.body.clientWidth-800)/2
+  DFrameLink(linkurl,0,Left,800,550)
+}
+</script>
+%START.OF.PAGE
+<body onload="PageLoad();">
+<span class=DFrameTitleBar>
+<img align="right" alt="Exit" class="MenuIcon"
+ src="../images/ExitIcon.gif" onclick="DFrameExit();">
+<script type="text/javascript">
+  document.write("Update HAC Flags Complexity Score"); 
+</script>
+
+</span>
+<div id=PageBodySection style="overflow: auto;">
+<form name=UpdateForm action=patweb17.pbl method=post style="margin:0">
+  <input type=hidden name=reportno value=3>
+  <input type=hidden name=template value=8>
+  <input type=hidden name=updttype value="F">
+  <input type=hidden name=pmhde001 value="%PATWEB17.03.104">
+  <input type=hidden name=d_pmhde001 value="">
+  <input type=hidden name=pmhde002 value="%PATWEB17.03.105.1">
+  <input type=hidden name=pmhde003 value="%PATWEB17.03.106"> 
+
+<table width="95%" cellpadding=1 cellspacing=1 border=0 align=center>
+  <tr><td><b>Contract ID</b></td>
+     <td><b><div id=ContractIDDIV></b></div>
+      </td>
+</tr>
+
+<tr>
+    <td><b>%STANDARD.01.017.Ha        </b></td>
+    <td><b>%PATWEB17.03.105.0         </b>
+    </td>
+</tr>
+
+<tr>
+  <td>&nbsp</td>
+</tr>
+
+<tr>
+  <td><b>%PATWEB17.03.108</b></td>
+  <td><b>Complexity Value</b></td>
+</tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.AMI
+    </td>
+    <td><input type=text name=pmhde073 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.AMI"
+         title="0"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.CAN
+    </td>
+    <td><input type=text name=pmhde074 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.CAN"
+         title="1" 
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.CHF
+    </td>
+    <td><input type=text name=pmhde075 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.CHF"
+         title="2"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.CTD
+    </td>
+    <td><input type=text name=pmhde076 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.CTD"
+         title="3"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.CVA
+    </td>
+    <td><input type=text name=pmhde077 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.CVA"
+         title="4"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.DBC
+    </td>
+    <td><input type=text name=pmhde078 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.DBC"
+         title="4"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.DEM
+    </td>
+    <td><input type=text name=pmhde079 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.DEM"
+         title="5"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.DIA
+    </td>
+    <td><input type=text name=pmhde080 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.DIA"
+         title="6"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.HIV
+    </td>
+    <td><input type=text name=pmhde081 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.HIV"
+         title="7"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.LIV
+    </td>
+    <td><input type=text name=pmhde082 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.LIV"
+         title="8"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.MCA
+    </td>
+    <td><input type=text name=pmhde083 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.MCA"
+         title="9"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.PAR
+    </td>
+    <td><input type=text name=pmhde084 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.PAR"
+         title="10"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.PEP
+    </td>
+    <td><input type=text name=pmhde085 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.PEP"
+         title="11"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.PUL
+    </td>
+    <td><input type=text name=pmhde086 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.PUL"
+         title="12"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.PVD
+    </td>
+    <td><input type=text name=pmhde087 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.PVD"
+         title="13"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.REN
+    </td>
+    <td><input type=text name=pmhde088 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.REN"
+         title="14"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr><td class=DataLabel>
+    %PATWEB17.03.107.SLD
+    </td>
+    <td><input type=text name=pmhde089 class="Number"
+         size=20 maxlength=15 value="%PATWEB17.03.103.SLD"
+         title="15"
+          max=9999999999.9999 onblur="RoundNumber(this,4);">
+    </td></tr>
+
+<tr>
+<td colspan=3 align=center><br>
+  <input type=button value=Update class="button" 
+   onclick="tempDisable(this);SubmitForm();">
+  <input type=button value=Delete class="button"
+   onclick="if(confirm('Are you sure you want to Delete?')) {
+            UpdateForm.updttype.value='D';SubmitForm();}">
+  <input type=button value=Cancel class="button" 
+   onclick='DFrameExit();'>
+</td></tr>
+</table>
+</form>
+

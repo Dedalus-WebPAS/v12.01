@@ -11,6 +11,11 @@
 .*               on current patient/visit status.                            *
 .* Mods      :                                                               *
 .*****************************************************************************
+.*        V12.01.02  03/02/2026 Ebon Clements          TSK 0972258           *
+.*                   Added uppercase of visit number - GVIS0000              *
+.*        V12.01.01  02/02/2026 PJ Le Febour           TSK 0972258           *
+.*                   GVIS0000   remove DE option KEYIN allow AlphaNum VisitNo*
+.*****************************************************************************
 .*        V12.00.01  21/05/2025 Bella Turco            TSK 0955096           *
 .*                   Alphanumeric changes                                    *
 .*        V11.04.01  28/03/2024 Thanh T                TSK 0935314           *
@@ -249,7 +254,7 @@ VISDESC4  INIT      "Waiting List"
 .
 PRGID     INIT      "HL7REGEN"
 PRGNAM    INIT      "HL7 Message Regeneration"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 +
 .*****************************************************************************
 .*                              MAIN0000                                     *
@@ -1709,9 +1714,14 @@ PCHG9999  RETURN
 GVIS0000  MOVE      SP20,VISITDSC                * initialise visit description
 .
           KEYIN     *P1:6,*EF,"Visit Number:":
-                    *P15:6,*V2LON,*DE,*JR,VISITNUM
+                    *P15:6,*V2LON,*JR,VISITNUM
 .
           PACK      VISITNUM,VISITNUM,SP8
+.
+          REP       UPPLOW,VISITNUM
+          DISPLAY   *P1:6,*EF,"Visit Number:":
+                    *P15:6,*V2LON,VISITNUM
+.
           MATCH     SP8,VISITNUM                 * anything entered ?
           GOTO      GVIS9100 IF EQUAL            * no
 .

@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -40,6 +40,9 @@ function ProcessReport() {
 
   if (document.ReportForm.keyinoption.value=="10") 
            {document.ReportForm.keystr03.value="pmsamhaf";}
+
+  if (document.ReportForm.keyinoption.value=="11") 
+           {document.ReportForm.keystr03.value="pmshdeaf";}
 
   document.ReportForm.keystr06.value="P";
   document.ReportForm.keystr07.value=" ";
@@ -126,6 +129,7 @@ function ProcessReport() {
       <option value="8">Upload URG Classifications</option>
       <option value="9">Upload Admitted Sub-Acute Price Weights</option>
       <option value="10">Upload Admitted Mental Health Price Weights</option>
+      <option value="11">Upload HAC Flag Complexity Values</option>
       </select>
 </td></tr>
 <tr><td class=DataLabel width=25%>Path & File Name</td>

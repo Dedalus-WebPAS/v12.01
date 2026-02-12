@@ -10,6 +10,11 @@
 .  *     Modifications:                                                       *
 .  *                                                                          *
 .  *--------------------------------------------------------------------------*
+.  *     V12.01.01 02/02/2026  Zumin Yu         TSK 0972011                   *
+.  *               Added HTLNUM, MRCNFUTD, HTNUMDAY, MRCNOIDM, MRCNPDST,      *
+.  *               MRCNSOMV, MRCNMOVR, MRCNMOVP, MRCNMOVT, MRCNMECH, MRCNMSCD,*
+.  *               MRCNTDAD, MRCNWNHL, MRCNACRR, MRCNACRV, MRCNUSRD, MRCNAMTR,*
+.  *               MRCNSLCM, MRCNNOHS, MRCNUCRG and MRCNUFTY from IBAMRT98    *
 .  *     V11.05.03 01/04/2025  Ebon Clements    TSK 0950532                   *
 .  *               Added MRTCN064 - Using diagnosis cluster id                *
 .  *     V11.05.02 21/03/2025  Alina Bhari      TSK 0951723                   *
@@ -162,6 +167,17 @@ MRTCN003  DIM       2        79    Label Layout
 .                                    9 = SATO
 .                                   10 = BHS
 MRTCN046  DIM       10       95    Unique Key
+MRTCN065  DIM       3       111    HTLNUM - Default Number of Labels to print
+MRTCN066  DIM       1       114    MRCNFUTD - Allow Future Dates in Record Move
+MRTCN067  DIM       3       115    HTNUMDAY - How many Future Days in Rec Move
+MRTCN068  DIM       1       119    MRCNOIDM - Operator Id Mandatory
+MRTCN070  DIM       1       147    MRCNSOMV - Send hours of MV to grouper
+MRTCN071  DIM       4       135    MRCNMOVR - Movement Reason for Outpatients
+MRTCN072  DIM       4       139    MRCNMOVP - Movement Reason for Preadmissions
+MRTCN073  DIM       4       143    MRCNMOVT - Movement reason for InP Transfers 
+MRTCN077  DIM       1       148    MRCNWNHL - Display Home Location Warn message
+MRTCN082  DIM       1       118    MRCNSLCM - Security Level for creating a MR
+MRTCN083  DIM       2       129    MRCNNOHS -Hospital Number for Data Directory
 .
 .
 .  ****************************************************************************
@@ -172,6 +188,7 @@ MRTCN046  DIM       10       95    Unique Key
 .----     ----   ------   -----   -----------
 ...
 MRTCN047  DIM    10       220     Next Bulk Record Movement Number
+MRTCN084  DIM    1        219     MRCNUCRG - Type of Cancer Register
 .
 .
 .  ****************************************************************************
@@ -267,4 +284,13 @@ MRTCN062  DIM    1                Send CTYPE (Care Type) Tag to Codefinder
 MRTCN063  DIM    1                Send the Procedure Prefix Code I to Grouping
 .                                 Products
 MRTCN064  DIM    1                Using Diagnosis Cluster Identifier (DCID)
+MRTCN069  DIM    3        102     MRCNPDST - Default Post Discharge Status
+MRTCN074  DIM    1        146     MRCNMECH - Mechanical Ventilation Check 
+MRTCN075  DIM    3        148     MRCNMSCD - Microfilmed Record Status
+MRTCN076  DIM    1        151     MRCNTDAD - Use Facility addr for Treat Dr addr
+MRTCN078  DIM    1        152     MRCNACRR - Auto create MR on PMI registration
+MRTCN079  DIM    1        153     MRCNACRV - Auto create MR all visit creations
+MRTCN080  DIM    1        154     MRCNUSRD-Use websecaf defaults in AutoMR creat
+MRTCN081  DIM    1        155     MRCNAMTR - Auto move records on bed transer
+MRTCN085  DIM    1        147     MRCNUFTY - Microfilm Upload File Format
 .

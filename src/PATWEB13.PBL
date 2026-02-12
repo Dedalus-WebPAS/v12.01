@@ -12,6 +12,8 @@
 .
 . Modifications :
 .-------------------------------------------------------------------------------
+. V12.01.01 29/01/2026  Thanh T        TSK 0930214
+.           Move SP70 to OBAUORNO, OBAUOVIS and OBAUOCOR fields
 . V11.05.01 04/03/2025  Thanh T        TSK 0956940
 .           Recompiled for OBSAUDFD changes
 .-------------------------------------------------------------------------------
@@ -253,7 +255,7 @@ TEMPTIME  INIT      "09:07:50"
 .
 .------------------------------------------------------------------------------
 PRGID     INIT      "PATWEB13"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "AN-SNAP Web Server"
 .------------------------------------------------------------------------------
 .
@@ -3147,6 +3149,9 @@ OBSAUD00  MOVE      OBPCURNO,OBAUURNO
           PACK      OBAUTIME,CTIMEIS
           MOVE      USERID,OBAUWEBU
           MOVE      SP70,OBAUREAS
+          MOVE      SP70,OBAUORNO
+          MOVE      SP70,OBAUOVIS
+          MOVE      SP70,OBAUOCOR
           PACK      OBAUSPAR,SP70
 .
           MATCH     ANSU,OBAUTYPE

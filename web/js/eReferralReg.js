@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //------------------------------------------------------------------------------
 // redirect on Cancel depending if eReferral Cookie is set or not
 //------------------------------------------------------------------------------
@@ -523,6 +523,11 @@ function ProcessContinueRef() {
   if (typeof formName.d_ptmas036 !== 'undefined' ||
       typeof formName.d_ptmis013 !== 'undefined') {
      findHFunddesc(); }
+
+  if(formName.name == "UpdateForm") {
+    // Prompy to save previous address if address field have been checked
+    PromptSavePrevAddressRef();
+  }
 
   if(formName.name == "AddForm") {
     if(formName.ptcnuepm != undefined ) {
@@ -1089,5 +1094,70 @@ function checkboxFieldRef(el,eAdmissionValue,objName){
     }
   } else {
     el.checked=false;
+  }
+}
+//------------------------------------------------------------------------
+// Function : Prompt question to save previous address if previous
+//            address field have been checked to update
+//------------------------------------------------------------------------
+function PromptSavePrevAddressRef() {
+  if(document.UpdateForm.preaddset == undefined) {
+    return;
+  }
+
+  AddressLine1 = PopUpFrame.document.getElementById("wp_ptmas008");
+  if(AddressLine1 != null) {
+    if(AddressLine1.checked == true) {
+      document.UpdateForm.preaddset.value="1";
+      return;
+    }
+  }
+
+  AddressLine2 = PopUpFrame.document.getElementById("wp_ptmas009");
+  if(AddressLine2 != null) {
+    if(AddressLine2.checked == true) {
+      document.UpdateForm.preaddset.value="1";
+      return;
+    }
+  }
+
+  Suburb = PopUpFrame.document.getElementById("wp_ptmas010");
+  if(Suburb != null) {
+    if(Suburb.checked == true) {
+      document.UpdateForm.preaddset.value="1";
+      return;
+    }
+  }
+
+  State = PopUpFrame.document.getElementById("wp_ptmas011");
+  if(State != null) {
+    if(State.checked == true) {
+      document.UpdateForm.preaddset.value="1";
+      return;
+    }
+  }
+
+  PostCode = PopUpFrame.document.getElementById("wp_ptmas012");
+  if(PostCode != null) {
+    if(PostCode.checked == true) {
+      document.UpdateForm.preaddset.value="1";
+      return;
+    }
+  }
+
+  HomePhone = PopUpFrame.document.getElementById("wp_ptmas013");
+  if(HomePhone != null) {
+    if(HomePhone.checked == true) {
+      document.UpdateForm.preaddset.value="1";
+      return;
+    }
+  }
+
+  OptOutSMS = PopUpFrame.document.getElementById("wp_d_ptmsx050");
+  if(OptOutSMS != null) {
+    if(OptOutSMS.checked == true) {
+      document.UpdateForm.preaddset.value="1";
+      return;
+    }
   }
 }

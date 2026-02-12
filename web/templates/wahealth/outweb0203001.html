@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome"    content="wahealth">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser"    content="true"> 
@@ -71,6 +71,17 @@ function InitTable() {
  PageBodySection.style.height = height/2 + "px";
 
  TableOutput(0,2);    // Order Column,Asc Dsc
+
+ if (!isWhitespace(PatientLinks.referadm.value) &&
+     !isWhitespace(PatientLinks.referdep.value)) {
+   linkurl = "allweb02.pbl?reportno=2&template=004"+
+        "&urnumber=" + PatientLinks.urnumber.value.replace(/ /g,"+") +
+        "&admissno=" + PatientLinks.referadm.value.replace(/ /g,"+") +
+        "&deptcode=" + PatientLinks.referdep.value.replace(/ /g,"+");
+   Left=(document.body.clientWidth-800)/2
+   DFrameLink(linkurl,50,Left,800,300)
+   return;
+ }
 
  if (PatientLinks.shwprint.value=="1") {
    if(PatientLinks.otbbccar.value=="1") {
@@ -524,15 +535,8 @@ InsertPatientHeader()
      %OUTWEB02.03.870.1 &nbsp;&nbsp; %OUTWEB02.03.868 &nbsp; %OUTWEB02.03.869</td>
 </tr>
 
-<tr><td class=DataLabel>Consent upload to My Health Record?</td>
-    <td class=DataField>
-      <script type="text/javascript">
-          patientConsentMyHR = trim("%OUTWEB02.03.043.0");
-          visitConsentMyHR   = trim("%OUTWEB02.03.336.0");
-          visitConsent = visitConsentMyHR || patientConsentMyHR || "Yes (implied)";
-          document.writeln(visitConsent);
-      </script>
-    </td>
+<tr><td class=DataLabel id="MyHRConsentTitle"></td>
+    <td class=DataField id="ausr1"></td>
     <td class=DataLabel>Last Updated By</td>
     <td class=DataField>
      %OUTWEB02.03.873.1 &nbsp;&nbsp; %OUTWEB02.03.871 &nbsp; %OUTWEB02.03.872</td>
@@ -594,6 +598,8 @@ function AddTableRows() {
 <input type=hidden name=origckey value="%OUTWEB02.03.685">
 <input type=hidden name=teleindc value="%OUTWEB02.03.327.006.3">
 <input type=hidden name=bookstat value="%OUTWEB02.03.608.1">
+<input type=hidden name=referadm value="%OUTWEB02.03.699.014">
+<input type=hidden name=referdep value="%OUTWEB02.03.699.015">
 </form>
 
 <form name=SelectPeriod>
@@ -616,6 +622,22 @@ function AddTableRows() {
        location.href="watweb01.pbl?reportno=2&template=001" +
                 "&casekeys=" + PatientLinks.waitretk.value.replace(/ /g,"+")
   }
+
+ document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;
+ PatientConsentMyHR = trim("%OUTWEB02.03.086.099.046");
+ VisitConsentMyHR =   trim("%OUTWEB02.03.899.010");
+
+ if (VisitConsentMyHR == ""){
+   VisitConsentMyHR = PatientConsentMyHR;
+ }
+
+ if (VisitConsentMyHR == "0") {
+   document.getElementById("ausr1").innerHTML = "No";
+ } else if (VisitConsentMyHR == "1") {
+   document.getElementById("ausr1").innerHTML = "Yes";
+ } else {
+   document.getElementById("ausr1").innerHTML = "Yes (implied)";
+ }
 </script>
 
 <span id=extracmbs style="display:none">

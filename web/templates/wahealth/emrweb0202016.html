@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="CrossBrowser" content="true">
 <link rel="stylesheet" href="../html/postcode.css" type="text/css">
@@ -458,11 +458,12 @@ InsertEmergencyHeader()
 </tr>
 
 <tr>
-  <td class=DataLabel>Consent MyHR upload?</td>
-  <td><select name=emvis169 tabindex=4 
-       title="Consent upload to My Health Record?" class=DataField>
-       <option></option>
-       %EMRWEB02.02.290.4
+  <td class=DataLabel id=MyHRConsentTitle></td>
+  <td><select name=pmsvx125 id=pmsvx125 tabindex=4 class=DataField 
+              title="Consent upload to My Health Record?" >
+           <option value=" "></option>
+           <option value="0">No</option>
+           <option value="1">Yes</option>
        </select>&nbsp;(<a href="javascript:patientMyhrConsentForm();">form</a>)
   </td>
   <td></td>
@@ -513,6 +514,10 @@ InsertEmergencyHeader()
         i--;
     }
   }
+
+document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;
+document.getElementById("pmsvx125").title = ScreenLabelMyHRConsent;
+
 </script>
 <form name=HiddenFields method=get>
 <input type=hidden name=cob value="%EMRWEB02.02.022.1">

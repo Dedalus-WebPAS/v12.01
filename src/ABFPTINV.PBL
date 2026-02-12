@@ -15,6 +15,8 @@
 .
 .*******************************************************************************
 . Modification : 
+.            V12.00.03 22/01/2025  J.Tan          TSK 0956147
+.                      Added HAC Flags to replace Charlson score
 .            V12.00.02 13/08/2025  J.Tan          TSK 0964813
 .                      Mod for ICD10v13 for HAC generation (patd13af)
 .            V12.00.01 14/05/2025  J.Tan          TSK 0955096
@@ -149,6 +151,9 @@ DRGSDESC  DIM       80
 NEPVALUE  FORM      10.4
 NEWBORN   FORM      1
 .
+HACFRISK  FORM      1
+FNAMEA    DIM       8
+F3P2      FORM      3.2
 FORM2A    FORM      2
 FORM6     FORM      6
 FORM6A    FORM      6
@@ -195,6 +200,7 @@ IPIV0000
           READ      CONTROLF,HUND24;*121,PTCNDGED
           READ      CONTROLF,ZERO;*43,IBCNMHOS
           READ      CONTROLF,HUND30;*66,PTCNDRND
+          READ      CONTROLF,EIGHTY8;*70,PTCNHACD
 .
           MOVE      SP70,PMVXMHOS
           OPEN      PMSVX1A1,"pmsvx1af"
@@ -274,7 +280,21 @@ IPIV0000
 .
           MOVE      FOUR,CALCFLAG         * Disc.from 01 July 2024
 .
+.         Check HAC Flags for Risk Factors start date
+.
+          REP       " 0",PTCNHACD
+          MATCH     "00000000",PTCNHACD
+          GOTO      IPIV1000 IF EQUAL
+.
+          MATCH     PTCNHACD,KEY8
+          GOTO      IPIV1000 IF LESS       * discharged before the Start date
+.
+          MOVE      ONE,HACFRISK           * Disc.from 01 July 2024 Risk factors
+.
 IPIV1000  CALL      CCOV0000               * Check COVID19 ICD/DRG
+          IF        COVIDFLG=1
+            MOVE      ZERO,HACFRISK        * Does not apply for covid19
+          ENDIF
 .
 IPIV1200  CALL      LCNT0000                  * look for a Contract ID
           BRANCH    EXIT,IPIV9000
@@ -352,7 +372,6 @@ IPIV1200  CALL      LCNT0000                  * look for a Contract ID
           CALL      CPPW0000                  * Calculate Patient weight
           CALL      GHAC0000                  * Get HAC Complexity value
 .
-.
           CALL      CABF0000                  * Calculate ABF amount
           MULT      NEPAMNTS,ABFCHRGE         * ABF Charge= NWAU x NEP 
           MOVE      ABFCHRGE,GROSSTOT
@@ -393,6 +412,7 @@ IVAR0000  MOVE     ZERO,PRIVFLAG
           MOVE     ZERO,ABFCHRGE
           MOVE     ZERO,ABFFLAG
           MOVE     ZERO,CALCFLAG
+          MOVE     ZERO,HACFRISK
           MOVE     ZERO,NEWBORN
 .
           MOVE     ZERO,CHLSCORE
@@ -415,7 +435,7 @@ IVAR0000  MOVE     ZERO,PRIVFLAG
           MOVE     ZERO,ADTRNVAL   * Admission transfer status
           MOVE     ZERO,DRGTYVAL   * DRG Type
           MOVE     ZERO,PTSEXVAL   * Patient Sex
-          MOVE     ZERO,CHSCOVAL   * Charlson scores
+          MOVE     ZERO,CHSCOVAL   * Charlson scores/HAC Flags
           MOVE     ZERO,PTAGEVAL   * Age
           MOVE     ZERO,MDCVALUE   * MDC
 .
@@ -1462,7 +1482,9 @@ AICU0000  MATCH     "1",PMPWBICU
             PACK      ADJMDESC,SP70,SP70
           ENDIF
 .
-AICU1000  MOVE      AADMNO,KEY8
+AICU1000  BRANCH    HACFRISK,AICU9999    * HAC Flags for Risk Factors
+.
+          MOVE      AADMNO,KEY8
           CALL      RDPTICU1
           BRANCH    OVRCD,AICU9999
 .
@@ -1620,6 +1642,7 @@ GHAC0000  READ      CONTROLF,EIGHTY;*250,PTCNHDPS
           GOTO      GHAC9999 IF EQUAL        * Queensland - No HAC Component
 .
           CALL      ICDE0000                 * Check ICD10 Edition
+          MOVE      KEY8,FNAMEA
 .
           MOVE      ZERO,HACCOUNT
           PACK      KEY13,AADMNO,SP70
@@ -1635,7 +1658,7 @@ GHAC1000  CALL      RKPTECD1
 .
           PACK      KEY30,PTEDCODE,SP70      * Disease code
           MOVE      "HAC",PMVMMVSI           * Set ID
-          PACK      KEY41,KEY8,KEY30,PMVMMVSI
+          PACK      KEY41,FNAMEA,KEY30,PMVMMVSI
           CALL      RDPMVMT1
           BRANCH    OVRCD,GHAC1000
 .
@@ -1646,7 +1669,7 @@ GHAC1000  CALL      RKPTECD1
 .
           MOVE      BASELVAL,FORM102     * Baseline
           ADD       PTAGEVAL,FORM102     * Age
-          ADD       CHSCOVAL,FORM102     * Charlson scores
+          ADD       CHSCOVAL,FORM102     * Charlson scores/HAC flags
           ADD       DRGTYVAL,FORM102     * DRG Type
           ADD       PTSEXVAL,FORM102     * Patient Sex
           ADD       EMRADVAL,FORM102     * Emergency Admission
@@ -1758,73 +1781,73 @@ ICDE9999  RETURN
 CMPV0000  PACK      KEY80,SP70,SP70
           CLEAR     KEY80
 .
-          MOVE      ZERO,F2P2
-          MOVE      BASELVAL,F2P2        * Baseline
-          MOVE      F2P2,KEY5
-          SQUEEZE   KEY5
-          APPEND    KEY5,KEY80
+          MOVE      ZERO,F3P2
+          MOVE      BASELVAL,F3P2        * Baseline
+          MOVE      F3P2,KEY6
+          SQUEEZE   KEY6
+          APPEND    KEY6,KEY80
           APPEND    "+",KEY80
 .
-          MOVE      ZERO,F2P2
-          MOVE      PTAGEVAL,F2P2        * Age
-          MOVE      F2P2,KEY5
-          SQUEEZE   KEY5
-          APPEND    KEY5,KEY80
+          MOVE      ZERO,F3P2
+          MOVE      PTAGEVAL,F3P2        * Age
+          MOVE      F3P2,KEY6
+          SQUEEZE   KEY6
+          APPEND    KEY6,KEY80
           APPEND    "+",KEY80
 .
-          MOVE      ZERO,F2P2
-          MOVE      CHSCOVAL,F2P2        * Charlson scores
-          MOVE      F2P2,KEY5
-          SQUEEZE   KEY5
-          APPEND    KEY5,KEY80
+          MOVE      ZERO,F3P2
+          MOVE      CHSCOVAL,F3P2        * Charlson scores
+          MOVE      F3P2,KEY6
+          SQUEEZE   KEY6
+          APPEND    KEY6,KEY80
           APPEND    "+",KEY80
 .
-          MOVE      ZERO,F2P2
-          MOVE      DRGTYVAL,F2P2        * DRG Type
-          MOVE      F2P2,KEY5
-          SQUEEZE   KEY5
-          APPEND    KEY5,KEY80
+          MOVE      ZERO,F3P2
+          MOVE      DRGTYVAL,F3P2        * DRG Type
+          MOVE      F3P2,KEY6
+          SQUEEZE   KEY6
+          APPEND    KEY6,KEY80
           APPEND    "+",KEY80
 .
-          MOVE      ZERO,F2P2
-          MOVE      PTSEXVAL,F2P2        * Patient Sex
-          MOVE      F2P2,KEY5
-          SQUEEZE   KEY5
-          APPEND    KEY5,KEY80
+          MOVE      ZERO,F3P2
+          MOVE      PTSEXVAL,F3P2        * Patient Sex
+          MOVE      F3P2,KEY6
+          SQUEEZE   KEY6
+          APPEND    KEY6,KEY80
           APPEND    "+",KEY80
 .
-          MOVE      ZERO,F2P2
-          MOVE      EMRADVAL,F2P2        * Emergency Admission
-          MOVE      F2P2,KEY5
-          SQUEEZE   KEY5
-          APPEND    KEY5,KEY80
+          MOVE      ZERO,F3P2
+          MOVE      EMRADVAL,F3P2        * Emergency Admission
+          MOVE      F3P2,KEY6
+          SQUEEZE   KEY6
+          APPEND    KEY6,KEY80
           APPEND    "+",KEY80
 .
-          MOVE      ZERO,F2P2
-          MOVE      ICUHRVAL,F2P2        * ICU Hours
-          MOVE      F2P2,KEY5
-          SQUEEZE   KEY5
-          APPEND    KEY5,KEY80
+          MOVE      ZERO,F3P2
+          MOVE      ICUHRVAL,F3P2        * ICU Hours
+          MOVE      F3P2,KEY6
+          SQUEEZE   KEY6
+          APPEND    KEY6,KEY80
           APPEND    "+",KEY80
 .
-          MOVE      ZERO,F2P2
-          MOVE      MDCVALUE,F2P2        * MDC
-          MOVE      F2P2,KEY5
-          SQUEEZE   KEY5
-          APPEND    KEY5,KEY80
+          MOVE      ZERO,F3P2
+          MOVE      MDCVALUE,F3P2        * MDC
+          MOVE      F3P2,KEY6
+          SQUEEZE   KEY6
+          APPEND    KEY6,KEY80
           APPEND    "+",KEY80
 .
-          MOVE      ZERO,F2P2
-          MOVE      ADTRNVAL,F2P2        * Admission transfer status
-          MOVE      F2P2,KEY5
-          SQUEEZE   KEY5
-          APPEND    KEY5,KEY80
+          MOVE      ZERO,F3P2
+          MOVE      ADTRNVAL,F3P2        * Admission transfer status
+          MOVE      F3P2,KEY6
+          SQUEEZE   KEY6
+          APPEND    KEY6,KEY80
           APPEND    "=",KEY80
 .
-          MOVE      FORM102,F2P2
-          MOVE      F2P2,KEY5
-          SQUEEZE   KEY5
-          APPEND    KEY5,KEY80
+          MOVE      FORM102,F3P2
+          MOVE      F3P2,KEY6
+          SQUEEZE   KEY6
+          APPEND    KEY6,KEY80
 .
           APPEND    SP70,KEY80
           RESET     KEY80
@@ -1966,8 +1989,12 @@ HACC1800  MATCH     "F",PSEX                * Check Patient Sex - Female ?
 . 
 .         HAC Complexity type for Charlson, Age and MDC
 .
-HACC2000  IF        ICUFLAG=1
-            CALL      CCHR0000              * Charlson score Complexity
+HACC2000   IF        HACFRISK=1
+            CALL       HACF0000             * HAC Flags for risk factors
+          ELSE
+            IF       ICUFLAG=1
+              CALL     CCHR0000             * Charlson score Complexity
+            ENDIF
           ENDIF
           CALL      CAGE0000                * Age Complexity
           CALL      CMDC0000                * MDC Complexity
@@ -2002,12 +2029,13 @@ CCHR0000  MOVE      "001",KEY3        * for Charlson score
           MOVE      SP70,D3
           IF        CHLSCORE=0
             MOVE      "66",F3
-            GOTO      CCHR1000 IF EQUAL   * Zero Chalson score
+            GOTO      CCHR1000            * Zero Chalson score
           ENDIF
 .
           MOVE      ZERO,F3
           LOAD      F3,CHLSCORE,NINE,TEN,TEN1,TEN2,TEN3,TEN4,TEN5,TEN6,TEN7:
                                 TEN8,TEN9,TWENTY,TWENTY1,TWENTY2,TWENTY3,TWENTY4
+.
 CCHR1000  MOVE      F3,D3
           REP       " 0",D3
           PACK      KEY15,CONTRCID,HACGROUP,KEY3,D3,SP70
@@ -2016,6 +2044,142 @@ CCHR1000  MOVE      F3,D3
           MOVE      PMHECOMV,CHSCOVAL      * Charlson Score complexity value
 .
 CCHR9999  RETURN
++
+.*******************************************************************************
+.         HAC Flags for Risk factor
+.*******************************************************************************
+HACF0000  MOVE      "004",KEY3               * HAC Flags for Risk factor
+.
+          PACK      KEY30,PTEDCODE,SP70      * Disease code
+          MOVE      "HAF",PMVMMVSI           * Set ID
+          PACK      KEY41,FNAMEA,KEY30,PMVMMVSI
+          CALL      RDPMVMT1
+          BRANCH    OVRCD,HACF9999
+.
+          MOVE      PMVMMCOD,D3              * HAC Group Code
+          PACK      KEY15,CONTRCID,HACGROUP,KEY3,D3,SP70
+          CALL      RDPMHDE1
+          BRANCH    OVRCD,HACF9999
+.
+.         Write to ABF Patient details for HAC Flags Complexity value 
+.
+          CLEAR     ADJMDESC
+.
+          MATCH     "AMI",D3
+          IF        @EQUAL
+            MOVE      "075",KEY3
+            APPEND    "HAC Flag AMI",ADJMDESC
+          ENDIF
+.
+          MATCH     "CAN",D3
+          IF        @EQUAL
+            MOVE      "076",KEY3
+            APPEND    "HAC Flag CAN",ADJMDESC
+          ENDIF
+.
+          MATCH     "CHF",D3
+          IF        @EQUAL
+            MOVE      "077",KEY3
+            APPEND    "HAC Flag CHF",ADJMDESC
+          ENDIF
+.
+          MATCH     "CTD",D3
+          IF        @EQUAL
+            MOVE      "078",KEY3
+            APPEND    "HAC Flag CTD",ADJMDESC
+          ENDIF
+.
+          MATCH     "CVA",D3
+          IF        @EQUAL
+            MOVE      "079",KEY3
+            APPEND    "HAC Flag CVA",ADJMDESC
+          ENDIF
+.
+          MATCH     "DBC",D3
+          IF        @EQUAL
+            MOVE      "080",KEY3
+            APPEND    "HAC Flag DBC",ADJMDESC
+          ENDIF
+.
+          MATCH     "DEM",D3
+          IF        @EQUAL
+            MOVE      "081",KEY3
+            APPEND    "HAC Flag DEM",ADJMDESC
+          ENDIF
+.
+          MATCH     "DIA",D3
+          IF        @EQUAL
+            MOVE      "082",KEY3
+            APPEND    "HAC Flag DIA",ADJMDESC
+          ENDIF
+.
+          MATCH     "HIV",D3
+          IF        @EQUAL
+            MOVE      "083",KEY3
+            APPEND    "HAC Flag HIV",ADJMDESC
+          ENDIF
+.
+          MATCH     "LIV",D3
+          IF        @EQUAL
+            MOVE      "084",KEY3
+            APPEND    "HAC Flag LIV",ADJMDESC
+          ENDIF
+.
+          MATCH     "MCA",D3
+          IF        @EQUAL
+            MOVE      "085",KEY3
+            APPEND    "HAC Flag MCA",ADJMDESC
+          ENDIF
+.
+          MATCH     "PAR",D3
+          IF        @EQUAL
+            MOVE      "086",KEY3
+            APPEND    "HAC Flag PAR",ADJMDESC
+          ENDIF
+.
+          MATCH     "PEP",D3
+          IF        @EQUAL
+            MOVE      "087",KEY3
+            APPEND    "HAC Flag PEP",ADJMDESC
+          ENDIF
+.
+          MATCH     "PUL",D3
+          IF        @EQUAL
+            MOVE      "088",KEY3
+            APPEND    "HAC Flag PUL",ADJMDESC
+          ENDIF
+.
+          MATCH     "PVD",D3
+          IF        @EQUAL
+            MOVE      "089",KEY3
+            APPEND    "HAC Flag PVD",ADJMDESC
+          ENDIF
+.
+          MATCH     "REN",D3
+          IF        @EQUAL
+            MOVE      "090",KEY3
+            APPEND    "HAC Flag REN",ADJMDESC
+          ENDIF
+.
+          MATCH     "SLD",D3
+          IF        @EQUAL
+            MOVE      "091",KEY3
+            APPEND    "HAC Flag SLD",ADJMDESC
+          ENDIF
+.
+          APPEND    ",HAC Group: ",ADJMDESC
+          APPEND    HACGROUP,ADJMDESC
+          APPEND    SP70,ADJMDESC
+          APPEND    SP70,ADJMDESC
+          RESET     ADJMDESC
+.
+          MOVE      PMHECOMV,FORM104       * HAC Flag complexity value
+          CALL      WABF0000               * Write to ABF Patient details
+          PACK      ADJMDESC,SP70,SP70
+.
+          MOVE      PMHECOMV,CHSCOVAL      * HAC adjustment
+.
+HACF9999  RETURN
 +
 .*******************************************************************************
 .         Age Complexity

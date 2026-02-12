@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="CrossBrowser" content="true">
 <meta name="HelpFileName"    content="NoContextSet.html">
@@ -33,6 +33,23 @@ function DisplayCHA() {
     ShowDetail01(showURL);
   }
 }
+
+function DisplayHACFlags() {
+  if (isWhitespace(UpdateForm.HAFindic.value)) {
+    showURL = 'patweb17.pbl?reportno=03&template=007' +
+    '&pmhde001=' + UpdateForm.pmhac001.value.replace(/%/g,"~") +
+    '&pmhde002=' + UpdateForm.pmhac002.value.replace(/%/g,"~") +
+    '&pmhde003=004';
+    ShowDetail01(showURL);
+  } else {
+    showURL = 'patweb17.pbl?reportno=03&template=008' +
+    '&pmhde001=' + UpdateForm.HAFindic.value.substring(0,6).replace(/%/g,"~") +
+    '&pmhde002=' + UpdateForm.HAFindic.value.substring(6,9).replace(/%/g,"~") +
+    '&pmhde003=' + UpdateForm.HAFindic.value.substring(9,12).replace(/%/g,"~");
+    ShowDetail01(showURL);
+  }
+}
+
 function DisplayAGE() {
   if (isWhitespace(UpdateForm.AGEindic.value)) {
     showURL = 'patweb17.pbl?reportno=03&template=003' +
@@ -88,6 +105,7 @@ function ShowDetail01(linkurl) {
   <input type=hidden name=AGEindic value="%PATWEB17.02.108">
   <input type=hidden name=MDCindic value="%PATWEB17.02.109">
   <input type=hidden name=HDEindic value="%PATWEB17.02.110">
+  <input type=hidden name=HAFindic value="%PATWEB17.02.111">
 
 <table width="95%" cellpadding=1 cellspacing=1 border=0 align=center>
   <tr><td>Contract ID</td>
@@ -133,7 +151,7 @@ function ShowDetail01(linkurl) {
           max=9999999999.9999 onblur="RoundNumber(this,4);">
     </td>
     <td>
-      <input type=button value=MDC class="button"
+      <input type=button value=MDC class="button" name="mdcbut"
        onclick="DisplayMDC();">
     </td>
 </tr>
@@ -147,7 +165,7 @@ function ShowDetail01(linkurl) {
           max=9999999999.9999 onblur="RoundNumber(this,4);">
     </td>
     <td>
-      <input type=button value=Age class="button"
+      <input type=button value=Age class="button" name="agebut"
        onclick="DisplayAGE();">
     </td>
 </tr>
@@ -161,7 +179,7 @@ function ShowDetail01(linkurl) {
           max=9999999999.9999 onblur="RoundNumber(this,4);">
     </td>
     <td>
-      <input type=button value=Charlson class="button"
+      <input type=button value=Charlson class="button" name="charlsonbut"
        onclick="DisplayCHA();">
     </td>
 </tr>
@@ -173,7 +191,12 @@ function ShowDetail01(linkurl) {
          size=20 maxlength=15 value="%PATWEB17.02.103.006"
          title="DRG Intervention"
           max=9999999999.9999 onblur="RoundNumber(this,4);">
-    </td></tr>
+    </td>
+    <td>
+      <input type=button value="HAC Flags" class="button" name="hacflagbut"
+       onclick="DisplayHACFlags();">
+    </td>
+</tr>
 
 <tr><td class=DataLabel>
     Male
@@ -206,3 +229,26 @@ function ShowDetail01(linkurl) {
 </table>
 </form>
 
+<script type="text/javascript">
+
+  var MDCindic = "%PATWEB17.02.109";
+  if ( MDCindic != "" ) {
+     document.UpdateForm.mdcbut.className="RedButton";
+  }
+
+  var AGEindic = "%PATWEB17.02.108";
+  if ( AGEindic != "" ) {
+     document.UpdateForm.agebut.className="RedButton";
+  }
+
+  var CHAindic = "%PATWEB17.02.107";
+  if ( CHAindic != "" ) {
+     document.UpdateForm.charlsonbut.className="RedButton";
+  }
+
+  var HAFindic = "%PATWEB17.02.111";
+  if ( HAFindic != "" ) {
+     document.UpdateForm.hacflagbut.className="RedButton";
+  }
+
+</script>

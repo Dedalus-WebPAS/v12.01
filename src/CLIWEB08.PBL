@@ -5,6 +5,8 @@
 .
 . Modifications  :
 .-------------------------------------------------------------------------------
+. V12.01.02 23/01/2026  Thanh T        TSK 0930214
+.           Added transfer clinical documents functionality 
 . V12.01.01 08/12/2025  Thanh T        TSK 0953127
 .           Recompiled for MRTAUCFD changes
 . V12.00.05 30/10/2025  Ebon Clements  TSK 0968602
@@ -599,6 +601,8 @@ CMDPARA   DIM       100       * Command line parameters
 CORRESID  FORM      4
 COPYFKEY  DIM       20        * Document Copied From Key
 CORSFILE  DIM       20     
+CORSFILO  DIM       20     
+CORSFILN  DIM       20     
 CORSP001  DIM       100       * Correspondence File Name
 CORSP002  DIM       8         * Input date          
 CORSP003  DIM       3         * Type of correspondance
@@ -618,6 +622,10 @@ CORSP016  DIM       8         * User Def Date 2
 CORSP017  DIM       2         * Alert Category
 CORSP018  DIM       3         * Alert Code
 CORSP019  DIM       3         * Alert Counter
+CORSP020  DIM       3         * Transfer Cinical Document Type
+CORSP021  DIM       8         * Transfer Cinical Document U/R Number
+CORSP022  DIM       8         * Transfer Cinical Document Visit Number 
+.
 DOCINDIC  DIM       1
 DOCFNAM3  DIM       50
 DOCFNAM4  DIM       50
@@ -722,10 +730,22 @@ OBSPCOKY  DIM       20
 OUTVAR    DIM       127
 FILEPATH  DIM       127
 .
+OLDCURNO  DIM       8
+OLDCCVIS  DIM       8
+OLDCCPID  DIM       4
+OLDCMDEL  DIM       1
+OLDCFEXT  DIM       6
+NEWCURNO  DIM       8
+NEWCCVIS  DIM       8
+NEWCCPID  DIM       4
+.
+CFILE     FILE      ASCII, FIXED=256
+CFILENAM  DIM       100 
+.
 SAVEPKEY  DIM       24
 SAVKEY20  DIM       20
 .
-CATWI     INIT      "wi"
+CATwi     INIT      "wi"
 CATw0     INIT      "w0"
 CLIDF001  DIM       5         * Data Field Number
 CLIDF002  DIM       50        * Description
@@ -940,7 +960,7 @@ STRETURN  FORM      1
 .
 .------------------------------------------------------------------------------
 PRGID     INIT      "CLIWEB08"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Patient Correspondence Details"
 .------------------------------------------------------------------------------
 .
@@ -1440,6 +1460,10 @@ CLRPAR00  MOVE      SP70,URNUMBER
           MOVE      SP70,CORSP017
           MOVE      SP70,CORSP018
           MOVE      SP70,CORSP019
+          MOVE      SP70,CORSP020
+          MOVE      SP70,CORSP021
+          MOVE      SP70,CORSP022
+.
           MOVE      SP70,RESULTKY
           MOVE      SP70,PRINTFMT
           MOVE      SP70,REFERLKY
@@ -1997,7 +2021,8 @@ SETCOR00  MOVE      ZERO,EXIT
           BRANCH    F3,SETCOR01,SETCOR02,SETCOR03,SETCOR04,SETCOR05:
                        SETCOR06,SETCOR07,SETCOR08,SETCOR09,SETCOR10:
                        SETCOR11,SETCOR12,SETCOR13,SETCOR14,SETCOR15:
-                       SETCOR16,SETCOR17,SETCOR18,SETCOR19
+                       SETCOR16,SETCOR17,SETCOR18,SETCOR19,SETCOR20:
+                       SETCOR21,SETCOR22
 .
           GOTO      SETCOR99
 .
@@ -2047,6 +2072,15 @@ SETCOR17  MOVE      QRYDATA,CORSP017
 SETCOR18  MOVE      QRYDATA,CORSP018
           GOTO      SETCOR99
 SETCOR19  MOVE      QRYDATA,CORSP019
+          GOTO      SETCOR99
+.
+SETCOR20  PACK      CORSP020,QRYDATA,SP70
+          GOTO      SETCOR99
+.
+SETCOR21  PACK      CORSP021,QRYDATA,SP70
+          GOTO      SETCOR99
+.
+SETCOR22  PACK      CORSP022,QRYDATA,SP70
           GOTO      SETCOR99
 .
 SETCOR99  RETURN
@@ -2951,7 +2985,13 @@ DELCOR99  MOVE      LOKKEY20,KEY20                                     *I-90207
 .-------------------------------------------------------------------------------
 .         Update a correspondence record 
 .-------------------------------------------------------------------------------
-UPDCOR00  PACK      KEY20,DETAILKY
+UPDCOR00  MATCH     SP70,CORSP020
+          IF        !@EQUAL
+            CALL      UPCORT00
+            GOTO      UPDCOR99
+          ENDIF
+.
+          PACK      KEY20,DETAILKY
           MOVE      DETAILKY,LOKKEY20       * Save the key to Unlock   *I-90207
           CALL      RLOBPC1
           BRANCH    OVRCD,UPDCOR90
@@ -3093,7 +3133,7 @@ CORR0000  BRANCH    FLDITMNO,CORR0100,CORR0200,CORR0300,CORR0400,CORR0500:
                              CORR4600,CORR4700,CORR4800,CORR4900,CORR5000:
 			     CORR5100,CORR5200,CORR5300,CORR5400,CORR5500:
                              CORR5600,CORR5700,CORR5800,CORR5900,CORR6000:
-                             CORR6100,CORR6200
+                             CORR6100,CORR6200,CORR6300,CORR6400
           GOTO      CORR9999      
 .
 CORR0100  CALL      CORPGE00                * Link to Document
@@ -3515,6 +3555,24 @@ CORR6100  MOVE      ZERO,TABCFLAG
           GOTO      CORR9999
 .
 CORR6200  CALL      LNKALR00                * Check if document linked to Alert
+          GOTO      CORR9999
+.
+CORR6300  MATCH     SP70,OBPCCTYP
+          IF        !@EQUAL
+            PACK      KEY5,CATwi,OBPCCTYP,SP70
+            CALL      RDCODE1
+            IF        OVRCD=0
+              WRITE     HTMLFILE;TCINDC8;              
+            ENDIF
+          ENDIF
+          GOTO      CORR9999
+.
+CORR6400  MATCH     "00000000",OBPCCVIS
+          IF        @EQUAL
+            WRITE     HTMLFILE;""; 
+          ELSE 
+            WRITE     HTMLFILE;OBPCCVIS; 
+          ENDIF
           GOTO      CORR9999
 .
 CORR9999  RETURN
@@ -3966,7 +4024,7 @@ DISCOR20  CALL      RPOBPC5
           MATCH     SP70,OBPCCTYP
           GOTO      DISCOR20 IF EQUAL
 .
-          PACK      KEY5,CATWI,OBPCCTYP,SP70
+          PACK      KEY5,CATwi,OBPCCTYP,SP70
           CALL      RDCODE1
           BRANCH    OVRCD,DISCOR20
 .
@@ -4001,7 +4059,7 @@ DISSUM20  CALL      RPOBPC5
           MATCH     SP70,OBPCCTYP
           GOTO      DISSUM20 IF EQUAL
 .
-          PACK      KEY5,CATWI,OBPCCTYP,SP70
+          PACK      KEY5,CATwi,OBPCCTYP,SP70
           CALL      RDCODE1
           BRANCH    OVRCD,DISSUM20
 .
@@ -4038,7 +4096,7 @@ DISTAB00  PACK      DETAILKY,OBPCURNO,OBPCCVIS,OBPCCPID
           RESET     HTMLLNK2
 .
           MOVE      SP70,DTYPDESC
-          PACK      KEY5,CATWI,OBPCCTYP,SP70
+          PACK      KEY5,CATwi,OBPCCTYP,SP70
           CALL      RDCODE1
           IF        OVRCD=0
             MOVE      TDESC,DTYPDESC
@@ -7444,7 +7502,7 @@ WDSA0000  MOVE      ZERO,EXIT
             GOTO      WDSA9999 IF NOT EQUAL
           ENDIF
 .
-          PACK      KEY5,CATWI,OBPCCTYP,SP70 * ignore if not a discharge summary
+          PACK      KEY5,CATwi,OBPCCTYP,SP70 * ignore if not a discharge summary
           CALL      RDCODE1
           BRANCH    OVRCD,WDSA9999
 .
@@ -7799,6 +7857,9 @@ OBSAUD00  MOVE      OBPCURNO,OBAUURNO
           PACK      OBAUTIME,CTIMEIS 
           MOVE      USERID,OBAUWEBU
           MOVE      SP70,OBAUREAS
+          MOVE      SP70,OBAUORNO
+          MOVE      SP70,OBAUOVIS
+          MOVE      SP70,OBAUOCOR
           PACK      OBAUSPAR,SP70 
 .
           MATCH     ANSU,OBAUTYPE
@@ -7858,6 +7919,12 @@ TABCDA10  CALL      RPOBAUD1
             GOTO      TABCDA50
           ENDIF
 .
+          MATCH     ANSC,OBAUTYPE
+          IF        @EQUAL
+            WRITE     HTMLFILE;"<td>Change</td>";
+            GOTO      TABCDA50
+          ENDIF
+.
           MATCH     ANSS,OBAUTYPE
           IF        @EQUAL
             WRITE     HTMLFILE;"<td>Sent</td>";
@@ -7879,6 +7946,16 @@ TABCDA50  PACK      KEY10,OBAUWEBU,SP70          * Last Web User ID
           PACK      DATELACC,CDAY,SP1,MTHNAM3,SP1,CCENT,CYEAR
 .
           WRITE     HTMLFILE;"<td>",DATELACC," at ",OBAUTIME,"</td>";
+.
+          WRITE     HTMLFILE;"<td align=right>",OBAUORNO,"</td>";
+.
+          MATCH     "00000000",OBAUOVIS
+          IF        @EQUAL
+            WRITE     HTMLFILE;"<td></td>";
+          ELSE
+            WRITE     HTMLFILE;"<td align=right>",OBAUOVIS,"</td>";
+          ENDIF  
+          WRITE     HTMLFILE;"<td align=right>",OBAUOCOR,"</td>";
 .
           WRITE     HTMLFILE;"</tr>"
 .
@@ -11018,6 +11095,310 @@ NIHCHR00  MATCH     "3",PTCNUNET
 .
 NIHCHR99  RETURN
 +
+.-------------------------------------------------------------------------------
+. Update a correspondence record - Transfer clinical document
+.-------------------------------------------------------------------------------
+UPCORT00  PACK      KEY20,DETAILKY
+          MOVE      DETAILKY,LOKKEY20       * Save the key to Unlock
+.
+          UNPACK    DETAILKY,OLDCURNO,OLDCCVIS,OLDCCPID
+.
+          CALL      RLOBPC1
+          BRANCH    OVRCD,UPCORT90
+.
+          MATCH     "1",OBPCMDEL
+          GOTO      UPCORT94 IF EQUAL   * deleted
+.
+          PACK      TESTKEY,OBPCDTLU,OBPCTMLU
+          MATCH     UPDATEKY,TESTKEY
+          GOTO      UPCORT91 IF NOT EQUAL
+.
+          PACK      OLDCMDEL,OBPCMDEL,SP70
+          PACK      OLDCFEXT,OBPCFEXT
+          STRIP     OLDCFEXT
+.
+          CALL      IBACLOCK
+          PACK      OBPCDTLU,CCC,CYY,CMM,CDD     * Last Input date and time
+          REP       " 0",OBPCDTLU
+          PACK      OBPCTMLU,CTIMEIS
+.
+          PACK      KEY10,USERID
+          CALL      RDWBSE1
+          BRANCH    OVRCD,UPCORT92
+.
+          MOVE      WBSEUID,OBPCLUID        * Last Web User ID
+          MOVE      "4",OBPCMDEL
+          CALL      UPOBPC1
+.
+UPCORT50  MATCH     "1",CORSP020
+          IF        @EQUAL
+            MOVE      OLDCURNO,NEWCURNO
+            MOVE      CORSP022,NEWCCVIS
+          ENDIF
+.
+          MATCH     "2",CORSP020
+          IF        @EQUAL
+            MOVE      OLDCURNO,NEWCURNO
+            MOVE      "00000000",NEWCCVIS
+          ENDIF
+.
+          MATCH     "3",CORSP020
+          IF        @EQUAL
+            MOVE      CORSP021,NEWCURNO
+            MOVE      CORSP022,NEWCCVIS
+          ENDIF
+.
+          MATCH     "4",CORSP020
+          IF        @EQUAL
+            MOVE      CORSP021,NEWCURNO
+            MOVE      "00000000",NEWCCVIS
+          ENDIF
+.
+          CALL      NXCORI00
+.
+          CALL      RNCODO00
+.
+          CALL      NWOBPC00
+.
+          CALL      CPAUD000
+          CALL      NWOBAU00
+.
+          MOVE      ZERO,EXIT
+          GOTO      UPCORT99
+.
+UPCORT90  MOVE      "Error: Invalid Update Key",WEBTITLE
+          CALL      SHWERR00
+          MOVE      ONE,EXIT
+          GOTO      UPCORT99
+.
+UPCORT91  MOVE      "Error: Invalid Update Key",WEBTITLE
+          CALL      SHWERR00
+          MOVE      ONE,EXIT
+          GOTO      UPCORT99
+.
+UPCORT92  CLEAR     WEBTITLE
+          APPEND    "Invalid User ID - ",WEBTITLE
+          APPEND    KEY10,WEBTITLE
+          RESET     WEBTITLE
+          CALL      SHWERR00
+          MOVE      ONE,EXIT
+          GOTO      UPCORT99
+.
+UPCORT93  MOVE      "Error: Invalid Storage Location",WEBTITLE
+          CALL      SHWERR00
+          MOVE      ONE,EXIT
+          GOTO      UPCORT99
+.
+UPCORT94  MOVE      "Error: Document has been Marked as Deleted",WEBTITLE
+          CALL      SHWERR00
+          MOVE      ONE,EXIT
+          GOTO      UPCORT99
+.
+UPCORT95  CLEAR     WEBTITLE
+          APPEND    "Error: File upload failed (cliweb08.us1 script)",WEBTITLE
+          RESET     WEBTITLE
+          CALL      WEBERR00
+          MOVE      ONE,EXIT
+          GOTO      UPCORT99
+.
+UPCORT96  CLEAR     WEBTITLE
+          APPEND    "Error: File upload failed (filesystem move)",WEBTITLE
+          RESET     WEBTITLE
+          CALL      WEBERR00
+          MOVE      ONE,EXIT
+          GOTO      UPCORT99
+.
+UPCORT99  RETURN 
++
+.-------------------------------------------------------------------------------
+. Get Next Correspondence ID for New U/R and Visit
+.-------------------------------------------------------------------------------
+NXCORI00  MOVE      ONE,F4
+          MOVE      F4,NEWCCPID
+.
+          PACK      KEY20,NEWCURNO,NEWCCVIS,Z70
+          CALL      RSOBPC1
+NXCORI10  CALL      RPOBPC1
+          BRANCH    OVRCD,NXCORI99
+.
+          MATCH     NEWCURNO,OBPCURNO
+          GOTO      NXCORI99 IF NOT EQUAL
+.
+          MATCH     NEWCCVIS,OBPCCVIS
+          GOTO      NXCORI99 IF NOT EQUAL
+.
+          MOVE      OBPCCPID,F4
+          ADD       ONE,F4                     
+          MOVE      F4,NEWCCPID
+.
+NXCORI99  RETURN
+.
+.-------------------------------------------------------------------------------
+. Write new obspcoaf for New U/R and Visit
+.-------------------------------------------------------------------------------
+NWOBPC00  PACK      KEY20,DETAILKY
+          CALL      RDOBPC1
+          BRANCH    OVRCD,NWOBPC90
+.
+          MOVE      NEWCURNO,OBPCURNO
+          MOVE      NEWCCVIS,OBPCCVIS
+          MOVE      NEWCCPID,OBPCCPID
+          MOVE      OLDCMDEL,OBPCMDEL
+. 
+          MOVE      CORSP002,OBPCINDT  *   Input Date
+          MOVE      CORSP003,OBPCCTYP  *   Type of Correspondence
+          MOVE      CORSP004,OBPCINTM  *   Time hh:mm:ss
+.
+          MOVE      CORSP007,OBPCCOM1  *   Comment 1
+          MOVE      CORSP008,OBPCCOM2  *   Comment 2
+          MOVE      CORSP009,OBPCCFRM  *   From
+          MOVE      CORSP010,OBPCCTOO  *   To
+          MOVE      CORSP011,OBPCUDF1  *   User Def Code 1 (Cat xx)
+          MOVE      CORSP012,OBPCUDF2  *   User Def Code 2 (Cat xx)
+          MOVE      CORSP013,OBPCUYN1  *   User Def Y/N 1
+          MOVE      CORSP014,OBPCUYN2  *   User Def Y/N 2
+          MOVE      CORSP015,OBPCUDD1  *   User Def Date 1
+          MOVE      CORSP016,OBPCUDD2  *   User Def Date 1
+.
+          MOVE      CORSP017,OBPCACAT  *   Alert Category
+          MOVE      CORSP018,OBPCACOD  *   Alert Code
+          MOVE      CORSP019,OBPCCNTR  *   Alert Counter
+.
+          PACK      KEY20,OBPCURNO,OBPCCVIS,OBPCCPID,SP70
+          CALL      WROBPC1
+.
+          GOTO      NWOBPC99
+.
+NWOBPC90  MOVE      "Error: Invalid Update Key",WEBTITLE
+          CALL      SHWERR00
+          MOVE      ONE,EXIT
+          GOTO      NWOBPC99 
+.
+NWOBPC99  RETURN
+.
+.-------------------------------------------------------------------------------
+. Copy Clinical Audit data from original
+.-------------------------------------------------------------------------------
+CPAUD000  PACK      KEY47,DETAILKY,SP70
+          CALL      RSOBAUD1
+CPAUD100  CALL      RKOBAUD1
+          BRANCH    OVRCD,CPAUD999
+.
+          PACK      KEY20,OBAUURNO,OBAUVISN,OBAUCORR,SP70
+.
+          MATCH     DETAILKY,KEY20
+          GOTO      CPAUD999 IF NOT EQUAL
+.
+          MOVE      NEWCURNO,OBAUURNO
+          MOVE      NEWCCVIS,OBAUVISN
+          MOVE      NEWCCPID,OBAUCORR
+.
+          MATCH     SP70,OBAUORNO
+          IF        @EQUAL
+            MOVE      OLDCURNO,OBAUORNO
+            MOVE      OLDCCVIS,OBAUOVIS
+            MOVE      OLDCCPID,OBAUOCOR
+          ENDIF
+.
+          PACK      KEY47,OBAUURNO,OBAUVISN,OBAUCORR,OBAUDATE,OBAUTIME:
+                          OBAUWEBU,OBAUTYPE,SP70
+          CALL      WROBAUD1
+.
+          GOTO      CPAUD100
+.
+CPAUD999  RETURN
+.
+.-------------------------------------------------------------------------------
+. Create Clinical Documents Audit Type Changed ("C")
+.-------------------------------------------------------------------------------
+NWOBAU00  CALL      CLOBSAUD
+          MOVE      OLDCURNO,OBAUURNO
+          MOVE      OLDCCVIS,OBAUVISN
+          MOVE      OLDCCPID,OBAUCORR
+          CALL      IBACLOCK
+          PACK      OBAUDATE,CCC,CYY,CMM,CDD,SP70
+          REP       " 0",OBAUDATE
+          PACK      OBAUTIME,CTIMEIS
+          MOVE      USERID,OBAUWEBU
+          MOVE      ANSC,OBAUTYPE
+          MOVE      OBPCUDF1,OBAUREAS
+.
+          MOVE      NEWCURNO,OBAUORNO
+          MOVE      NEWCCVIS,OBAUOVIS
+          MOVE      NEWCCPID,OBAUOCOR
+.
+          PACK      KEY47,OBAUURNO,OBAUVISN,OBAUCORR,OBAUDATE,OBAUTIME:
+                          OBAUWEBU,OBAUTYPE,SP70
+          CALL      RAOBAUD1
+          IF        OVRCD=1
+            CALL      WROBAUD1
+          ENDIF
+.
+NWOBAU99  RETURN
+.
+.-------------------------------------------------------------------------------
+. Rename correspondence document from old name to new name
+.-------------------------------------------------------------------------------
+RNCODO00  MATCH     "00000000",OLDCCVIS
+          IF        @EQUAL
+            MOVE      "UR",DIM2
+            PACK      CORSFILO,DIM2,OLDCURNO,DASH,OLDCCPID,OLDCFEXT
+          ELSE
+            PACK      CORSFILO,OLDCCVIS,DASH,OLDCCPID,OLDCFEXT
+          ENDIF
+          REP       " 0",CORSFILO
+.
+          MATCH     "00000000",NEWCCVIS
+          IF        @EQUAL
+            MOVE      "UR",DIM2
+            PACK      CORSFILN,DIM2,NEWCURNO,DASH,NEWCCPID,OLDCFEXT
+          ELSE
+            PACK      CORSFILN,NEWCCVIS,DASH,NEWCCPID,OLDCFEXT
+          ENDIF
+          REP       " 0",CORSFILN
+.
+          READ      CONTROLF,NINTY1;*219,CWEBCLOC
+          PACK      KEY4,CWEBCLOC,SP70
+          CALL      RDOBPT1
+          BRANCH    OVRCD,RNCODO91
+.
+          MOVE      OBPTSLID,OBPCSLID       * Storage Location ID
+          STRIP     OBPTSDIR
+.
+RNCODO50  PACK      CFILENAM,OBPTSDIR,CORSFILO 
+          MOVE      ZERO,OVRCD
+          TRAP      OVERCOND IF IO
+          OPEN      CFILE,CFILENAM
+          TRAPCLR   IO
+          IF        OVRCD = 1
+            GOTO      RNCODO99 
+          ENDIF
+.
+          PACK      CMDLINE,CMDMOVE,OBPTSDIR,CORSFILO,SP1,OBPTSDIR,CORSFILN
+          EXECUTE   CMDLINE,TASKID
+          MATCH     "0",TASKID
+          GOTO      RNCODO97 IF NOT EQUAL       * move (mv) command failed
+.
+          GOTO      RNCODO99
+.
+RNCODO91  CLEAR     WEBTITLE
+          APPEND    "Invalid Storage Location ID From Control File - ",WEBTITLE
+          APPEND    KEY4,WEBTITLE
+          RESET     WEBTITLE
+          CALL      SHWERR00
+          MOVE      ONE,EXIT
+          GOTO      RNCODO99
+.
+RNCODO97  CLEAR     WEBTITLE
+          APPEND    "Error: File upload failed (filesystem move)",WEBTITLE
+          APPEND    KEY4,WEBTITLE
+          RESET     WEBTITLE
+          CALL      SHWERR00
+          MOVE      ONE,EXIT
+          GOTO      RNCODO99
+.
+RNCODO99  RETURN
++
           INC       IBAWEBCD
 .
           INC       AAEDI1IO/INC
@@ -11131,6 +11512,7 @@ NIHCHR99  RETURN
           INC       CLPATMIS
           INC       CLPATDSC
           INC       CLPATRE1
+          INC       CLOBSAUD
 .
           INC       RESCLNCD
           INC       PATNAMCD

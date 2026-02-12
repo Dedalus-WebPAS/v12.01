@@ -5,6 +5,9 @@
 .           KEY8  - Visit number
 .           KEY19 - W/L case key (UR,Procedure,count)
 . Modifications
+.------------------------------------------------------------------------------
+. V12.01.01 29/01/2026  Thanh T        TSK 0930214
+.           Move SP70 to OBAUORNO, OBAUOVIS and OBAUOCOR fields
 . V10.12.00 23/01/2018 Ebon Clements  TSK 0845295
 .           Created include 
 .------------------------------------------------------------------------------
@@ -209,6 +212,9 @@ OBSAUD00  MOVE      OBPCURNO,OBAUURNO
           PACK      OBAUTIME,CTIMEIS
           MOVE      SP70,OBAUWEBU
           MOVE      SP70,OBAUREAS
+          MOVE      SP70,OBAUORNO
+          MOVE      SP70,OBAUOVIS
+          MOVE      SP70,OBAUOCOR
           PACK      OBAUSPAR,SP70
 .
           MATCH     ANSU,OBAUTYPE

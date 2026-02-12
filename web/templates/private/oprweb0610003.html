@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.01">
+<meta name="TemplateVersion" content="V12.00.02">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="TemplateHome" content="private">
 <meta name="CrossBrowser" content="true">
@@ -344,7 +344,7 @@ function SetNurseName(name) {
 </script>
 </head>
 %START.OF.PAGE
-<body onload="PageLoad(event);setTimeout('ChkReg()',100);showDelay();
+<body onload="PageLoad(event);setTimeout('ChkReg()',100);showDelayHEA2();
               showExitDelayHEA();">
 <span class=DFrameTitleBar>
 <img align="right" alt="Exit" class="MenuIcon"
@@ -417,6 +417,8 @@ TheatreHeading="Theatre Case Recovery Details"
 <input type=hidden name=gnm id=gnm>
 <input type=hidden name=opcnurse id=opcnurse
        value="%STANDARD.01.025.113.051.0.1">
+<input type=hidden name="opcnsetr" id="opcnsetr"
+ value="%STANDARD.01.025.113.057.0.2">
 
 <table border=0 cellpadding=2 cellspacing=0 width="100%" align=center >
 <tr><td class=DataLabel width=20%>Time in Recovery</td>
@@ -426,7 +428,7 @@ TheatreHeading="Theatre Case Recovery Details"
     <tr><td class=DataField>
     <input type=text name=opard077 size=8 title="Time in Recovery"
      id=opard077 value='%OPRWEB06.10.277' onclick="displayCRRHI();" 
-     onBlur="checkTime(this);chkTime(this);showDelay();">
+     onBlur="checkTime(this,this.title);chkTime(this);showDelayHEA2();">
     <img src="../images/DateTimeStamp.gif" class=Icon
      onclick="SetCurrentDateTime(null,UpdateForm.opard077);">
     <img src=../images/TimeLookup.gif class=Icon
@@ -448,8 +450,8 @@ TheatreHeading="Theatre Case Recovery Details"
     <img src="../images/SearchIcon.gif" class=Icon
      onclick="SearchOTNurse(UpdateForm.opard078,UpdateForm.name_opard078);">
     </td></tr>
-<tr><td class=DataLabel> &nbsp; </td>
-    <td class=DataField> &nbsp; </td>
+<tr><td class=DataLabel><div id="DelayReasonTitle"></div></td>
+    <td class=DataField><div id="DelayReason"></div></td>
     <td class=DataLabel>Nurse Attending Patient</td>
     <td><input type=text name=opard079 size=6 value="%OPRWEB06.10.279.1"
      id=opard079 
@@ -463,7 +465,8 @@ TheatreHeading="Theatre Case Recovery Details"
     <td class=DataField>
     <input type=text name=opard085 id=opard085 size=8
      title="Ready to Depart Time"
-     value='%OPRWEB06.10.285' onBlur="checkTime(this);chkTime(this);ChgRTD();
+     value='%OPRWEB06.10.285' 
+     onBlur="checkTime(this,this.title);chkTime(this);ChgRTD();
                                       checkRecoveryTime(this);"
      onchange="checkReadyToDepartExist();">
     <img src="../images/DateTimeStamp.gif" class=Icon
@@ -475,7 +478,7 @@ TheatreHeading="Theatre Case Recovery Details"
     <td class=DataField>
     <input type=text name=opard083 size=8 title="Time Patient Went to ICU"
      value='%OPRWEB06.10.283'
-     onBlur="checkTime(this);chkTime(this);setETTime(this);">
+     onBlur="checkTime(this,this.title);chkTime(this);setETTime(this);">
     <img src="../images/DateTimeStamp.gif" class=Icon
      onclick="SetCurrentDateTime(null,UpdateForm.opard083);">
     <img src=../images/TimeLookup.gif class=Icon
@@ -485,7 +488,8 @@ TheatreHeading="Theatre Case Recovery Details"
     <td class=DataLabel>Time Patient Died </td>
     <td class=DataField>
     <input type=text name=opard082 size=8 title="Time Patient Died"
-     value='%OPRWEB06.10.282' onBlur="checkTime(this);chkTime(this);">
+     value='%OPRWEB06.10.282' 
+     onBlur="checkTime(this,this.title);chkTime(this);">
     <img src="../images/DateTimeStamp.gif" class=Icon
      onclick="SetCurrentDateTime(null,UpdateForm.opard082);">
     <img src=../images/TimeLookup.gif class=Icon
@@ -500,7 +504,7 @@ TheatreHeading="Theatre Case Recovery Details"
     <input type=text name=opard080 size=8 title="Exit Theatre Complex Time"
      id=opard080 value='%OPRWEB06.10.280' 
      onBlur="if (checkTime(this,this.title)) {
-             chkTime(this);ChgRTD();chkMan();ChkReg();
+             chkTime(this);ChgRTD();ChkReg();
              checkRecoveryTime(this);chkMan2();
              showExitDelayHEA();}">
     <img src="../images/DateTimeStamp.gif" class=Icon
@@ -540,9 +544,23 @@ TheatreHeading="Theatre Case Recovery Details"
     </td>
     <td>&nbsp;</td>
     <td>&nbsp;</td></tr>
-</table>
 
-<div id="DelayReason"></div>
+<tr><td>Clinical Review Date</td>
+    <td><input type=text name=opard030 size=12 value="%OPRWEB06.10.230"
+     class="Date PastDate" title="Clinical Review Date"
+     onblur="checkReviewTime(UpdateForm.opard030,UpdateForm.opard031);">
+    <img src=../images/DateLookup.gif class=Icon date=UpdateForm.opard030>
+    Time
+    <input type=text name=opard031 size=6 value="%OPRWEB06.10.231"
+     onblur="checkReviewTime(UpdateForm.opard030,this);"
+     title="Clinical Review Time">
+    <img src=../images/DateTimeStamp.gif class=Icon date=UpdateForm.opard030
+     time=UpdateForm.opard031>
+    <img src=../images/TimeLookup.gif class=Icon time=UpdateForm.opard031>
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td></tr>
+</table>
 
 <table border=0 cellpadding=2 cellspacing=0 width="100%" align=center >
 <tr><td colspan=4 align=center>
@@ -595,7 +613,7 @@ name=WaitNote>%OPRWEB06.10.459</textarea>
      style="background-color:white;position:absolute;width:600px;height:100px;top:100px;right:10%;
             border:3px outset grey;display:none">
  <table width="100%" cellpadding="0" cellspacing="0">
-   <tr class="DFrameTitleBar"><td colspan="2">Recovery Event</td></tr>
+   <tr class="DFrameTitleBar"><td colspan="3">Recovery Event</td></tr>
    <tr><td>&nbsp;</td></tr>
    <tr align="center" width="100%">
       <td width="60%">
@@ -643,42 +661,21 @@ name=WaitNote>%OPRWEB06.10.459</textarea>
 <input type="hidden" name="opsrg055" value=" ">
 </span>
 
+<div id="TitleDelayReason" style="display:none;">
+%STANDARD.01.017.Ou
+</div>
 
 <div id="ShowDelayReason" style="display:none;">
-<table border=0 cellpadding=2 cellspacing=0 width="100%" align=center >
-<tr><td width=20%>%STANDARD.01.017.Ou</td>
-    <td><select name=opard084 id="opard084" title="%STANDARD.01.017.Ou">
-        <option></option>
-        %OPRWEB06.10.284.2
-        </select>
-    </td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td></tr>
-
-<tr><td>Clinical Review Date</td>
-    <td><input type=text name=opard030 size=12 value="%OPRWEB06.10.230"
-     class="Date PastDate" title="Clinical Review Date"
-     onblur="checkReviewTime(UpdateForm.opard030,UpdateForm.opard031);">
-    <img src=../images/DateLookup.gif class=Icon date=UpdateForm.opard030>
-    Time
-    <input type=text name=opard031 size=6 value="%OPRWEB06.10.231"
-     onblur="checkReviewTime(UpdateForm.opard030,this);"
-     title="Clinical Review Time">
-    <img src=../images/DateTimeStamp.gif class=Icon date=UpdateForm.opard030
-     time=UpdateForm.opard031>
-    <img src=../images/TimeLookup.gif class=Icon time=UpdateForm.opard031>
-    </td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td></tr>
-</table>
+  <select name=opard084 id="opard084" title="%STANDARD.01.017.Ou"
+   class="Mandatory">
+  <option></option>
+   %OPRWEB06.10.284.2
+  </select>
 </div>
 
 <div id="NoDelayReason" style="display:none;">
 <input type="hidden" name="opard084" value=" ">
-<input type="hidden" name="opard030" value=" ">
-<input type="hidden" name="opard031" value=" ">
 </div>
-
 
 <script type="text/javascript">
 if (document.getElementById("opcncrrh").value=="2" ||

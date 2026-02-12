@@ -1,7 +1,7 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="CrossBrowser" content="true">
-<meta name="HelpFileName"    content="NoContextSet.html">
+<meta name="HelpFileName" content="NoContextSet.html">
 %START.OF.PAGE
 <body onload="PageLoad(event);">
 <span class=DFrameTitleBar>
@@ -28,12 +28,6 @@
   <input type=hidden name=redirect value="%CLIWEB08.01.001.comweb06.06.001">
   <input type=hidden name=usersecu value="%STANDARD.01.042.CLIWEB08">
 <table align=center width=95% border=0 cellspacing=1 cellpadding=2>
-<!--
-<tr><td colspan=2 class=HeadingCell align=center>
-  Patient : CLIWEB08.01.002
-    (CLIWEB08.01.019 Age CLIWEB08.01.021
-     U/R CLIWEB08.01.003)</td>
--->
 <tr><td width=30% class=DataLabel>Created/Linked by</td>
     <td class=DataField>%CLIWEB08.01.106.0 </td></tr>
 <tr><td width=30% class=DataLabel>Last Updated by</td>
@@ -56,6 +50,8 @@
 <tr><td class=DataLabel>Comments</td>
     <td class=DataField>%CLIWEB08.01.111 <br>
                         %CLIWEB08.01.112 </td></tr>
+<tr><td class=DataLabel>Visit Number</td>
+    <td class=DataField>%CLIWEB08.01.164</td></tr>
 <tr><td colspan=2 align=center> &nbsp;
 </td></tr>
 <tr><td class=DataLabel></td>
@@ -87,6 +83,15 @@
   </td>
   <td class="HeadingCell">
     Date Time
+  </td>
+  <td align=right class="HeadingCell">
+    Original U/R
+  </td>
+  <td align=right class="HeadingCell">
+    Original Visit
+  </td>
+  <td align=right class="HeadingCell">
+    Original Corr ID
   </td>
 </tr>
 

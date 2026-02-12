@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome"    content="wahealth">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser"    content="true"> 
@@ -30,7 +30,6 @@ function CheckFundingSource() {
       return;
     }
   }
-
 if (document.UpdateForm.outbb035.value.substr(3,1)=="2" ||
     document.UpdateForm.outbb035.value.substr(3,1)=="3" ||
     document.UpdateForm.outbb035.value.substr(3,1)=="4") {
@@ -41,7 +40,6 @@ if (document.UpdateForm.outbb035.value.substr(3,1)=="2" ||
          "outweb02.pbl?reportno=03&template=006" +
          "&urnumber=" + document.PatientLinks.urnumber.value.replace(/ /g,"+") +
          "&admissno=" + document.UpdateForm.deprtred.value;
-
       document.UpdateForm.nextpage.value="1";
 
     }
@@ -70,7 +68,9 @@ if (document.UpdateForm.outbb035.value.substr(3,1)=="2" ||
          "&admissno=" + PatientLinks.admissno.value.replace(/ /g,"+") +
          "&casekeys=" + PatientLinks.casekeys.value.replace(/ /g,"+") +
          "&pmext049=" + document.UpdateForm.opwamvny.value + 
-         "&chckcomp=" + document.UpdateForm.outbb002.value[3]+"O";
+         "&chckcomp=" + document.UpdateForm.outbb002.value[3]+"O" +
+         "&referadm=" + PatientLinks.refrvisn.value +
+         "&referdep=" + PatientLinks.refrdept.value;
 
     document.UpdateForm.nextpage.value="1";
 
@@ -88,6 +88,11 @@ if (document.UpdateForm.outbb035.value.substr(3,1)=="2" ||
     }
   } else {
     document.UpdateForm.redirect.value = setFundingRedirect();
+    if (PatientLinks.refrvisn.value && (selOutcome.value.substr(6,1) == "C")) {
+      document.UpdateForm.redirect.value += 
+      "&referdep=" + PatientLinks.refrdept.value.replace(/ /g,"+") +
+      "&referadm=" + PatientLinks.refrvisn.value.replace(/ /g,"+");
+    }
     UpdateRecords();
   }
 }
@@ -311,10 +316,12 @@ Enter/Update Attendance Details - %OUTWEB02.03.303.1 - %OUTWEB02.03.605.0
     <td class=DataField>&nbsp;</td>
     </tr>
 
-<tr><td class=DataLabel>Consent MyHR upload?</td>
-    <td><select name=outbb017 id=outbb017 tabindex=10 title="Consent MyHR Upload" class="DataField">
-         <option></option>
-         %OUTWEB02.03.336.2
+<tr><td class=DataLabel id="MyHRConsentTitle"></td>
+    <td><select name=pmsvx125 id=pmsvx125 tabindex=10 class="DataField" 
+                title="Consent MyHR Upload">
+           <option value=" "></option>
+           <option value="0">No</option>
+           <option value="1">Yes</option>
          </select>&nbsp;(<a href="javascript:patientMyhrConsentForm();">form</a>)
     </td>
     <td></td>
@@ -628,16 +635,15 @@ DisplayXCmbsAttend();
  UpdateForm.genpname.value = trim(title)+" "+trim(gname)+" "+trim(surname);
 
 // Convert a blank visit-level consent to the implied consent from patient level
-patientConsentMyHR = "%OUTWEB02.03.043.3";
-visitConsentMyHR   = "%OUTWEB02.03.336.3";
-yesConsentMyHR     = "%STANDARD.01.018.O1.001.3";
+document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;
+document.getElementById("pmsvx125").title = ScreenLabelMyHRConsent;
+patientConsentMyHR = trim("%OUTWEB02.03.086.099.046");
+visitConsentMyHR   = trim("%OUTWEB02.03.899.010");
 
-if (visitConsentMyHR.substring(0,3)=="   ") {
-  if (patientConsentMyHR.substring(0,3)=="   ") {
-    document.getElementById("outbb017").value = yesConsentMyHR.substring(0,43);
-  } else {
-    document.getElementById("outbb017").value = patientConsentMyHR.substring(0,43); 
-  }
+if (visitConsentMyHR == "") {
+  document.getElementById("pmsvx125").value = patientConsentMyHR; 
+} else {
+  document.getElementById("pmsvx125").value = visitConsentMyHR; 
 }
 
 var codeList = document.UpdateForm.outbb002.options;

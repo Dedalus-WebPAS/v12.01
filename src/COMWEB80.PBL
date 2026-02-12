@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .------------------------------------------------------------------------------
+. V12.01.01 29/01/2026  Thanh T        TSK 0930214
+.           Move SP70 to OBAUORNO, OBAUOVIS and OBAUOCOR fields
 .V12.00.03  27/10/2025  Ebon Clements  TSK 0964542
 .           Recompiled for WEBGROUP - Load Codefinder clinician date and time
 .V12.00.02  24/07/2025  J.Tan          TSK 0962500
@@ -1261,7 +1263,7 @@ LOADFILE  FILE      ASCII,FIXED=200
 TEMP1     FILE      ASCII,FIXED=660
 .------------------------------------------------------------
 PRGID     INIT      "COMWEB80"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Common XML Remote Code Validation Service"
 .------------------------------------------------------------
 .
@@ -8170,6 +8172,9 @@ VWOBAD00  CALL      XMLHED00
           PACK      OBAUTIME,CTIMEIS
           MOVE      USERID,OBAUWEBU
           MOVE      SP70,OBAUREAS
+          MOVE      SP70,OBAUORNO
+          MOVE      SP70,OBAUOVIS
+          MOVE      SP70,OBAUOCOR
           PACK      OBAUSPAR,SP70
           MOVE      ANSV,OBAUTYPE
 .

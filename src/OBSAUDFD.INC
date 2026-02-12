@@ -1,4 +1,5 @@
-. V11.05.01 06/03/2025 TT C-0956940 Added OBAUORNO and OBAUOVIS fields 
+. V12.01.01 23/01/2026 TTI C-0930214 Added OBAUOCOR                             
+. V11.05.01 06/03/2025 TT C-0956940 Added OBAUORNO and OBAUOVIS fields          
 . V10.05.02 14/10/2014 PV C-301518 Added Index 2                                
 . V10.05.01 10/09/2014 SA C-301518 Created FD                                   
 . *----------------------------------------------------------------------
@@ -38,7 +39,8 @@ OBAUTYPE  DIM       1      1        47    Audit Type
 OBAUREAS  DIM       3      3        48    Update Reason (Cat wo)             
 OBAUORNO  DIM       8      8        51    Original U/R Number                
 OBAUOVIS  DIM       8      8        59    Original Visit Number              
-OBAUSPAR  DIM       34     34       67    Spare Variable                     
+OBAUOCOR  DIM       4      4        67    Original Corresponence ID          
+OBAUSPAR  DIM       30     30       71    Spare Variable                     
 .
 .End of Record                      101  
 .

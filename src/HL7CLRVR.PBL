@@ -4,6 +4,8 @@
 .*         Used by the HL7 PAS-CIS Interface.                                *
 .*                                                                           *
 .* Modifications:                                                            *
+.*        13/01/2026  Davin            TSK 0961944                           *
+.*                    Added clears for NTE segment variables (CLNTE000)      *
 .*        21/10/2025  Bella Turco      TSK 0960178                           *
 .*                    Added ZXP077                                           *
 .*        07/10/2025  Davin            TSK 0946211 (unrelated issue)         *
@@ -385,6 +387,28 @@ CLNK1000  PACK      NK1001,SP70
           CLEAR     NK1032
 .
 CLNK1999  RETURN
++
+.*****************************************************************************
+.*                           CLNTE000                                        *
+.*                 Clear all the NTE fields                                  *
+.*****************************************************************************
+.
+CLNTE000  PACK      NTE001,SP70
+          PACK      NTE002,SP70
+          PACK      NTE003,SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100:
+                           SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100:
+                           SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100:
+                           SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100:
+                           SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100:
+                           SP100
+          PACK      NTE004,SP70,SP70,SP70,SP70
+.
+          CLEAR     NTE001
+          CLEAR     NTE002
+          CLEAR     NTE003
+          CLEAR     NTE004
+.
+CLNTE999  RETURN
 +
 .*****************************************************************************
 .*                           CLPV1000                                        *

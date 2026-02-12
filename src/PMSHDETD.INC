@@ -5,6 +5,8 @@
 . *----------------------------------------------------------------------
 . *
 . * Modifications  :
+. * V12.01.01 16/05/2025 J.Tan      TSK 0956147
+. *           Added HAC Flags PMSHDE073 .. PMSHDE089
 . * V10.14.02 10/07/2019 Peter Vela TSK 0857392
 . *           Added Ventilation, Unknown
 . * V10.14.01 02/07/2019 Peter Vela TSK 0857392
@@ -94,6 +96,23 @@ PMHDE004  DIM       3      HAC Complexity Field
 .         003 - MDC - 065 - MDC 939-951 (Factors Influencing Health Status &
 .                                        Other Contacts with Health Services)
 .         003 - MDC - 070 - MDC          Unknown
+.
+.         004 – HAC Flag - AMI - Acute myocardial infarction
+.         004 – HAC Flag – CAN - Cancer
+.         004 – HAC Flag – CHF – Congestive heart failure
+.         004 - HAC Flag - CTD - Connective Tissue Disorder
+.         004 - HAC Flag - CVA - Cerebral vascular accident
+.         004 - HAC Flag - DEM - Dementia
+.         004 - HAC Flag - DIA - Diabetes
+.         004 - HAC Flag - HIV – HIV
+.         004 - HAC Flag - LIV – Liver Disease
+.         004 - HAC Flag - MCA – Metastatic Cancer
+.         004 - HAC Flag - PAR - Paraplegia
+.         004 - HAC Flag - PEP – Peptic Ulcer
+.         004 - HAC Flag - PUL - Pulmonary disease
+.         004 - HAC Flag - PVD - Peripheral vascular disease
+.         004 - HAC Flag - REN – Renal Disease
+.         004 - HAC Flag - SLD – Severe Liver Disease
 .
 .         001 - Charlson - 066 - Charlson Score 0
 .
@@ -192,3 +211,30 @@ PMHDE070  FORM      10.4   Complex Val 003 - MDC - 068 - Alcohol/Drug Use&
 .                          Induced Organic Mental Disorder
 PMHDE071  FORM      10.4   Complex Val 003 - MDC - 069 - Ventilation
 PMHDE072  FORM      10.4   Complex Val 003 - MDC - 070 - Unknown
+.
+PMHDE073  FORM      10.4   Complex Val 004 – HAC Flag - AMI
+.                                          - Acute myocardial infarction
+PMHDE074  FORM      10.4   Complex Val 004 – HAC Flag – CAN - Cancer
+PMHDE075  FORM      10.4   Complex Val 004 – HAC Flag - CHF 
+.                                          – Congestive heart failure
+PMHDE076  FORM      10.4   Complex Val 004 - HAC Flag - CTD
+.                                          - Connective Tissue Disorder
+PMHDE077  FORM      10.4   Complex Val 004 - HAC Flag - CVA
+.                                          - Cerebral vascular accident
+PMHDE078  FORM      10.4   Complex Val 004 - HAC Flag - DBC
+.                                          - Diabetes complication
+PMHDE079  FORM      10.4   Complex Val 004 - HAC Flag - DEM - Dementia
+PMHDE080  FORM      10.4   Complex Val 004 - HAC Flag - DIA - Diabetes
+PMHDE081  FORM      10.4   Complex Val 004 - HAC Flag - HIV – HIV
+PMHDE082  FORM      10.4   Complex Val 004 - HAC Flag - LIV – Liver Disease
+PMHDE083  FORM      10.4   Complex Val 004 - HAC Flag - MCA – Metastatic Cancer
+PMHDE084  FORM      10.4   Complex Val 004 - HAC Flag - PAR - Paraplegia
+PMHDE085  FORM      10.4   Complex Val 004 - HAC Flag - PEP – Peptic Ulcer
+PMHDE086  FORM      10.4   Complex Val 004 - HAC Flag - PUL - Pulmonary disease
+PMHDE087  FORM      10.4   Complex Val 004 - HAC Flag - PVD
+.                                          - Peripheral vascular disease
+PMHDE088  FORM      10.4   Complex Val 004 - HAC Flag - REN – Renal Disease
+PMHDE089  FORM      10.4   Complex Val 004 - HAC Flag - SLD
+.                                          – Severe Liver Disease
+.
+.

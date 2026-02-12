@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser"    content="true">
@@ -25,6 +25,9 @@ function UpdateDetails() {
    }
 }
 function valProc() {
+   if (!isWhitespace(UpdateForm.newprocc.value)) {
+    UpdateForm.newprocc.value=trim(UpdateForm.newprocc.value);
+   }
    validateCode(27,UpdateForm.newprocc,UpdateForm.wattr003,AddForm.wpgrp)
 }
 function valProcSubmit() {

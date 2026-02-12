@@ -5,6 +5,15 @@
 .
 . Modifications  : 
 .-------------------------------------------------------------------------------
+. V12.01.06 04/02/2026  Ebon Clements  TSK 0971780
+.           Added HMLTLINK to table sort field 8 when time ready to depart
+.           recovery is blank - RECLST40
+. V12.01.05 27/01/2026  J.Tan          TSK 0970317
+.           Mod CINV0000 - checking if Current Theatre case has been invoiced
+. V12.01.04 05/01/2026  J.Tan          TSK 0970317
+.           Added CINV0000 - checking if Theatre case has been invoiced
+. V12.01.03 09/01/2026  J.Tan          TSK 0969989
+.           Mod to initialise PMMIITYP - item type
 . V12.01.02 27/11/2025  Bella Turco    TSK 0956710
 .           Skip 'anaesthetic started/previous patient out of theatre'
 .           validation if overnight indicator is set POTPRV10
@@ -2346,7 +2355,7 @@ ISERASE   INIT      "iserase "
 .
 .******************************************************************************
 PRGID     INIT      "OPRWEB06"                                                *
-VERSION   INIT      "V12.01.02"
+VERSION   INIT      "V12.01.06"
 PRGNAM    INIT      "Theatre Information Server"                              *
 .******************************************************************************
           CALL      WEBINT00                * Initialise FIFO Etc.
@@ -6926,6 +6935,7 @@ WRITM400  APPEND    SP70,PMMIDESC
           MOVE      SP70,PMMITMNO
           MOVE      SP70,PMMIPMBS
           MOVE      SP70,PMMIRBRS
+          MOVE      SP70,PMMIITYP
           PACK      PMMIACOI,SP70       * After Care Override Indicator
           PACK      PMMIDSOV,SP70       * Duplicate Service Override
           PACK      PMMISTXT,SP70       * Service Text
@@ -10112,6 +10122,7 @@ MISCHG10  MOVE     OPDAADMN,KEY8
           MOVE      SP70,PMMIPMBS
           MOVE      SP70,PMMIRBRS
           MOVE      SP70,PMMICTYP
+          MOVE      SP70,PMMIITYP
           PACK      PMMIACOI,SP70       * After Care Override Indicator
           PACK      PMMIDSOV,SP70       * Duplicate Service Override
           PACK      PMMISTXT,SP70       * Service Text
@@ -16118,7 +16129,7 @@ CMBS0000  BRANCH    FLDITMNO,CMBS0100,CMBS0200,CMBS0300,CMBS0400,CMBS0500:
                              CMBS1100,CMBS1200,CMBS1300,CMBS1400,CMBS1500:
                              CMBS1600,CMBS1700,CMBS1800,CMBS1900,CMBS2000:
                              CMBS2100,CMBS2200,CMBS2300,CMBS2400,CMBS2500:
-                             CMBS2600,CMBS2700
+                             CMBS2600,CMBS2700,CMBS2800
 .
           WRITE     HTMLFILE;"Invalid Tag";
           GOTO      CMBS9999
@@ -16239,7 +16250,71 @@ CMBS2600  WRITE     HTMLFILE;NOWARNFL;      * No Warning message flag
 CMBS2700  WRITE     HTMLFILE;MBSTOTAL;      * Total number of MBS Items all team
           GOTO      MISC9999
 .
+CMBS2800  CALL      CINV0000                * Check if Case has been invoiced
+          WRITE     HTMLFILE;FORM1;
+          GOTO      MISC9999
+.
 CMBS9999  RETURN
++
+.******************************************************************************
+.         Only allow to Add MBS to the last Theatre Case/Booking Unique ID or
+.         Un-invoiced previous Case/Booking Unique ID
+.******************************************************************************
+CINV0000  MOVE      ZERO,FORM1
+          MATCH     "1",OPCNCOMB
+          GOTO      CINV9999 IF NOT EQUAL  * Not using 'Combined CMBS&Misc.Chrg)
+.
+          MATCH     SP70,OPDAADMN
+          GOTO      CINV9999 IF EQUAL
+.
+          MOVE      OPDAADMN,KEY8
+          MOVE      OPDAUNIQ,KEY10
+.
+          PACK      KEY31,OPDAADMN,Z70
+          CALL      RSOPDEA2
+          CALL      RPOPDEA2                * Reading Through Operation Detail
+          BRANCH    OVRCD,CINV8000
+.
+          MATCH     KEY8,OPDAADMN
+          GOTO      CINV8000 IF NOT EQUAL
+.
+          MATCH     KEY10,OPDAUNIQ
+          GOTO      CINV1000 IF NOT EQUAL   * this is not the last Theatre case
+.
+          MOVE      TWO,FORM1         * This is the last or Current Theatre case
+.
+.         This Unique ID is not the Last Case for the Admission, so we need to
+.         check if this Unique ID has been invoiced
+.
+CINV1000  PACK      KEY22,KEY8,SP20
+          CALL      RDSDTRN1
+CINV2000  CALL      RDKDTRN1
+          BRANCH    OVRCD,CINV8000          * no (more) details for admission
+.
+          MATCH     KEY8,DTADMNO
+          GOTO      CINV8000 IF NOT EQUAL   * different admission
+.
+          MATCH     "1",PTDTCRST
+          GOTO      CINV2000 IF EQUAL       * Fully credited
+.
+          MATCH     SP70,PTDTUNIQ
+          GOTO      CINV2000 IF EQUAL
+.
+          MATCH     KEY10,PTDTUNIQ
+          GOTO      CINV2000 IF NOT EQUAL
+.
+          COMPARE   TWO,FORM1
+          GOTO      CINV9000 IF EQUAL       * Current case has been invoiced
+.
+CINV6000  MOVE      ONE,FORM1               * selected case has been invoiced
+          GOTO      CINV9000
+.
+CINV8000  MOVE      ZERO,FORM1
+CINV9000  CALL      RDOPDEA3                * reposition
+          IF        OVRCD=1
+            CALL      CLOPRDEA
+          ENDIF
+CINV9999  RETURN
 +
 .******************************************************************************
 .*                Display Extra MBS Items                                     *
@@ -18294,7 +18369,7 @@ RECLST40  CALL      SESDET00
                                "#"",HTMLLINK,"#",":
                                "#"",OPARTIDP,"#",":
                                "#"",OPARTETC,"#",":
-                               "#"",SP70,"#",":
+                               "#"",HTMLLINK,"#",":                  * 8
                                "#"",KEY7,"#",":
                                "#"",OPARUT11,"#",":
                                "#"",PATFLDER,"#",":

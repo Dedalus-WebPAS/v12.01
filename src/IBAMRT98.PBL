@@ -8,6 +8,9 @@
 .* Comment  :  Copied from IBATRA98 and modified for the new Medical          *
 .*          :  Records Tracking system for H.R.H.                             *
 .* Mods     :                                                                 *
+.*        V12.01.01 02/02/2026  Zumin Yu         TSK 0972011                  *
+.*                  Added position number to MRCNMECH in WRUCS2 & DISPUCS2    *
+.****************************************************************************** 
 .*        V10.06.01 24/09/2015  Davin            CAR 316612                   *
 .*                  Moved MRCNGRUP from hospital screen 2 to web front end    *
 .******************************************************************************
@@ -263,7 +266,7 @@ VERT      FORM      2
 .
 PRGID     INIT      "IBAMRT98"
 PRGNAM    INIT      "Med. Rec. Tracking Parameter Maintenance"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 .
 .*********************************************************************
 .         START OF PROGRAM
@@ -1493,7 +1496,7 @@ WRUSR1    WRITAB    CONTROLF,SIXTY;*77,MRCNLPAG,MRCNLSIZ,MRCNLAYT,MRCNTLOC:
 .
 WRUCS2    WRITAB    CONTROLF,NINTY7;*1,MRCNIN1A,*21,MRCNIN1B,*41,MRCNIN1C:
                                     *61,MRCNIN1D,*81,MRCNIN1E:
-                                    MRCNMECH  
+                                    *146,MRCNMECH  
           WRITAB    CONTROLF,SIXTY;*135,MRCNMOVR,MRCNMOVP,MRCNMOVT,*148,MRCNWNHL
           WRITAB    CONTROLF,NINTY7;*148,MRCNMSCD,*151,MRCNTDAD,*152,MRCNACRR:
                                     *153,MRCNACRV,*154,MRCNUSRD,*155,MRCNAMTR:
@@ -1509,7 +1512,7 @@ WRUCS2    WRITAB    CONTROLF,NINTY7;*1,MRCNIN1A,*21,MRCNIN1B,*41,MRCNIN1C:
 .********************************************************************
 DISPUCS2  READ      CONTROLF,NINTY7;*1,MRCNIN1A,*21,MRCNIN1B,*41,MRCNIN1C:
                                     *61,MRCNIN1D,*81,MRCNIN1E:
-                                    MRCNMECH
+                                    *146,MRCNMECH
           READ      CONTROLF,SIXTY;*135,MRCNMOVR,*139,MRCNMOVP,*143,MRCNMOVT:
                                    *148,MRCNWNHL
           READ      CONTROLF,NINTY7;*148,MRCNMSCD,*151,MRCNTDAD,*152,MRCNACRR:

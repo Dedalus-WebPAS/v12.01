@@ -1,0 +1,49 @@
+<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateHome" content="evonz">
+<meta name="HelpFileName" content="NoContextSet.html">
+<meta name="CrossBrowser" content="true">
+<script type="text/javascript">
+
+function SetValue() {
+  if (validateMandatory(UpdateForm)) UpdateForm.submit();
+}
+</script>
+</head>
+%START.OF.PAGE
+<body onload="PageLoad(event)">
+<span class=DFrameTitleBar>
+  <img align="right" alt="Exit" class="MenuIcon" src="../images/ExitIcon.gif" onclick="DFrameExit();">
+  ASA Score
+</span>
+
+<table border="0" cellpadding="2" cellspacing="0" width="95%" align=center >
+  <form name=UpdateForm method=post action=oprweb01.pbl onsubmit='return validateMandatory(this);'>
+    <input type=hidden name=reportno value=5>
+    <input type=hidden name=template value=1>
+    <input type=hidden name=updatedb value="1">
+    <input type=hidden name=urnumber value="%OPRWEB01.04.003">
+    <input type=hidden name=admissno value="%OPRWEB01.04.081">
+    <input type=hidden name=casekeys value="%OPRWEB01.04.101">
+    <input type=hidden name=opsedate value="%OPRWEB01.04.302">
+    <input type=hidden name=currdate value="%STANDARD.01.013">
+    <input type=hidden name=currtime>
+
+    <tr>
+      <td class=DataLabel>ASA Score</td>
+      <td class=DataField>
+        <select name=opard045 title="ASA Score">
+          <option></option>
+          %OPRWEB01.04.445.2
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan=4 align=center>
+        <input class="button" type=button id="opr01sub" value="OK" onclick="tempDisable(this); SetValue();">
+        <input class="button" type=button value="Cancel" onclick=DFrameClose()>
+      </td>
+    </tr>
+  </form>
+</table>
+

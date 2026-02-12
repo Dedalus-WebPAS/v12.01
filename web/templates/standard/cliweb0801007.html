@@ -1,10 +1,482 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="CrossBrowser" content="true">
-<meta name="HelpFileName"    content="NoContextSet.html">
+<meta name="HelpFileName" content="NoContextSet.html">
 <script type="text/javascript" src="../js/cliweb08.js"> </script>
+<script type="text/javascript">
+function DisplayTransferClinicalDoc() {
+  f = document.UpdateForm;
+  if (f.catwiin8.value == "R") {
+    document.getElementById('UpdateVisit').style.display = "none";
+    document.getElementById('TransDocOption').style.display = "none";
+  }
+  else {
+    if (VariableNameExists('AllowTSFClinicalDocs')) {
+      if (AllowTSFClinicalDocs == true) {
+        document.getElementById('UpdateVisit').style.display = "";
+        document.getElementById('TransDocOption').style.display = "";
+      }
+      else {
+        document.getElementById('UpdateVisit').style.display = "none";
+        document.getElementById('TransDocOption').style.display = "none";
+      }
+    }
+    else {
+      document.getElementById('UpdateVisit').style.display = "none";
+      document.getElementById('TransDocOption').style.display = "none";
+    }
+  }
+
+  ShowOptionBlank();
+
+  f.currvist.value = f.obpccvis.value;
+  if (f.currvist.value == "00000000") {
+    f.currvist.value = "";
+  }
+}
+function ShowOptionBlank() {
+  HideDetOption1();
+  HideDetOption2();
+  HideDetOption3();
+  HideUpdateUrDetails();
+  HideDetOption3a();
+  ShowCorrespFile();
+}
+function ShowOption1() {
+  ShowDetOption1();
+  HideDetOption2();
+  HideDetOption3();
+  HideUpdateUrDetails();
+  HideDetOption3a();
+  HideCorrespFile();
+}
+function ShowOption2() {
+  HideDetOption1();
+  ShowDetOption2();
+  HideDetOption3();
+  HideUpdateUrDetails();
+  HideDetOption3a();
+  HideCorrespFile();
+}
+function ShowOption3() {
+  HideDetOption1();
+  HideDetOption2();
+  ShowDetOption3();
+  HideUpdateUrDetails();
+  ShowDetOption3a();
+  HideCorrespFile();
+}
+function ShowOption4() {
+  HideDetOption1();
+  HideDetOption2();
+  ShowDetOption3();
+  HideUpdateUrDetails();
+  HideDetOption3a();
+  HideCorrespFile();
+}
+function HideDetOption1() {
+  f = document.UpdateForm;
+  document.getElementById('TransferClinicalDocOption1').style.display = "none";
+  ClearDetOption1();
+  RemoveClassName(f.updadno1,"Mandatory");
+}
+function HideDetOption2() {
+  f = document.UpdateForm;
+  document.getElementById('TransferClinicalDocOption2').style.display = "none";
+  ClearDetOption2();
+}
+function HideDetOption3() {
+  f = document.UpdateForm;
+  document.getElementById('TransferClinicalDocOption3').style.display = "none";
+  ClearDetOption3();
+  RemoveClassName(f.updurno3,"Mandatory");
+  RemoveClassName(f.updadno3,"Mandatory");
+}
+function HideDetOption3a() {
+  f = document.UpdateForm;
+  document.getElementById('TransferClinicalDocOption3a').style.display = "none";
+  ClearDetOption3a();
+  RemoveClassName(f.updadno3,"Mandatory");
+}
+function HideCorrespFile() {
+  document.getElementById('CorrespFile').style.display = "none";
+  ClearCorrespFile();
+}
+function ShowDetOption1() {
+  document.getElementById('TransferClinicalDocOption1').style.display = "";
+  AddClassName(f.updadno1,"Mandatory");
+}
+function ShowDetOption2() {
+  document.getElementById('TransferClinicalDocOption2').style.display = "";
+}
+function ShowDetOption3() {
+  document.getElementById('TransferClinicalDocOption3').style.display = "";
+  AddClassName(f.updurno3,"Mandatory");
+  ShowDetOption3a();
+}
+function ShowDetOption3a() {
+  document.getElementById('TransferClinicalDocOption3a').style.display = "";
+  AddClassName(f.updadno3,"Mandatory");
+}
+function ShowCorrespFile() {
+  document.getElementById('CorrespFile').style.display = "";
+}
+function ClearDetOption1() {
+  f = document.UpdateForm;
+  f.updadno1.value = "";
+}
+function ClearDetOption2() {
+  f = document.UpdateForm;
+  f.updadno2.value = "";
+}
+function ClearDetOption3() {
+  f = document.UpdateForm;
+  f.updurno3.value = "";
+  f.updurnm3.value = "";
+}
+function ClearDetOption3a() {
+  f = document.UpdateForm;
+  f.updadno3.value = "";
+}
+function ClearCorrespFile() {
+  f = document.UpdateForm;
+  f.corsp001.value = "";
+}
+function ShowHideUpdateUrDetails() {
+  f = document.UpdateForm;
+  if (isWhitespace(f.updurno3.value)) {
+    HideUpdateUrDetails();
+  }
+  else {
+    ShowUpdateUrDetails();
+  }
+}
+function HideUpdateUrDetails() {
+  document.getElementById('UrDetail1').style.display = "none";
+  document.getElementById('UrDetail2').style.display = "none";
+  document.getElementById('UrDetail3').style.display = "none";
+  ClearUrDetals();
+}
+function ShowUpdateUrDetails() {
+  document.getElementById('UrDetail1').style.display = "";
+  document.getElementById('UrDetail2').style.display = "";
+  document.getElementById('UrDetail3').style.display = "";
+}
+function ClearUrDetals() {
+  f = document.UpdateForm;
+  f.pattitle.value = "";
+  f.patsname.value = "";
+  f.patgname.value = "";
+  f.patsex.value = "";
+  f.patdob.value = "";
+}
+function TransferClinicalDocChange() {
+  f = document.UpdateForm;
+  optn = f.corsp020.value;
+  if (optn == "") {
+    ShowOptionBlank();
+  }
+  if (optn == "1") {
+    ShowOption1();
+  }
+  if (optn == "2") {
+    ShowOption2();
+  }
+  if (optn == "3") {
+    ShowOption3();
+  }
+  if (optn == "4") {
+    ShowOption4();
+  }
+}
+function ValidateVisit1(AdmNo) {
+  f = document.UpdateForm;
+  justifyRight(AdmNo);
+
+  if (isWhitespace(AdmNo.value)) {return;}
+
+  if (AdmNo.value == f.currvist.value) {
+    alert('Error: Update Visit Number ' + AdmNo.value +
+          ' is the same as Current Visit Number ' + f.currvist.value);
+    AdmNo.value = "";
+    return;
+  }
+
+  if (!validateCode(12,AdmNo,f.patfname,f.psex,f.pbdate,f.pcease,
+                    f.purno,f.dummy,f.lastvdat,f.lastvtyp)) {
+    return;
+  }
+  
+  if (f.purno.value != f.urnumber.value) {
+    alert('Error: Invalid Update Visit Number ' + AdmNo.value +
+          ' for this U/R Number ' + f.urnumber.value);
+    AdmNo.value = "";
+    return;
+  }
+  return;
+}
+function ValidateVisit3(UrNo,AdmNo) {
+  f = document.UpdateForm;
+  justifyRight(AdmNo);
+
+  if (isWhitespace(AdmNo.value)) {return;}
+
+  if (isWhitespace(UrNo.value)) {
+    alert("Error: Update U/R Number must enter first");
+    AdmNo.value = "";
+    return;
+  }
+
+  if (AdmNo.value == f.currvist.value) {
+    alert('Error: Update Visit Number ' + AdmNo.value +
+          ' is the same as Current Visit Number ' + f.currvist.value);
+    AdmNo.value = "";
+    return;
+  }
+
+  if (!validateCode(12,AdmNo,f.patfname,f.psex,f.pbdate,f.pcease,
+                    f.purno,f.dummy,f.lastvdat,f.lastvtyp)) {
+    return;
+  }
+
+  if (f.purno.value != UrNo.value) {
+    alert('Error: Invalid Update Visit Number ' + AdmNo.value +
+          ' for Update U/R Number ' + UrNo.value);
+    AdmNo.value = "";
+    return;
+  }
+  return;
+}
+function VisitSearchFrameClicked(UrNo,AdmNo) {
+  if (isWhitespace(UrNo.value)) {
+    alert("Error: Update U/R Number must enter first");
+    return;
+  }
+  VisitSearchFrame(UrNo,AdmNo);
+}
+function ReturnFromVisitSearch(VisitNo) {
+  f = document.UpdateForm;
+  optn = f.corsp020.value;
+  if (optn == "1") {
+    ValidateVisit1(f.updadno1);
+    return; 
+  }
+  if (optn == "3") {
+    ValidateVisit3(f.updurno3,f.updadno3);
+    return;
+  }
+}
+function ValidateUR3() {
+  f = document.UpdateForm;
+  ValidateUR(f.updurno3,f.updurnm3);
+}
+function ValidateUR(UrNo,UrName) {
+  f = document.UpdateForm;
+  UrName.value = "";
+  justifyRight(UrNo);
+
+  if (isWhitespace(UrNo.value)) {
+    HideUpdateUrDetails();
+    ClearDetOption3a();
+    return;
+  }
+
+  if (UrNo.value == f.urnumber.value) {
+    alert('Error: Update U/R Number ' + UrNo.value +
+          ' is the same as current U/R ' + f.urnumber.value);
+    UrNo.value = "";
+    HideUpdateUrDetails();
+    ClearDetOption3a();
+    return;
+  }
+
+  if (!validateURFreeFormat1(UrNo,UrName)) { return; }
+
+  if (!validateURFreeFormat2(UrNo,UrName)) { return; }
+
+  ShowUpdateUrDetails();
+
+  CheckurVisit(7,
+               f.currdate,
+               f.updurno3,
+               f.dummy,
+               f.updadno3);
+}
+function validateURFreeFormat1(ReturnCode,ReturnName) {
+  ReturnName.value="";
+
+  var serverURL   = "../cgi-bin/patweb80.pbl?reportno=13" +
+                    "&valdcode=" + ReturnCode.value.replace(/ /g,"+")
+  var returnValue = RSExecute(serverURL);
+  if (returnValue.status==0) {
+    ReturnValue=returnValue.return_value.split("|")
+    ReturnName.value=trim(ReturnValue[0])
+    return true;
+  }
+  else {
+    ReturnCode.value="";
+    ReturnCode.focus();
+    return false;
+  }
+}
+function validateURFreeFormat2(ReturnCode,ReturnName) {
+  f = document.UpdateForm;
+
+  var serverURL   = "../cgi-bin/patweb80.pbl?reportno=13" +
+                    "&valdcode=" + ReturnCode.value.replace(/ /g,"+") +
+                    "&returnfm=1";
+  var returnValue = RSExecute(serverURL);
+  if (returnValue.status==0) {
+    ReturnValue=returnValue.return_value.split("|")
+    if (ReturnValue.length == 1) {
+      ReturnCode.value = "";
+      ReturnName.value = "";
+      HideUpdateUrDetails();
+      return false;
+    }
+    f.pattitle.value = trim(ReturnValue[3]);                // Title
+    f.patsname.value = trim(ReturnValue[1]);                // Surname
+    f.patgname.value = trim(ReturnValue[2]);                // Given Names
+    f.patdob.value = trim(ReturnValue[5]);                  // Date Of Birth
+    PatientSexDesc(ReturnValue[4]);                          // Sex  
+
+    ShowUpdateUrDetails();
+    return true;
+  }
+  else {
+    ReturnCode.value = "";
+    ReturnCode.focus();
+    HideUpdateUrDetails();
+    return false;
+  }
+}
+function PatientSexDesc(PSex) {
+  f = document.UpdateForm;
+  f.patsex.value = PSex;
+  acat = "G "
+  serverURL = "../cgi-bin/comweb81.pbl?reportno=61" +
+              "&valdctyp=" + acat.replace(/ /g,"+") +
+              "&valdcode=" + PSex.replace(/ /g,"+")
+  var returnValue = RSExecute(serverURL);
+  if (returnValue.status == 0) {
+    ReturnValue = returnValue.return_value.split("|")
+    if (ReturnValue.length > 1) {
+      f.patsex.value = trim(ReturnValue[2]);
+    }
+  }
+}
+//Ajax Call retrieving data based on UR number
+function CheckurVisit(OptionNumber,OptionDate,ReturnCode,ReturnName) {
+  ReturnFunction="" ;
+  ReturnName.value="";
+
+  //Checks arguments for a function, and assigns it to ReturnFuction
+  //Otherwise clares it.
+  for (var i=3; i < CheckurVisit.arguments.length; i++) {
+    if (typeof(CheckurVisit.arguments[i]) == 'function') {
+      ReturnFunction=CheckurVisit.arguments[i] }
+    else {
+      CheckurVisit.arguments[i].value=""; }  }
+
+  if (isWhitespace(ReturnCode.value)) return;
+
+  //Calls the backend
+  var serverURL  = "../cgi-bin/allweb03.pbl?reportno=" + OptionNumber +
+               "&valddate=" + OptionDate.value.replace(/ /g,"+") +
+               "&returnfm=2" +
+               "&valdcode=" + ReturnCode.value.replace(/ /g,"+")
+  var returnValue = RSExecute(serverURL);
+
+  //Was the retrieval successul
+  if (returnValue.status==0) {
+    ReturnValue=returnValue.return_value.split("|")
+    ReturnName.value=trim(ReturnValue[0])
+    j=0
+
+    //Goes through the results and assigns the data
+    for (var i=4; i < CheckurVisit.arguments.length; i++) {
+       if (typeof(CheckurVisit.arguments[i]) != 'function') {
+         j++
+         CheckurVisit.arguments[i].value=ReturnValue[j] } }
+
+    //Otherwise returns the function
+    if (typeof(ReturnFunction) == 'function') {
+       ReturnFunction() } }
+  else {
+    ReturnCode.select();  }
+}
+function UpdateButtonClicked() {
+  f = document.UpdateForm;
+  f.updttype.value = "U";
+  MandatoryOk = validateMandatory(f)
+  if (!MandatoryOk) { return; }
+
+  f.corsp021.value = "";
+  f.corsp022.value = "";
+
+  optn = f.corsp020.value;
+  if (optn == "1") {
+    f.corsp022.value = f.updadno1.value;
+    if (confirm("Warning: Clinical Document will be transferred \n" +
+        "From Visit " + f.currvist.value + "\n" +
+        "To      Visit " + f.corsp022.value + "\n" +
+        "Click OK to transfer OR Click Cancel to Exit without transfer")) {
+      f.submit();
+    }
+    else {
+      return ;
+    }
+  }
+  if (optn == "2") {
+    if (f.updadno2.value == f.currvist.value) {
+      alert('Error: Update Visit Number ' + f.updadno2.value +
+            ' is the same as Current Visit Number ' + f.currvist.value);
+      return;
+    }
+    f.corsp022.value = f.updadno2.value;
+    if (confirm("Warning: Clinical Document will be transferred" + "\n" +
+        "From Visit " + f.currvist.value + "\n" +
+        "To U/R " + f.urnumber.value + "\n" +
+        "Click OK to transfer OR Click Cancel to Exit without transfer")) {
+      f.submit();
+    }
+    else {
+      return ;
+    }
+  }
+  if (optn == "3") {
+    f.corsp021.value = f.updurno3.value;
+    f.corsp022.value = f.updadno3.value;
+    if (confirm("Warning: Clinical Document will be moved \n" +
+        "From U/R " + f.urnumber.value +
+        ", Visit Number " + f.currvist.value + "\n" + 
+        "To     U/R " + f.corsp021.value +
+        ", Visit Number " + f.corsp022.value + "\n" +
+        "Click Ok to transfer OR Click Cancel to Exit without transfer")) {
+      f.submit();
+    }
+    else {
+      return ;
+    }
+  }
+  if (optn == "4") {
+    f.corsp021.value = f.updurno3.value;
+    if (confirm("Warning: Clinical Document will be moved \n" +
+        "from U/R " + f.urnumber.value + "\n" +
+        "to     U/R " + f.corsp021.value + "\n" +
+        "Click Ok to transfer OR Click Cancel to Exit without transfer")) {
+      f.submit();
+    }
+    else {
+      return ;
+    }
+  }
+
+  f.submit();
+}
+</script>
 %START.OF.PAGE
-<body onload="PageLoad(event);">                            
+<body onload="PageLoad(event);DisplayTransferClinicalDoc();">                  
 <span class=DFrameTitleBar>
 <img align="right" alt="Exit" class="MenuIcon" 
  src="../images/ExitIcon.gif" onclick="DFrameExit();">
@@ -19,24 +491,39 @@
   <input type=hidden name=detailky value="%CLIWEB08.01.125">
   <input type=hidden name=updateky value="%CLIWEB08.01.124">
   <input type=hidden name=lnkalert id=lnkalert value="%CLIWEB08.01.162">
+  <input type=hidden name=urnumber value="%CLIWEB08.01.003">
+  <input type=hidden name=dummy  id=dummy value="">
+  <input type=hidden name=dummy1 id=dummy1 value="">
+  <input type=hidden name=patfname value="">
+  <input type=hidden name=psex     value="">
+  <input type=hidden name=pbdate   value="">
+  <input type=hidden name=pcease   value="">
+  <input type=hidden name=purno    value="">
+  <input type=hidden name=lastvdat value="">
+  <input type=hidden name=lastvtyp value="">
+  <input type=hidden name=corsp021 id=corsp021 value="">
+  <input type=hidden name=corsp022 id=corsp022 value="">
+  <input type=hidden name=currdate id=currdate value="%STANDARD.01.015">
+  <input type=hidden name=obpccvis id=obpccvis value="%CLIWEB08.01.103">
+  <input type=hidden name=catwiin8 id=catwiin8 value="%CLIWEB08.01.163">
 
-<table align=center width=95% align=center border=0 cellspacing=0>
-<tr><td width=30% class=DataLabel>Created/Linked by</td>
+<table width=95% align=center border=0 cellspacing=0>
+<tr><td width=25% class=DataLabel>Created/Linked by</td>
     <td class=DataField>%CLIWEB08.01.106.0 </td></tr>
-<tr><td width=30% class=DataLabel>Last Updated by</td>
+<tr><td width=25% class=DataLabel>Last Updated by</td>
     <td class=DataField>%CLIWEB08.01.123.0 on
                         %CLIWEB08.01.121 at %CLIWEB08.01.122  
     </td></tr>
-<tr><td width=30% class=DataLabel>Reason for Change</td>
+<tr><td width=25% class=DataLabel>Reason for Change</td>
     <td class=DataField>%CLIWEB08.01.115.0 </td></tr>
 <tr><td class=DataLabel>Date</td>
-    <td><input type="text" name="corsp002" size="12" value="%CLIWEB08.01.104"
+    <td><input type="text" name="corsp002" size=12 value="%CLIWEB08.01.104"
          onblur="checkDate(this,'Date')">
        <img notab src="../images/DateLookup.gif" class="Icon"
         alt="Calendar" date="UpdateForm.corsp002"></td>
 
 <tr><td class=DataLabel>Time</td>
-    <td><input type="text" name="corsp004" size="08" value="%CLIWEB08.01.105"
+    <td><input type="text" name="corsp004" size=12 value="%CLIWEB08.01.105"
          onblur="checkTime(this,'Time')">
        <img notab src="../images/DateTimeStamp.gif" class="Icon"
         alt="Current" date="UpdateForm.corsp002" time="UpdateForm.corsp004">
@@ -71,8 +558,119 @@
         <option></option>
         %CLIWEB08.01.115.2
         </select></td></tr>
+<tr id=UpdateVisit>
+    <td class=DataLabel>Current Visit Number</td>
+    <td><input type=text name=currvist id=currvist maxlength=8 size=12
+         class=Readonly readonly
+         title="Current Visit Number"
+         value="%CLIWEB08.01.103">
+    </td>
+</tr>
+<tr id=TransDocOption>
+    <td class=DataLabel>Transfer Clinical Document</td>
+    <td><select name=corsp020 title="Transfer Clinical Document"
+          onchange="TransferClinicalDocChange();">
+         <option value=""></option>
+         <option value="1">Transfer Clinical Document to Different Visit for Same Patient</option>
+         <option value="2">Transfer Clinical Document to U/R Only (Not Visit Assigned)</option>
+         <option value="3">Transfer Clinical Document to Different U/R and Visit</option>
+         <option value="4">Transfer Clinical Document to Different U/R Only (No Visit Assigned)</option>
+        </select>
+    </td>
+</tr>
+</table>
 
-<tr valign=top><td class=DataLabel>Alert Link</td>
+<table width=95% align=center border=0 cellspacing=0>
+<tr id=TransferClinicalDocOption1>
+    <td width=25% class=DataLabel>Update Visit Number</td>
+    <td><input type=text name=updadno1 id=updadno1 maxlength=8 size=12
+         title="Update Visit Number"
+         onchange="justifyRight(this);
+                   ValidateVisit1(UpdateForm.updadno1);">
+         <img src="../images/SearchIcon.gif" class=Icon
+          onclick="VisitSearchFrame(UpdateForm.urnumber,
+                                    UpdateForm.updadno1);">
+         <img src="../images/erase.gif" class=Icon
+          onclick="clrFields(UpdateForm.updadno1);">
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+<tr id=TransferClinicalDocOption2>
+    <td width=25% class=DataLabel>Update Visit Number</td>
+    <td><input type=text name=updadno2 id=updadno2 size=12
+         class=Readonly readonly
+         title="Update Visit Number">
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+<tr id=TransferClinicalDocOption3>
+    <td width=25% class=DataLabel>Update U/R Number</td>
+    <td><input type=text name=updurno3 id=updurno3 maxlength=8 size=12
+         title="Update U/R Number"
+         onchange="ValidateUR3();">
+        <input type=text name=updurnm3 id=updurnm3 size=50 maxlength=30
+         class=Readonly readonly
+         title="Update U/R Name">
+        <input type=hidden id=d2 name=d2>
+        <img src="../images/SearchIcon.gif" class=Icon notab
+         onclick="PatientSearchFrame(UpdateForm.updurnm3,
+                                     UpdateForm.updurno3,
+                                     UpdateForm.d2,
+                                     ValidateUR3);">
+        <img src="../images/erase.gif" class=Icon
+         onclick="clrFields(UpdateForm.updurno3,
+                            UpdateForm.updurnm3,
+                            UpdateForm.d2);
+                  ValidateUR3();">
+    </td>
+</tr>
+</table>
+
+<table width=95% align=center border=0 cellspacing=0>
+<tr id=UrDetail1>
+    <td width=25% class=DataLabel>Title</td>
+    <td width=35%><input type=text name=pattitle class=Readonly readonly size=40
+         title="Title"></td>
+    <td width=10% class=DataLabel>Sex</td>
+    <td><input type=text name=patsex class=Readonly readonly size=30
+         title="Sex"></td>
+</tr>
+<tr id=UrDetail2>
+    <td width=25% class=DataLabel>Surname</td>
+    <td><input type=text name=patsname class=Readonly readonly size=40
+         title="Surname"></td>
+    <td class=DataLabel>Date Of Birth</td>
+    <td><input type=text name=patdob class=Readonly readonly size=12
+         title="Date Of Birth"></td>
+</tr>
+<tr id=UrDetail3>
+    <td width=25% class=DataLabel>Given Name</td>
+    <td><input type=text name=patgname class=Readonly readonly size=40
+         title="Given Name"></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+<tr id=TransferClinicalDocOption3a>
+    <td width=25% class=DataLabel>Update Visit Number</td>
+    <td><input type=text name=updadno3 id=updadno3 maxlength=8 size=12
+         title="Update Visit Number"
+         onchange="ValidateVisit3(UpdateForm.updurno3,
+                                  UpdateForm.updadno3);">
+         <img src="../images/SearchIcon.gif" class=Icon
+          onclick="VisitSearchFrameClicked(UpdateForm.updurno3,
+                                           UpdateForm.updadno3);">
+         <img src="../images/erase.gif" class=Icon
+          onclick="clrFields(UpdateForm.updadno3);">
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+</table>
+
+<table width=95% align=center border=0 cellspacing=0>
+<tr><td width=25% class=DataLabel>Alert Link</td>
     <td><input type=hidden name=corsp017 id=corsp017 value="%CLIWEB08.01.141">
         <input type=hidden name=corsp018 id=corsp018 value="%CLIWEB08.01.142">
         <input type=hidden name=corsp019 value="%CLIWEB08.01.149">
@@ -82,13 +680,20 @@
         <img src="../images/ClearIcon.gif" class=Icon
         onclick="clrFields(corsp017,corsp018,alertdes);"> 
         </td></tr>
-
-<tr><td class=DataLabel>Correspondence File</td>
-    <td><input type=file size=35 name=corsp001></td></tr>
+<tr id=CorrespFile>
+    <td class=DataLabel>Correspondence File</td>
+    <td><input type=file size=35 name=corsp001 id=corsp001></td>
+</tr>
+<tr><td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
 <tr><td colspan=2 align=center>
-    <input type=button value="Update" class="button" onclick="setFormactn01('U');">
-    <input type=button value="Delete" class="button" onclick="setFormactn01('D');">
-    <input type=button value="Close" class="button" onclick="DFrameClose()">
+    <input type=button value="Update" class=button name=btnUpdate id=btnUpdate 
+     onclick="UpdateButtonClicked();">
+    <input type=button value="Delete" class=button
+     onclick="setFormactn01('D');">
+    <input type=button value="Close" class=button
+     onclick="DFrameClose()">
 </td></tr>
 </table>
 </form>

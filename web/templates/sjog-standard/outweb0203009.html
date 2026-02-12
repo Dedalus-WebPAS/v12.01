@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome"    content="sjog-standard">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser"    content="true"> 
@@ -83,7 +83,7 @@ function UpdateApp() {
       return;
     }
   }
-
+  
   setRedirect()
   if (validateMandatory(UpdateForm)) {
     EnableLetterFields(UpdateForm);
@@ -654,9 +654,9 @@ value="%OUTWEB02.03.303.1" >
 </form>
 <script type="text/javascript">
 function init(){
- var title = '%OUTWEB02.03.348.003'
- var gname  = '%OUTWEB02.03.348.004'
- var surname = '%OUTWEB02.03.348.005'
+ var title = "%OUTWEB02.03.348.003"
+ var gname  = "%OUTWEB02.03.348.004"
+ var surname = "%OUTWEB02.03.348.005"
 
  UpdateForm.genpname.value = trim(title)+" "+trim(gname)+" "+trim(surname);
 }

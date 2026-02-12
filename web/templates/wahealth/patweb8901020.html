@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -639,10 +639,11 @@ InsertPatientHeader()
 
 <tr><td class=DataLabel></td>
     <td></td>
-    <td class=DataLabel>Consent upload visit to My Health Record?</td>
-    <td><select name=ptmis037 tabindex=262 title="Upload to MyHR?">
-        <option></option>
-         %PATWEB89.01.133.2
+    <td class=DataLabel id="MyHRConsentTitle"></td>
+    <td><select name=pmsvx125 id=pmsvx125 tabindex=262 title="Upload to MyHR?">
+           <option value=" "></option>
+           <option value="0">No</option>
+           <option value="1">Yes</option>
         </select>&nbsp;(<a href="javascript:patientMyhrConsentForm();">form</a>)
         </td></tr>
 
@@ -736,6 +737,10 @@ InsertPatientHeader()
  if (MVAccYN == "1") {
    document.UpdateForm.pmext049.value = "1";
  }
+
+ document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;
+ document.getElementById("pmsvx125").title = ScreenLabelMyHRConsent;
+ document.getElementById("pmsvx125").value = trim("%PATWEB89.01.998.037");
 </script>
 
 <span id=disasteridnumbertitleSPAN style="display:none">

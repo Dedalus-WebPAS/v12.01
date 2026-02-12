@@ -5,6 +5,9 @@
 .
 . Modifications  :
 .----------------------------------------------------------------------
+. V12.01.01 03/02/2026  PJ Le Febour   TSK 0972012
+.           PMSPRG00 -  CatCode=G IND16=P Pregnancy Details allowed
+.----------------------------------------------------------------------
 . V11.02.02 31/10/2022  Bella Turco    TSK 0921957
 .           Added NOMORE00 - Display "No more records" at end of list
 .           Added PTCNNRTD - Displays number of rows set by parameter value.
@@ -191,7 +194,7 @@ RESUSITN  INIT      "Resuscitation"
 .
 .------------------------------------------------------------------------------
 PRGID     INIT      "PATWEB08"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Maternity Details"
 .------------------------------------------------------------------------------
 .
@@ -692,9 +695,15 @@ PMSPRG00  PACK      KEY8,URNUMBER,SP70
           ENDIF
 .
           MATCH     ANSF,PSEX
+          GOTO      PMSPRG05 IF EQUAL
+.
+          PACK      KEY5,ANSG,SP1,PSEX,SP70
+          CALL      RDCODE1
+          BRANCH    OVRCD,PMSPRG93
+          MATCH     ANSP,TCINDC16
           GOTO      PMSPRG93 IF NOT EQUAL
 .
-          CALL      CLPATVIS
+PMSPRG05  CALL      CLPATVIS
           CALL      CLPMSVX1
           PACK      KEY8,ADMISSNO,SP70
           CALL      RDPTVIS1

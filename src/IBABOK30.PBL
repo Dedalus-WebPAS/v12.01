@@ -9,6 +9,10 @@
 .* Mods     :                                                                 *
 .*                                                                            *
 .******************************************************************************
+.* V12.01.01 29/01/2026  Jacob Jackson     TSK 0971747                        *
+.*           Remove restriction of new contact table being required           *
+.*           If no mobile attached to patient, but other contact does, then   *
+.*           ensure it will send                                              *
 .* V12.00.02 02/06/2025  Don Nguyen        TSK 0955096                        *
 .*           Alphanumeric visit number changes                                *
 .* V12.00.01 30/05/2025  Don Nguyen        TSK 0955096                        *
@@ -381,13 +385,14 @@ INPBOKNM  DIM       8
 NOSMSFLT  FORM      1
 DOCCODE   DIM       10
 BKFTHOSP  DIM       3
+BKSMSOTH  FORM      1
 .
 PRGID     INIT      "IBABOK30"
 PRGNAM    INIT      "Adhoc Letter Printing"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 TEMP1     FILE      ASCII,FIXED=131
-
+.
 . Temp File Definition
 .
 TEMPBK    IFILE     SQL, FIXED=17, KEY="U1-8,9-16"
@@ -464,13 +469,13 @@ ML0800    MATCH     "1",PTCNSMSN       * Using SMS Notifications?
             GOTO      ML9999
           ENDIF
 .
-          MATCH     "1",PTCNNEWC
-          IF        !@EQUAL
-            DISPLAY   *P1:24,*EL,*B,*V2LON,"** 'Using New Contacts' ":
-                      "parameter is not enabled ** ";
-            CALL      HITENTER
-            GOTO      ML9999
-          ENDIF
+.          MATCH     "1",PTCNNEWC
+.          IF        !@EQUAL
+.            DISPLAY   *P1:24,*EL,*B,*V2LON,"** 'Using New Contacts' ":
+.                      "parameter is not enabled ** ";
+.            CALL      HITENTER
+.            GOTO      ML9999
+.          ENDIF
 .
           CALL      INBK0000                      * Input search criteria
           BRANCH    EXIT,ML0200
@@ -493,13 +498,13 @@ ML1000    MATCH     "1",PTCNSMSN
             GOTO      ML9999
           ENDIF
 .
-          MATCH     "1",PTCNNEWC
-          IF        !@EQUAL
-            DISPLAY   *P1:24,*EL,*B,*V2LON,"** 'Using New Contacts' ":
-                      "parameter is not enabled ** ";
-            CALL      HITENTER
-            GOTO      ML9999
-          ENDIF
+.          MATCH     "1",PTCNNEWC
+.          IF        !@EQUAL
+.            DISPLAY   *P1:24,*EL,*B,*V2LON,"** 'Using New Contacts' ":
+.                      "parameter is not enabled ** ";
+.            CALL      HITENTER
+.            GOTO      ML9999
+.          ENDIF
 .
           MOVE      ONE,NOSMSFLT
 .
@@ -2678,6 +2683,12 @@ SET0500   CALL      POST0000                     * set postal address
 .
             PACK      KEY8,TEMPURNO
             CALL      RDMAST1
+.
+            MATCH     SP70,PTMXCELL
+            IF        @EQUAL
+              MOVE      ONE,BKSMSOTH
+            ENDIF
+.
             MOVE      PTMXCELL,LXXSMSPH               * SMS Phone Number
             STRIP     LXXSMSPH
 .
@@ -2785,7 +2796,14 @@ PRIN0000  MOVE      FALSE,EXIT
             MOVE      ONE,BOTTMARG          * Default bottom margin to 1
             MOVE      ONE,LEFTMARG          * Default left margin to 1
 .
-            CALL      PRSMSH00              * Print SMS Message XML Header Tag
+            IF        BKSMSOTH=1
+              MOVE      TEMPURNO,PURNO
+              CALL      GETCPN00
+              CALL      OCTMSH00
+            ELSE
+              CALL      PRSMSH00              * Print SMS Message XML Header Tag
+            ENDIF
+.
             GOTO      PRIN1000              * Skip to print actual letter lines
           ENDIF
 .
@@ -2827,8 +2845,8 @@ PRIN2000  CALL      MOD0000                      * substitute % var value
 .
 PRIN9000  MATCH     "1",BOKLCOMM
           IF        @EQUAL
-            CALL       PRSMSF00
-            GOTO       PRIN9050
+            CALL      PRSMSF00
+            GOTO      PRIN9050
           ENDIF
 .
           COMPARE   TOPMARG,COUNT

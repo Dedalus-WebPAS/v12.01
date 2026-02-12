@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -106,9 +106,9 @@ function clickUpdateButton() {
       checkAge(p.ptmas017.value,p.maxage.value);
       UpdHealthFund();
 
-     if (PatientMyhrConsentCode != UpdateForm.ptmas039.value.substring(0,3)) {
-       clearMyHRfuture(document.UpdateForm.urnumber.value)
-     }
+     //if (PatientMyhrConsentCode != UpdateForm.pmpxi110.value.substring(0,3)) {
+     //  clearMyHRfuture(document.UpdateForm.urnumber.value)
+     //}
       
    // document.UpdateForm.ptmas069.focus();
    // document.UpdateForm.ptmas069.blur();
@@ -415,7 +415,7 @@ PatientAGE="%PATWEB89.01.021";
 PatientLOC="%PATWEB89.01.083";
 PatientPRI="%PATWEB89.01.086.066.1";
 PatientUNT="%PATWEB89.01.066.0";
-PatientMyhrConsentCode="%PATWEB89.01.043.1";
+//PatientMyhrConsentCode="%PATWEB89.01.043.1";
 DoctorCOD="%PATWEB89.01.082.003";
 DoctorNAM="%PATWEB89.01.082.002";
 PatientAID="%PATWEB89.01.086.090";
@@ -450,6 +450,7 @@ function valPostCode(){
  onsubmit="return validateDeath01(this)">
 <input type=hidden name=opendate value="%STANDARD.01.015">
 <input type=hidden name=opentime value="%STANDARD.01.016">
+<input type=hidden name=wahealth value="1">
 <input type=hidden name=reportno value="2">
 <input type=hidden name=template value="002">
 <input type=hidden name=updatety value="4">
@@ -760,10 +761,12 @@ function valPostCode(){
     <td><input type=text size=42 maxlength=40
         name=pmpmi093 title="Health Fund Contributor Name" tabindex=26
         value="%PATWEB89.01.899.010"></td>
-    <td class=DataLabel>Consent upload to My Health Record?</td>
-    <td><select name=ptmas039 tabindex=35 title="Consent MyHR Upload">
-         <option></option>
-         %PATWEB89.01.043.2
+    <td class=DataLabel id="MyHRConsentTitle"></td>
+    <td><select name=pmpmi110 id=pmpmi110 tabindex=35 
+         title="Consent MyHR Upload">
+	   <option value=" "></option>
+           <option value="0">No</option>
+           <option value="1">Yes</option>
          </select>&nbsp;(<a href="javascript:patientMyhrConsentForm();">form</a>)
     </td>
 
@@ -879,6 +882,9 @@ Language
  if (document.UpdateForm.urnumber.value.substring(0,1)=="T") {
   document.UpdateForm.ptmas021.className="";
   }
+ document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;
+ document.getElementById("pmpmi110").title = ScreenLabelMyHRConsent; 
+ document.getElementById("pmpmi110").value = "%PATWEB89.01.899.046";
 //
 //
 function init() {
@@ -954,7 +960,6 @@ function init() {
  if (f.multbrth.value=="1" ) {
     document.UpdateForm.multbbut.className="RedButton";
  }
-
 }
 function contacts() {
  if(document.UpdateForm.ptcnnewc.value=='1'){

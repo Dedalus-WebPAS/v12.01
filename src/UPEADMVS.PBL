@@ -2,6 +2,9 @@
 . Update eAdmission Visit Number
 . 
 . Modifications
+.------------------------------------------------------------------------------
+. V12.01.01 29/01/2026  Thanh T        TSK 0930214
+.           Move SP70 to OBAUORNO, OBAUOVIS and OBAUOCOR fields
 . V12.00.01 19.05.2025 Ebon Clements  TSK 0960463
 .           Fixed population of last updated date and user
 . V10.06.01 02.04/2015 B.G.Ackland    CAR 312482
@@ -218,6 +221,9 @@ OBSAUD00  MOVE      OBPCURNO,OBAUURNO
           PACK      OBAUTIME,CTIMEIS
           MOVE      SP70,OBAUWEBU
           MOVE      SP70,OBAUREAS
+          MOVE      SP70,OBAUORNO
+          MOVE      SP70,OBAUOVIS
+          MOVE      SP70,OBAUOCOR
           PACK      OBAUSPAR,SP70
 .
           MATCH     ANSU,OBAUTYPE

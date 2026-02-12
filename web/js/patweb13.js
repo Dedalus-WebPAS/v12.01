@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.01
+//jsVersion  : V12.01.02
 //==============================================================================
 // Program   : patweb13.js
 //
@@ -381,7 +381,7 @@
  function calcMMSEScore(theForm) {
     theForm.totalScore.value =
        (theForm.pmmms004.value -0) + (theForm.pmmms005.value -0) +
-       (theForm.pmmms006.value -0) + (theForm.pmmms007.value -0) +
+       (theForm.pmmms006.value -0) + 
        (theForm.pmmms008.value -0) + (theForm.pmmms009.value -0) +
        (theForm.pmmms010.value -0) + (theForm.pmmms011.value -0) +
        (theForm.pmmms012.value -0) + (theForm.pmmms013.value -0) +

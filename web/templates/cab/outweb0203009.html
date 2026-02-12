@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome"    content="cab">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser"    content="true"> 
@@ -234,12 +234,15 @@ Update Appointment - %OUTWEB02.03.618.1 - %OUTWEB02.03.002
        %OUTWEB02.03.341.2
 	</select></td></tr>
 
-<tr><td class=DataLabel>Special Arrangements</td>
-    <td class=DataField>
-      <select name=outbb054 id=outbb054 class=SelectBig>
-    <option></option>
-    %OUTWEB02.03.378.2
-    </select></td>
+<tr><td class=DataLabel>Health Fund</td>
+    <td class=DataField><input type=text size=6 maxlength=6 name=outbb008
+       id=outbb008 title="Health Fund"
+       onchange="validateCode(16,document.UpdateForm.outbb008,funddesc);
+       checkHFTable(UpdateForm);" value="%OUTWEB02.03.327.014.0">
+      <input type=text size=30 maxlength=30 name=funddesc id=funddesc 
+       class=readonly
+       Readonly notab value="%OUTWEB02.03.327.014.1" tabindex=-1>
+    </td>
     <td class=DataLabel>Referring GP</td>
     <td class=DataField>
     <input type=hidden name=outbb029 id=outbb029 value='%OUTWEB02.03.390'>
@@ -249,8 +252,19 @@ Update Appointment - %OUTWEB02.03.618.1 - %OUTWEB02.03.002
     <img src="../images/erase.gif" class=Icon
      onclick="clrFields(outbb029,genpname);">
     </td></tr>
-<tr><td class=DataLabel>Notify GP</td>
-    <td><input type=checkbox value=1 name=outbb036 id=outbb036></td>
+<tr><td class=DataLabel>Level</td>
+    <td><input name="outbb009" id="outbb009" maxlength=8
+       value="%OUTWEB02.03.327.015.0"
+       title="Level"
+       onblur="validateHFT(20,outbb008,outbb009,funddesc,tabldesc);
+       checkHFTable(UpdateForm);" size=8>
+      <input type="text" size=20 maxlength=17 name="tabldesc" id="tabldesc"
+       class=readonly Readonly notab value="%OUTWEB02.03.327.015.1" tabindex=-1>
+      <img src=../images/SearchIcon.gif border=0 hspace=0 align=absmiddle
+       onclick="HealthFundSearchFrame(outbb008,funddesc,outbb009,tabldesc);">
+      <img src="../images/erase.gif" align=absmiddle onclick="clrDoc(outbb008,
+       outbb009);clrDoc(funddesc,tabldesc);checkHFTable(UpdateForm);">
+    </td>
     <td>Practice</td>
     <td>
       <input type=hidden name=returnprov1 id=returnprov1>
@@ -262,12 +276,23 @@ Update Appointment - %OUTWEB02.03.618.1 - %OUTWEB02.03.002
       <img src="../images/erase.gif" class=Icon
        onclick="clrFields(d_outbb030,returnprov1,outbb030,outbb037);"></td></tr>
 
-<tr><td colspan=2>&nbsp;</td>
+<tr><td class=DataLabel>Special Arrangements</td>
+    <td class=DataField><select name=outbb054 id=outbb054 class=SelectBig>
+    <option></option>
+    %OUTWEB02.03.378.2
+    </select></td>
     <td class=DataLabel>Source of Referral</td>
     <td class=DataField><select name=outbb018 id=outbb018 class=SelectBig>
         <option></option>
         %OUTWEB02.03.337.2</td>
 </tr>
+
+<tr><td class=DataLabel>Notify GP</td>
+    <td class=DataField><input type=checkbox value=1 name=outbb036 id=outbb036>
+    </td>
+    <td class=DataLabel></td>
+    <td class=DataField></td>
+    </tr>
 
       <tr>
         <td>
@@ -463,9 +488,9 @@ Update Appointment - %OUTWEB02.03.618.1 - %OUTWEB02.03.002
 <script type = "text/javascript" language = javascript>
 
 function init(){
- var title = '%OUTWEB02.03.348.003'
- var gname  = '%OUTWEB02.03.348.004'
- var surname = '%OUTWEB02.03.348.005'
+ var title = "%OUTWEB02.03.348.003"
+ var gname  = "%OUTWEB02.03.348.004"
+ var surname = "%OUTWEB02.03.348.005"
 
  UpdateForm.genpname.value = trim(title)+" "+trim(gname)+" "+trim(surname);
 }

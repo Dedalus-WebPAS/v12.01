@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <!-- $Id: patweb8901030.html 4266 2019-01-07 03:18:55Z  $ -->
 <!-- $URL: http://lxfm700sub/svn/webpas/trunk/web/custom/patweb8901030.html $ -->
@@ -563,10 +563,11 @@ InsertPatientHeader()
 
 <tr><td class=DataLabel></td>
     <td></td>
-    <td class=DataLabel>Consent upload visit to My Health Record?</td>
-    <td><select name=ptmis037 tabindex=146 title="Upload to MyHR?">
-         <option></option>
-          %PATWEB89.01.133.2
+    <td class=DataLabel id="MyHRConsentTitle"></td>
+    <td><select name=pmsvx125 id=pmsvx125 tabindex=146 title="Upload to MyHR?">
+           <option value=" "></option>
+           <option value="0">No</option>
+           <option value="1">Yes</option>
         </select>&nbsp;(<a href="javascript:patientMyhrConsentForm();">form</a>)
     </td></tr>
 
@@ -698,6 +699,10 @@ MergePsy="%PATWEB89.01.050"
 </script>
 
 <script type="text/javascript">
+document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;
+document.getElementById("pmsvx125").title = ScreenLabelMyHRConsent;
+document.getElementById("pmsvx125").value = trim("%PATWEB89.01.298.037");
+
 for (var i=0;i<document.UpdateForm.ptvis022.length;i++){
 if (document.UpdateForm.ptvis022.options[i].value=="%PATWEB89.01.225.0"){
     document.UpdateForm.ptvis022.selectedIndex=i}};
@@ -714,7 +719,7 @@ if (!isWhitespace(document.UpdateForm.ptvis075.value)){
 
 <script type="text/javascript">
   // Disable the MyHR Consent field for discharged admissions
-  document.UpdateForm.ptmis037.disabled = (PatientLOC == "Discharged");
+  document.UpdateForm.pmsvx125.disabled = (PatientLOC == "Discharged");
 </script>
 
 <span id=blanklabel style="display:none">&nbsp;</span>

@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .----------------------------------------------------------------------
+. V12.01.01 15/05/2025 J.Tan      TSK 0956147
+.           Added HAC Flags
 . V11.04.01 18/04/2023 J.Tan      TSK 0943758
 .           Removed Psychiatric age fields
 . V11.03.01 23/05/2023 J.Tan      TSK 0923703
@@ -46,6 +48,8 @@
           INC       PMSHACTD/INC
           INC       PMSHDEFD/INC
           INC       PMSHDETD/INC
+          INC       PMSVSTFD/INC
+          INC       PMSVSCFD/INC
 .
 .----------------------------------------------------------------------
 .
@@ -185,7 +189,7 @@ UPDTTYPE  DIM       1       * Update Type
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "PATWEB17"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "New Web Server"
 .----------------------------------------------------------------------
 .
@@ -250,6 +254,9 @@ INIT0000  OPEN      CONTROLF,"controlf"
           OPEN      PMSHACA1,"pmshacaf"
           OPEN      PMSHACA2,"pmshacaf"
           OPEN      PMSHDEA1,"pmshdeaf"
+.
+          OPEN      PMSVSTA1,"pmsvstaf"
+          OPEN      PMSVSCA1,"pmsvscaf"
 .
 INIT9999  RETURN
 .------------------------------------------------------------
@@ -1943,7 +1950,8 @@ ABFH9999  RETURN
 . ABF HAC Baseline Complexity Maintenance Tags
 .------------------------------------------------------------
 HACMN000  BRANCH    FLDITMNO,HACMN010,HACMN020,HACMN030,HACMN040,HACMN050:
-                             HACMN060,HACMN070,HACMN080,HACMN090,HACMN100
+                             HACMN060,HACMN070,HACMN080,HACMN090,HACMN100:
+                             HACMN110
           GOTO      HACMN999
 .
 HACMN010  CALL      HACTB000
@@ -2040,6 +2048,23 @@ HACMN100  PACK      KEY15,PMHAC001,PMHAC002,SP70
           WRITE     HTMLFILE;ONE;
           GOTO      HACMN999
 .
+HACMN110  PACK      KEY15,PMHAC001,PMHAC002,ZERO,ZERO,FOUR,SP70
+          CALL      RSPMHDE1
+          CALL      RKPMHDE1
+          BRANCH    OVRCD,HACMN999
+.
+          MATCH     PMHAC001,PMHECNTR
+          GOTO      HACMN999 IF NOT EQUAL
+.
+          MATCH     PMHAC002,PMHEHACG
+          GOTO      HACMN999 IF NOT EQUAL
+.
+          MATCH     "004",PMHEHACT
+          GOTO      HACMN999 IF NOT EQUAL
+.
+          WRITE     HTMLFILE;PMHAC001,PMHAC002,ZERO,ZERO,FOUR;
+          GOTO      HACMN999
+
 HACMN999  RETURN
 +
 .------------------------------------------------------------
@@ -2211,6 +2236,9 @@ ABFE0000  MATCH     SP70,UPDTTYPE
           MATCH     "A",UPDTTYPE            * Add Charlson Values
           GOTO      ABFE1000 IF EQUAL
 .
+          MATCH     "H",UPDTTYPE            * Add HAC Flags
+          GOTO      ABFE1200 IF EQUAL
+.
           MATCH     "B",UPDTTYPE            * Add Age Values
           GOTO      ABFE1300 IF EQUAL
 .
@@ -2219,6 +2247,9 @@ ABFE0000  MATCH     SP70,UPDTTYPE
 .
           MATCH     "U",UPDTTYPE            * Update Charlson Values
           GOTO      ABFE2000 IF EQUAL
+.
+          MATCH     "F",UPDTTYPE            * Update HAC Flags Value
+          GOTO      ABFE2100 IF EQUAL
 .
           MATCH     "V",UPDTTYPE            * Update Age Values
           GOTO      ABFE2300 IF EQUAL
@@ -2422,6 +2453,207 @@ ABFE1050  CALL      MVPMHE00
           MOVE      "001",PMHEHACT
           MOVE      "024",PMHEHACF
           MOVE      PMHDE026,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      ZERO,EXIT
+          GOTO      ABFE9999
+.
+.   **********  ADD FORMACTION HAC Flags **********
+.
+ABFE1200  CALL      CLPMSHDE
+.
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,SP70
+          CALL      RSPMHDE1
+          CALL      RKPMHDE1
+          BRANCH    OVRCD,ABFE1250
+.
+          MATCH     PMHDE001,PMHECNTR
+          GOTO      ABFE1250 IF NOT EQUAL
+.
+          MATCH     PMHDE002,PMHEHACG
+          GOTO      ABFE1250 IF NOT EQUAL
+.
+          MATCH     PMHDE003,PMHEHACT
+          GOTO      ABFE1250 IF NOT EQUAL
+.
+          GOTO      ABFE9100
+.
+ABFE1250  CALL      MVPMHE00
+.
+          MOVE      USERID,PMHECUID
+          CALL      IBACLOCK
+          PACK      PMHECDAT,CCC,CYY,CMM,CDD
+          REP       " 0",PMHECDAT
+          MOVE      CTIMEIS,PMHECTIM
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "AMI",PMHEHACF
+          MOVE      PMHDE073,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "CAN",PMHEHACF
+          MOVE      PMHDE074,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "CHF",PMHEHACF
+          MOVE      PMHDE075,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "CTD",PMHEHACF
+          MOVE      PMHDE076,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "CVA",PMHEHACF
+          MOVE      PMHDE077,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "DBC",PMHEHACF
+          MOVE      PMHDE078,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "DEM",PMHEHACF
+          MOVE      PMHDE079,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "DIA",PMHEHACF
+          MOVE      PMHDE080,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "HIV",PMHEHACF
+          MOVE      PMHDE081,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "LIV",PMHEHACF
+          MOVE      PMHDE082,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "MCA",PMHEHACF
+          MOVE      PMHDE083,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "PAR",PMHEHACF
+          MOVE      PMHDE084,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "PEP",PMHEHACF
+          MOVE      PMHDE085,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "PUL",PMHEHACF
+          MOVE      PMHDE086,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "PVD",PMHEHACF
+          MOVE      PMHDE087,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "REN",PMHEHACF
+          MOVE      PMHDE088,PMHECOMV
+.
+          PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
+          CALL      RAPMHDE1
+          IF        OVRCD=1
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "004",PMHEHACT
+          MOVE      "SLD",PMHEHACF
+          MOVE      PMHDE089,PMHECOMV
 .
           PACK      KEY15,PMHECNTR,PMHEHACG,PMHEHACT,PMHEHACF,SP70
           CALL      RAPMHDE1
@@ -3399,6 +3631,453 @@ ABFE2010  MOVE      "066",PMHDE004
             MOVE      PMHDE003,PMHEHACT
             MOVE      PMHDE004,PMHEHACF
             MOVE      PMHDE067,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      ZERO,EXIT
+          GOTO      ABFE9999
+.
+.   **********  UPDATE FORMACTION HAC Flags Values  **********
+.
+ABFE2100  PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,SP70
+          CALL      RSPMHDE1
+          CALL      RKPMHDE1
+          BRANCH    OVRCD,ABFH9200
+.
+          MATCH     PMHDE001,PMHECNTR
+          GOTO      ABFE9200 IF NOT EQUAL
+.
+          MATCH     PMHDE002,PMHEHACG
+          GOTO      ABFE9200 IF NOT EQUAL
+.
+          MOVE      USERID,PMHDE011
+          CALL      IBACLOCK
+          PACK      PMHDE009,CCC,CYY,CMM,CDD
+          REP       " 0",PMHDE009
+          MOVE      CTIMEIS,PMHDE010
+.
+          MOVE      "AMI",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE073,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE073,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "CAN",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE074,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE074,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "CHF",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE075,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE075,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "CTD",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE076,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE076,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "CVA",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE077,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE077,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "DBC",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE078,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE078,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "DEM",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE079,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE079,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "DIA",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE080,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE080,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "HIV",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE081,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE081,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "LIV",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE082,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE082,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "MCA",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE083,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE083,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "PAR",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE084,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE084,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "PEP",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE085,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE085,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "PUL",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE086,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE086,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "PVD",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE087,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE087,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "REN",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE088,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE088,PMHECOMV
+            MOVE      PMHDE009,PMHECDAT
+            MOVE      PMHDE010,PMHECTIM
+            MOVE      PMHDE011,PMHECUID
+            CALL      WRPMHDE1
+          ENDIF
+.
+          MOVE      "SLD",PMHDE004
+          PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,PMHDE004,SP70
+          CALL      RDPMHDE1
+          IF        OVRCD=0
+            MOVE      PMHECOMV,SAVECOMV
+            MOVE      PMHDE089,PMHECOMV
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE011,PMHEUUID
+            MOVE      PMHDE009,PMHEUDAT
+            MOVE      PMHDE010,PMHEUTIM
+            MOVE      PMHDE004,PMHEHACF
+            CALL      UPPMHDE1
+          ELSE
+            CALL      CLPMSHDE
+            MOVE      PMHDE001,PMHECNTR
+            MOVE      PMHDE002,PMHEHACG
+            MOVE      PMHDE003,PMHEHACT
+            MOVE      PMHDE004,PMHEHACF
+            MOVE      PMHDE089,PMHECOMV
             MOVE      PMHDE009,PMHECDAT
             MOVE      PMHDE010,PMHECTIM
             MOVE      PMHDE011,PMHECUID
@@ -4681,7 +5360,7 @@ ABFE9999  RETURN
 . ABF HAC Detail Complexity Maintenance Tags
 .------------------------------------------------------------
 HDEMN000  BRANCH    FLDITMNO,HDEMN010,HDEMN020,HDEMN030,HDEMN040,HDEMN050:
-                             HDEMN060
+                             HDEMN060,HDEMN070,HDEMN080
           GOTO      HDEMN999
 .
 HDEMN010  
@@ -4693,7 +5372,6 @@ HDEMN020
           GOTO      HDEMN999
 .
 HDEMN030  UNPACK    DIM127,D1,DIM3,DIM127
-.
           PACK      KEY15,PMHDE001,PMHDE002,PMHDE003,DIM3,SP70
           CALL      RDPMHDE1
           IF        OVRCD=0
@@ -4711,6 +5389,22 @@ HDEMN050  MOVE      "Ha",CATEGORY
           GOTO      HDEMN999
 .
 HDEMN060  WRITE     HTMLFILE;PMHDE003;
+          GOTO      HDEMN999
+.
+HDEMN070  UNPACK    DIM127,D1,DIM3,DIM127
+          MOVE      "HAF",PMVCVSID
+          PACK      KEY33,PMVCVSID,DIM3,SP70
+          CALL      RDPMVSC1
+          IF        OVRCD=0
+            WRITE     HTMLFILE;PMVCPTRM;
+          ENDIF
+          GOTO      HDEMN999
+.
+HDEMN080  MOVE      "HAF",KEY3
+          CALL      RDPMVST1
+          IF        OVRCD=0
+            WRITE     HTMLFILE;PMVTVSNM;
+          ENDIF
           GOTO      HDEMN999
 .
 HDEMN999  RETURN
@@ -4731,5 +5425,7 @@ HDEMN999  RETURN
           INC       PMSCIDIO/INC
           INC       PMSHACIO/INC
           INC       PMSHDEIO/INC
+          INC       PMSVSTIO/INC
+          INC       PMSVSCIO/INC
 .
           INC       DAYOFWEK

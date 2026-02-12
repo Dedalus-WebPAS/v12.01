@@ -6,6 +6,9 @@
 . * Includes Needed : PMSHDEFD - ABF HAC Detail Complexity Table
 . *                   PMSHDEIO - IO for ABF HAC Detail Complexity Table
 . * Modifications :
+. *
+. * V12.01.01 16/05/2025 J.Tan      TSK 0956147
+. *           Added HAC Flags
 . * V10.14.02 10/07/2019 Peter Vela TSK 0857392
 . *           Added Ventilation, Unknown
 . * V10.14.01 02/07/2019 Peter Vela TSK 0857392
@@ -92,6 +95,24 @@ CLRHDE00  MOVE      Z70,PMHDE001
           MOVE      ZERO,PMHDE070
           MOVE      ZERO,PMHDE071
           MOVE      ZERO,PMHDE072
+.
+          MOVE      ZERO,PMHDE073
+          MOVE      ZERO,PMHDE074
+          MOVE      ZERO,PMHDE075
+          MOVE      ZERO,PMHDE076
+          MOVE      ZERO,PMHDE077
+          MOVE      ZERO,PMHDE078
+          MOVE      ZERO,PMHDE079
+          MOVE      ZERO,PMHDE080
+          MOVE      ZERO,PMHDE081
+          MOVE      ZERO,PMHDE082
+          MOVE      ZERO,PMHDE083
+          MOVE      ZERO,PMHDE084
+          MOVE      ZERO,PMHDE085
+          MOVE      ZERO,PMHDE086
+          MOVE      ZERO,PMHDE087
+          MOVE      ZERO,PMHDE088
+          MOVE      ZERO,PMHDE089
           RETURN
 .
 .------------------------------------------------------------
@@ -184,7 +205,10 @@ SPPHE000  MOVE      ZERO,EXIT
                        SPPHE056,SPPHE057,SPPHE058,SPPHE059,SPPHE060:
                        SPPHE061,SPPHE062,SPPHE063,SPPHE064,SPPHE065:
                        SPPHE066,SPPHE067,SPPHE068,SPPHE069,SPPHE070: 
-                       SPPHE071,SPPHE072
+                       SPPHE071,SPPHE072,SPPHE073,SPPHE074,SPPHE075:
+                       SPPHE076,SPPHE077,SPPHE078,SPPHE079,SPPHE080:
+                       SPPHE081,SPPHE082,SPPHE083,SPPHE084,SPPHE085:
+                       SPPHE086,SPPHE087,SPPHE088,SPPHE089
 .
           MOVE      ONE,EXIT
           GOTO      SPPHE999
@@ -477,6 +501,74 @@ SPPHE071  SQUEEZE   QRYDATA
 .
 SPPHE072  SQUEEZE   QRYDATA
           MOVE      QRYDATA,PMHDE072
+          GOTO      SPPHE999
+.
+SPPHE073  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE073
+          GOTO      SPPHE999
+.
+SPPHE074  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE074
+          GOTO      SPPHE999
+.
+SPPHE075  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE075
+          GOTO      SPPHE999
+.
+SPPHE076  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE076
+          GOTO      SPPHE999
+.
+SPPHE077  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE077
+          GOTO      SPPHE999
+.
+SPPHE078  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE078
+          GOTO      SPPHE999
+.
+SPPHE079  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE079
+          GOTO      SPPHE999
+.
+SPPHE080  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE080
+          GOTO      SPPHE999
+.
+SPPHE081  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE081
+          GOTO      SPPHE999
+.
+SPPHE082  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE082
+          GOTO      SPPHE999
+.
+SPPHE083  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE083
+          GOTO      SPPHE999
+.
+SPPHE084  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE084
+          GOTO      SPPHE999
+.
+SPPHE085  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE085
+          GOTO      SPPHE999
+.
+SPPHE086  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE086
+          GOTO      SPPHE999
+.
+SPPHE087  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE087
+          GOTO      SPPHE999
+.
+SPPHE088  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE088
+          GOTO      SPPHE999
+.
+SPPHE089  SQUEEZE   QRYDATA
+          MOVE      QRYDATA,PMHDE089
           GOTO      SPPHE999
 .
 SPPHE999  RETURN

@@ -1,0 +1,291 @@
+<meta name="TemplateVersion" content="V12.01.01">
+<meta name="TemplateHome" content="standard">
+<meta name="HelpFileName" content="NoContextSet.html">
+<meta name="CrossBrowser" content="true">
+<script type="text/javascript">
+function PostForm() {
+  if(document.UpdateForm.d_mrtcn066.checked==false) {
+     document.UpdateForm.mrtcn066.value="0";
+  } else {
+     document.UpdateForm.mrtcn066.value="1";
+  }
+  if(document.UpdateForm.d_mrtcn068.checked==false) {
+     document.UpdateForm.mrtcn068.value="0";
+  } else {
+     document.UpdateForm.mrtcn068.value="1";
+  }
+  if(document.UpdateForm.d_mrtcn070.checked==false) {
+     document.UpdateForm.mrtcn070.value="0";
+  } else {
+     document.UpdateForm.mrtcn070.value="1";
+  }
+  if(document.UpdateForm.d_mrtcn074.checked==false) {
+     document.UpdateForm.mrtcn074.value="0";
+  } else {
+     document.UpdateForm.mrtcn074.value="1";
+  }
+  if(document.UpdateForm.d_mrtcn077.checked==false) {
+     document.UpdateForm.mrtcn077.value="0";
+  } else {
+     document.UpdateForm.mrtcn077.value="1";
+  }
+  if(document.UpdateForm.d_mrtcn078.checked==false) {
+     document.UpdateForm.mrtcn078.value="0";
+  } else {
+     document.UpdateForm.mrtcn078.value="1";
+  }
+  if(document.UpdateForm.d_mrtcn079.checked==false) {
+     document.UpdateForm.mrtcn079.value="0";
+  } else {
+     document.UpdateForm.mrtcn079.value="1";
+  }
+  if(document.UpdateForm.d_mrtcn080.checked==false) {
+     document.UpdateForm.mrtcn080.value="0";
+  } else {
+     document.UpdateForm.mrtcn080.value="1";
+  }
+  if(document.UpdateForm.d_mrtcn081.checked==false) {
+     document.UpdateForm.mrtcn081.value="0";
+  } else {
+     document.UpdateForm.mrtcn081.value="1";
+  }
+
+
+  setFormactn('U');
+}
+</script>
+</head>
+%START.OF.PAGE
+<body onload="PageLoad(event);">
+<form name=UpdateForm method=post action=comweb98.pbl>
+<input type=hidden name=reportno value="11">
+<input type=hidden name=template value="005">
+<input type=hidden name=redirect value="comweb98.pbl?reportno=11&template=001">
+<input type=hidden name=nextpage value="1">
+<input type=hidden name=updttype value=" ">
+<input type=hidden name=mrtcn066 value=" ">
+<input type=hidden name=mrtcn068 value=" ">
+<input type=hidden name=mrtcn070 value=" ">
+<input type=hidden name=mrtcn074 value=" ">
+<input type=hidden name=mrtcn077 value=" ">
+<input type=hidden name=mrtcn078 value=" ">
+<input type=hidden name=mrtcn079 value=" ">
+<input type=hidden name=mrtcn080 value=" ">
+<input type=hidden name=mrtcn081 value=" ">
+
+<table align=center width=100% border=0 cellspacing=0 cellpadding=0>
+<tr><td class=HeadingCell align=center>
+     Medical Records Parameter Maintenance - Hospital Controlled 3
+    </td>
+    </tr>
+<tr><td>
+</table>
+<table align=center width=95% border=0 cellspacing=0 cellpadding=0>
+
+<tr><td colspan=2 align=center><hr width=100%></td></tr>
+
+<tr>
+    <td class=DataLabel>Default Number of Labels to print</td>
+    <td class=DataItem><input type=text name=mrtcn065
+        class="Number JustifyRight Integer" min=0 max=999
+        title="Default Number of Labels to print"
+        size=4 maxlength=3 value="%COMWEB98.11.165">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Allow Future Dates in Record Movements</td>
+    <td class=DataField>
+      <input type=checkbox name=d_mrtcn066 value="1"
+       title="Allow Future Dates in Record Movements">
+    </td>
+</tr>
+
+<tr>
+    <td class=DataLabel>How many Future Days in Record Movements</td>
+    <td class=DataItem><input type=text name=mrtcn067
+        class="Number JustifyRight Integer" min=0 max=999
+        title="How many Future Days in Record Movements"
+        size=4 maxlength=3 value="%COMWEB98.11.167">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Operator Id Mandatory</td>
+    <td class=DataField>
+      <input type=checkbox name=d_mrtcn068 value="1"
+       title="Operator Id Mandatory">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Default Post Discharge Status</td>
+    <td class=DataItem><select id=mrtcn069 name=mrtcn069
+       title="Default Post Discharge Status">
+      <option> </option>
+      %COMWEB98.11.169.2
+      </select>
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Send Hours of Mechanical Ventilation to Grouper</td>
+    <td class=DataField>
+      <input type=checkbox name=d_mrtcn070 value="1"
+       title="Send Hours of Mechanical Ventilation to Grouper">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Movement Reason for Outpatients</td>
+    <td class=DataItem><select id=mrtcn071 name=mrtcn071
+       title="Movement Reason for Outpatients">
+      <option> </option>
+      %COMWEB98.11.171
+      </select>
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Movement Reason for Preadmissions</td>
+    <td class=DataItem><select id=mrtcn072 name=mrtcn072
+       title="Movement Reason for Preadmissions">
+      <option> </option>
+      %COMWEB98.11.172  
+      </select>
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Movement Reason for Inpatient Ward/Bed Transfers</td>
+    <td class=DataItem><select id=mrtcn073 name=mrtcn073
+       title="Movement Reason for Inpatient Ward/Bed Transfers">
+      <option> </option>
+      %COMWEB98.11.173 
+      </select>
+    </td>
+</tr>
+
+<tr><td class=DataLabel>
+      Mechanical Ventilation Check (No = Warning, Yes = Fatal Error)</td>
+    <td class=DataField>
+      <input type=checkbox name=d_mrtcn074 value="1"
+       title="Mechanical Ventilation Check (No = Warning, Yes = Fatal Error)">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Microfilmed Record Status</td>
+    <td class=DataItem><select id=mrtcn075 name=mrtcn075
+       title="Microfilmed Record Status">
+      <option> </option>
+      %COMWEB98.11.175.2
+      </select>
+    </td>
+</tr>
+
+<tr><td class=Datalabel>Use Facility Address for Treating Doctor Address</td>
+    <td><select name=mrtcn076 id=mrtcn076
+         title="Use Facility Address for Treating Doctor Address">
+        <option value="1">Facility Address only</option>
+        <option value="2">Treating Doctor Address only</option>
+        <option value="3">
+           Facility Address if Treating Doctor Address is blank
+        </option></select>
+     </td>
+</tr>
+
+<tr><td class=DataLabel>Display a Home Location Warning Message</td>
+    <td class=DataField>
+      <input type=checkbox name=d_mrtcn077 value="1"
+       title="Display a Home Location Warning Message">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Auto Create a Medical Record on PMI Registration</td>
+    <td class=DataField>
+      <input type=checkbox name=d_mrtcn078 value="1"
+       title="Auto Create a Medical Record on PMI Registration">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>
+      Auto Create a Medical Record for All Visit creations</td>
+    <td class=DataField>
+      <input type=checkbox name=d_mrtcn079 value="1"
+       title="Auto Create a Medical Record for All Visit creations">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>
+      Using websecaf defaults in Auto Medical Record Creation</td>
+    <td class=DataField>
+      <input type=checkbox name=d_mrtcn080 value="1"
+       title="Using websecaf defaults in Auto Medical Record Creation">
+    </td>
+</tr>
+
+<tr><td class=DataLabel>Automatically move record on bed transfer</td>
+    <td class=DataField>
+      <input type=checkbox name=d_mrtcn081 value="1"
+       title="Automatically move record on bed transfer">
+    </td>
+</tr>
+
+<tr><td width=10% class=DataLable>&nbsp;</td>
+    <td width=10% class=DataItem>&nbsp;</td>
+    </tr>
+    
+<tr><td colspan=2 align=center><hr width=100%></td></tr>
+
+<tr><td colspan=2 align=center>
+   <input type=button value="Update" class="button" onclick="PostForm();">
+   <input type=button onclick='history.go(-1)' value=Cancel class="button">
+</td></tr>
+</table>
+
+</form>
+
+<script type="text/javascript">
+AllowFutureDatesInRecordMovements="%COMWEB98.11.166";
+ if(AllowFutureDatesInRecordMovements=="1") {
+   document.UpdateForm.d_mrtcn066.checked=true;
+ }
+OperatorIdMandatory="%COMWEB98.11.168";
+if (OperatorIdMandatory=="1") {
+     document.UpdateForm.d_mrtcn068.checked=true;
+ }
+SendHrsOfMVtoGrouper="%COMWEB98.11.170";
+if (SendHrsOfMVtoGrouper=="1") {
+     document.UpdateForm.d_mrtcn070.checked=true;
+ }
+MechanicalVentilationCheck="%COMWEB98.11.174";
+if (MechanicalVentilationCheck=="1") {
+     document.UpdateForm.d_mrtcn074.checked=true;
+ }
+UseFacilityAddrForTreatDoctorAddr="%COMWEB98.11.176";
+for (var i =0 ; i < document.UpdateForm.mrtcn076.length; i++) {
+  if (document.UpdateForm.mrtcn076.options[i].value==
+      UseFacilityAddrForTreatDoctorAddr) {
+    document.UpdateForm.mrtcn076.selectedIndex=i;
+  }
+}
+DisplayHomeLocationWarningMessage="%COMWEB98.11.177";
+if (DisplayHomeLocationWarningMessage=="1") {
+     document.UpdateForm.d_mrtcn077.checked=true;
+ }
+AutoCreateMRonPMIRegistration="%COMWEB98.11.178";
+if (AutoCreateMRonPMIRegistration=="1") {
+     document.UpdateForm.d_mrtcn078.checked=true;
+ }
+AutoCreateMRforAllVisitcreations="%COMWEB98.11.179";
+if (AutoCreateMRforAllVisitcreations=="1") {
+     document.UpdateForm.d_mrtcn079.checked=true;
+ }
+UsingWebsecafDefaultsInAutoMRCreation="%COMWEB98.11.180";
+if (UsingWebsecafDefaultsInAutoMRCreation=="1") {
+     document.UpdateForm.d_mrtcn080.checked=true;
+ }
+AutoMoveRecordOnBedTransfer="%COMWEB98.11.181";
+if (AutoMoveRecordOnBedTransfer=="1") {
+     document.UpdateForm.d_mrtcn081.checked=true;
+ }
+
+
+sortSelectionList(document.UpdateForm.mrtcn071);
+sortSelectionList(document.UpdateForm.mrtcn072);
+sortSelectionList(document.UpdateForm.mrtcn073);
+
+</script>

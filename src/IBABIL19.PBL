@@ -14,6 +14,8 @@
 .*  MODIFICATIONS:                                                            *
 .*                                                                            *
 .*----------------------------------------------------------------------------*
+.* V12.01.01 23/01/2025  J.Tan          TSK 0956147                           *
+.*           Recompiled for ABFPTINV-Added HAC Flags to replace Charlson score*
 .* V11.05.01 20/02/2025  J.Tan   TSK 0955356                                  *
 .*           Recompiled for PATCALFN - Financial Summary                      *
 .*           24/02/2025  J.Tan            TSK 0946490                         *
@@ -1353,7 +1355,7 @@ CFPAYCOD  DIM       3        * 3M Codefinder PAY Code
 .
 PRGID     INIT      "IBABIL19"
 PRGNAM    INIT      "Fees Invoiced Report"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .
 .        ======================================================================

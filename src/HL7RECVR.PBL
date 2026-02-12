@@ -95,6 +95,9 @@
 .***************************************************************************
 .*  Mod's     :                                                            *
 .***************************************************************************
+.*        V12.01.03 19/12/2025  Davin          TSK 0961944                 *
+.*                  Receive NTE segment in M02 messages based on PTCNNTES  *
+.*                  (VNTE0000/PTCO0000/WTCO0000/PHCP0000/WHCP0000/DHCP0000)*
 .*        V12.01.02 11/12/2025  Bella Turco    TSK 0949715                 *
 .*                  Recompiled for UPDUR - added NZPMICHG                  *
 .*        V12.01.01 04/12/2025  Davin          TSK 0970365                 *
@@ -1608,6 +1611,7 @@
           INC       PMSMTIFD/INC                 * misc. items file
           INC       PMSPAYFD/INC
           INC       PMSPTDFD/INC
+          INC       PMSTCOFD/INC
           INC       PMSTLEFD/INC
           INC       PMSTSPFD/INC
           INC       PMSUPDFD/INC
@@ -5724,7 +5728,7 @@ DEC       INIT      "December"
 .-----------------------------------------------------------------------
 PRGID     INIT      "HL7RECVR"
 PRGNAM    INIT      "HL7 General Receiving Server"
-VERSION   INIT      "V12.01.02"
+VERSION   INIT      "V12.01.03"
 .-----------------------------------------------------------------------
 +
 .*************************************************************************
@@ -5888,7 +5892,8 @@ INIT0000  MOVE      SP70,NZPMICHG
           READ      CONTROLF,HUND30;*113,PTCNFNM2:    * rebroadcast HL7 MFN^M02
                                     *119,PTCNVIMS:    * Verify SIU^S12 Inp Msg
                                     *121,PTCNB08E:    * Broadcast HL7 EMR A08
-                                    *122,PTCNMSH3     * MSH.3 for EMR A08
+                                    *122,PTCNMSH3:    * MSH.3 for EMR A08
+                                    *172,PTCNNTES     * Receive NTE in M02
 .
           IF        PTCNHDPS=3
             OPEN      WATESPA1,"watespaf"
@@ -6272,6 +6277,9 @@ INIT0500  DISPLAY   *P64:24,"allaudaf"
 .
           DISPLAY   *P64:24,"pmsrelaf"
           OPEN      PMSRELA1,"pmsrelaf"
+.
+          DISPLAY   *P64:24,"pmstcoaf"
+          OPEN      PMSTCOA1,"pmstcoaf"
 .
           DISPLAY   *P64:24,"pmstleaf"
           OPEN      PMSTLEA1,"pmstleaf"
@@ -32105,6 +32113,10 @@ RNTE0301  RESET     NTE00301                     * Comment (FT)
           MOVE      NTE00301,OLDSTRNG
           CALL      CONV0000                     * convert any escape sequences
           MOVE      NEWSTRNG,NTE00301
+          MATCH     BLANKSTR,NTE00301
+          IF        !@EQUAL
+            REP       "#"'",NTE00301             * convert " to '
+          ENDIF
           GOTO      RNTE9999
 .
 .         NTE.4  Comment Type (CE)
@@ -48480,9 +48492,31 @@ VNTE0100  RJUSTIFY  NTE00101
           PACK      RTMPVRBL,NTE00101,SP100,SP100,SP100,SP100,SP100
           CALL      WTMP0000
 .
+.         Comment Source (NTE.2)
+.
+VNTE0200  STRIP     NTE00201
+.
+          COMPARE   TEN,MESSGNUM
+          GOTO      VNTE0300 IF NOT EQUAL        * only validate for M02
+.
+          MATCH     "1",NTE00201
+          IF        !@EQUAL
+            MOVE      "NTE.2: Comment Source must be 1 for HCP",ERRORDSC
+            MOVE      "207",ERRORNUM
+            CALL      EROR0000
+            GOTO      VNTE0300
+          ENDIF
+.
+          MOVE      NTE00101,RTMPSEGC            * load NTE segment count
+          MOVE      TWO,RTMPFLDN                 * load field number
+          MOVE      ONE,RTMPFCNT                 * load field number count
+          MOVE      ONE,RTMPCMPN                 * load component number
+          PACK      RTMPVRBL,NTE00201,SP100,SP100,SP100,SP100,SP100
+          CALL      WTMP0000
+.
 .         Load Comments (NTE.3)
 .
-VNTE0200  STRIP     NTE00301
+VNTE0300  STRIP     NTE00301
           MOVELPTR  NTE00301,FORM3
           COMPARE   ZERO,FORM3                   * field populated ?
           IF        @EQUAL
@@ -48492,13 +48526,16 @@ VNTE0200  STRIP     NTE00301
                                SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100:
                                SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100
             CLEAR     NTE00301
-            GOTO      VNTE0250
+            GOTO      VNTE0350
           ENDIF
 .
           MATCH     BLANKSTR,NTE00301            * field null ?
           IF        @EQUAL
+            COMPARE   TEN,MESSGNUM
+            GOTO      VNTE0350 IF EQUAL          * leave as "" for M02
+.
             COMPARE   TEN2,MESSGNUM
-            GOTO      VNTE0250 IF EQUAL          * leave as "" for S14
+            GOTO      VNTE0350 IF EQUAL          * leave as "" for S14
 .
             PACK      NTE00301,SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100:
                                SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100:
@@ -48506,12 +48543,203 @@ VNTE0200  STRIP     NTE00301
                                SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100:
                                SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100
             CLEAR     NTE00301
-            GOTO      VNTE0250
+            GOTO      VNTE0350
           ENDIF
 .
-VNTE0250  CALL      PODC0000                     * process appointment comments
+VNTE0350  IF        MESSGNUM = 10
+            CALL      PTCO0000                   * process M02 HCP comments
+          ELSE
+            CALL      PODC0000                   * process appointment comments
+          ENDIF
+.
+.         Comment Type (NTE.4)
+.
+VNTE0400  STRIP     NTE00401
+.
+          COMPARE   TEN,MESSGNUM
+          GOTO      VNTE0900 IF NOT EQUAL        * only validate for M02
+.
+          MATCH     "1",NTE00201
+          GOTO      VNTE0900 IF NOT EQUAL        * only validate for HCP
+.
+          MOVELPTR  NTE00401,FORM3
+          COMPARE   ZERO,FORM3                   * field populated ?
+          GOTO      VNTE0450 IF NOT EQUAL        * yes
+.
+          MATCH     BLANKSTR,NTE00401
+          GOTO      VNTE0450 IF NOT EQUAL        * field "" ?
+.
+          MOVE      "NTE.4: Comment Type must be populated for HCP comments",ERRORDSC
+          MOVE      "103",ERRORNUM
+          CALL      EROR0000
+          GOTO      VNTE0900
+.
+VNTE0450  PACK      KEY5,ANST,ANSZ,NTE00401,SP5
+          CALL      RDCODE1                      * field valid on Cat TZ ?
+          IF        OVRCD = 1
+            MOVE      "NTE.4: Comment Type not valid on Category TZ",ERRORDSC
+            MOVE      "103",ERRORNUM
+            CALL      EROR0000
+            GOTO      VNTE0900
+          ENDIF
+.
+          MATCH     ANSI,PTCOACTV                * inactive ?
+          IF        @EQUAL
+            MOVE      "NTE.4: Comment Type not active on Category TZ",ERRORDSC
+            MOVE      "103",ERRORNUM
+            CALL      EROR0000
+            GOTO      VNTE0900
+          ENDIF
+.
+          MATCH     ANSR,TCINDC5                 * receiving this type ?
+          GOTO      VNTE0500 IF EQUAL            * yes
+.
+          MATCH     ANSB,TCINDC5                 * sending/receiving this type ?
+          GOTO      VNTE0500 IF EQUAL            * yes
+.
+          MOVE      "NTE.4: Indicator 5 on Category TZ code must be R or B",ERRORDSC
+          MOVE      "103",ERRORNUM
+          CALL      EROR0000
+          GOTO      VNTE0900
+.
+VNTE0500  MOVE      NTE00101,RTMPSEGC            * load NTE segment count
+          MOVE      FOUR,RTMPFLDN                 * load field number
+          MOVE      ONE,RTMPFCNT                 * load field number count
+          MOVE      ONE,RTMPCMPN                 * load component number
+          PACK      RTMPVRBL,NTE00401,SP100,SP100,SP100,SP100,SP100
+          CALL      WTMP0000
+.
+VNTE0900
 .
 VNTE9999  RETURN
++
+.*****************************************************************************
+.*                               PTCO0000                                    *
+.*                                                                           *
+.*                Process the hcp comments field                             *
+.* Requires: NTE00301 - HCP Message Comments                                 *
+.*****************************************************************************
+.
+PTCO0000  STRIP     NTE00301
+          MOVE      NTE00301,OLDSTRNG
+          CALL      CONV0000                     * convert any escape sequences
+          MOVE      NEWSTRNG,NTE00301
+          MOVELPTR  NTE00301,SAVFORM4
+.
+          COMPARE   ZERO,SAVFORM4                * field populated ?
+          GOTO      PTCO9999 IF EQUAL            * no - finished
+.
+.         There are hcp comments in the field, so write to tempfile (pmstcoaf)
+.         "" is allowed (used to signify deleting the comments for that type)
+.
+          CALL      WTCO0000
+.
+PTCO9999  RETURN
++
+.*****************************************************************************
+.*                           WTCO0000              Called by: PTCO0000       *
+.*                    Write pmstcoaf record(s)                               *
+.* Requires: PMSHCPFD - record exists on pmshcpaf for hcp                    *
+.*           NTE00301 - HCP Message Comments                                 *
+.*****************************************************************************
+.
+.         Bump through the text string on a character by character basis
+.         and for each character check to see whether there is a line break.
+.         Allow 70 characters/line, unless of course there is a line break
+.         or the end of the string is reached.
+.
+WTCO0000  MOVE      ZERO,LINENUMB                * initialise line number
+          MOVE      ZERO,CHRCOUNT                * initialise character count
+          MOVE      SP100,DIM70
+          CLEAR     DIM70
+.
+.         Check to see if we have a line break
+.
+WTCO0200  MOVE      ZERO,BREAKFLG                * initialise break found flag
+          MATCH     LINBREAK,NTE00301
+          IF        !@EQUAL | @LESS
+            GOTO      WTCO0500
+          ENDIF
+.
+.         We have found a line break, so if there is no data so far in the
+.         the line (CHRCOUNT is zero), then ignore the line break, otherwise,
+.         write the current line data
+.
+          IF        CHRCOUNT = 0
+            BUMP      NTE00301,5                 * move past line break
+            GOTO      WTCO9500 IF EOS            * eos - finished
+            GOTO      WTCO0200                   * check for another line break
+          ENDIF
+.
+          MOVE      ONE,BREAKFLG                 * set flag for break found
+.
+WTCO0300  CALL      WHLN0000                     * write a comment line
+.
+          MOVE      ZERO,CHRCOUNT                * re-initialise character count
+.
+WTCO0400  IF        BREAKFLG = 1
+            BUMP      NTE00301,5                 * move past line break
+          ELSE
+            BUMP      NTE00301                   * get next character
+          ENDIF
+          GOTO      WTCO9000 IF EOS              * eos - finished
+          GOTO      WTCO0200                     * check for another line break
+.
+.         We have a valid character, so load it into the text line and then
+.         get the next character
+.
+WTCO0500  MOVE      NTE00301,ANS
+          APPEND    ANS,DIM70                    * load current character
+          ADD       ONE,CHRCOUNT                 * increment character count
+.
+          COMPARE   SEVENTY,CHRCOUNT             * full line yet ?
+          GOTO      WTCO0400 IF LESS             * no
+.
+.         Check for blank space on char 70 so as not to split up words
+.
+WTCO1000  MATCH     SP1,ANS
+          IF        !@EQUAL
+            BUMP      DIM70,-1                   * go back to previous character
+            LENSET    DIM70                      * set LL to FP position
+            BUMP      NTE00301,-1
+            MOVE      NTE00301,ANS
+            MOVEFPTR  DIM70,FPPOSITN
+            IF        FPPOSITN = 1
+WTCO1500      SETLPTR   DIM70,70
+              BUMP      NTE00301,69
+              GOTO      WTCO0300
+            ENDIF
+            GOTO      WTCO1000                   * check for space again
+          ELSE
+            GOTO      WTCO0300                   * write comment if space
+          ENDIF
+.
+WTCO9000  IF        CHRCOUNT > 0
+            CALL      WHLN0000                   * write comment record
+          ENDIF
+.
+WTCO9500  RESET     NTE00301
+.
+WTCO9999  RETURN
++
+.*****************************************************************************
+.*                                  WHLN0000       Called by: WTCO0000       *
+.*        Write hcp comment line record to tempfile                          *
+.*****************************************************************************
+.
+WHLN0000  ADD       ONE,LINENUMB                 * increment line number
+          RESET     DIM70
+.
+          MOVE      THREE,RTMPFLDN
+          MOVE      LINENUMB,RTMPFCNT
+          MOVE      ONE,RTMPCMPN
+          PACK      RTMPVRBL,DIM70,SP100,SP100,SP100,SP100,SP100
+          CALL      WTMP0000
+.
+          MOVE      SP100,DIM70
+          CLEAR     DIM70
+.
+WHLN9999  RETURN
 +
 .*****************************************************************************
 .*                               PODC0000                                    *
@@ -55183,7 +55411,7 @@ MSCH0100  MOVE      SP3,SCH22HSP
           ENDIF
 .
 .         Multihospital: Validate that the facility code exists as an approval
-.         number on a hospital record (pathspaf)
+.         number / hospital code on a hospital record (pathspaf)
 .
           MOVE      SP3,KEY3
           CALL      RSPTHSP1                     * position at start of file
@@ -58237,8 +58465,8 @@ VZTR0300  STRIP     ZTR01201
 .
           MATCH     BLANKSTR,ZTR01201            * field null ?
           IF        @EQUAL
-            MATCH     MTYPEA08,MESSTYPE
-            GOTO      VZTR0400 IF EQUAL          * not mandatory for EMR A08
+.0959732    MATCH     MTYPEA08,MESSTYPE
+.0959732    GOTO      VZTR0400 IF EQUAL          * not mandatory for EMR A08
 .
             MOVE      "ZTR.12: Attendance Source Code is mandatory",ERRORDSC
             MOVE      "101",ERRORNUM
@@ -75637,7 +75865,16 @@ PM027300  MATCH     SP8,LASTUPDT
           CALL      WISL0000                     * Write EDWARD ISP Audit vars
           MOVE      "A",PMHCACTN                 * add action flag for DGCLIM02
 .
-PM029000  MATCH     "1",PTCNFNM2
+PM029000  MATCH     "1",PTCNNTES
+          IF        @EQUAL
+            CALL      PHCP0000                   * hcp comments (NTE)
+          ENDIF
+          MATCH     "2",PTCNNTES
+          IF        @EQUAL
+            CALL      PHCP0000                   * hcp comments (NTE)
+          ENDIF
+.
+          MATCH     "1",PTCNFNM2
           GOTO      PM029999 IF NOT EQUAL        * rebroadcast HL7 MFN^M02 ?
 .
           MOVE      "HL7RECVR  ",USERID
@@ -75653,6 +75890,197 @@ PM029000  MATCH     "1",PTCNFNM2
           PROC      DGCLIM02                     * trigger M02 message
 .
 PM029999  RETURN
++
+.*****************************************************************************
+.*                              PHCP0000                                     *
+.*                 Process NTE comment segments                              *
+.* Requires:  NTECOUNT - number of NTE segments received                     *
+.*            NTEFOUND - found NTE segment flag                              *
+.*                             0 = one or more NTE segment found             *
+.*                             1 = no NTE segment found                      *
+.*****************************************************************************
+.
+.         Check if a NTE segment was received
+.
+PHCP0000  BRANCH    NTEFOUND,PHCP9999            * no NTE segments received
+.
+          MOVE      NTECOUNT,SVNTECNT            * save NTE segment count
+.
+          COMPARE   ZERO,SVNTECNT                * any NTE's to process ?
+          GOTO      PHCP9999 IF EQUAL            * no - finished
+.
+.         There is one or more valid NTE segments
+.
+          MOVE      ZERO,NTECOUNT                * initialise NTE segment count
+.
+          MOVE      ZERO,LINENUMB                * initialise line number
+          MOVE      PMHCHCPC,PMTCCODE            * load HCP Code
+.
+          PACK      KEY15,NTESEGMT,SP20
+          CALL      RSTEMP1                      * position on NTE segment
+PHCP0080  CALL      RKTEMP1                      * read next record
+          BRANCH    OVRCD,PHCP0090               * eof - finished
+.
+          MATCH     NTESEGMT,RTMPSEGI            * same segment still ?
+          GOTO      PHCP0090 IF NOT EQUAL        * no - finished
+.
+          COMPARE   NTECOUNT,RTMPSEGC            * same segment count still ?
+          GOTO      PHCP0100 IF EQUAL            * yes
+.
+          ADD       ONE,NTECOUNT                 * increment NTE segment count
+.
+          COMPARE   ONE,NTECOUNT                 * first NTE segment ?
+          GOTO      PHCP0100 IF EQUAL            * yes
+.
+.         We have a new segment and therefore have completed loading the
+.         fields for the previous NTE segment, so write or update pmstcoaf
+.
+PHCP0090  SUB       ONE,SVNTECNT
+          COMPARE   ZERO,SVNTECNT                * last NTE record ?
+          GOTO      PHCP9999 IF EQUAL            * yes
+.
+          MOVE      ZERO,LINENUMB                * initialise line number
+          MOVE      PMHCHCPC,PMTCCODE            * load HCP Code
+.
+.         Load the relevant field/component
+.
+PHCP0100  BRANCH    RTMPFLDN,PHCP0110:           * Set ID (SI)
+                             PHCP0200:           * Comment Source (ID)
+                             PHCP0300:           * Comment (FT)
+                             PHCP0400            * Comment Type (CE)
+.
+.                   Invalid field number, so ignore
+.
+          GOTO      PHCP0080
+.
+.         NTE.1  Set ID (SI)
+.
+PHCP0110  GOTO      PHCP0080
+.
+.         NTE.2  Comment Source (ID)
+.
+PHCP0200  GOTO      PHCP0080
+.
+.         NTE.3  Comment (FT)
+.
+PHCP0300  BRANCH    RTMPCMPN,PHCP0301            * identifier (ST)
+          GOTO      PHCP0080
+.
+PHCP0301  STRIP     RTMPVRBL
+          MOVELPTR  RTMPVRBL,FORM3               * field populated ?
+          COMPARE   ZERO,FORM3
+          GOTO      PHCP0080 IF EQUAL            * no - no change
+.
+.         "" is allowed (used to signify deleting the comments for that type)
+          PACK      DIM70,RTMPVRBL,SP100         * load Note Comments
+.
+.         NTE.4  Comment Type (CE) * Need to get here as it relates to NTE.3
+.
+          PACK      SAVKEY15,RTMPSEGI,RTMPSEGC,RTMPFLDN,RTMPFCNT,RTMPCMPN
+          MOVE      FOUR,RTMPFLDN
+          MOVE      ONE,RTMPFCNT
+          MOVE      ONE,RTMPCMPN
+          PACK      KEY15,RTMPSEGI,RTMPSEGC,RTMPFLDN,RTMPFCNT,RTMPCMPN
+          CALL      RDTEMP1
+          BRANCH    OVRCD,PHCP0390
+.
+          STRIP     RTMPVRBL
+          MOVELPTR  RTMPVRBL,FORM3               * field populated ?
+          COMPARE   ZERO,FORM3
+          GOTO      PHCP0080 IF EQUAL            * no - no change
+.
+          MATCH     BLANKSTR,RTMPVRBL            * field null ?
+          IF        @EQUAL
+            PACK      PMTCTCOM,SP100             * yes
+          ELSE
+            PACK      PMTCTCOM,RTMPVRBL,SP100    * load Comment Type
+            CALL      WHCP0000                   * write to pmstcoaf
+          ENDIF
+.
+PHCP0390  MOVE      SAVKEY15,KEY15
+          CALL      RDTEMP1
+          BRANCH    OVRCD,PHCP0399
+.
+PHCP0399  GOTO      PHCP0080
+.
+.         NTE.4  Comment Type (CE)
+.
+PHCP0400  BRANCH    RTMPCMPN,PHCP0401:           * identifier (ST)
+                             PHCP0402:           * text (ST)
+                             PHCP0403:           * name of coding system (ST)
+                             PHCP0404:           * alternate identifier (ST)
+                             PHCP0405:           * alternate text (ST)
+                             PHCP0406            * name of alt. cod. system (ST)
+          GOTO      PHCP0080
+.
+PHCP0401  GOTO      PHCP0080
+.
+PHCP0402  GOTO      PHCP0080
+.
+PHCP0403  GOTO      PHCP0080
+.
+PHCP0404  GOTO      PHCP0080
+.
+PHCP0405  GOTO      PHCP0080
+.
+PHCP0406  GOTO      PHCP0080
+.
+PHCP9999  RETURN
++
+.*****************************************************************************
+.* Write NTE00301 comment to pmstcoaf                                        *
+.*****************************************************************************
+WHCP0000  MATCH     BLANKSTR,DIM70
+          IF        @EQUAL
+            CALL      DHCP0000                   * "" = delete from pmstcoaf
+            GOTO      WHCP9000
+          ENDIF
+.
+WHCP0100  ADD       ONE,LINENUMB                 * increment line number
+          MOVE      LINENUMB,PMTCLNUM
+.
+          PACK      KEY16,PMTCCODE,PMTCTCOM,PMTCLNUM
+          CALL      RAPMTCO1
+          IF        OVRCD<>1
+            GOTO      WHCP0100
+          ENDIF
+.
+          RESET     DIM70
+          PACK      PMTCCOMM,DIM70,SP100         * Comment Line
+.
+          MOVE      "HL7RECVR  ",PMTCUUID        * User ID Updated
+          MOVE      CURRDATE,PMTCUDAT            * Date Updated
+          MOVE      CTIMEIS,PMTCUTIM             * Time Updated
+.
+          MOVE      SP70,PMTCSPAR
+.
+          CALL      WRPMTCO1                     * write new record
+
+WHCP9000  MOVE      SP100,DIM70
+          CLEAR     DIM70                        * clear comment line
+WHCP9999  RETURN
++
+.*****************************************************************************
+.* Delete NTE00301 comments from pmstcoaf for the comment type               *
+.*****************************************************************************
+DHCP0000  MOVE      PMTCCODE,D10
+          MOVE      PMTCTCOM,D3
+DHCP1000  PACK      KEY16,D10,D3,SP70
+          CALL      RSPMTCO1
+          CALL      RKPMTCO1
+          BRANCH    OVRCD,DHCP9999
+.
+          MATCH     D10,PMTCCODE
+          GOTO      DHCP9999 IF NOT EQUAL
+.
+          MATCH     D3,PMTCTCOM
+          GOTO      DHCP9999 IF NOT EQUAL
+.
+          PACK      KEY16,PMTCCODE,PMTCTCOM,PMTCLNUM
+          CALL      DEPMTCO1                     * delete record
+          GOTO      DHCP1000
+
+DHCP9999  RETURN
 +
 .*****************************************************************************
 .*                              SZST0000                                     *
@@ -94218,6 +94646,7 @@ DETEMP5   DELETE    COMTEMP1,KEY5
           INC       PMSPX2IO/INC
           INC       PMSQPTIO/INC
           INC       PMSRELIO/INC
+          INC       PMSTCOIO/INC
           INC       PMSTLEIO/INC
           INC       PMSTSPIO/INC
           INC       PMSUPDIO/INC

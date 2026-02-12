@@ -6,6 +6,8 @@
 . Modifications  :
 .
 .--------------------------------------------------------------------------
+. V12.01.02 20/01/20256 Nikitha Bhaskar   TSK 0969712
+.           Added new label DLRF0000 to delete/remove referrals when unlinked.
 . V12.01.01 04/12/2025  Jacob Jackson     TSK 0908319
 .           Add ability to change/merge UR for medical/maternity booking
 . V12.00.04 27/07/2025  Nikitha Bhaskar   TSK 0963585
@@ -852,6 +854,7 @@
           INC       ALLPCTFD/INC
           INC       ALLREFFD/INC
           INC       APSMASFD/INC
+          INC       ALLRLNFD/INC
           INC       BOKRC1FD/INC
           INC       EMRVISFD/INC       * Emergency
           INC       EOCLNKFD/INC
@@ -1366,7 +1369,7 @@ URWTARAY  INIT      "234567"
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "PATWEB83"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Input New Borns Web Server"
 .----------------------------------------------------------------------
 .
@@ -1416,6 +1419,8 @@ MAIN9999  MOVE      "SERVER SHUTDOWN COMPLETE",WEBTITLE
 INIT0000  CALL      INTMAS00 
           OPEN      CONTROLF,"controlf"
           OPEN      BOKRC1A1,"bokrc1af"
+          OPEN      ALLRLNA1,"allrlnaf"
+          OPEN      ALLRLNA2,"allrlnaf"
           OPEN      EMRVISA1,"emrvisaf" 
           OPEN      EMRVISA3,"emrvisaf"
           OPEN      NHIMASA1,"nhimasaf"
@@ -3235,6 +3240,8 @@ CHAD3500  MATCH     " 2",PVISYST          * Allied Health
           CALL      FIXART00
           CALL      RMHV0000
 .
+          CALL      DLRF0000              * Delete referral rec from allrefaf
+.
           READ      CONTROLF,HUND21;*122,ALCNA44L
           MATCH     "1",ALCNA44L
           GOTO      CHAD4000 IF NOT EQUAL
@@ -3669,6 +3676,36 @@ CHGT0000  MOVE      ZERO,MEDIBOOK
 .
 CHGT9999  RETURN
 +
+.*********************************************************************
+.        Subroutine to Delete referral linked record from allrefaf
+.        when referral moved from one UR is moved to another UR
+.*********************************************************************
+DLRF0000  PACK      KEY16,DPVIBILL,SP70
+          CALL      RSALRLN1
+          CALL      RKALRLN1
+          BRANCH    OVRCD,DLRF2000
+.
+          MATCH     ALRLVISN,DPVIBILL
+          GOTO      DLRF2000 IF NOT EQUAL
+.                                            * Program / master referral
+          PACK      KEY16,ALRLVISN,ALRLLNKV,SP70
+          CALL      DEALRLN1
+          GOTO      DLRF0000
+.
+DLRF2000  PACK      KEY16,DPVIBILL,SP70
+          CALL      RSALRLN2
+          CALL      RKALRLN2
+          BRANCH    OVRCD,DLRF9999
+.
+          MATCH     ALRLLNKV,DPVIBILL
+          GOTO      DLRF9999 IF NOT EQUAL
+.                                            * Episode / internal referral
+          PACK      KEY16,ALRLLNKV,ALRLVISN,SP70
+          CALL      DEALRLN2
+          GOTO      DLRF2000
+.
+DLRF9999  RETURN
+.
 .------------------------------------------------------------
 . Process Fields 
 .------------------------------------------------------------
@@ -7536,6 +7573,7 @@ WPMNPL99  RETURN
           INC       ALLPCTIO/INC
           INC       ALLREFIO/INC
           INC       APSMASIO/INC
+          INC       ALLRLNIO/INC
           INC       BOKRC1IO/INC
           INC       EMRVISIO/INC       * Emergency
           INC       EOCLNKIO/INC

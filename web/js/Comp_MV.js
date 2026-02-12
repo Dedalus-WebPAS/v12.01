@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 
 //=============================================================================
 // Program   : Comp_MV.js
@@ -148,7 +148,8 @@ function SetPrinterAltMVIT() {
 }
 
 function DisplayIns() {
-    GetIns(document.getElementById('pmext012'),
+    var insurer = document.getElementById('pmext012');
+    GetIns(insurer,
            document.UpdateForm.insadd1,
            document.UpdateForm.insadd2,
            document.UpdateForm.insadd3,
@@ -165,6 +166,22 @@ function DisplayIns() {
     document.UpdateForm.inspcode.value="";
     document.UpdateForm.inscname.value="";
     document.UpdateForm.insctelp.value="";
+   }
+
+   if(insurer.value == document.UpdateForm.d_pmext012.value){
+     document.UpdateForm.pmext030.value=
+       document.UpdateForm.d_pmext030.value;
+     document.UpdateForm.pmext031.value=
+       document.UpdateForm.d_pmext031.value;
+     document.UpdateForm.pmext032.value=
+       document.UpdateForm.d_pmext032.value;
+     document.UpdateForm.pmext034.value=
+       document.UpdateForm.d_pmext034.value;
+   } else {
+     document.UpdateForm.pmext030.value="";
+     document.UpdateForm.pmext031.value="";
+     document.UpdateForm.pmext032.value="";
+     document.UpdateForm.pmext034.value="";
    }
 }
 

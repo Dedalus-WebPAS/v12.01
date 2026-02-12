@@ -3,6 +3,8 @@
 .*    HL7 Variables for HL7CISIN & HL7CISRC                                  *
 .*                                                                           *
 .*    Mods:                                                                  *
+.*        13/01/2026  Davin            TSK 0961944                           *
+.*                    Added NTE segment variables                            *
 .*        21/10/2025  Bella Turco      TSK 0960178                           *
 .*                    Added ZXP077                                           *
 .*        16/10/2025  J.Tan            TSK 0967027                           *
@@ -876,6 +878,11 @@ NK1035    DIM       80
 NK1036    DIM       2
 NK1037    DIM       16
 .
+NTE001    DIM       4
+NTE002    DIM       8
+NTE003    DIM       4090
+NTE004    DIM       250
+.
 OBX001    DIM       4
 OBX002    DIM       3
 OBX003    DIM       80
@@ -1245,7 +1252,7 @@ ZLH004    DIM       8
 ZLU001    DIM       100
 ZLU002    DIM       10
 .
-ZNT001    DIM       3
+ZNT001    DIM       4
 ZNT002    DIM       3
 ZNT003    DIM       6
 ZNT004    DIM       4090

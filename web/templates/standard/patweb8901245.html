@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -42,6 +42,18 @@ function SetCancel() {
   location.href= link;
 }
 
+function checkReferralProcess() {
+  if (!isWhitespace(UpdateForm.referadm.value) && 
+      !isWhitespace(UpdateForm.referdep.value)) {
+    document.UpdateForm.redirect.value="outweb02.pbl?reportno=03&template=001" +
+    "&urnumber=" + document.UpdateForm.urnumber.value.replace(/ /g,"+") +
+    "&admissno=" + document.UpdateForm.admissno.value.replace(/ /g,"+") +
+    "&casekeys=" + document.UpdateForm.casekeys.value.replace(/ /g,"+") +
+    "&referadm=" + document.UpdateForm.referadm.value.replace(/ /g,"+") +
+    "&referdep=" + document.UpdateForm.referdep.value.replace(/ /g,"+");  
+  }
+}
+
 function SubmitClaim() {
   if(document.UpdateForm.seriflag.value=="1"){  // Single HCP Series
     document.UpdateForm.redirect.value="outweb02.pbl?reportno=03&template=001" +
@@ -78,6 +90,8 @@ function SubmitClaim() {
   if(document.UpdateForm.scrname.value=="OCR"){
     document.UpdateForm.redirect.value += "&showfoll=1";
   }
+
+ checkReferralProcess();
 
  if(validateMandatory(UpdateForm)){
   UpdateForm.updatety.value="5";
@@ -190,7 +204,8 @@ onsubmit='return validateMandatory(this);'>
 <input type=hidden name=faxnumbr value=" ">
 <input type=hidden name=oldpcode value="%PATWEB89.01.384.084">
 <input type=hidden name=scrname  value="%PATWEB89.01.999.137">
-
+<input type=hidden name=referdep value="%PATWEB89.01.999.140">
+<input type=hidden name=referadm value="%PATWEB89.01.999.141">
 <table border=1 width=100% cellspacing=0 cellpadding=1>
 <tr><td class=HeadingCell align=center>
     Shipping Details</td></tr>

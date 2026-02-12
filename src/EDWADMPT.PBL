@@ -6,6 +6,10 @@
 .* RETURNS     :                                                              *
 .* Mods        :                                                              *
 .******************************************************************************
+.* V12.01.01 23/01/2026 Ebon Clements  Task 0969838                           *
+.*           Report Obj 60 attribute 01 care type on admission from the first *
+.*           care type change record or ACARE is no care type changes         *
+.*           ADMC0000                                                         *
 .* V12.00.06 09/09/2025 Ebon Clements  Task 0960807                           *
 .*           Read admission file record to restore the current care type      *
 .*           value after reporting care type change on admission date         *
@@ -5377,7 +5381,9 @@ UCAR9999  RETURN
 ADMC0000  MOVE      SP70,SAVCHDAT      * Clear end date for current record
           MOVE      SP70,SAVCHTIM      * Clear end time for current record
 .
-.* check if care type changed on day of admission.  Get old value from patchcof
+.* Get the first care type change to determine the care type on admission.
+.* If there has been a care type change ACARE will not hold the care type
+.* at admission as it's the current care type
 .
           PACK      KEY24,DTADMN,SP70
           CALL      RDSCHCO1
@@ -5389,9 +5395,6 @@ ADMC1000  CALL      RDKCHCO1
 .
           MATCH     "CC",CHCATG
           GOTO      ADMC1000 IF NOT EQUAL
-.
-          MATCH     ADATE,CHDATE                 * Changed on admission date
-          GOTO      ADMC5000 IF NOT EQUAL
 .
           PACK      ACARE,CHCODE,SP70
 .

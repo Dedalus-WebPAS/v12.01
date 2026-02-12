@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <!-- $Id: patweb8903001.html 4223 2018-11-20 08:10:33Z  $ -->
 <!-- $URL: http://lxfm700sub/svn/webpas/trunk/web/custom/patweb8903001.html $ -->
@@ -593,10 +593,11 @@ InsertPatientHeader()
          <option> </option>
           %PATWEB89.03.111.2
          </select></td>
-    <td class=DataLabel>Consent upload visit to My Health Record?</td>
-    <td><select name=ptmis037 tabindex=146 title="Upload to MyHR?">
-         <option></option>
-          %STANDARD.01.018.U1.000.4
+    <td class=DataLabel id="MyHRConsentTitle"></td>
+    <td><select name=pmsvx125 id=pmsvx125 tabindex=146 title="Upload to MyHR?">
+           <option value=" "></option>
+           <option value="0">No</option>
+           <option value="1">Yes</option>
         </select>&nbsp;
          (<a href="javascript:patientMyhrConsentForm();">form</a>)</td></tr>
 
@@ -752,6 +753,9 @@ if (document.UpdateForm.ismrtmas.value!="1"){
       i--;
     }
   }
+ document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;
+ document.getElementById("pmsvx125").title = ScreenLabelMyHRConsent;
+ document.getElementById("pmsvx125").value = trim("%PATWEB89.03.298.037");
 
 </script>
 

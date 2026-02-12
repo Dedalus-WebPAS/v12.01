@@ -1,24 +1,13 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="cac">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
 <script type="text/javascript" src="../js/emrweb0201101.js"></script>
 <script type="text/javascript">
-function DisplayPresentComplaintAddInfo() {
-  f = document.UpdateForm;
-  if (f.emcprcmp.value == "1") {
-    document.getElementById('PresentComplaintAddInfo').style.display = "";
-  }
-  else {
-    document.getElementById('PresentComplaintAddInfo').style.display = "none";
-  }
-}
-
 function init() {
   var strg1= trim(HiddenFields.Pres01.value)
   var strg2= trim(HiddenFields.Pres02.value)
   UpdateForm.prcom001.value=strg1+'\n'+strg2
-  UpdateForm.vicmt023.value=trim(HiddenFields.pcompadd.value)
 
   if (HiddenFields.DischargeComplete.value != "1") {
     alert("Patient is already discharged")
@@ -155,8 +144,7 @@ function displayReferralFields() {
 </script>
 </head>
 %START.OF.PAGE
-<body onload="PageLoad(event);displayReferralFields();CheckDepartureDateNZ();
-              DisplayPresentComplaintAddInfo();">
+<body onload="PageLoad(event);displayReferralFields();CheckDepartureDateNZ();">
 <div id=PatientHeading></div>
 <script type="text/javascript">
 PatientURN="%EMRWEB02.01.003";
@@ -220,8 +208,6 @@ InsertEmergencyHeader()
 <input type=hidden name=currtime value="">
 <input type="hidden" name="stfrefin" id="stfrefin"
  value="%EMRWEB02.01.919">
-<input type=hidden name=emcprcmp id=emcprcmp
- value="%STANDARD.01.025.122.051.1.1">
 
 <table width=95% align=center border=0 cellspacing=0 cellpadding=1>
 <tr valign=top><td>
@@ -233,22 +219,9 @@ InsertEmergencyHeader()
          class="Readonly">
     </td>
     <td colspan=4>
-    <textarea name=prcom001 wrap=hard cols=50 rows=6 
+    <textarea name=prcom001 wrap=hard cols=50 rows=2 
               title="Presenting Complaint"></textarea>
     </td></tr>
-
-<tr valign=top id=PresentComplaintAddInfo>
-  </td></tr>
-  </td></tr>
-  <td>
-    <textarea type=text name=vicmt023 id=vicmt023 wrap=hard
-     cols=50 rows=6 class=AsciiOnly
-     title="Presenting Complaint - Additional Information"
-     onkeydown="CheckPresentCompAddInfoTextLimit(this);"
-     onblur="TextareaBlurHandler(this);">
-    </textarea>
-  </td>
-</tr>
 
 <tr><td>&nbsp;</td></tr>
 
@@ -439,7 +412,6 @@ InsertEmergencyHeader()
 <input type=hidden name=ShowOutstanding value="%EMRWEB02.01.474"> 
 <input type=hidden name=Pres01 value="%EMRWEB02.01.104">
 <input type=hidden name=Pres02 value="%EMRWEB02.01.105">
-<input type=hidden name=pcompadd value="%EMRWEB02.01.955.023.0">
 </form>
 <form name=PatientLinks method=get style="margin:0">
 <input type=hidden name=reportno value=1>

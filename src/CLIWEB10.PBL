@@ -6,6 +6,8 @@
 . Modifications
 .
 .-------------------------------------------------------------------------------
+. V12.01.01 29/01/2026  Thanh T        TSK 0930214
+.           Move SP70 to OBAUORNO, OBAUOVIS and OBAUOCOR fields
 . V12.00.01 24/10/2025  Don Nguyen   TSK 0956680
 .           Fixed bug where the Text Format flag (TEXTFMT) was not set for each
 .           Observation read (OBXHTM00) and the globally set (server) value was
@@ -533,7 +535,7 @@ PRACPROV  DIM       10
 .
 .------------------------------------------------------------
 PRGID     INIT      "CLIWEB10"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Clinical Result Detail Server"
 .------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -3844,6 +3846,9 @@ OBSAUD00  MOVE      OBPCURNO,OBAUURNO
           PACK      OBAUTIME,CTIMEIS
           MOVE      USERID,OBAUWEBU
           MOVE      SP70,OBAUREAS
+          MOVE      SP70,OBAUORNO
+          MOVE      SP70,OBAUOVIS
+          MOVE      SP70,OBAUOCOR
           PACK      OBAUSPAR,SP70
 .
           MATCH     ANSU,OBAUTYPE

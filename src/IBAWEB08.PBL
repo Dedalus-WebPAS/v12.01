@@ -11,6 +11,9 @@
 .*                  to extract, then proceed with the extraction.             *
 .*                                                                            *
 .* Modifications  :                                                           *
+*******************************************************************************
+.* V12.01.01 02/02/2026  Peter Vela         0939466                           *
+.*           Added distance in kilometres to JSON output                      *
 .******************************************************************************
 .* V12.00.02 02/10/2025  Peter Vela         0939466                           *
 .*           Added accountReferenceNumber                                     *
@@ -1005,7 +1008,7 @@ ERRORDSC  DIM       500
 .
 PRGID     INIT      "IBAWEB08"
 PRGNAM    INIT      "WebServices DVAW Claims Extract"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .******************************************************************************
 .*                                   MAIN0000                                 *
@@ -6422,6 +6425,31 @@ JSON0000  PACK      PROPFLNM,WBDWTRID,PROPLITR,SP70
                               WRITE     DVAWFILE,SEQ;DIM100
                             ENDIF
 .
+.                           **** claim/medicalEvent/service/distanceKilometres ****
+.
+.                           WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB59,QUOTE:
+.                                                                      COLON:
+.                                                  QUOTE,DVWVAL59,QUOTE,COMMA
+.
+                            MATCH     SP70,DVWVAL59
+                            IF        !@EQUAL
+                              CLEAR     DIM100
+                              APPEND    SP12,DIM100
+                              APPEND    QUOTE,DIM100
+                              APPEND    DVWLAB59,DIM100
+                              APPEND    QUOTE,DIM100
+                              APPEND    COLON,DIM100
+.                              APPEND    QUOTE,DIM100
+                              APPEND    DVWVAL59,DIM100
+                              RESET     DIM100
+                              STRIP     DIM100
+                              ENDSET    DIM100
+.                              APPEND    QUOTE,DIM100
+                              APPEND    COMMA,DIM100
+                              RESET     DIM100
+                              WRITE     DVAWFILE,SEQ;DIM100
+                            ENDIF
+.//TODO
 .                           **** claim/medicalEvent/service
 .                                                  /aftercareOverrideInd ****
 .

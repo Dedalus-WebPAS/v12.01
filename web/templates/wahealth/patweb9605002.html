@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -582,8 +582,8 @@ InsertPatientHeader()
 <input type=hidden name=mnhlredr id=mnhlredr
  value="%PATWEB96.05.001.mehweb01.09.001">
 <input type=hidden name=ptmis024 id=ptmis024 value="%PATWEB96.05.124.3">
-<input type=hidden name=ptmis037 id=ausr1 value="%PATWEB96.05.133.3">
-<input type=hidden name=dschusr1 id=dusd1 value="%PATWEB96.05.133.3">
+<input type=hidden name=pmsvx125 id=ausr1 value="%PATWEB96.05.498.037">
+<input type=hidden name=dschusr1 id=dusd1 value="%PATWEB96.05.498.037">
 <input type=hidden name=ismrtmas id=ismrtmas value="%PATWEB96.05.841">
 <input type=hidden name=mnhlpatn id=mnhlpatn value="%PATWEB96.05.221">
 <input type=hidden name=mhadmflg id=mhadmflg>
@@ -1024,14 +1024,10 @@ function checkClaimType(){
 }
 
 // Convert a blank visit-level consent to the implied consent from patient level
-PatientConsentMyHR = "%PATWEB96.05.043.3";
-VisitConsentMyHR   = "%PATWEB96.05.133.3";
-if (VisitConsentMyHR.substring(0,3)=="   ") {
-  if (PatientConsentMyHR.substring(0,3)=="   ") {
-    document.getElementById("dusd1").value = "001                        0          A    ";
-  } else {
-    document.getElementById("dusd1").value = PatientConsentMyHR; 
-  }
+PatientConsentMyHR = trim("%PATWEB96.05.599.046");
+VisitConsentMyHR   = trim("%PATWEB96.05.498.037");
+if (VisitConsentMyHR=="") {
+  document.getElementById("dusd1").value = PatientConsentMyHR; 
 }
 
 </script>

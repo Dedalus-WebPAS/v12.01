@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -878,10 +878,13 @@ function EthnicityLanguageSpokenAtHome() {
         name=pmpmi093 title="Health Fund Contributor Name" tabindex=26>
     </td>
 
-    <td class=DataLabel>Consent upload to My Health Record?</td>
-    <td><select name=ptmas039 tabindex=31 title="Consent MyHR Upload">
-         <option></option>
-         %STANDARD.01.018.P1.000.4
+    <td class=DataLabel  id="MyHRConsentTitle" ></td>
+    <td><select name=pmpmi110 id=pmpmi110 tabindex=31 
+                title="Consent MyHR Upload">
+         <option value=" "></option>
+         <option value="0">No</option>
+         <option value="1">Yes</option>
+         
          </select>&nbsp;(<a href="javascript:patientMyhrConsentForm();">form</a>)
     </td>
 </tr>
@@ -967,6 +970,8 @@ function EthnicityLanguageSpokenAtHome() {
 
 <script type="text/javascript">
    UsualPRFA="%PATWEB89.05.909"
+ document.getElementById("MyHRConsentTitle").innerHTML = ScreenLabelMyHRConsent;
+ document.getElementById("pmpmi110").title = ScreenLabelMyHRConsent;
 /*
    PatientSex="%PATWEB89.05.086.082"
    for (var i =0 ; i < document.AddForm.ptmas015.length; i++) {
