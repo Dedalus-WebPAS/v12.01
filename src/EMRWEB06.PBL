@@ -6,6 +6,8 @@
 . Modifications :
 .
 .----------------------------------------------------------------------
+. V12.01.02 17/02/2026 Thanh T          TSK 0960621
+.           Changed WRTHIS40 to space out EMHITHDR to EMHITHNT fields
 . V12.01.01 16/12/2025  Bella Turco     TSK 0949715
 .           Recompiled for EMRVISTM
 . V12.00.02 03/06/2025  J.Tan          TSK 0955096
@@ -988,7 +990,7 @@ SP100     INIT      "                                   ":
 .
 .---------------------------------------------------------------------
 PRGID     INIT      "EMRWEB06"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Procedures, Diagnoses and Investigations Server"
 .---------------------------------------------------------------------
 .
@@ -5778,6 +5780,14 @@ WRTHIS40  MOVE      HISTTYPE,EMHIUPT
           MOVE      EMVILOCN,EMHILOC
           MOVE      EMVIDOCT,EMHIDOC
           MOVE      EMVIATNS,EMHINUR
+.
+          MOVE      SP70,EMHITHDR              . Telehealth Doctor Code
+          MOVE      SP70,EMHITHDD              . Telehealth Doctor Date
+          MOVE      SP70,EMHITHDT              . Telehealth Doctor Time
+          MOVE      SP70,EMHITHNR              . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMHITHND              . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMHITHNT              . Telehealth Nurse/Midwife Time
+.
           PACK      EMHISPA,SP70,SP70
           PACK      EMHIDSD,EMHIDSD,SP70
           PACK      EMHIDST,EMHIDST,SP70

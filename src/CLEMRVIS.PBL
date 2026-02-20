@@ -2,8 +2,10 @@
 .*                  CLEMRVIS.PBL                                             *
 .*        clear the EMRVISFD variables                                       *
 .*****************************************************************************
-. V12.00.01  14/05/2025  Ebon Clements TSK 0955096                           *
-.            Alphanueric visit number changes. ZEROVISN to EMVIPADM           *
+.* V12.01.01 13/02/2026  Thanh T       TSK 0960621                           *
+.*           Added EMVITHDR to EMVITHNT fields                               *
+.* V12.00.01 14/05/2025  Ebon Clements TSK 0955096                           *
+.*           Alphanueric visit number changes. ZEROVISN to EMVIPADM          *
 .* V11.01.01 01/03/2021 Ebon Clements  TSK 0873184                           *
 .*           Added EMVIAHCP to EMVIDRUG                                      *
 .* V10.14.01 13/03/2019 Ebon Clements  TSK 0868834                           *
@@ -234,6 +236,14 @@ CLEMRVIS  MOVE      SP8,EMVIDATE
           MOVE      SP70,EMVIAHST
           MOVE      SP70,EMVIDISD
           MOVE      SP70,EMVIDRUG
+.
+          MOVE      SP70,EMVITHDR      . Telehealth Doctor Code
+          MOVE      SP70,EMVITHDD      . Telehealth Doctor Date
+          MOVE      SP70,EMVITHDT      . Telehealth Doctor Time
+          MOVE      SP70,EMVITHNR      . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMVITHND      . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMVITHNT      . Telehealth Nurse/Midwife Time
+.
           PACK      EMVISPAR,SP30,SP30
           RETURN
 +

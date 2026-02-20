@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="private">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -40,8 +40,12 @@ t.addColumn("Post Op Ward/Bed","String",9,9,"left","","",50)
  break; }
  }
 }
- function CaseLink(casekeys) {
+ function CaseLink(casekeys,deftime) {
   LinkForm.casekeys.value=casekeys;
+  LinkForm.defttime.value="";
+  if(deftime != undefined) {
+    LinkForm.defttime.value=deftime;
+  }
   Left=(document.body.clientWidth-800)/2;
   var popup = DFrameSubmit(LinkForm,0,Left,985,650);
   popup.style.height = "650";
@@ -129,6 +133,7 @@ function RecoveryClosedFrame() {
 <form name=LinkForm method=get action=oprweb06.pbl style="margin:0">
 <input type=hidden name=reportno value=10>
 <input type=hidden name=template value=3>
+<input type=hidden name=defttime value="">
 <input type=hidden name=casekeys >
 </form>
 <form name=PACULinkForm method=get action=oprweb06.pbl style="margin:0">

@@ -5,6 +5,9 @@
 .
 . Modifications : 
 .------------------------------------------------------------------------------
+. V12.01.02 17/02/2026 Thanh T          TSK 0960621
+.           Changed WRTHIS40, WRTHS240, WDHIST40 to space out EMHITHDR to
+.           EMHITHNT fields
 . V12.01.01 21/01/2026  PJ Le Febour   TSK 0966798
 .           DOSEEN10 change default from Current to Discharge date
 .           NUSEEN10 change default from Current to Discharge date
@@ -932,7 +935,7 @@ ZERO20    INIT      "00000000000000000000"
 .
 .------------------------------------------------------------
 PRGID     INIT      "EMRWEB08"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "XML Remote Code Validation Service"
 .------------------------------------------------------------
 .
@@ -2931,6 +2934,14 @@ WRTHIS40  MOVE      UPDTTYPE,EMHIUPT
           MOVE      EMVILOCN,EMHILOC
           MOVE      EMVIDOCT,EMHIDOC
           MOVE      EMVIATNS,EMHINUR
+.
+          MOVE      SP70,EMHITHDR              . Telehealth Doctor Code
+          MOVE      SP70,EMHITHDD              . Telehealth Doctor Date
+          MOVE      SP70,EMHITHDT              . Telehealth Doctor Time
+          MOVE      SP70,EMHITHNR              . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMHITHND              . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMHITHNT              . Telehealth Nurse/Midwife Time
+.
           PACK      EMHISPA,SP70,SP70
           PACK      EMHIDSD,EMHIDSD,SP70
           PACK      EMHIDST,EMHIDST,SP70
@@ -7004,6 +7015,14 @@ WRTHS240  MOVE      UPDTTYPE,EMHIUPT
           MOVE      EMVILOCN,EMHILOC
           MOVE      EMVIDOCT,EMHIDOC
           MOVE      EMVIATNS,EMHINUR
+.
+          MOVE      SP70,EMHITHDR              . Telehealth Doctor Code
+          MOVE      SP70,EMHITHDD              . Telehealth Doctor Date
+          MOVE      SP70,EMHITHDT              . Telehealth Doctor Time
+          MOVE      SP70,EMHITHNR              . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMHITHND              . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMHITHNT              . Telehealth Nurse/Midwife Time
+.
           PACK      EMHISPA,SP70,SP70
           PACK      EMHIDSD,EMHIDSD,SP70
           PACK      EMHIDST,EMHIDST,SP70
@@ -9334,6 +9353,14 @@ WDHIST40  MOVE      "ALDOC",EMHIUPT
           MOVE      EMVILOCN,EMHILOC
           MOVE      EMVIMPRA,EMHIDOC       * Set doctor seen to MH practitioner
           MOVE      EMVIATNS,EMHINUR
+.
+          MOVE      SP70,EMHITHDR              . Telehealth Doctor Code
+          MOVE      SP70,EMHITHDD              . Telehealth Doctor Date
+          MOVE      SP70,EMHITHDT              . Telehealth Doctor Time
+          MOVE      SP70,EMHITHNR              . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMHITHND              . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMHITHNT              . Telehealth Nurse/Midwife Time
+.
           PACK      EMHISPA,SP70,SP70
           PACK      EMHIDSD,EMHIDSD,SP70
           PACK      EMHIDST,EMHIDST,SP70

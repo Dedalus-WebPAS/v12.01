@@ -8,6 +8,8 @@
 .*  Modifications :                                                           *
 .*                                                                            *
 .*----------------------------------------------------------------------------*
+.*        V12.01.01 16/02/2026  J.Tan          TSK 0946305                    *
+.*                  Removed array of ADMISSNO variable                        *
 .*        V12.00.06 10/10/2025  J.Tan          TSK 0946593                    *
 .*                  Recompiled for PATCATBI-Sort Casepayment Theatre fee items*
 .*        V12.00.05 30/09/2025  Thanh T        TSK 0937505                    *
@@ -1041,7 +1043,7 @@ ACC       DIM       2                       * Century for PATAA1FD
 ADMNDATE  DIM      10
 AADMNOX   DIM       8
 ADIAG     DIM       50
-ADMISSNO  DIM       8[13]
+ADMISSNO  DIM       8
 XDESC     DIM       30
 BFAMT     FORM      8.2                                               *C-111521
 .
@@ -1310,7 +1312,7 @@ CFPAYCOD  DIM       3        * 3M Codefinder PAY Code
 .
 PRGID     INIT      "IBAINP25"
 PRGNAM    INIT      "Print Patient Invoices"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .******************************************************************************
 .*                               ML0000                                       *
@@ -1997,7 +1999,7 @@ GADM3100  ADD       ONE,COUNTER
                     *P4:CVERT,AADMNO,*P14:CVERT,ADMNDATE,*P25:CVERT,DISCDATE:
                     *P38:CVERT,LINVDATE,*P49:CVERT,DIM30
 .
-          MOVE      AADMNO,ADMISSNO[COUNTER]
+          MOVE      AADMNO,ADMISSNO
           ADD       ONE,CVERT
           GOTO      GADM1000
 .
@@ -2043,7 +2045,7 @@ GADM8000
             GOTO      GADM7000
           ENDIF
 
-          MOVE      ADMISSNO[FORM2],KEY8
+          MOVE      ADMISSNO,KEY8
           CALL      RDMISS1
           BRANCH    OVRCD OF GADM7000
 .
@@ -2549,7 +2551,7 @@ OUTDET50  MOVE     ZERO,OVRCD
           OPEN     OUTPREA1,"outpreaf"   * Pre Attendance File
           TRAPCLR  IO
           BRANCH   OVRCD,OUTDET95
-          MOVE     ADMISSNO[FORM2],KEY8
+          MOVE     ADMISSNO,KEY8
           CALL     RDPREA1               * Check for Pre-Attendance
           BRANCH   OVRCD,OUTDET95
 .
@@ -2613,7 +2615,7 @@ OUTDET80  IF       COPTION=4
           IF       COPTION=5
             PACK     CFNAME,OSTFILE,FILBB1A1
             CALL     OPOTBB11
-            MOVE     ADMISSNO[FORM2],KEY8
+            MOVE     ADMISSNO,KEY8
             CALL     RDBOKB1
             IF       OVRCD=0
               MATCH    SP6,OTBBDEPT
@@ -2668,7 +2670,7 @@ EMRCHK10  MOVE     ZERO,OVRCD
           TRAPCLR  IO
           BRANCH   OVRCD,EMRCHK90
 .
-          MOVE     ADMISSNO[FORM2],KEY8
+          MOVE     ADMISSNO,KEY8
           CALL     RDEMVIS1
           BRANCH   OVRCD,EMRCHK90
 .

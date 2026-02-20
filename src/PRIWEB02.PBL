@@ -5,7 +5,9 @@
 .
 . Modifications :
 .-------------------------------------------------------------------------------
-. V12.00.03 22/09/2025  J.Tan            TSK 0966921
+. V12.01.02 12/02/2026  J.Tan            TSK 0966921
+.           Mod to remove tempfiles
+. V12.01.01 22/09/2025  J.Tan            TSK 0966921
 .           Mod to remove tempfiles
 . V12.00.02 27/08/2025  Alina Bhari      TSK 0954453
 .           Recompiled for PRIINVHL - Added Patient Name
@@ -1136,7 +1138,7 @@ PRCTC009  DIM       20      * Reference number
 .
 .---------------------------------------------------------------------------
 PRGID     INIT      "PRIWEB02"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "Private Practice Billing Maintenance"
 .---------------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -1157,6 +1159,7 @@ MAIN1000  CALL      WEBRED00       * Read Fifo WEBPID and USERID
           GOTO      MAIN1000
 .
 MAIN1100  CALL      PRBILL00        * Billing Maintenance
+          CALL      RMTMP000        * kill existing temp file
           BRANCH    EXIT,MAIN1000
           CALL      NXTPAG00
           GOTO      MAIN1000
@@ -1168,6 +1171,7 @@ MAIN1300  CALL      GNPRFA00        * Get PRFA
           GOTO      MAIN1000
 .
 MAIN1400  CALL      PRPINV00        * Print private practice invoice
+          CALL      RMTMP000        * kill existing temp file
           BRANCH    EXIT,MAIN1000
 .
           IF        EXIT=0
@@ -4268,7 +4272,6 @@ PRPINV00  MOVE      ONE,VSCANPMI
             BRANCH    EXIT,PRPINV99
           ENDIF
 .
-          CALL      RMTMP000                * remove PRIINVPR temp files
           MOVE      PRCNINVN,INVOICEN       * Populate invoice number
 .
           MATCH     "1",PTCNWSIN
@@ -4561,7 +4564,7 @@ REPRNT90  MOVE      ONE,EXIT
 REPRNT92  MOVE     "Invoice Header/Tail Template Not Setup. ",WEBTITLE
           CALL      WEBERR00   * Create Output File and Write HTML Page Header
           MOVE      ONE,EXIT
-          GOTO      PRPINV99
+          GOTO      REPRNT99
 .
 REPRNT99  RETURN
 +

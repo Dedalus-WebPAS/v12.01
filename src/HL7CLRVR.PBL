@@ -4,6 +4,10 @@
 .*         Used by the HL7 PAS-CIS Interface.                                *
 .*                                                                           *
 .* Modifications:                                                            *
+.*        16/02/2026  DA Sarkies       TSK 0875822                           *
+.*                    Added ZXP078 for MyHR Consent                          *
+.*        13/01/2026  Alina Bhari      TSK 0960123                           *
+.*                    Added PRA008,PRA009,PRA010,PRA011,PRA012               *
 .*        13/01/2026  Davin            TSK 0961944                           *
 .*                    Added clears for NTE segment variables (CLNTE000)      *
 .*        21/10/2025  Bella Turco      TSK 0960178                           *
@@ -1001,7 +1005,11 @@ CLPRA000  PACK      PRA001,SP70
           PACK      PRA005,SP70,SP70
           PACK      PRA006,SP70,SP70
           PACK      PRA007,SP70,SP70,SP70
-          PACK      PRA008,SP70
+          PACK      PRA008,SP70,SP70,SP70,SP70
+          PACK      PRA009,SP70,SP70,SP70,SP70
+          PACK      PRA010,SP70,SP70,SP70,SP70
+          PACK      PRA011,SP70,SP70,SP70,SP70
+          PACK      PRA012,SP70
 .
           CLEAR     PRA001
           CLEAR     PRA002
@@ -1011,6 +1019,10 @@ CLPRA000  PACK      PRA001,SP70
           CLEAR     PRA006
           CLEAR     PRA007
           CLEAR     PRA008
+          CLEAR     PRA009
+          CLEAR     PRA010
+          CLEAR     PRA011
+          CLEAR     PRA012
 .
 CLPRA999  RETURN
 +
@@ -1470,6 +1482,7 @@ CLZXP000  MOVE      SP100,ZXP001
           MOVE      SP100,ZXP075
           MOVE      SP100,ZXP076
           MOVE      SP100,ZXP077
+          MOVE      SP100,ZXP078
 
 .
 .         Set the LL and FP to zero so that each character received for
@@ -1552,6 +1565,7 @@ CLZXP000  MOVE      SP100,ZXP001
           CLEAR     ZXP075
           CLEAR     ZXP076
           CLEAR     ZXP077
+          CLEAR     ZXP078
 .
 CLZXP999  RETURN
 +

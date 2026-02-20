@@ -1,8 +1,24 @@
-<meta name="TemplateVersion" content="V12.01.01">
+<meta name="TemplateVersion" content="V12.01.03">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
 <script type="text/javascript">
+function DispFutureDays() {
+  p=document.UpdateForm;
+  
+  if (p.d_mrtcn066.checked == true) {
+    document.getElementById('FutureDaysInRMHeading').innerHTML=
+    ShowFutureDaysInRMHeading.innerHTML;
+    document.getElementById('FutureDaysInRM').innerHTML=
+    ShowFutureDaysInRM.innerHTML;
+  } else {
+    document.getElementById('FutureDaysInRMHeading').innerHTML="";
+    document.getElementById('FutureDaysInRM').innerHTML=
+    ShowFutureDaysInRMblank.innerHTML;
+    document.UpdateForm.mrtcn070.value="";
+  } 
+}
+
 function PostForm() {
   if(document.UpdateForm.d_mrtcn066.checked==false) {
      document.UpdateForm.mrtcn066.value="0";
@@ -15,9 +31,9 @@ function PostForm() {
      document.UpdateForm.mrtcn068.value="1";
   }
   if(document.UpdateForm.d_mrtcn070.checked==false) {
-     document.UpdateForm.mrtcn070.value="0";
-  } else {
      document.UpdateForm.mrtcn070.value="1";
+  } else {
+     document.UpdateForm.mrtcn070.value="0";
   }
   if(document.UpdateForm.d_mrtcn074.checked==false) {
      document.UpdateForm.mrtcn074.value="0";
@@ -96,17 +112,13 @@ function PostForm() {
 <tr><td class=DataLabel>Allow Future Dates in Record Movements</td>
     <td class=DataField>
       <input type=checkbox name=d_mrtcn066 value="1"
-       title="Allow Future Dates in Record Movements">
+       title="Allow Future Dates in Record Movements"
+       onclick="DispFutureDays();">
     </td>
 </tr>
 
-<tr>
-    <td class=DataLabel>How many Future Days in Record Movements</td>
-    <td class=DataItem><input type=text name=mrtcn067
-        class="Number JustifyRight Integer" min=0 max=999
-        title="How many Future Days in Record Movements"
-        size=4 maxlength=3 value="%COMWEB98.11.167">
-    </td>
+<tr><td><div id="FutureDaysInRMHeading"></div></td>
+    <td><div id="FutureDaysInRM"></div></td>
 </tr>
 
 <tr><td class=DataLabel>Operator Id Mandatory</td>
@@ -127,7 +139,7 @@ function PostForm() {
 
 <tr><td class=DataLabel>Send Hours of Mechanical Ventilation to Grouper</td>
     <td class=DataField>
-      <input type=checkbox name=d_mrtcn070 value="1"
+      <input type=checkbox name=d_mrtcn070 value="0"
        title="Send Hours of Mechanical Ventilation to Grouper">
     </td>
 </tr>
@@ -238,17 +250,35 @@ function PostForm() {
 
 </form>
 
+<span id=ShowFutureDaysInRMHeading style="display:none">
+  How many Future Days in Record Movements
+</span>
+  
+<span id=ShowFutureDaysInRM style="display:none">
+    <input type=text name=mrtcn067 id=mrtcn067
+      class="Number JustifyRight Integer" min=0 max=999
+      title="How many Future Days in Record Movements"
+      size=4 maxlength=3 value="%COMWEB98.11.167">
+</span>
+
+<span id=ShowFutureDaysInRMblank style="display:none">
+    <input type=hidden name=mrtcn067 id=mrtcn067 value="  0">
+</span>
+
+
 <script type="text/javascript">
 AllowFutureDatesInRecordMovements="%COMWEB98.11.166";
  if(AllowFutureDatesInRecordMovements=="1") {
    document.UpdateForm.d_mrtcn066.checked=true;
  }
+DispFutureDays();
+
 OperatorIdMandatory="%COMWEB98.11.168";
 if (OperatorIdMandatory=="1") {
      document.UpdateForm.d_mrtcn068.checked=true;
  }
 SendHrsOfMVtoGrouper="%COMWEB98.11.170";
-if (SendHrsOfMVtoGrouper=="1") {
+if (SendHrsOfMVtoGrouper=="0") {
      document.UpdateForm.d_mrtcn070.checked=true;
  }
 MechanicalVentilationCheck="%COMWEB98.11.174";
@@ -283,7 +313,7 @@ if (AutoMoveRecordOnBedTransfer=="1") {
      document.UpdateForm.d_mrtcn081.checked=true;
  }
 
-
+DispFutureDays();
 sortSelectionList(document.UpdateForm.mrtcn071);
 sortSelectionList(document.UpdateForm.mrtcn072);
 sortSelectionList(document.UpdateForm.mrtcn073);

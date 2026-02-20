@@ -11,6 +11,8 @@
 .*     Mods.        :             look for (spare) or (moved) for free space  *
 .*                                                                            *
 .******************************************************************************
+.* V12.01.05 05/02/2026  Zumin Yu                TSK 0972419                  *
+.*           Moved PTCNMRPN to Sector 130                                     *
 .* V12.01.04 04/02/2026  Thanh T                 TSK 0961944                  *
 .*           Added PTCNUMOP - If Home Phone is blank, use Mobile Phone        *
 .*                 PTCNLBNB - Leave pttybedn blank                            *
@@ -2313,7 +2315,7 @@ PTCNRLAY  FORM      1        195       Medical Record Request Form Layout
 .                                         0 = User Defined
 PTCNUCOD  DIM       6        196       User Defined Stationery Code for Medical
 .                                      Records Request Form
-PTCNMRPN  DIM       3        202       Printer for Medical Record Request Form
+..(moved)  DIM      3        202     was PTCNMRPN - Printer for Med Rec Req
 CDOPANA   DIM       2        205       Category used for Anaesthetic in Day Only
 .                                        Procedures Form
 PTPMS68F  FORM      1        207       Print Flag for IBAPMS68
@@ -4857,6 +4859,8 @@ PTCNPPNT  DIM       1        176   Populate Patient Notes (pttynote) with
 .                                  1 = Yes
 PTCNDIAD  DIM       3        177   Number of Days in advance to include
 .
-.End of Record               180
+PTCNMRPN  DIM       6        180   Printer for Medical Record Request Form
+.
+.End of Record               186
 +
 

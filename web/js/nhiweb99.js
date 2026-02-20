@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.01
+//jsVersion  : V12.01.02
 //=============================================================================
 // Program   : nhiweb99.js
 //
@@ -127,8 +127,8 @@ function UpdateForm02() {
       }
     }
     if (skipaliasQues == 0) {
-      AliasQues();
       if(!IsDirtyNHI(NHIUpdate)) { NHIUpdate.nzpmichg.value = "1"; }
+      AliasQues();
     }
     else {
       f.nhmas019.value = "1";
@@ -412,7 +412,11 @@ function IsDirtyNHI(eForm) {
     var eElem = eForm.elements[i];
     if (eElem.type == "text" || eElem.type == "textarea") {
       if(eElem.name) {
-        if(eElem.name=="prcom001") { continue; }
+        if(eElem.name=="fadd1" ||
+           eElem.name=="fadd2" ||
+           eElem.name=="fadd3" ||
+           eElem.name=="fadd4" ||
+           eElem.name=="fgiven") { continue; }
       }
       if (trim(eElem.value) != trim(eElem.defaultValue))  {
         return true; }

@@ -13,6 +13,8 @@
 .* Modifications   :                                                          *
 .*                                                                            *
 .******************************************************************************
+.* V12.01.01 16/02/2026  Jacob Jackson     TSK 0908319                        *
+.*           Add call to URNC0000 in visit booking merges                     *
 .* V12.00.03 25/07/2025  Nikitha Bhaskar   TSK 0963585                        *
 .*           Modified at CRMED000 to display right Created By ID.             *
 .* V12.00.02 24/06/2025  J.Tan             TSK 0961696                        *
@@ -2878,6 +2880,9 @@ FIXBOK10  PACK      KEY16,OURNO,SP70
           CALL      UPBKREC6
 .
           CALL      FIXDET00           * Fix oprdetaf record for this admission
+.
+          MOVE      BKREBOOK,PVIBILL
+          CALL      URNC0000
 .
           GOTO      FIXBOK10           * Loop back to correct file position
 .                                      * after key has been updated

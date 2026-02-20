@@ -12,6 +12,10 @@
 .*     AUTHOR :          KARIN PEAK                                           *
 .*                                                                            *
 .*     MODIFICATIONS:                                                         *
+.*       V12.01.01  05/02/2026  Zumin Yu        TSK 0972419                   *
+.*                  Updated PTCNMRPN to DIM 6 and read & write its new        *
+.*                  location in DISPHO2 & WRHOS2                              *
+.******************************************************************************
 .*        V9.03.01  30/12/2003  Sylvek Litewka  CAR 20222                     *
 .*                  Modified section HS4K0800 to use RDPTICD1 IO routine when *
 .*                  checking for existance of a given ICD Disease code.       *
@@ -140,7 +144,7 @@ PMS59D2   INIT      "Wellington/Others"
 .
 PRGID     INIT      "IBAHOS93"
 PRGNAM    INIT      "Medical Record Parameter Maintenance"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .
 .         START OF PROGRAM
@@ -362,9 +366,10 @@ DISPHO2   READ      CONTROLF,TEN;*246,CSRCHDRG,CSRCHYRG
           READ      CONTROLF,TEN4;*248,CURDEL,CURCHG
           READ      CONTROLF,TEN9;*73,CPUSR,CSUSR,CCNOTES,*208,CPMIAD:
                                  *250,CPMS59
-          READ      CONTROLF,FIFTY9;*63,CFFMORB,*192,PTCNURCF,PTCNRQCF,PTCNDPCF:
-                                        PTCNRLAY,PTCNUCOD,PTCNMRPN
+          READ      CONTROLF,FIFTY9;*63,CFFMORB,*192,PTCNURCF,*193,PTCNRQCF:
+                                    *194,PTCNDPCF,*195,PTCNRLAY,*196,PTCNUCOD
           READ      CONTROLF,HUND05;*100,PTCNUDRN
+          READ      CONTROLF,HUND30;*180,PTCNMRPN
 .
           MOVE      DNO,HANS1
           LOAD      HANS1 USING CPUSR OF DYES,DNO
@@ -399,7 +404,7 @@ DISPHO2   READ      CONTROLF,TEN;*246,CSRCHDRG,CSRCHYRG
           MOVE      LAYOUT0,LAYOUT
 .
           MOVE      SP20,PRTDESC
-          MOVE      PTCNMRPN,KEY3
+          MOVE      PTCNMRPN,KEY6
           CALL      RDPRTA1
 .
           PACK      IBTHDESC,SP20,SP10
@@ -724,7 +729,7 @@ KPOS15    MOVE      SP20,PRTDESC
           MATCH     SP3,PTCNMRPN
           GOTO      KPOS15Y IF EQUAL
 .
-          MOVE      PTCNMRPN,KEY3
+          MOVE      PTCNMRPN,KEY6
           CALL      RDPRTA1
           BRANCH    OVRCD,KPOS15N
 .
@@ -1361,9 +1366,10 @@ WRHOS2    WRITAB    CONTROLF,TEN;*246,CSRCHDRG,CSRCHYRG
           WRITAB    CONTROLF,TEN4;*248,CURDEL,CURCHG
           WRITAB    CONTROLF,TEN9;*73,CPUSR,CSUSR,CCNOTES,*208,CPMIAD:
                                  *250,CPMS59
-          WRITAB    CONTROLF,FIFTY9;*63,CFFMORB,*192,PTCNURCF,PTCNRQCF,PTCNDPCF:
-                                        PTCNRLAY,PTCNUCOD,PTCNMRPN
+          WRITAB    CONTROLF,FIFTY9;*63,CFFMORB,*192,PTCNURCF,*193,PTCNRQCF:
+                                    *194,PTCNDPCF,*195,PTCNRLAY,*196,PTCNUCOD
           WRITAB    CONTROLF,HUND05;*100,PTCNUDRN
+          WRITAB    CONTROLF,HUND30;*180,PTCNMRPN
           DISPLAY   *P60:24,*EL,*V2LON,"*** Posted ***",*W2;
           RETURN
 .

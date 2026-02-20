@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .----------------------------------------------------------------------
+. V12.01.02 10/02/2026  Bella Turco    TSK 0949715
+.           Added NZPMICHG check to DEATHA00 in UPDNHI50
 . V12.01.01 11/12/2025  Bella Turco    TSK 0949715
 .           Recompiled for UPDUR - added NZPMICHG
 . V12.00.03 04/09/2025  Zumin Yu  TSK 0939593
@@ -805,7 +807,7 @@ SEC1      FORM      "00001"
 .
 .------------------------------------------------------------------------------
 PRGID     INIT      "NHIWEB99"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "NHI/MWS Update Interface"
 .------------------------------------------------------------------------------
 .
@@ -4099,7 +4101,14 @@ UPDNHI50  CALL      MVNHI000                * Move nhi parameters to local vars
           MOVE      NHMAURNO,KEY8
           CALL      UUPTMAS1                     * NHI Master Field Selected
 .
-          CALL      DEATHA00
+.
+.         If NZ PMI details have not been changed do not update
+.         'Demographics Last Updated' details
+.
+          MATCH     "1",NZPMICHG                  * "1" means no change
+          IF        !@EQUAL
+            CALL      DEATHA00
+          ENDIF
 .
           MOVE      ZERO,EXIT
           GOTO      UPDNHI99

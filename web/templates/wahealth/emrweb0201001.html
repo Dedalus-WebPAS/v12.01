@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.01">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -520,6 +520,10 @@ function UpdatePage() {
       }
     }
     setTimeout('document.UpdateForm.UpdateButton.disabled=false',1000);
+    
+    if (trim(document.UpdateForm.pmsvx125.value) != ""){
+      document.UpdateForm.pmpxi110.value = document.UpdateForm.pmsvx125.value;
+    }
     document.UpdateForm.submit()
   }
 }
@@ -735,6 +739,7 @@ InsertEmergencyHeader()
   <input type=hidden name=updatety value="4">
   <input type=hidden name=opendate value="%STANDARD.01.015">
   <input type=hidden name=opentime value="%STANDARD.01.016">
+  <input type=hidden name=wahealth value="1">
   <input type=hidden name=formactn value="C1">
   <input type=hidden name=updttype value="TRIAG">
   <input type=hidden name=updateky value="%EMRWEB02.01.404">
@@ -767,16 +772,17 @@ InsertEmergencyHeader()
   <input type=hidden name=currdate value="%STANDARD.01.015">
   <input type=hidden name=ptcnnmpr value="%STANDARD.01.025.128.226.1.1">
   <input type=hidden name=emvis096 value="">
-<input type="hidden" name="stfrefin" id="stfrefin"
- value="%EMRWEB02.01.919">
-<input type=hidden name=dummx value="">
-<input type="hidden" name="ptcnuesf" id="ptcnuesf"
- value="%STANDARD.01.025.124.222.0.1">
-<input type=hidden name=multbrth value="%EMRWEB02.01.939"> 
-<input type=hidden name=ptcnavcd value="%STANDARD.01.025.125.183.0.1">
-<input type=hidden name=sjogaudt value="1">
-<input type=hidden name=aliassts value="">
-<input type=hidden name=emclcin1 value="">
+  <input type=hidden name="stfrefin" id="stfrefin"
+         value="%EMRWEB02.01.919">
+  <input type=hidden name=dummx value="">
+  <input type=hidden name="ptcnuesf" id="ptcnuesf"
+         value="%STANDARD.01.025.124.222.0.1">
+  <input type=hidden name=multbrth value="%EMRWEB02.01.939"> 
+  <input type=hidden name=ptcnavcd value="%STANDARD.01.025.125.183.0.1">
+  <input type=hidden name=sjogaudt value="1">
+  <input type=hidden name=aliassts value="">
+  <input type=hidden name=emclcin1 value="">
+  <input type=hidden name=pmpxi110 value="%EMRWEB02.01.699.046">
   <table align=center width=100% border=0 cellspacing=0 cellpadding=0>
   <tr>
     <td class=HeadingCell colspan=6 align=center>Demographics Details</td>

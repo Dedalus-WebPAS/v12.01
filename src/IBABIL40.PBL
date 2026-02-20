@@ -10,6 +10,8 @@
 .* Modifications  :                                                           *
 .*                                                                            *
 .*----------------------------------------------------------------------------*
+.*        V12.01.01 16/02/2026  J.Tan          TSK 0946305                    *
+.*                  Removed array of ADMISSNO variable                        *
 .*        V12.00.05 10/10/2025  J.Tan          TSK 0946593                    *
 .*                  Recompiled for PATCATBI-Sort Casepayment Theatre fee items*
 .*        V12.00.04 30/09/2025  Thanh T        TSK 0937505                    *
@@ -472,7 +474,7 @@ ACC       DIM       2                       * Century for PATAA1FD
 ADMNDATE  DIM      10
 AADMNOX   DIM       8
 ADIAG     DIM       50
-ADMISSNO  DIM       8[13]
+ADMISSNO  DIM       8
 XDESC     DIM       30
 BFAMT     FORM      8.2                                               *C-111521
 .
@@ -762,7 +764,7 @@ CFPAYCOD  DIM       3        * 3M Codefinder PAY Code
 .
 PRGID     INIT      "IBABIL40"
 PRGNAM    INIT      "Bulk Invoices Exception Report                  "
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .******************************************************************************
 .*                                   ML0000                                   *
@@ -1376,6 +1378,7 @@ GINP1000  CALL      RDKMISS4                  record
           CALL      RDVISA1
           BRANCH    OVRCD,GINP1000
 .
+          MOVE      PVIBILL,ADMISSNO
           MOVE      AINVPRT,INVPRNTD           * save no of invoices printed
 .
 .        Check to see if the patient is discharged yet
@@ -1564,6 +1567,7 @@ GOUT2000  CALL      RDKBOKA2
           CALL      RDVISA1
           BRANCH    OVRCD OF GOUT2000
 .
+          MOVE      PVIBILL,ADMISSNO
           MOVE      OBAOUTNO,KEY8
           CALL      RDBOKB1
           BRANCH    OVRCD OF GOUT2000
@@ -1708,6 +1712,7 @@ GEMR1000  CALL      RKEMVIS2
           CALL      RDVISA1
           BRANCH    OVRCD OF GEMR1000
 .
+          MOVE      PVIBILL,ADMISSNO
           IF        PVITYPE=9
             MATCH     " 1",PVISYST
             IF        @EQUAL
@@ -2442,7 +2447,7 @@ OUTDET50  MOVE     ZERO,OVRCD
           OPEN     OUTPREA1,"outpreaf"   * Pre Attendance File
           TRAPCLR  IO
           BRANCH   OVRCD,OUTDET95
-          MOVE     ADMISSNO[FORM2],KEY8
+          MOVE     ADMISSNO,KEY8
           CALL     RDPREA1               * Check for Pre-Attendance
           BRANCH   OVRCD,OUTDET95
 .
@@ -2506,7 +2511,7 @@ OUTDET80  IF       COPTION=4
           IF       COPTION=5
             PACK     CFNAME,OSTFILE,FILBB1A1
             CALL     OPOTBB11
-            MOVE     ADMISSNO[FORM2],KEY8
+            MOVE     ADMISSNO,KEY8
             CALL     RDBOKB1
             IF       OVRCD=0
               MATCH    SP6,OTBBDEPT
@@ -2561,7 +2566,7 @@ EMRCHK10  MOVE     ZERO,OVRCD
           TRAPCLR  IO
           BRANCH   OVRCD,EMRCHK90
 .
-          MOVE     ADMISSNO[FORM2],KEY8
+          MOVE     ADMISSNO,KEY8
           CALL     RDEMVIS1
           BRANCH   OVRCD,EMRCHK90
 .

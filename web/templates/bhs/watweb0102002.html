@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="bhs">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -105,6 +105,9 @@ function valUnit() {
 }
 
 function valProc() {
+  if (!isWhitespace(AddForm.wattr001.value)) {
+    AddForm.wattr001.value=trim(AddForm.wattr001.value);
+  }
   validateCode(27,AddForm.wattr001,AddForm.dummy1,AddForm.wpgrp,AddForm.wattr013,AddForm.wattr002);
   AddForm.wattr003.value=AddForm.dummy1.value;
 }

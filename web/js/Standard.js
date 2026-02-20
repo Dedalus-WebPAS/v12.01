@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.04
+//jsVersion  : V12.01.05
 //========================================================================
 // Global Variables
 //========================================================================
@@ -399,6 +399,10 @@ var DNDInvalidProcforUnitMessage = false;
 // Blank in Standard.js - Populated (if openIDC is used) in Custom.js
 //=============================================================================
 var openIDCLogoutURL = "";
+//=============================================================================
+// Variable to display booking request from eAdmissions behind the patient
+// search frame
+var eAdmSearchViewjs = false;
 //=============================================================================
 // Function prototypes for insertAdjacentElement(), insertAdjacentHTML() and
 // insertAdjacentText().

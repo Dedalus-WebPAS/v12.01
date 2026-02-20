@@ -2,6 +2,14 @@
 .*                              HL7COMN.PBL                                  *
 .*        Contains common HL7 routines used by both HL7CISIN and HL7QUERY    *
 .* Mods:                                                                     *
+.*        V12.01.04 13.02.2026  DA Sarkies       TSK 0875822                 *
+.*                  Added ZXP078 at WRZXP778 for MyHR consent for PMI        *
+.*                  Added call to GMYHR000 for EMR at EMRZXV285              *
+.*                  Added call to GMYHR000 for O/P at WRRZXV184              *
+.*        V12.01.03 11/02/2026  Alina Bhari      TSK 0958930                 *
+.*                  Added second on broadcasting Unique ID in PV1.50 for a   *
+.*                  Bed Transfer Event - OTHVIS20                            *
+.*                  Send Unique Id in PV1.50 when patient admit and discharge*
 .*        V12.01.02 08/01/2026  Alina Bhari      TSK 0958930                 *
 .*                  Added Broadcast a Unique ID in PV1.50 for a Bed Transfer *
 .*                  Event. - OTHVIS20                                        * 
@@ -9468,7 +9476,7 @@ EMZXV270  MOVE      BLANKSTR,ZXV086              * load default value
 EMZXV280  MOVE      BLANKSTR,ZXV087              * load default value
 .
           MATCH     SP3,EMVIEXRS                 * field populated ?
-          GOTO      EMZXV290 IF EQUAL            * no
+          GOTO      EMZXV285 IF EQUAL            * no
 .
           MOVE      EMVIEXRS,FIELDSTR
           CALL      SPCHR000                     * convert special characters
@@ -9487,6 +9495,10 @@ EMZXV280  MOVE      BLANKSTR,ZXV087              * load default value
           APPEND    CARET,ZXV087
           APPEND    "webPAS",ZXV087
           RESET     ZXV087
+.
+.         Consent MyHR Record Upload (ZXV.89)
+.
+EMZXV285  CALL      GMYHR000
 .
 .         ZXV.107 Senior Doctor
 .
@@ -9661,12 +9673,7 @@ EMZXV350  MOVE      BLANKSTR,ZXV113               * Load default value
           APPEND    "webPAS",ZXV113
           RESET     ZXV113
           STRIP     ZXV113
-.
-.         Consent MyHR Record Upload (ZXV.89)
-.>>>>     Commented below out as this field should not be populated at this
-.         stage, but will be done at a later date.
-EMZXV360  
-.         CALL      GMYHR000
+EMZXV360
 .
 EMZXV999  RETURN
 +
@@ -9756,13 +9763,14 @@ OTHVIS15  IF        PV150CNT = 0
 .         TDATETIME^^^webPAS-BT^VN (the colons will be removed from the time)
 OTHVIS20  MATCH     "1",PTCNBDTE                 * parameter on ?
           IF        @EQUAL
-            IF        MESSNUMB = 2 | MESSNUMB = 14 | MESSNUMB = 18 | MESSNUMB=19
-              UNPACK    TTIME,CHOUR,D1,CMIN,D1
+            IF        MESSNUMB = 2 | MESSNUMB = 14 | MESSNUMB = 18 |MESSNUMB=19|MESSNUMB = 1 | MESSNUMB = 3
+              UNPACK    TTIME,CHOUR,D1,CMIN,D1,CSEC
 .
               IF        PV150CNT = 0
                 MOVE      TDATE,PV1050                * load Date and time
                 APPEND    CHOUR,PV1050
                 APPEND    CMIN,PV1050
+                APPEND    CSEC,PV1050
                 ENDSET    PV1050
               ELSE
                 ENDSET    PV1050
@@ -9770,6 +9778,7 @@ OTHVIS20  MATCH     "1",PTCNBDTE                 * parameter on ?
                 APPEND    TDATE,PV1050
                 APPEND    CHOUR,PV1050
                 APPEND    CMIN,PV1050
+                APPEND    CSEC,PV1050
               ENDIF
               APPEND    CARET,PV1050
               APPEND    CARET,PV1050
@@ -11998,13 +12007,13 @@ WRZXP775  OPEN      COMPARA1,"comparaf"
 .
 WRZXP776  PACK      KEY11,SP3,D8,SP70
           CALL      RDCMPAR1                * Read default system parameter
-          BRANCH    OVRCD,WRZXP800
+          BRANCH    OVRCD,WRZXP778
 .
           MATCH     "0",CMPAACTV
-          GOTO      WRZXP800 IF NOT EQUAL   * found active data
+          GOTO      WRZXP778 IF NOT EQUAL   * found active data
 .
 WRZXP777  MATCH     "1",CMPAVALU                 * Estimated DOB Flag Parameter
-          GOTO      WRZXP800 IF NOT EQUAL
+          GOTO      WRZXP778 IF NOT EQUAL
 .
           MOVE      "N",ZXP077
           MATCH     "1",PMPXEDOB
@@ -12012,6 +12021,19 @@ WRZXP777  MATCH     "1",CMPAVALU                 * Estimated DOB Flag Parameter
             MOVE      "Y",ZXP077
           ENDIF
 .
+.         PMI My HR Consent (ZXP.78)
+.
+.
+WRZXP778  MATCH    "0",PMPXSN16
+          IF       @EQUAL
+            MOVE     ANSN,ZXP078
+          ENDIF
+.
+          MATCH    "1",PMPXSN16
+          IF       @EQUAL
+            MOVE     ANSY,ZXP078
+          ENDIF
+          
 WRZXP800
 .
 WRZXP900  PACK      SEGSTRNG,ANSZ,ANSX,ANSP,PIPE:
@@ -12034,7 +12056,7 @@ WRZXP900  PACK      SEGSTRNG,ANSZ,ANSX,ANSP,PIPE:
                              ZXP065,PIPE,ZXP066,PIPE,ZXP067,PIPE,ZXP068,PIPE:
                              ZXP069,PIPE,ZXP070,PIPE,ZXP071,PIPE,ZXP072,PIPE:
                              ZXP073,PIPE,ZXP074,PIPE,ZXP075,PIPE,ZXP076,PIPE:
-                             ZXP077,CRETURN
+                             ZXP077,PIPE,ZXP078,CRETURN
 .
           CALL      SENDM000                     * send message
           BRANCH    EXIT,WRZXP910:               * connection lost
@@ -13107,7 +13129,7 @@ WRZXV170  MOVE      BLANKSTR,ZXV050              * set default value
 WRZXV180  MOVE      BLANKSTR,ZXV051              * set default value
 .
           MATCH     SP3,OTBBPURC                 * field populated ?
-          GOTO      WRZXV185 IF EQUAL            * no
+          GOTO      WRZXV184 IF EQUAL            * no
 .
           MOVE      OTBBPURC,FIELDSTR
           CALL      SPCHR000                     * convert special characters
@@ -13126,6 +13148,10 @@ WRZXV180  MOVE      BLANKSTR,ZXV051              * set default value
           APPEND    CARET,ZXV051
           APPEND    "webPAS",ZXV051
           RESET     ZXV051
+.
+.         Consent MyHR Record Upload (ZXV.89)
+.
+WRZXV184  CALL      GMYHR000
 .
 .         O/P Service Delivery Mode (Cat sd)
 .
@@ -14447,6 +14473,7 @@ CODFLG99  RETURN
 +
 .*****************************************************************************
 .*                            GMYHR000             Called by: IPZXV000       *
+.*                                                            EMZXV000       *
 .*          Get the MyHR Consent value and populate ZXV.89                   *
 .* Requires: PTCNBMYH: parameter for value to send for blank field           *
 .*           PMVXUDF7: MyHR Consent field                                    *

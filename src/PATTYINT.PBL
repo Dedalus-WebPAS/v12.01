@@ -10,6 +10,9 @@
 .*               is run, and write the relevant data to an ASCII file ready  *
 .*               for PaTTY to pick up.                                       *
 .* Mods      :                                                               *
+.*****************************************************************************
+.* V12.01.01 04/02/2026 Thanh T        TSK 0958094                           *
+.*           Added 4 new parameters to PaTTY Interface Extract               *
 .* V11.04.01 05.02.2024 DA Sarkies     TSK 0936282                           *
 .*           Fixed code to allow for 19 digit heath fund number              *
 .* V10.10.01 22/03/2017 Richa Phogat   TSK 0832066                           *
@@ -41,6 +44,7 @@
 . FILE DESCRIPTION INCLUDES
 . -------------------------
           INC       PATCODFD/INC
+          INC       PATCONFD/INC
           INC       PATDSCFD/INC
           INC       PATMA1FD/INC
           INC       PATMI1FD/INC
@@ -48,8 +52,10 @@
           INC       PATMRGFD/INC
           INC       PMSCCDFD/INC
           INC       PMSPX2FD/INC
+          INC       BOKRC1FD/INC
+          INC       BOKRX1FD/INC
 .
-PTTYFILE  FILE      ASCII, FIXED=500
+PTTYFILE  FILE      ASCII, FIXED=600
 .
 . Field   Type    Length  Start     Description
 .------   ----    ------  -----     -----------------------------------
@@ -126,25 +132,31 @@ PTTYOURN  DIM       8     462       Old U/R Number
 .PIPE     DIM       1     470       Pipe delimiter
 PTTYOADM  DIM       8     471       Old Admission Number
 .PIPE     DIM       1     479       Pipe delimiter
-PTTYNOTE  DIM       1               Additional Patient Notes (not sent)
-.PIPE     DIM       1     480       Pipe delimiter
+PTTYNOTE  DIM       91    480       Additional Patient Notes (not sent)
+.PIPE     DIM       1     571       Pipe delimiter
 .
-. End of record           481
+. End of record           572
 .
 .
 . LOCAL VARIABLE DEFINITION
 . -------------------------
-ADMCOUNT  FORM      3
-DISCOUNT  FORM      3
+ADMCOUNT  FORM      5
+DISCOUNT  FORM      5
+PRECOUNT  FORM      5
+BOKCOUNT  FORM      5
 CMDLINE   DIM       80
 CURRDATE  DIM       8             * current date (ccyymmdd)
 FILENAME  DIM       8             * interface file name
-PTCNPATY  DIM       60
+.PTCNPATY  DIM       60
+EXTRDIR   DIM       60
+ADATEX    DIM       10
+DATEFR    DATE      8
+DATETO    DATE      8
 .
 .
 . PROGRAM CONSTANTS
 . -----------------
-CATCT     INIT      "ct"
+CATct     INIT      "ct"
 CRETURN   INIT      015
 PIPE      INIT      "|"
 SP11      INIT      "           "
@@ -153,7 +165,7 @@ TILDA20   INIT      "~~~~~~~~~~~~~~~~~~~~"
 .
 PRGID     INIT      "PATTYINT"
 PRGNAM    INIT      "Pharmacy Interface"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 +
 .*****************************************************************************
 .*                              MAIN0000                                     *
@@ -175,7 +187,19 @@ MAIN2000  CALL      CREA0000               * create and open interface file
           CALL      GCUR0000               * get current admissions
           CALL      GDIS0000               * get today's discharges
 .
-MAIN3000  CALL      MVEXT000               * Move Extract file to sub-directory
+.
+MAIN3000  MOVE      ZERO,F3
+          MOVE      PTCNDIAD,F3
+          IF        F3 > 0
+            MOVE      CURRDATE,DATEFR
+            MOVE      CURRDATE,DATETO
+            ADD       F3,DATETO
+            CALL      GPRE0000             * get pre-admissions
+            CALL      GBOK0000             * get bookings
+          ENDIF
+.
+MAIN8000  CALL      MVEXT000               * Move Extract file to sub-directory
+          CALL      ENDP0000
 .
 MAIN9999  CHAIN     PGM                    * chain back to program
 +
@@ -211,6 +235,12 @@ INIT0000  CALL      DISPHEAD                  * display heading
 .
           DISPLAY   *P64:24,"patmrgaf";
           OPEN      PATMRGG2,"patmrgaf"
+.
+          DISPLAY   *P64:24,"bokrc1af";
+          OPEN      BOKRC1A4,"bokrc1af"
+.
+          DISPLAY   *P64:24,"bokrx1af";
+          OPEN      BOKRX1A1,"bokrx1af"
 .         
           DISPLAY   *P58:24,"controlf"
           OPEN      CONTROLF,"controlf"
@@ -222,6 +252,8 @@ INIT0000  CALL      DISPHEAD                  * display heading
           REP       " 0",CURRDATE
 .
           READ      CONTROLF,HUND18;*1,PTCNPATY  * Pharmacy Interface Parameter
+          READ      CONTROLF,HUND30;*174,PTCNUMOP,*175,PTCNLBNB,*176,PTCNPPNT:
+                                    *177,PTCNDIAD
 .
 INIT9999  RETURN
 +
@@ -312,16 +344,16 @@ GDIS0000  DISPLAY   *P12:24,*EL,"discharges:";
           PACK      KEY16,CURRDATE,SP20
           CALL      RDSDSCH2                     * position on today's records
 GDIS0500  CALL      RDKDSCH2                     * read next record
-          BRANCH    OVRCD,GDIS9000               * eof - finished
+          BRANCH    OVRCD,GDIS9999               * eof - finished
 .
           MATCH     CURRDATE,DDATE               * same date still ?
-          GOTO      GDIS9000 IF NOT EQUAL        * no - finished
+          GOTO      GDIS9999 IF NOT EQUAL        * no - finished
 .
 .         A discharge record for today has been found
 .
           DISPLAY   *P23:24,*EL,*V2LON,DADMNO;
 .
-          MOVE      DURNO,KEY8
+          MOVE      DDADMNO,KEY8
           CALL      RDPTMIS1                     * admission record found ?
           BRANCH    OVRCD,GDIS0500               * no - ignore record
 .
@@ -335,19 +367,114 @@ GDIS0500  CALL      RDKDSCH2                     * read next record
 .
           GOTO      GDIS0500                     * get next record
 .
-GDIS9000  DISPLAY   *P1:21,*EF,"Current admissions processed: ":
-                    *V2LON,ADMCOUNT,*HOFF:
-                    *P1:22,"Today's discharges processed: ":
-                    *V2LON,DISCOUNT,*HOFF:
-                    *P1:24,"Data extract completed.  ";
+GDIS9999  RETURN
+.
+.*****************************************************************************
+.*        Loop through the admission table looking for pre-admissions        *
+.*        and write any found to the interface file.                         *
+.*****************************************************************************
+.
+GPRE0000  DISPLAY   *P1:24,*EL,"Processing pre-admission:";
+.
+          MOVE      ZERO,PRECOUNT                * initialise count
+.
+          PACK      KEY9,ONE,SP10
+          CALL      RDSMISS2
+GPRE0500  CALL      RDKMISS2
+          BRANCH    OVRCD,GPRE9999
+.
+          COMPARE   ONE,ASTAT                    * same status still ?
+          GOTO      GPRE9999 IF NOT EQUAL        * no - finished
+.
+          MATCH     DATEFR,ADATE
+          GOTO      GPRE0500 IF LESS
+.
+          MATCH     ADATE,DATETO
+          GOTO      GPRE0500 IF LESS
+.
+          DISPLAY   *P23:24,*EL,*V2LON,AADMNO;
+.
+          CALL      GPMI0000                     * get all PMI details
+          BRANCH    EXIT,GPRE0500                * error - ignore record
+.
+          CALL      CMRG0000                     * check for U/R merge today
+.
+          ADD       ONE,PRECOUNT                 * increment count
+GPRE0700  CALL      LREC0000                     * load variables and write rec.
+.
+          GOTO      GPRE0500                     * get next admission
+.
+GPRE9999  RETURN
+.
+.*****************************************************************************
+.*        Loop through the admission table looking for pre-admissions        *
+.*        and write any found to the interface file.                         *
+.*****************************************************************************
+.
+GBOK0000  DISPLAY   *P1:24,*EL,"Processing bookings:";
+.
+          MOVE      ZERO,BOKCOUNT                * initialise count
+.
+          PACK      KEY16,DATEFR,SP70
+          CALL      RSBKREC4
+GBOK0500  CALL      RKBKREC4
+          BRANCH    OVRCD,GBOK9999
+.
+          MATCH     BKREEDAT,DATETO
+          GOTO      GBOK9999 IF LESS
+.
+          PACK      KEY8,BKREBOOK,SP70
+          CALL      RDBKRX11
+          BRANCH    OVRCD,GBOK0500
+.
+          COMPARE   ZERO,BKRESTAT
+          GOTO      GBOK0500 IF NOT EQUAL        
+.
+          DISPLAY   *P23:24,*EL,*V2LON,DBKREBOO;
+.
+          MOVE      BKREURNO,AURNO
+          CALL      GPMI0000                     * get all PMI details
+          BRANCH    EXIT,GBOK0500                * error - ignore record
+.
+          CALL      CMRG0000                     * check for U/R merge today
+.
+          ADD       ONE,BOKCOUNT                 * increment count
+GBOK0700  CALL      LRED0000                     * load variables and write rec.
+.
+          GOTO      GBOK0500                     * get next admission
+.
+GBOK9999  RETURN
+.
+.-----------------------------------------------------------------------------
+. Display total counts
+.-----------------------------------------------------------------------------
+ENDP0000  MOVE      ZERO,F3
+          MOVE      PTCNDIAD,F3
+          IF        F3 = 0
+            DISPLAY   *P1:21,*EF,"Current admissions processed: ":
+                      *V2LON,ADMCOUNT,*HOFF:
+                      *P1:22,"Today's discharges processed: ":
+                      *V2LON,DISCOUNT,*HOFF:
+                      *P1:24,"Data extract completed.  ";
+          ELSE
+            DISPLAY   *P1:19,*EF,"Current admissions processed: ":
+                      *V2LON,ADMCOUNT,*HOFF:
+                      *P1:20,"Today's discharges processed: ":
+                      *V2LON,DISCOUNT,*HOFF:
+                      *P1:21,"Pre-admissions processed    : ":
+                      *V2LON,PRECOUNT,*HOFF:
+                      *P1:22,"Bookings processed          : ":
+                      *V2LON,BOKCOUNT,*HOFF:
+                      *P1:24,"Data extract completed.  ";
+          ENDIF 
+.            
           CALL      HITENTER
 .
-GDIS9999  RETURN
+ENDP9999  RETURN
 +
 .*****************************************************************************
-.*                               LREC0000              Called by: GCUR0000   *
-.*        Load the record variables and write to the interface    GDIS0000   *
-.*        file                                                               *
+.* Load the record variables and write to the interface file for             *
+.* for admission, pre-admission and discharge                                *
 .*****************************************************************************
 .
 LREC0000  MOVE      PSNAME,PTTYSNAM              * load surname
@@ -365,19 +492,16 @@ LREC0000  MOVE      PSNAME,PTTYSNAM              * load surname
           MOVE      PSUBRB,PTTYSUBR              * load suburb
           MOVE      PPOST,PTTYPOST               * load postcode
 .
-          MATCH     SP20,PTELEP                  * load phone number
+          MOVE      PTELEP,PTTYPHON              * load phone number
+          MATCH     SP70,PTELEP                  
           IF        @EQUAL
-            MOVE      SP20,PTTYPHON
-          ELSE
-            MOVE      PTELEP,PTTYPHON
+            MATCH     "1",PTCNUMOP
+            IF        @EQUAL
+              MOVE      PTMXCELL,PTTYPHON
+            ENDIF
           ENDIF
 .
-          MATCH     SP70,PMPXPEML                * load email address
-          IF        @EQUAL
-            PACK      PTTYEMAL,SP70,SP10
-          ELSE
-            MOVE      PMPXPEML,PTTYEMAL
-          ENDIF
+          MOVE      PMPXPEML,PTTYEMAL            * load email address
 .
           MOVE      ANSA,PTTYSTAT                * load status
           IF        ASTAT = 3
@@ -429,7 +553,13 @@ LREC1000  MATCH     SP8,PMPXMEDC                 * load medicare expiry date
           MOVE      SP30,PTTYALGY                * load allergy codes
           MOVE      SP4,PTTYHOSP                 * load hosptial code
           MOVE      SP4,PTTYROOM
+.
           MOVE      ABED,PTTYBEDN                * load bed number
+          MATCH     "1",PTCNLBNB
+          IF        @EQUAL
+            MOVE      SP70,PTTYBEDN
+          ENDIF
+.                    
           MOVE      PURNO,PTTYURNO               * load U/R number
           PACK      PTTYWARD,AWARD,SP10          * load ward
           MOVE      AADMNO,PTTYADMN              * load admission number
@@ -460,7 +590,11 @@ LREC1000  MATCH     SP8,PMPXMEDC                 * load medicare expiry date
           MOVE      SP10,PTTYIDAT                * load ins. expiry date
           MOVE      SP8,PTTYOADM                 * load old admission number
 .
-.         Note: PTTYNOTE (additional patient notes) is not sent
+LREC7000  PACK      PTTYNOTE,SP70,SP70     
+          MATCH     "1",PTCNPPNT
+          GOTO      LREC8000 IF EQUAL
+. 
+. PTTYNOTE (additional patient notes) is not sent
 .
           WRITE     PTTYFILE,SEQ;PIPE,PTTYSNAM,PIPE,PTTYGNAM,PIPE,PTTYTITL,PIPE:
                                  PTTYADDR,PIPE,PTTYSUBR,PIPE,PTTYPOST,PIPE:
@@ -474,18 +608,186 @@ LREC1000  MATCH     SP8,PMPXMEDC                 * load medicare expiry date
                                  PTTYTABL,PIPE,PTTYFMEM,PIPE,PTTYIDAT,PIPE:
                                  PTTYOURN,PIPE,PTTYOADM,PIPE,PIPE,CRETURN
 .
+          GOTO      LREC9999
+.
+. PTTYNOTE (additional patient notes) is sent
+.
+LREC8000  MOVE      SP70,ADATEX
+          MATCH     SP70,ADATE
+          IF        !@EQUAL
+            UNPACK    ADATE,CCENT,CYEAR,CMON,CDAY
+            CALL      PACDATE
+            MOVE      CPCDATE,ADATEX
+          ENDIF
+          PACK      PTTYNOTE,ADATEX,SP1,ADIAG1,SP70,SP70
+.
+          WRITE     PTTYFILE,SEQ;PIPE,PTTYSNAM,PIPE,PTTYGNAM,PIPE,PTTYTITL,PIPE:
+                                 PTTYADDR,PIPE,PTTYSUBR,PIPE,PTTYPOST,PIPE:
+                                 PTTYPHON,PIPE,PTTYEMAL,PIPE,PTTYSTAT,PIPE:
+                                 PTTYCNUM,PIPE,PTTYCDAT,PIPE,PTTYDVAN,PIPE:
+                                 PTTYDVAC,PIPE,PTTYSNNO,PIPE,PTTYBDAT,PIPE:
+                                 PTTYMEDC,PIPE,PTTYMCDT,PIPE,PTTYALGY,PIPE:
+                                 PTTYHOSP,PIPE,PTTYROOM,PIPE,PTTYBEDN,PIPE:
+                                 PTTYURNO,PIPE,PTTYWARD,PIPE,PTTYADMN,PIPE:
+                                 PTTYATYP,PIPE,PTTYMAIL,PIPE,PTTYFUND,PIPE:
+                                 PTTYTABL,PIPE,PTTYFMEM,PIPE,PTTYIDAT,PIPE:
+                                 PTTYOURN,PIPE,PTTYOADM,PIPE,PTTYNOTE,PIPE:
+                                 CRETURN
+.
 LREC9999  RETURN
 +
 .*****************************************************************************
-.*                              DVAN0000           Called by: WPAT0000       *
+.* Load the record variables and write to the interface file for bookings    *
+.*****************************************************************************
+LRED0000  MOVE      PSNAME,PTTYSNAM              * load surname
+          MOVE      PGNAME,PTTYGNAM              * load given name
+          PACK      PTTYTITL,PTITL,SP10          * load title
+.
+          MOVE      PADD1,PTTYADDR               * load address (line 1 & 2)
+          STRIP     PTTYADDR
+          ENDSET    PTTYADDR
+          APPEND    SP1,PTTYADDR
+          APPEND    PADD2,PTTYADDR
+          APPEND    SP70,PTTYADDR
+          RESET     PTTYADDR
+.
+          MOVE      PSUBRB,PTTYSUBR              * load suburb
+          MOVE      PPOST,PTTYPOST               * load postcode
+.
+          MOVE      PTELEP,PTTYPHON              * load phone number
+          MATCH     SP70,PTELEP
+          IF        @EQUAL
+            MATCH     "1",PTCNUMOP
+            IF        @EQUAL
+              MOVE      PTMXCELL,PTTYPHON
+            ENDIF
+          ENDIF
+.
+          MOVE      PMPXPEML,PTTYEMAL            * load email address
+.
+          MOVE      ANSA,PTTYSTAT                * load status
+          IF        PCEASE = 1
+            MOVE      ANSD,PTTYSTAT
+          ENDIF
+.
+          CALL      GCON0000                     * get concession card details
+          CALL      DVAN0000                     * get DVA number
+.
+          UNPACK    PBDATE,CCENT,CYEAR,CMON,CDAY   * load date of birth
+          CALL      PACDATE
+          MOVE      CPCDATE,PTTYBDAT
+.
+          MATCH     SP10,PMEDI                   * blank medicare number ?
+          IF        @EQUAL
+            MOVE      SP20,PTTYMEDC              * yes
+            GOTO      LRED1000
+          ENDIF
+.
+          PACK      PTTYMEDC,PMEDI,SP20          * load medicare number
+          MATCH     SP2,PTMXMCCD                 * medicare ref. no. blank ?
+          GOTO      LRED1000 IF EQUAL            * yes
+.
+          STRIP     PTTYMEDC
+          ENDSET    PTTYMEDC
+          MOVE      PTMXMCCD,DIM2
+          SQUEEZE   DIM2                         * remove blanks
+          MATCH     "0",DIM2                     * leading zero ?
+          IF        @EQUAL
+            UNPACK    DIM2,ANS,ANS               * yes - take second char.
+            APPEND    ANS,PTTYMEDC
+          ELSE
+            APPEND    DIM2,PTTYMEDC
+          ENDIF
+          RESET     PTTYMEDC
+          PACK      PTTYMEDC,PTTYMEDC,SP20
+.
+LRED1000  MATCH     SP8,PMPXMEDC                 * load medicare expiry date
+          IF        @EQUAL
+            MOVE      SP5,PTTYMCDT
+          ELSE
+            UNPACK    PMPXMEDC,CCENT,CYEAR,CMON,CDAY
+            PACK      PTTYMCDT,CMON,SLASH,CYEAR,SP5
+          ENDIF
+.
+          MOVE      SP30,PTTYALGY                * load allergy codes
+          MOVE      SP4,PTTYHOSP                 * load hosptial code
+          MOVE      SP4,PTTYROOM
+.
+          MOVE      SP70,PTTYBEDN
+.
+          MOVE      PURNO,PTTYURNO               * load U/R number
+          MOVE      SP70,PTTYWARD                * load ward
+          MOVE      DBKREBOO,PTTYADMN            * load admission number
+          MOVE      SP1,PTTYATYP                 * load account type
+          MOVE      SP4,PTTYMAIL                 * load mail category
+.
+          MATCH     SP70,PFUNDH                  * health fund blank ?
+          IF        @EQUAL
+            MOVE      SP70,PTTYFUND              * yes
+          ELSE
+            MOVE      PFUNDH,PTTYFUND            * no - load hf
+          ENDIF
+.
+          MATCH     SP70,PFNDTB                  * health fund table blank ?
+          IF        @EQUAL
+            MOVE      SP70,PTTYTABL              * yes
+          ELSE
+            MOVE      PFNDTB,PTTYTABL            * no - load hf table
+          ENDIF
+.
+          MATCH     SP70,PFNDMM                  * hf membership no. blank ?
+          IF        @EQUAL
+            MOVE      SP70,PTTYFMEM              * yes
+          ELSE
+            MOVE      PFNDMM,PTTYFMEM            * no - load hf memb. no.
+          ENDIF
+.
+          MOVE      SP70,PTTYIDAT                * load ins. expiry date
+          MOVE      SP70,PTTYOADM                * load old admission number
+.
+LRED7000  PACK      PTTYNOTE,SP70,SP70
+          MATCH     "1",PTCNPPNT
+          GOTO      LRED8000 IF EQUAL
+.
+. PTTYNOTE (additional patient notes) is not sent
+.
+          WRITE     PTTYFILE,SEQ;PIPE,PTTYSNAM,PIPE,PTTYGNAM,PIPE,PTTYTITL,PIPE:
+                                 PTTYADDR,PIPE,PTTYSUBR,PIPE,PTTYPOST,PIPE:
+                                 PTTYPHON,PIPE,PTTYEMAL,PIPE,PTTYSTAT,PIPE:
+                                 PTTYCNUM,PIPE,PTTYCDAT,PIPE,PTTYDVAN,PIPE:
+                                 PTTYDVAC,PIPE,PTTYSNNO,PIPE,PTTYBDAT,PIPE:
+                                 PTTYMEDC,PIPE,PTTYMCDT,PIPE,PTTYALGY,PIPE:
+                                 PTTYHOSP,PIPE,PTTYROOM,PIPE,PTTYBEDN,PIPE:
+                                 PTTYURNO,PIPE,PTTYWARD,PIPE,PTTYADMN,PIPE:
+                                 PTTYATYP,PIPE,PTTYMAIL,PIPE,PTTYFUND,PIPE:
+                                 PTTYTABL,PIPE,PTTYFMEM,PIPE,PTTYIDAT,PIPE:
+                                 PTTYOURN,PIPE,PTTYOADM,PIPE,PIPE,CRETURN
+.
+          GOTO      LRED9999
+.
+. PTTYNOTE (additional patient notes) is sent, Blank for booking
+.
+LRED8000  WRITE     PTTYFILE,SEQ;PIPE,PTTYSNAM,PIPE,PTTYGNAM,PIPE,PTTYTITL,PIPE:
+                                 PTTYADDR,PIPE,PTTYSUBR,PIPE,PTTYPOST,PIPE:
+                                 PTTYPHON,PIPE,PTTYEMAL,PIPE,PTTYSTAT,PIPE:
+                                 PTTYCNUM,PIPE,PTTYCDAT,PIPE,PTTYDVAN,PIPE:
+                                 PTTYDVAC,PIPE,PTTYSNNO,PIPE,PTTYBDAT,PIPE:
+                                 PTTYMEDC,PIPE,PTTYMCDT,PIPE,PTTYALGY,PIPE:
+                                 PTTYHOSP,PIPE,PTTYROOM,PIPE,PTTYBEDN,PIPE:
+                                 PTTYURNO,PIPE,PTTYWARD,PIPE,PTTYADMN,PIPE:
+                                 PTTYATYP,PIPE,PTTYMAIL,PIPE,PTTYFUND,PIPE:
+                                 PTTYTABL,PIPE,PTTYFMEM,PIPE,PTTYIDAT,PIPE:
+                                 PTTYOURN,PIPE,PTTYOADM,PIPE,PTTYNOTE,PIPE:
+                                 CRETURN
+.
+LRED9999  RETURN
++
+.*****************************************************************************
 .*     Get the patient DVA number from the concession card file              *
 .* Requires: PURNO - U/R number                                              *
 .*           PMCDDVAC - DVA card colour coded field                          *
 .* Returns:  PTTYDVAN - Concession Card Number                               *
 .*           PTTYDVAC - DVA card colour                                      *
-.*                         W = White card                                    *
-.*                         G = Gold card                                     *
-.*                         Blank = Unknown or not entered                    *
 .*****************************************************************************
 .
 DVAN0000  MOVE      SP10,PTTYDVAN                * initialise DVA number
@@ -494,14 +796,14 @@ DVAN0000  MOVE      SP10,PTTYDVAN                * initialise DVA number
           PACK      KEY19,PURNO,TILDA20
           CALL      RSPMCCD1                     * position on U/R
 DVAN0500  CALL      RPPMCCD1                     * read previous record
-          BRANCH    OVRCD,DVAN9100               * eof - nothing found
+          BRANCH    OVRCD,DVAN9999               * eof - nothing found
 .
           MATCH     PURNO,PMCDURNO               * same U/R still ?
-          GOTO      DVAN9100 IF NOT EQUAL        * no - nothing found
+          GOTO      DVAN9999 IF NOT EQUAL        * no - nothing found
 .
 .         Check if the card type is DVA (Cat ct, Indicator 1 = 3)
 .
-          PACK      KEY5,CATCT,PMCDCTYP
+          PACK      KEY5,CATct,PMCDCTYP
           CALL      RDCODE1                      * code on file ?
           BRANCH    OVRCD,DVAN0500               * no - ignore record
 .
@@ -524,7 +826,7 @@ DVAN0500  CALL      RPPMCCD1                     * read previous record
 .         card is current
 .
           MATCH     CURRDATE,PMCDEXDT            * card valid for date ?
-          GOTO      DVAN9100 IF LESS             * no - finished
+          GOTO      DVAN0500 IF LESS             * no - ignore record 
 .
 .         DVA concession card is current
 .
@@ -540,17 +842,19 @@ DVAN9100  MATCH     SP3,PMCDDVAC                 * blank card colour ?
           CALL      RDCODE1                      * code on file ?
           BRANCH    OVRCD,DVAN9999               * no - finished
 .
-          MATCH     ANSW,THCSCOD                 * white card ?
-          IF        @EQUAL
-            MOVE      ANSW,PTTYDVAC              * yes
-            GOTO      DVAN9999
-          ENDIF
+          MOVE       THCSCOD,PTTYDVAC 
 .
-          MATCH     ANSG,THCSCOD                 * gold card ?
-          IF        @EQUAL
-            MOVE      ANSG,PTTYDVAC              * yes
-            GOTO      DVAN9999
-          ENDIF
+.          MATCH     ANSW,THCSCOD                 * white card ?
+.          IF        @EQUAL
+.            MOVE      ANSW,PTTYDVAC              * yes
+.            GOTO      DVAN9999
+.          ENDIF
+.
+.          MATCH     ANSG,THCSCOD                 * gold card ?
+.          IF        @EQUAL
+.            MOVE      ANSG,PTTYDVAC              * yes
+.            GOTO      DVAN9999
+.          ENDIF
 .
 DVAN9999  RETURN
 +
@@ -580,7 +884,7 @@ GCON0500  CALL      RPPMCCD1                     * read previous record
 .         Check if the card type is DVA (Cat ct, Indicator 1 = 3) and
 .         ignore the record if it is.
 .
-          PACK      KEY5,CATCT,PMCDCTYP
+          PACK      KEY5,CATct,PMCDCTYP
           CALL      RDCODE1                      * code on file ?
           BRANCH    OVRCD,GCON0500               * no - ignore record
 .
@@ -602,12 +906,12 @@ GCON0500  CALL      RPPMCCD1                     * read previous record
 .         card is current
 .
           MATCH     CURRDATE,PMCDEXDT            * card valid for date ?
-          GOTO      GCON0500 IF LESS             * no - finished
+          GOTO      GCON0500 IF LESS             * no - ignore record 
 .
 .         Concession card is current
 .
 GCON1000  MATCH     SP20,PMCDCNUM                * card number blank ?
-          GOTO      GCON0500 IF EQUAL            * yes - finished
+          GOTO      GCON0500 IF EQUAL            * yes - ignore record
 .
 .         An SN number represents a Safety Net Entitlement card (which may
 .         be issued in addition to a Safety Net Concession Card).  The SN..
@@ -621,16 +925,19 @@ GCON1000  MATCH     SP20,PMCDCNUM                * card number blank ?
 .
           MATCH     "SN",PMCDCNUM
           IF        @EQUAL
-            MATCH     SP11,PTTYSNNO              * safety net ent. no. blank ?
-            GOTO      GCON0500 IF NOT EQUAL      * no - ignore record
+            MATCH     SP70,PTTYSNNO              * 1st safety net found ?
+            GOTO      GCON0500 IF NOT EQUAL      * yes - ignore record
 .
-            MOVE      PMCDCNUM,PTTYSNNO          * load safety net ent. number
+            MOVE      PMCDCNUM,PTTYSNNO          * load 1st safety net ent no
             GOTO      GCON0500                   * get next record
           ENDIF
 .
 .         The card is a standard concession card
 .
-          MOVE      PMCDCNUM,PTTYCNUM            * load concession card number
+          MATCH     SP70,PTTYCNUM                * 1st conession card found ?
+          GOTO      GCON0500 IF NOT EQUAL        * yes - ignore record
+.
+          MOVE      PMCDCNUM,PTTYCNUM            * load 1st concession card no
           MATCH     SP8,PMCDEXDT              
           IF        !@EQUAL
             UNPACK    PMCDEXDT,CCENT,CYEAR,CMON,CDAY  * load expiry date
@@ -701,12 +1008,21 @@ CMRG9999  RETURN
 .*                                                                           *
 .*****************************************************************************
 MVEXT000  MOVE      ZERO,EXIT
-          STRIP     PTCNPATY
+          MOVE      PTCNPATY,EXTRDIR
+          SQUEEZE   EXTRDIR 
+          ENDSET    EXTRDIR
+          CMATCH    SLASH,EXTRDIR
+          IF        !@EQUAL
+            RESET     EXTRDIR
+            PACK      EXTRDIR,EXTRDIR,SLASH
+          ENDIF
+.
+          RESET     EXTRDIR
           CLEAR     CMDLINE
           APPEND    "mv ",CMDLINE
           APPEND    FILENAME,CMDLINE
           APPEND    ".txt ",CMDLINE              
-          APPEND    PTCNPATY,CMDLINE
+          APPEND    EXTRDIR,CMDLINE
           APPEND    FILENAME,CMDLINE
           APPEND    ".txt ",CMDLINE
           RESET     CMDLINE
@@ -728,4 +1044,6 @@ NVEXT999  RETURN
           INC       PATMRGIO/INC
           INC       PMSCCDIO/INC
           INC       PMSPX2IO/INC
+          INC       BOKRC1IO/INC
+          INC       BOKRX1IO/INC
 +

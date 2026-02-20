@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.01">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -163,6 +163,9 @@ function UpdatePage() {
 
     setTimeout('document.UpdateForm.UpdateButton.disabled=false',1000);
   if (validateMandatory(document.UpdateForm)) { 
+    if (trim(document.UpdateForm.pmsvx125.value) != ""){
+      document.UpdateForm.pmpxi110.value = document.UpdateForm.pmsvx125.value;
+    }
     document.UpdateForm.submit();
   }
 }
@@ -287,6 +290,7 @@ InsertEmergencyHeader()
   <input type=hidden name=nextpage value="11"><input type=hidden name=redirect>
   <input type=hidden name=ptcnueoc value="%EMRWEB02.01.454">
   <input type=hidden name=ptcnxcom value="%STANDARD.01.025.116.222.0.1">
+  <input type=hidden name=wahealth value="1">
   <input type="hidden" name="savealia" value="0">
   <input type="hidden" name="aliasset" value="0">
   <input type="hidden" name="prevaddr" value="0">
@@ -306,6 +310,7 @@ InsertEmergencyHeader()
   <input type="hidden" name=dispprev value="%EMRWEB02.01.535">
   <input type="hidden" name=emvis128 value="">
   <input type="hidden" name=emvis129 value="">
+  <input type="hidden" name=pmpxi110 value="%EMRWEB02.01.699.046">
   <input type="hidden" name=emclcin1>
 
 <table align=center width=100% border=0 cellspacing=0 cellpadding=0>

@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.02">
+<meta name="TemplateVersion" content="V12.01.03">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -127,21 +127,25 @@ function processCompRedirect() {
     }
   } else {
     if (pageType=="O"){
-
-      if(document.UpdateForm.scrname.value=="OCR") {
-        server="outweb02";
-        report="03";
-        template="004";
-        document.UpdateForm.retdfrae.value="Y"
-      } else if (document.UpdateForm.scrname.value == "OCD"){
-        server="outweb02";
-        report="03";
-        template="006";
-        document.UpdateForm.retdfrae.value="Y"
-      } else {
-        server="outweb02";
-        report="03";
-        template="001";
+      if ( chckcomp == "P") {
+        if(document.UpdateForm.scrname.value=="OCR") {
+          server="outweb02";
+          report="03";
+          template="004";
+          document.UpdateForm.retdfrae.value="Y"
+        } else if (document.UpdateForm.scrname.value == "OCD"){
+          //server="outweb02";
+          //report="03";
+          //template="006";
+          server="allweb02"
+          report="02"
+          template="004"
+          document.UpdateForm.retdfrae.value="Y"
+        } else {
+          server="outweb02";
+          report="03";
+          template="001";
+        }
       }
     } else if (pageType=="P"){
       server="patweb98";
@@ -160,7 +164,14 @@ function processCompRedirect() {
   if (document.UpdateForm.scrname.value != "   ") {
      document.UpdateForm.redirect.value += "&scrname="+
        document.UpdateForm.scrname.value;
-  }
+  } 
+
+  if (!isWhitespace(document.UpdateForm.referadm.value) &&
+      !isWhitespace(document.UpdateForm.referdep.value)) {
+     document.UpdateForm.redirect.value += "&referadm="+
+       document.UpdateForm.referadm.value + "&referdep=" +
+       document.UpdateForm.referdep.value;
+  } 
 }
 
 function SubmitClaim() {
@@ -276,7 +287,8 @@ function SubmitClaim() {
   <input type=hidden name=visitty value="%PATWEB89.01.999.129.0">
   <input type=hidden name=visitst value="%PATWEB89.01.999.129.1">
   <input type=hidden name=newMVIT  value="%PATWEB89.01.384.099.042.1">
-
+  <input type=hidden name=referadm value="%PATWEB89.01.999.141">
+  <input type=hidden name=referdep value="%PATWEB89.01.999.140">
 <table align=center width=100% border=1 cellspacing=0 cellpadding=2>
 <tr><td class=HeadingCell align=center>
     Motor Vehicle Details</td></tr>

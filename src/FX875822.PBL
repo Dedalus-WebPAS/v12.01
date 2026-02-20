@@ -1,0 +1,472 @@
+.***************************************************************************
+.* System    :   PMS,Inpatients,Emergency,Outpatients                      *
+.* Program   :   FX875822                                                  *
+.* Desc      :   Move the MyHR consent value to PMI extended and Patient   *
+.*               extented table                                            *
+.***************************************************************************
+.* Date      :   09/09/2026                                                *
+.* Author    :   DA Sarkies                                                *
+.* Function  :   This program will moved the value for MyHR consent from   *
+.*               the user defined field and moves it to a field in the PMI *
+.*               extension table and the visit extension table             *
+.*                                                                         *
+.* Modifications  :                                                        *
+.*        V12.01.00 11.02.2025 DA Sarkies    Tsk 0875822                  *
+.*                  Created program                                        *
+.***************************************************************************
+.
+          INC       STD001FD
+.
+. FILE DESCRIPTION INCLUDES
+. -------------------------
+.
+          INC       EMRVISFD/INC
+          INC       OUTBB1FD/INC
+          INC       OUTBOAFD/INC
+          INC       OUTSITFD/INC
+          INC       PATMA1FD/INC
+          INC       PATMI1FD/INC
+          INC       PMSDAUFD/INC
+	  INC       PMSPX2FD/INC
+          INC       PMSVX1FD/INC
+          INC       PMSVX1TD/INC
+.
+. LOCAL VARIABLE DEFINITION
+. -------------------------
+.
+BLKSTR    INIT      "Blank"
+.
+CFILEPRE  DIM       3
+COUNTBLK  FORM      6
+COUNTLIN  FORM      2
+COUNTUPD  FORM      6
+SAVESITE  DIM       3
+STRTDATE  DIM       8
+.
+PRGID     INIT      "FX875822"
+PRGNAM    INIT      "MyHR Consent field update" 
+VERSION   INIT      "V12.01.00"
++
+.**************************************************************************
+.*                              ML0000                                    *
+.*                      Controlling Logic (Mainline code)                 *
+.**************************************************************************
+.
+ML0000    CALL      INIT0000               * initialisation and open files
+.
+ML0100    CALL      OPTN0000               * select options
+          BRANCH    EXIT,ML9999            * EXIT = 1 if 0 chosen in menu
+          BRANCH    COPTION,ML1000,ML1000  * proceed with clean up
+.
+ML1000    CALL      CONTQST                * Ok to continue ?
+          BRANCH    CEXIT,ML2000:          * yes
+                          ML0100:          * no
+                          ML0100           * cancel
+.
+ML2000    CALL      PROC0000               * process
+.
+ML9999    CHAIN     PGM                    * chain back to program
++
+.****************************************************************************
+.*                                INIT0000             Called by: ML0000    *
+.*                             initialisation                               *
+.*  The initialisation routine is used to display headings and open files.  *
+.****************************************************************************
+.
+INIT0000  CALL      DISPHEAD                  * display heading
+          OPEN      EMRVISA1,"emrvisaf"
+          OPEN      OUTSITA3,"outsitaf"
+          OPEN      PATMA1A1,"patma1af"
+          OPEN      PATMX1A1,"patmx1af"
+          OPEN      PATMI1A1,"patmi1af"
+          OPEN      PMSDAUA1,"pmsdauaf"
+          OPEN      PMSPX2A1,"pmspx2af"
+          OPEN      PMSVX1A1,"pmsvx1af"
+.
+INIT9999  RETURN
++
+.****************************************************************************
+.*                                OPTN0000             Called by: ML0000    *
+.*                        get user options or exit                          *
+.*                                                                          *
+.*    Returns:  EXIT    = FALSE (0)  Run clean up                           *
+.*                        TRUE  (1)  Exit option selected                   *
+.****************************************************************************
+.
+OPTN0000  DISPLAY   *P1:3,*EF,*P1:4,*V2LON,ZERO,*HOFF,". Exit":
+                    *P1:5,*V2LON,ONE,*HOFF,". Report Only":
+                    *P1:6,*V2LON,TWO,*HOFF,". Run FIXIT program"
+.
+OPTN0500  KEYIN     *P1:8,*EL,"Select Option : ",*DV,UNDLN1:
+                    *P17:8,*V2LON,COPTION
+.
+          COMPARE   ZERO,COPTION                 * exit selected ?
+          GOTO      OPTN9500 IF EQUAL            * yes
+.
+          BRANCH    COPTION,OPTN9000,OPTN9000    * run clean-up
+.
+          BEEP
+          GOTO      OPTN0500
+.
+OPTN9000  MOVE      ZERO,EXIT
+          GOTO      OPTN9999
+.
+OPTN9500  MOVE      ONE,EXIT
+.
+OPTN9999  RETURN
++
+.**************************************************************************
+.*                               PROC0000              Called by: ML0000  *
+.*                                                                        *
+.**************************************************************************
+.
+PROC0000  PACK      CPHDROPT,SP70
+          CALL      IBACLOCK
+.         
+          COMPARE   ONE,COPTION 
+          IF        @EQUAL
+            MOVE      " PMI - report only",CPHDROPT
+          ELSE
+            MOVE      " PMI",CPHDROPT
+          ENDIF
+.
+          CALL      UPPMS000
+.         
+          COMPARE   ONE,COPTION 
+          IF        @EQUAL
+            MOVE      " Visit - report only",CPHDROPT
+          ELSE
+            MOVE      " Visit",CPHDROPT
+          ENDIF
+.
+          CALL      UPDIP000
+          CALL      UPEMR000
+          CALL      UPOUT000
+.
+PROC9999  RETURN
++
+. =========================================================================
+.         UPPMS000 - Update PMS Entries
+. =========================================================================
+.
+UPPMS000  CALL      HEAD80
+          PRINT     *N,"UR Number",*12,"New MyHR Consent Value"
+          MOVE      ZERO,COUNTLIN
+          MOVE      ZERO,COUNTBLK
+          MOVE      ZERO,COUNTUPD
+          PACK      KEY8,SP70 
+          CALL      RDSMAST1
+UPPMS100  CALL      RDKMAST1
+          BRANCH    OVRCD,UPPMS990
+.
+          MATCH     SP70,PURNO
+          GOTO      UPPMS100 IF EQUAL
+.
+          MATCH     SP70,PUSR1
+          IF        @EQUAL
+            ADD       ONE,COUNTBLK
+          ENDIF
+.
+          MATCH     "001",PUSR1
+          IF        !@EQUAL
+            MATCH     "000",PUSR1
+            GOTO      UPPMS100 IF NOT EQUAL
+          ENDIF 
+.
+          ADD       ONE,COUNTUPD
+          PACK      KEY8,PURNO
+          CALL      RDPMPX21
+          BRANCH    OVRCD,UPPMS100
+.
+          COMPARE   ONE,COPTION
+          IF        @EQUAL
+            CALL      DPLY0000
+            UNPACK    PUSR1,D2,PMPXSN16
+            COMPARE   ZERO,COUNTLIN
+            IF        @EQUAL
+              PRINT     *N,"UR Number",*12,"New MyHR Consent Value"
+            ENDIF
+            PRINT     *N,PURNO,*16,PMPXSN16
+          ELSE
+.
+            UNPACK    PUSR1,D2,PMPXSN16
+            CALL      UPPMPX21
+            CALL      CLPMSDAU
+.
+UPPMS200    MOVE      PURNO,PMDEURNO 
+            CALL      IBACLOCK
+            PACK      PMDECDAT,CCC,CYY,CMM,CDD
+            REP       " 0",PMDECDAT
+            PACK      PMDECTIM,CTIMEIS
+.
+            MOVE      "008",PMDERTYP
+            PACK      PMDEFL05,BLKSTR
+            PACK      KEY27,PURNO,PMDECDAT,CTIMEIS,PMDERTYP
+            CALL      WRPMDAU1
+.
+            CALL      DPLY0000
+            COMPARE   ZERO,COUNTLIN
+            IF        @EQUAL
+              PRINT     *N,"UR Number",*12,"New MyHR Consent Value"
+            ENDIF
+            PRINT     *N,PURNO,*16,PMPXSN16
+.
+          ENDIF
+          GOTO      UPPMS100
+.
+UPPMS990  CALL      DEND0000
+.
+UPPMS999  RETURN
++
+. =========================================================================
+.         UPDIP000 - Update Inpatient Visits
+. =========================================================================
+.
+UPDIP000  CALL      HEAD80
+          PRINT     *N,"Visit Number",*20,"New MyHR Consent Value"
+          MOVE      ZERO,COUNTLIN
+          PACK      KEY8,SP70
+          CALL      RDSMISS1
+UPDIP100  CALL      RDKMISS1
+          BRANCH    OVRCD,UPDIP990 
+.
+          MATCH     SP70,DAADMNO
+          GOTO      UPDIP100 IF EQUAL
+. 
+          MATCH     SP70,AUSR1
+          IF        @EQUAL
+            ADD       ONE,COUNTBLK
+          ENDIF
+.
+          MATCH     "001",AUSR1
+          IF        !@EQUAL
+            MATCH     "000",AUSR1
+            GOTO      UPDIP100 IF NOT EQUAL
+          ENDIF 
+.
+          ADD       ONE,COUNTUPD
+          PACK      KEY8,DAADMNO,SP70
+          CALL      RDPMVX11
+          BRANCH    OVRCD,UPDIP100
+.
+          COMPARE   ONE,COPTION
+          IF        @EQUAL
+            CALL      DPLY0000
+            UNPACK    AUSR1,D2,PMVXUDF7
+            COMPARE   ZERO,COUNTLIN
+            IF        @EQUAL
+              PRINT     *N,"Visit Number",*20,"New MyHR Consent Value"
+            ENDIF 
+            PRINT     *N,DAADMNO,*24,PMVXUDF7
+          ELSE
+.
+            UNPACK    AUSR1,D2,PMVXUDF7
+            CALL      UPPMVX11
+.
+            CALL      DPLY0000
+            COMPARE   ZERO,COUNTLIN
+            IF        @EQUAL
+              PRINT     *N,"Visit Number",*20,"New MyHR Consent Value"
+            ENDIF 
+            PRINT     *N,DAADMNO,*24,PMVXUDF7
+.
+          ENDIF
+          GOTO      UPDIP100
+.
+UPDIP990  CALL      DEND0000
+UPDIP999  RETURN
++
+. =========================================================================
+.         UPEMR000 - Update EMR Visits
+. =========================================================================
+.
+UPEMR000  CALL      HEAD80
+          PRINT     *N,"Visit Number",*20,"New MyHR Consent Value"
+          MOVE      ZERO,COUNTLIN
+          PACK      KEY8,SP70     
+          CALL      RAEMVIS1
+UPEMR100  CALL      RKEMVIS1
+          BRANCH    OVRCD,UPEMR990 
+.
+          MATCH     SP70,DEMVIADM
+          GOTO      UPEMR100 IF EQUAL
+.
+          MATCH     SP70,EMVIUC33
+          IF        @EQUAL
+            ADD       ONE,COUNTBLK
+          ENDIF
+.
+          MATCH     "001",EMVIUC33
+          IF        !@EQUAL
+            MATCH     "000",EMVIUC33
+            GOTO      UPEMR100 IF NOT EQUAL
+          ENDIF 
+.
+          ADD       ONE,COUNTUPD
+          PACK      KEY8,DEMVIADM,SP70
+          CALL      RDPMVX11
+          BRANCH    OVRCD,UPEMR100
+.
+          COMPARE   ONE,COPTION
+          IF        @EQUAL
+            CALL      DPLY0000
+            UNPACK    EMVIUC33,D2,PMVXUDF7
+            COMPARE   ZERO,COUNTLIN
+            IF        @EQUAL
+              PRINT     *N,"Visit Number",*20,"New MyHR Consent Value"
+            ENDIF 
+            PRINT     *N,DEMVIADM,*24,PMVXUDF7
+          ELSE
+.
+            UNPACK    EMVIUC33,D2,PMVXUDF7
+            CALL      UPPMVX11
+.
+            CALL      DPLY0000
+            COMPARE   ZERO,COUNTLIN
+            IF        @EQUAL
+              PRINT     *N,"Visit Number",*20,"New MyHR Consent Value"
+            ENDIF 
+            PRINT     *N,DEMVIADM,*24,PMVXUDF7
+.
+          ENDIF
+          GOTO      UPEMR100
+.
+UPEMR990  CALL      DEND0000
+UPEMR999  RETURN
++
+. =========================================================================
+.         UPOUT000 - Update Outpatient Visits
+. =========================================================================
+.
+UPOUT000  CALL      HEAD80 
+          PRINT     *N,"Visit Number",*20,"New MyHR Consent Value"
+          MOVE      ZERO,COUNTLIN
+          MOVE      SP70,SAVESITE
+          MOVE      SP70,CFILEPRE
+          PACK      KEY9,SP70
+          CALL      RDSSITA3
+UPOUT100  CALL      RDKSITA3
+          BRANCH    OVRCD,UPOUT990
+.
+          MATCH     SP70,SAVESITE
+          GOTO      UPOUT200 IF EQUAL
+.
+          MATCH     SAVESITE,OSTFILE
+          GOTO      UPOUT100 IF EQUAL
+.
+UPOUT200  MOVE      OSTFILE,SAVESITE
+.
+          MATCH     OSTFILE,CFILEPRE
+          IF        !@EQUAL
+            MOVE      OSTFILE,CFILEPRE
+            CALL      OPNOUT00
+          ENDIF
+.
+          PACK      KEY36,SP70
+          CALL      RDSBOKB1
+UPOUT300  CALL      RDKBOKB1
+          BRANCH    OVRCD,UPOUT100
+.
+          MATCH     DOBAOUTN,SP70
+          GOTO      UPOUT300 IF EQUAL
+.
+          MATCH     SP70,OBOUSR1
+          IF        @EQUAL
+            ADD       ONE,COUNTBLK
+          ENDIF
+.
+          MATCH     "001",OBOUSR1
+          IF        !@EQUAL
+            MATCH     "000",OBOUSR1
+            GOTO      UPOUT300 IF NOT EQUAL
+          ENDIF 
+.
+          ADD       ONE,COUNTUPD
+          PACK      KEY8,DOBAOUTN,SP70
+          CALL      RDPMVX11
+          BRANCH    OVRCD,UPOUT300
+.
+          COMPARE   ONE,COPTION
+          IF        @EQUAL
+            CALL      DPLY0000
+            UNPACK    OBOUSR1,D2,PMVXUDF7
+            COMPARE   ZERO,COUNTLIN
+            IF        @EQUAL
+              PRINT     *N,"Visit Number",*20,"New MyHR Consent Value"
+            ENDIF 
+            PRINT     *N,DOBAOUTN,*24,PMVXUDF7
+          ELSE
+.
+            UNPACK    OBOUSR1,D2,PMVXUDF7
+            CALL      UPPMVX11
+.
+            CALL      DPLY0000
+            COMPARE   ZERO,COUNTLIN
+            IF        @EQUAL
+              PRINT     *N,"Visit Number",*20,"New MyHR Consent Value"
+            ENDIF 
+            PRINT     *N,PURNO,*24,PMVXUDF7
+.
+          ENDIF
+          GOTO      UPOUT300
+.
+UPOUT990  CALL      DEND0000
+.
+UPOUT999  RETURN
++
+.------------------------------------------------------------
+. Open Outpatient Files
+.------------------------------------------------------------
+.
+OPNOUT00  PACK      CFNAME,CFILEPRE,FILBB1A1  * Get the name of the BOKA6 file
+          OPEN      OUTBB1A1,CFNAME           * Open the file
+.
+OPNOUT99  RETURN
+
++
+.------------------------------------------------------------
+. Display the end of the page
+.------------------------------------------------------------
+.
+DPLY0000  ADD       ONE,COUNTLIN
+          COMPARE   TWENTY7,COUNTLIN
+          IF        @EQUAL
+            CALL      DEND0000
+            CALL      HEAD80
+          ENDIF
+.
+DPLY9999  RETURN
+.
+DEND0000 CALL      LINE0000
+         PRINT     *N,"Total Records with blank value: ",COUNTBLK
+         IF        COPTION=1
+           PRINT     *N,"Total Records to be updated: ",COUNTUPD
+         ELSE
+           PRINT     *N,"Total Records updated: ",COUNTUPD
+         ENDIF
+         MOVE      ZERO,COUNTLIN
+.
+DEND9999 RETURN
+.
+LINE0000  PRINT     "*-----------------------------------------------"
+.
+LINE9999  RETURN
++
+. =========================================================================
+.         I/O Includes
+. =========================================================================
+.
+          INC       STD001IO
+          INC       CLEMRVIS
+          INC       CLPMSPX2
+          INC       CLPMSVX1
+          INC       CLPMSDAU
+          INC       EMRVISIO/INC
+          INC       OUTBB1IO/INC
+          INC       OUTBOAIO/INC
+          INC       OUTSITIO/INC
+          INC       PATMA1IO/INC
+          INC       PATMI1IO/INC
+          INC       PMSDAUIO/INC
+          INC       PMSPX2IO/INC
+          INC       PMSVX1IO/INC

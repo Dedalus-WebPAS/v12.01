@@ -5,6 +5,8 @@
 .
 . Modifications : 
 .----------------------------------------------------------------------
+. V12.01.01 05/02/2026  Zumin Yu       TSK 0972419
+.           Updated PTCNMRPN to read from the new location
 . V12.00.02 18/09/2025  Nikitha B      TSK 0966346
 .           Modified at PLOC1000 to check for user logged in hospitals only.
 . V12.00.01 08/07/2025  Bella Turco    TSK 0962544
@@ -811,7 +813,7 @@ ENDFONT   INIT      "</font>"
 
 .--------------------------------------------------------------------------
 PRGID     INIT      "PATWEB85"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Medical Records Request Server"
 .--------------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -998,8 +1000,9 @@ INIT0000  CALL      INTMAS00
                                   *64,CUSENOTE,*79,CYRESMAN,CBIRTHCN:
                                  *86,CDETENTE,*92,CDETPATH,*129,CCHGCMN,CADDLAB:
                                  *132,CALRDESC,CPIDCOD,*171,PTCNSTAU,PTCNNUMM:
-                                 *174,PTCNNDAT,*182,PTCNORNO,PTCNURCF,PTCNRQCF:
-                                      PTCNDPCF,PTCNRLAY,PTCNUCOD,PTCNMRPN:
+                                 *174,PTCNNDAT,*182,PTCNORNO,*192,PTCNURCF:
+                                 *193,PTCNRQCF,*194,PTCNDPCF,*195,PTCNRLAY:
+                                 *196,PTCNUCOD:
                                  *208,PTWRDLAB,PTCNDAYF,*216,PTPRVALS:
                                  *220,PTCNUADT,*226,CCARECL,CADMCAT:
                                  *231,PTCNRGNS:
@@ -1011,6 +1014,7 @@ INIT0000  CALL      INTMAS00
           READ      CONTROLF,NINTY7;*157,MRCNINCP,*162,MRCNPBLK:
                                     *170,MRCNTDAY,*176,MRCNTREC
           READ      CONTROLF,HUND03;*212,PTCNPFSN,PTCNPFGN
+          READ      CONTROLF,HUND30;*180,PTCNMRPN
 .
           IF        IBCNMHOS=1
             OPEN      MLTCODA1,"mltcodaf"

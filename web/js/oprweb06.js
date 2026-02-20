@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.01
+//jsVersion  : V12.01.02
 //========================================================================
 // Program   : oprweb06.js
 //
@@ -2771,4 +2771,12 @@ function checkTimeDiff(dischargeTime,exitTime,referralLink) {
          document.SelectPeriod.dlyrsnrc.value;
    }
 }
-
+function DefaultExitComplexTime() {
+  if(document.UpdateForm.defttime.value!="1") {
+    return;
+  }
+  if(!isWhitespace(document.UpdateForm.opard080.value)) {
+    return;
+  }
+  SetCurrentDateTime(null,document.UpdateForm.opard080);
+}

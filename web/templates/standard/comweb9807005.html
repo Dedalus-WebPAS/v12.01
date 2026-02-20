@@ -1,9 +1,11 @@
-<meta name="TemplateVersion" content="V12.01.01">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
 <script type="text/javascript">
 function PostForm() {
+  f = document.UpdateForm;
+
   if(document.UpdateForm.d_patcn004.checked==false) {
      document.UpdateForm.patcn004.value="0";
   } else {
@@ -110,6 +112,25 @@ function PostForm() {
   justifyRight(document.UpdateForm.patcn277.value);
   justifyRight(document.UpdateForm.patcn307.value);
 
+  if (f.d_patcn703.checked == false) {
+    f.patcn703.value = "0";
+  }
+  else {
+    f.patcn703.value = "1";
+  }
+  if (f.d_patcn704.checked == false) {
+    f.patcn704.value = "0";
+  }
+  else {
+    f.patcn704.value = "1";
+  }
+  if (f.d_patcn705.checked == false) {
+    f.patcn705.value = "0";
+  }
+  else {
+    f.patcn705.value = "1";
+  }
+
   setFormactn('U');
 }
 function GoBack() {
@@ -165,6 +186,9 @@ function AlertMessage() {
 <input type=hidden name=patcn394 value=" ">
 <input type=hidden name=patcn418 value=" ">
 <input type=hidden name=patcn421 value="0">
+<input type=hidden name=patcn703 value="0">
+<input type=hidden name=patcn704 value="0">
+<input type=hidden name=patcn705 value="0">
 
 <table align=center width=100% border=0 cellspacing=0 cellpadding=0>
 <tr><td class=HeadingCell align=center>Vendor Controlled 1</td></tr>
@@ -320,6 +344,29 @@ function AlertMessage() {
     <td class=DataItem><input type=checkbox name="d_patcn421" value="1"
  title="Map Short User ID to Long Login Name for in application authentication">
     </td></tr>
+<tr><td class=DataLabel>If Home Phone is blank, use Mobile Phone number - PaTTY
+                        Interface Extract</td>
+    <td class=DataItem><input type=checkbox name=d_patcn703 value="1"
+     title="If Home Phone is blank, use Mobile Phone number">
+    </td>
+</tr>
+<tr><td class=DataLabel>Leave pttybedn blank - PaTTY Interface</td>
+    <td class=DataItem><input type=checkbox name=d_patcn704 value="1"
+     title="Leave pttybedn blank">
+    </td>
+</tr>
+<tr><td class=DataLabel>Populate Patient Notes (pttynote) with concatenation
+ of Admission Date (patmi1af.adate)
+ and Admission Diagnosis (patmi1af.adiag1) - PaTTY Interface</td>
+    <td class=DataItem><input type=checkbox name=d_patcn705 value="1"
+     title="Populate Patient Notes (pttynote) with concatenation of Admission Date">
+    </td>
+</tr>
+<tr><td class=DataLabel>Include Pre-admissions and Bookings in PaTTY Extract - Number of Days in advance to include</td>
+    <td class=DataItem><input type=text name=patcn706
+     title=" Number of Days in advance to include"
+     class="Integer JustifyRight"
+     size=4 maxlength=3 value="%COMWEB98.07.199.606"></td></tr>
 
 <tr><td colspan=2 align=center><hr width=100%></td></tr>
 
@@ -446,5 +493,16 @@ if(EnableDRGEfftDates == "1")
  if (UsingShortUserID=="1") {
    document.UpdateForm.d_patcn421.checked=1;
  }
-
+ptcnumop="%COMWEB98.07.199.603"
+if (ptcnumop=="1") {
+  document.UpdateForm.d_patcn703.checked = 1;
+}
+ptcnlbnb="%COMWEB98.07.199.604"
+if (ptcnlbnb=="1") {
+  document.UpdateForm.d_patcn704.checked = 1;
+}
+ptcnppnt="%COMWEB98.07.199.605"
+if (ptcnppnt=="1") {
+  document.UpdateForm.d_patcn705.checked = 1;
+}
 </script>

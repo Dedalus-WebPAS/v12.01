@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //==============================================================================
   var mthArray = ["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 //==============================================================================
@@ -282,7 +282,12 @@ function openDocument(file,path) {
 //             --------------------------------------------
 function LinkTo(AdmissionID,urno,admission) {
   var t  = 50;
-  var h  = document.body.clientHeight-150;
+  if(eAdmSearchViewjs){
+    var h  = document.body.clientHeight;
+  }
+  else{
+    var h  = document.body.clientHeight-150;
+  } 
   var w = getClientWidth() - 400;
   var l = (getClientWidth()/2) - w/2;
 
@@ -387,7 +392,17 @@ function Process(AdmissionID,urno,admission) {
       theURL+='&srchpdob='+dateOfBirth; }
   if (UpdateForm.srchpage!=null) {
       theURL+='&srchpage='+UpdateForm.srchpage.value; }
-  location.href=theURL;
+
+  if(eAdmSearchViewjs){
+    var t  = 250;
+    var h  = document.body.clientHeight;
+    var w = getClientWidth()-12;
+    var l = (getClientWidth()/2) - w/2;
+    DFrameLink(theURL,t,l,w,h)
+  }
+  else{
+    location.href=theURL;
+  }
 }
 //             --------------------------------------------
 function UpdatePending() {

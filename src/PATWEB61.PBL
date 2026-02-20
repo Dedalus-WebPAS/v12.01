@@ -13,6 +13,9 @@
 .
 . Modifications :
 .------------------------------------------------------------------------------
+.      V12.01.01  11/02/2026  Ebon Clements  TSK 0964606
+.                 Added claim code filter FILTCLAM for journals and use of
+.                 PTCNNRTD/NORECORD to the System based GL Maintenance SGLLST00
 .      V12.00.01  07/08/2025  Z.Yu    TSK 0964606
 .                 Updated NORECORD in SGATB000 by using PTCNNRTD parameter
 .                 Added NOMORE00 in SGATB990
@@ -447,6 +450,7 @@ DIM26     DIM       26
 DIM26A    DIM       26                             
 ENQFLAG   FORM      1
 FILEOPEN  DIM       30
+FILTCLAM  DIM       3
 FILTHOSP  DIM       3
 FORM1A    FORM      1        
 FUNDCODE  DIM       6         * Health Fund Code
@@ -495,7 +499,7 @@ NBSP      INIT      "&nbsp;"
 .-----------------------------------------------------------------------------
 .
 PRGID     INIT      "PATWEB61"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Billing Maintenance Server"
 +
 .------------------------------------------------------------------------------
@@ -771,6 +775,7 @@ CLRPAR00  MOVE      ZERO,REPORTNO
           MOVE      ZERO,PTIRN003           * Next invoice number in range
           MOVE      ZERO,PTIRN004           * Maximum invoice number in range
           MOVE      SP70,FILTHOSP           * Hospital filter
+          MOVE      SP70,FILTCLAM           * Claim code filter
 .
           MOVE      SP70,PTEC0001           * Claim type (cat CL)          
           MOVE      SP70,PTEC0002           * Admission type (cat A)
@@ -1231,6 +1236,12 @@ SETPAR00  MATCH     "reportno=",QRYNAME
           MATCH     "filthosp=",QRYNAME
           IF        @EQUAL
             PACK      FILTHOSP,QRYDATA,SP70
+            GOTO      SETPAR99
+          ENDIF
+.
+          MATCH     "filtclam=",QRYNAME
+          IF        @EQUAL
+            PACK      FILTCLAM,QRYDATA,SP70
             GOTO      SETPAR99
           ENDIF
 .
@@ -4941,7 +4952,7 @@ SGATB000  IF        ENQFLAG<>1
           IF        @EQUAL
             CALL      RPPMSGA1              * Yes,re-position index
           ENDIF
-
+.
 SGATB100  CALL      RKPMSGA1                * Read next record
           BRANCH    OVRCD,SGATB990
 .
@@ -6137,7 +6148,7 @@ SGLN0000  BRANCH    FLDITMNO,SGLN0100,SGLN0200,SGLN0300,SGLN0400,SGLN0500:
                              SGLN2100,SGLN2200,SGLN2300,SGLN2400,SGLN2500:
                              SGLN2600,SGLN2700,SGLN2800,SGLN2900,SGLN3000:
                              SGLN3100,SGLN3200,SGLN3300,SGLN3400,SGLN3500:
-                             SGLN3600,SGLN3700,SGLN3800,SGLN3900
+                             SGLN3600,SGLN3700,SGLN3800,SGLN3900,SGLN4000
 .
           GOTO      SGLN9999
 .
@@ -6698,6 +6709,11 @@ SGLN3900  MATCH     PMFMTDEB,SP20
           WRITE     HTMLFILE;PMFMTDEB;  * Debtor account
           GOTO      SGLN9999
 .
+SGLN4000  MOVE      CODECL,CATEGORY            * Claim Code filter
+          MOVE      FILTCLAM,CODE
+          CALL      CODITM00
+          GOTO      SGLN9999
+.
 SGLN9999  RETURN
 +
 .------------------------------------------------------------------------------
@@ -6764,7 +6780,7 @@ SGLLST00  UNPACK    DIM127,D1,LINKPRG,DIM127
           CALL      DGLHD000              * Finance Letter List Table Heading
 .
           IF        NORECORD=0
-            MOVE      "14",NORECORD       * Set Default No Records to Display
+            MOVE      PTCNNRTD,NORECORD     * Set Default No Records to Display
           ENDIF
           MOVE      ZERO,RECNUMB
           MOVE      ZERO,DISNUMB
@@ -6786,8 +6802,20 @@ SGLLST10  CALL      RKPMFMS1
 .
           MATCH     "5",PMFMRSUB              * Journals
           GOTO      SGLLST20 IF NOT EQUAL
+.
           MATCH     SP3,PMFMCODE              * skip Default
           GOTO      SGLLST10 IF EQUAL
+.
+          IF        PTCNJFEE = 1
+            MATCH     "2",SUBSECTN            * Sub section Journal Codes
+            IF        @EQUAL
+              MATCH     SP70,FILTCLAM         * Journal Claim code filter
+              IF        !@EQUAL
+                 MATCH    FILTCLAM,PMFMCODE
+                 GOTO     SGLLST99 IF NOT EQUAL
+              ENDIF
+            ENDIF
+          ENDIF
           GOTO      SGLLST30
 .
 SGLLST20  CMATCH    SYSGL002,PMFMCODE
@@ -8922,6 +8950,7 @@ NXTSAC00  MOVE      NORECORD,KEY2
           REP       " +",SYSGL002
           REP       " +",SYSGL015
           REP       " +",SYSGL016
+          REP       " +",FILTCLAM
 .
           WRITE     HTMLFILE;"patweb61.pbl":
                                  "?reportno=",F2:
@@ -8932,12 +8961,14 @@ NXTSAC00  MOVE      NORECORD,KEY2
                                  "&sysgl002=",SYSGL002:
                                  "&sysgl015=",SYSGL015:
                                  "&sysgl016=",SYSGL016:
-                                 "&subsectn=",SUBSECTN;
+                                 "&subsectn=",SUBSECTN:
+                                 "&filtclam=",FILTCLAM;
 .
           REP       "+ ",SYSGL001
           REP       "+ ",SYSGL002
           REP       "+ ",SYSGL015
           REP       "+ ",SYSGL016
+          REP       "+ ",FILTCLAM
 .
 NXTSAC99  RETURN
 .-------------------------------------------------------------
@@ -8957,6 +8988,7 @@ PRVSAC00  MOVE      NORECORD,KEY2
           REP       " +",SYSGL002
           REP       " +",SYSGL015
           REP       " +",SYSGL016
+          REP       " +",FILTCLAM
 .
           WRITE     HTMLFILE;"patweb61.pbl":
                                  "?reportno=",F2:
@@ -8967,12 +8999,14 @@ PRVSAC00  MOVE      NORECORD,KEY2
                                  "&sysgl002=",SYSGL002:
                                  "&sysgl015=",SYSGL015:
                                  "&sysgl016=",SYSGL016:
-                                 "&subsectn=",SUBSECTN;
+                                 "&subsectn=",SUBSECTN:
+                                 "&filtclam=",FILTCLAM;
 .
           REP       "+ ",SYSGL001
           REP       "+ ",SYSGL002
           REP       "+ ",SYSGL015
           REP       "+ ",SYSGL016
+          REP       "+ ",FILTCLAM
 .
 PRVSAC99  RETURN
 .

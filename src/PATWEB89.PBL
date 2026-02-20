@@ -14,7 +14,19 @@
 .
 . Modifications :
 .------------------------------------------------------------------------
-. V12.01.06 04.02.2025  DA Sarkies     TSK 0878522
+. V12.01.11 17/02/2026 Thanh T          TSK 0960621
+.           Changed WRHIS000 to space out EMHITHDR to EMHITHNT fields
+. V12.01.10 16/02/2026  Ebon Clements  TSK 0972180
+.           Populate the visit based language spoken at home when
+.           using visit based interpreter required - UPDVIS00
+. V12.01.09 10/02/2026  Bella Turco    TSK 0949715
+.           Added NZPMICHG check to DEATHA00 in UPMAD000
+. V12.01.08 05.02.2026  Zumin Yu       TSK 0972419
+.           Updated PTCNMRPN to read from the new location
+. V12.01.07 05.01.2026  Jacob Jackson  TSK 0970532
+.           For certain workflows, check REFERDEP value to determine if
+.           screen should be sent to print page or not
+. V12.01.06 04.02.2026  DA Sarkies     TSK 0878522
 .           Added wahealth only updates to MHRI0300 for EMR and OP
 .           Added UPMHR000 for updating MyHR consent for current and
 .           future Outpatient appointments.
@@ -5237,6 +5249,8 @@ CHWCADMN  DIM       8        * Check Admission Number (Workers Compensation)
 VEMDRESI  DIM       1        * Don't update ED visit resident status
 .
 REFREJCT  DIM       1        * Flag whether to open reject referral DFrame
+REFERDEP  DIM       3
+REFERADM  DIM       8
 .
 . File variables for ACC45 Claim API response message (.resp)
 ACCRESAF  FILE      ASCII, FIXED=4000
@@ -5248,7 +5262,7 @@ AUTOMVMR  DIM       1        * Auto move (track) MR to Admitting Ward
 .
 .---------------------------------------------------------------------------
 PRGID     INIT      "PATWEB89"
-VERSION   INIT      "V12.01.06"
+VERSION   INIT      "V12.01.11"
 PRGNAM    INIT      "Admissions Web Server"
 .---------------------------------------------------------------------------
 .
@@ -6147,7 +6161,7 @@ RDCTRL00  READ      CONTROLF,TEN;*25,PTCNVKCA,*42,PTCNDGAT,*53,CPCONT:
                                     *171,PTCNSTAU,*172,PTCNNUMM,*174,PTCNNDAT:
                                     *182,PTCNORNO,*192,PTCNURCF,*193,PTCNRQCF:
                                     *194,PTCNDPCF,*195,PTCNRLAY,*196,PTCNUCOD:
-                                    *202,PTCNMRPN,*209,PTCNDAYF,*216,PTPRVALS:
+                                    *209,PTCNDAYF,*216,PTPRVALS:
                                     *220,PTCNUADT,*226,CCARECL:
                                     *233,PTCNADOC
 .
@@ -6172,7 +6186,7 @@ RDCTRL00  READ      CONTROLF,TEN;*25,PTCNVKCA,*42,PTCNDGAT,*53,CPCONT:
           READ      CONTROLF,HUND10;*115,PTCNUEDI,*243,PTCNCOMF,*248,PTCNEPAY
           READ      CONTROLF,HUND28;*105,PTCNUABF
           READ      CONTROLF,HUND29;*61,PTCNWSIN,*71,PTCNOECW,*72,PTCNOECE
-          READ      CONTROLF,HUND30;*70,PTCNTRSC
+          READ      CONTROLF,HUND30;*70,PTCNTRSC,*180,PTCNMRPN
 .
 RDCTRL99  RETURN
 +
@@ -7016,6 +7030,8 @@ CLRPAR00  READ      CONTROLF,TEN;*196,CGENRUR
           MOVE      SP70,FHIRLOCH
           MOVE      SP70,CHCKCOMP
           MOVE      SP70,SCRNAME
+          MOVE      SP70,REFERDEP
+          MOVE      SP70,REFERADM
 .
           MOVE      ONE,F2
           WHILE     F2 < 95
@@ -8873,7 +8889,7 @@ SETPAT50    MOVE      QRYDATA,FORM1
             GOTO      SETPAR99
           ENDIF
 .
-          MATCH     "scrname =",QRYNAME
+          MATCH     "scrname=",QRYNAME
           IF        @EQUAL
             MOVE      QRYDATA,SCRNAME
             GOTO      SETPAR99
@@ -8882,6 +8898,18 @@ SETPAT50    MOVE      QRYDATA,FORM1
           MATCH     "heanbhfl=",QRYNAME
           IF        @EQUAL
             MOVE      QRYDATA,HEANBHFL
+            GOTO      SETPAR99
+          ENDIF
+.
+          MATCH     "referdep=",QRYNAME
+          IF        @EQUAL
+            MOVE      QRYDATA,REFERDEP
+            GOTO      SETPAR99
+          ENDIF
+.
+          MATCH     "referadm=",QRYNAME
+          IF        @EQUAL
+            MOVE      QRYDATA,REFERADM
             GOTO      SETPAR99
           ENDIF
 .
@@ -12951,7 +12979,11 @@ PROADM50  MATCH     "1",SERIFLAG
             IF        !@EQUAL
               MATCH     "D",CLAIMTYP
               CALL      FPRA0000 IF EQUAL
-              MOVE      "&shwprint=1",REDIREC1
+              MATCH     SP70,REFERADM
+              IF        @EQUAL
+                MOVE      "&shwprint=1",REDIREC1
+              ENDIF
+.
               MATCH     "Y",RETDFRAE
               IF        @EQUAL
                 CALL      RDIREC00
@@ -12960,7 +12992,11 @@ PROADM50  MATCH     "1",SERIFLAG
               ENDIF
               GOTO      PROADM90
             ELSE
-              MOVE      "&shwprint=1",REDIREC1
+              MATCH     SP70,REFERADM
+              IF        @EQUAL
+                MOVE      "&shwprint=1",REDIREC1
+              ENDIF
+.
               MATCH     "Y",RETDFRAE
               IF        @EQUAL
                 CALL      RDIREC00
@@ -16264,7 +16300,12 @@ UPMAD000  REP       "+ ",ADMISSNO
 . 
           MATCH     "1",ADDRAUDT
           IF        @EQUAL
-            CALL      DEATHA00
+.         If NZ PMI details have not been changed do not update
+.         'Demographics Last Updated' details
+            MATCH     "1",NZPMICHG                  * "1" means no change
+            IF        !@EQUAL
+              CALL      DEATHA00
+            ENDIF
           ENDIF
 .
           CALL      SJGSAV00
@@ -21174,6 +21215,7 @@ UPDVIS20  MOVE      PPOST,PMVXPOST
             IF        !@EQUAL
               MOVE      PTVIS135,PMVXINTR    * Interpreter required
             ENDIF
+            MOVE      PMPXLNG1,PMVXLNG1      * Preferred Language 1
           ELSE
             MOVE      PMPXINTR,PMVXINTR      * Interpreter required
             MOVE      PMPXLNG1,PMVXLNG1      * Preferred Language 1
@@ -28268,7 +28310,8 @@ SFAX0000  BRANCH    FLDITMNO,SFAX0100,SFAX0200,SFAX0300,SFAX0400,SFAX0500:
                              SFA12100,SFA12200,SFA12300,SFA12400,SFA12500:
                              SFA12600,SFA12700,SFA12800,SFA12900,SFA13000: *130
                              SFA13100,SFA13200,SFA13300,SFA13400,SFA13500:
-                             SFA13600,SFA13700,SFA13800,SFA13900
+                             SFA13600,SFA13700,SFA13800,SFA13900,SFA14000: *140
+                             SFA14100
 .
 SFAX0100  WRITE     HTMLFILE;CPMISKEY;
           GOTO      SFAX9999
@@ -29608,6 +29651,12 @@ SFA13800  CALL      OPDECO00
           GOTO      SFAX9999
 .
 SFA13900  CALL      OPDECA00
+          GOTO      SFAX9999
+.
+SFA14000  WRITE     HTMLFILE;REFERDEP;
+          GOTO      SFAX9999
+.
+SFA14100  WRITE     HTMLFILE;REFERADM;
           GOTO      SFAX9999
 .
 SFAX9999  RETURN
@@ -48362,7 +48411,15 @@ WRHIS000  PACK      KEY22,EMVIADMN,Z70
           MOVE      SP70,EMHIUDAT                * Date Updated
           MOVE      SP70,EMHIUTIM                * Time Update
           MOVE      SP70,EMHIUUID                * Web User Id Updated
-          MOVE      SP70,EMHISPA
+.
+          MOVE      SP70,EMHITHDR              . Telehealth Doctor Code
+          MOVE      SP70,EMHITHDD              . Telehealth Doctor Date
+          MOVE      SP70,EMHITHDT              . Telehealth Doctor Time
+          MOVE      SP70,EMHITHNR              . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMHITHND              . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMHITHNT              . Telehealth Nurse/Midwife Time
+.
+          PACK      EMHISPA,SP70,SP70
 .
           PACK      KEY22,EMHIVIS,EMHIDAT,EMHITIM,SP70
           CALL      RAEMHIS1

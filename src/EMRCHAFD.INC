@@ -1,4 +1,5 @@
-. V10.14.01 15/03/2019 EC C-0868834 Added type 18
+. V12.01.01 10/02/2026 TTI C-0960621 Added Update Type 20 & 21                
+. V10.14.01 15/03/2019 EC C-0868834 Added type 18                               
 . V10.12.01 06/02/2018 EC C-0848319 Added index 2                               
 . V10.11.01 15/09/2017 EC C0841602 Added type 17                                
 . V10.06.01 03/08/2015 PV C-319976 Added End Triage Date                        
@@ -50,9 +51,11 @@ EMCHUPTY  DIM       2      2        35    Update Type
 .                                         15 - Update Other Doctor             
 .                                         16 - Triage End Date                 
 .                                         17 - Ambulance Handover Date/Time    
-.                                         18 - Service Type Update
-.                                         19 - Family Domestic violence ind
-.                                              (cat fv)
+.                                         18 - Service Type Update             
+.                                         19 - Family Domestic violence ind    
+.                                              (cat fv)                        
+.                                         20 - Update Telehealth Doctor        
+.                                         21 - Update Telehealth Nurse/Midwife 
 EMCHREAS  DIM       3      3        37    Reason for Change (Cat FW)         
 EMCHOVAL  DIM       80     80       40    Original Value                     
 EMCHCVAL  DIM       80     80       120   Changed Value                      

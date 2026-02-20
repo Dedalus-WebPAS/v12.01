@@ -8,6 +8,9 @@
 . Modifications :
 .
 .------------------------------------------------------------------------
+. V12.01.03 14/02/2026  PJ Le Febour   TSK 0946365
+.           INTDET91 amend Can't Find to no Interpreter Detail for this visit
+.           WINPR300 redirection to demographics template           
 . V12.01.02 03/12/2025  Bella Turco    TSK 0955574
 .           Changed Status to display Cat BG long desc PRHIST00 & PHLIST00
 . V12.01.01 02/12/2025  Bella Turco    TSK 0955574
@@ -1977,7 +1980,7 @@ ATTEXT    INIT      "at"
 .
 .-----------------------------------------------------------
 PRGID     INIT      "PATWEB92" 
-VERSION   INIT      "V12.01.02"
+VERSION   INIT      "V12.01.03"
 PRGNAM    INIT      "Hospital List Server"
 .-----------------------------------------------------------
 .
@@ -3497,6 +3500,34 @@ WINPR200  CALL      OPENHTML
                              "</script>"
           CALL      CLOSHTML
 WINPR299  RETURN
+.*******************************************************************************
+.      after the Update Interpreter Details - redirect to demographics template
+.*******************************************************************************
+WINPR300  CALL      OPENHTML
+          BRANCH    EXIT,WINPR399
+          WRITE     HTMLFILE;"<script type=#"text/javascript#"> {":
+                             "    alert(#"",WEBTITLE,"#");",012
+          REP       " +",ADMISSNO
+          REP       " +",URNUMBER
+          CLEAR     REDIRECT
+          APPEND    "patweb89.pbl?reportno=01&template=001&admissno=",REDIRECT
+          APPEND    ADMISSNO,REDIRECT
+          APPEND    "&urnumber=",REDIRECT
+          APPEND    URNUMBER,REDIRECT
+          RESET     REDIRECT
+          REP       "+ ",ADMISSNO
+          REP       "+ ",URNUMBER
+.
+          WRITE     HTMLFILE;" if (self.name.match(/PopUpFrame/)) {":
+                             "  parent.PopUpScreen.style.display=#"none#"; ":
+                             "  parent.location.href=#"",REDIRECT,"#"}":
+                             " else {":
+                             "  location.href=#"",REDIRECT,"#"}":
+                             "}":
+                             "</script>"
+
+          CALL      CLOSHTML
+WINPR399  RETURN
 .-------------------------------------------------------------------------------
 .  Goes back x number of pages
 .-------------------------------------------------------------------------------
@@ -3813,8 +3844,8 @@ INTDET80  PACK      KEY8,ADMISSNO,SP70
           MOVE      ONE,EXIT
           GOTO      INTDET99
 .
-INTDET91  MOVE      "Can't Find Interpreter Details",WEBTITLE
-          CALL      WEBERR00
+INTDET91  MOVE      "There are no Interpreter Details for this visit ",WEBTITLE
+          CALL      WINPR300                * redirect Demographic Details
           MOVE      ONE,EXIT
           GOTO      INTDET99
 .

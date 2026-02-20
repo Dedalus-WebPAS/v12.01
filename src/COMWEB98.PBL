@@ -5,6 +5,11 @@
 .
 . Modifications : 
 .-----------------------------------------------------------------------------
+. V12.01.10 10/02/2026  Zumin Yu                TSK 0972111
+.           Added PATCN707/PTCNMPTR -Max No. of patients returned in search 
+. V12.01.09 05/02/2026  Zumin Yu                TSK 0972419
+.           Updated new location of PTCNMRPN to read and update 
+.           Recompiled for PATCONFD & PATCONTD             
 . V12.01.08 04/02/2026  Thanh T                 TSK 0961944            
 .           Added PTCNUMOP - If Home Phone is blank, use Mobile Phone
 .                 PTCNLBNB - Leave pttybedn blank 
@@ -1797,7 +1802,7 @@ ZERO6     INIT      "000000"
 .
 .----------------------------------------------------------------------
 PRGID     INIT      "COMWEB98"
-VERSION   INIT      "V12.01.08"
+VERSION   INIT      "V12.01.10"
 PRGNAM    INIT      "Parameter Maintenance"
 .----------------------------------------------------------------------
 .
@@ -3180,7 +3185,7 @@ RPAT0000  READ      CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                     *166,PTCNTACP,*191,PTCECODE,*193,PTCNDCLM
           READ      CONTROLF,TWENTY1;*45,PTCNDRSM,*51,PTCNINVL:
                                      *105,PTCNIDTH,*111,PTCNBDTH:
-                                     *138,PTCNNHII,PTCNNHID:
+                                     *138,PTCNNHII,PTCNNHID,*178,PTCNMPTR:
                                      *191,PTCNNHIF,*204,PTCNAWRN:
                                      *216,PTCNDTRF,*217,CMDISL,*223,PTCNEIAS:
                                      *224,PTCNEIOC,*240,PTCNEDIF
@@ -3190,7 +3195,7 @@ RPAT0000  READ      CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                     *63,CFFMORB:
                                     *132,CALRDESC,*141,CPIDCOD,*192,PTCNURCF:
                                     *193,PTCNRQCF,*194,PTCNDPCF,*195,PTCNRLAY:
-                                    *196,PTCNUCOD,*202,PTCNMRPN:
+                                    *196,PTCNUCOD:
                                     *223,PTCNVDUC
 .
           READ      CONTROLF,SEVENTY7;*45,PTCNNZED,*195,PTCNDLKR
@@ -3430,7 +3435,7 @@ RPAT0000  READ      CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                     *119,PTCNVIMS,*120,PTCNEDDT,*121,PTCNB08E:
                                     *122,PTCNMSH3,*172,PTCNNTES,*173,PTCNBDTE:
                                     *174,PTCNUMOP,*175,PTCNLBNB,*176,PTCNPPNT:
-                                    *177,PTCNDIAD
+                                    *177,PTCNDIAD,*180,PTCNMRPN
 .
 RPAT9999  RETURN
 .
@@ -3467,7 +3472,7 @@ UPAT0000  WRITAB    CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                     *166,PTCNTACP,*191,PTCECODE
           WRITAB    CONTROLF,TWENTY1;*45,PTCNDRSM,*51,PTCNINVL,*58,PTCNHACD:
                                      *105,PTCNIDTH,*111,PTCNBDTH:
-                                     *138,PTCNNHII,PTCNNHID:
+                                     *138,PTCNNHII,PTCNNHID,*178,PTCNMPTR:
                                      *191,PTCNNHIF,*204,PTCNAWRN:
                                      *216,PTCNDTRF,*217,CMDISL,*223,PTCNEIAS:
                                      *224,PTCNEIOC,*240,PTCNEDIF
@@ -3477,7 +3482,7 @@ UPAT0000  WRITAB    CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                     *63,CFFMORB:
                                     *132,CALRDESC,*141,CPIDCOD,*192,PTCNURCF:
                                     *193,PTCNRQCF,*194,PTCNDPCF,*195,PTCNRLAY:
-                                    *196,PTCNUCOD,*202,PTCNMRPN:
+                                    *196,PTCNUCOD:
                                     *223,PTCNVDUC
 .
           WRITAB    CONTROLF,SEVENTY7;*45,PTCNNZED,*195,PTCNDLKR
@@ -3715,7 +3720,7 @@ UPAT0000  WRITAB    CONTROLF,ZERO;*43,IBCNMHOS,*87,IBCNMESI,*132,IBCNUMCI:
                                     *119,PTCNVIMS,*120,PTCNEDDT,*121,PTCNB08E:
                                     *122,PTCNMSH3,*172,PTCNNTES,*173,PTCNBDTE:
                                     *174,PTCNUMOP,*175,PTCNLBNB,*176,PTCNPPNT:
-                                    *177,PTCNDIAD
+                                    *177,PTCNDIAD,*180,PTCNMRPN
 .
 UPAT9999  RETURN
 .

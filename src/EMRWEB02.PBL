@@ -15,6 +15,13 @@
 . Modifications :
 .
 .----------------------------------------------------------------------
+. V12.01.04 17/02/2026 Thanh T          TSK 0960621
+.           Changed WRTHIS40, WDHIST40, LOCMGA00, LOCMGU00 to space out
+.           EMHITHDR to EMHITHNT fields
+. V12.01.03 09.02.2025  DA Sarkies     TSK 0878522
+.           Added wahealth only updates to MHRI1000 for OP appointments.
+.           Added UPMHR000 for updating MyHR consent for current and
+.           future Outpatient appointments.
 . V12.01.02 11/12/2025  Bella Turco    TSK 0949715
 .           Recompiled for UPDUR - added NZPMICHG
 .           Recompiled for EMRVISTM
@@ -2352,6 +2359,7 @@
           INC       OBSDETFD/INC
           INC       OBSPCOFD/INC
           INC       OPRNURFD/INC            * Nurse file
+          INC       OUTARTFD/INC
           INC       OUTBOAFD/INC
           INC       OUTSITFD/INC
           INC       PATAK1FD/INC
@@ -2566,6 +2574,7 @@ CTYPTIME  DIM       8
 CALCDATE  DATE      8
 CURRDATE  DIM       8         * Current date
 CURRTIME  DIM       8         * Current time
+CURDTE8   DIM       8
 CURSPACE  FORM      3
 .
 DATE      DIM       8
@@ -3430,6 +3439,7 @@ SAVECUID  DIM       8
 SAVECDAT  DIM       8
 SAVECTIM  DIM       8
 SAVEDCDT  DIM       8
+SAVESITE  DIM       3
 .
 SAVKEY3   DIM       3
 SAVKEY8A  DIM       8
@@ -3637,6 +3647,7 @@ SVMGCMMT  FORM      1
 XLINETOT  FORM      6.2
 XLINEGST  FORM      6.2
 NOTELOCN  FORM      1
+WAHEALTH  DIM       1
 .
 .
 . PROGRAM CONSTANTS
@@ -3747,7 +3758,7 @@ SVCRCNTR  FORM      3       Count
 .
 .-----------------------------------------------------------
 PRGID     INIT      "EMRWEB02"
-VERSION   INIT      "V12.01.02"
+VERSION   INIT      "V12.01.04"
 PRGNAM    INIT      "Emergency Details Server"
 .-----------------------------------------------------------
 .
@@ -9438,6 +9449,7 @@ CLRPAR00  MOVE      ZERO,PRECOMFL
           PACK      UPDVALUE,Z70
           PACK      UPDVAL01,SP70
           PACK      UPDVAL02,SP70
+          MOVE      ZERO,WAHEALTH
           PACK      NEWVALUE,Z70
           PACK      NEWVAL01,SP70
           PACK      NEWVAL02,SP70
@@ -9555,6 +9567,12 @@ SETPAR00  MATCH     "reportno=",QRYNAME
           MATCH     "updflag1=",QRYNAME
           IF        @EQUAL
             MOVE      QRYDATA,UPDFLAG1
+            GOTO      SETPAR99
+          ENDIF
+.
+          MATCH     "wahealth=",QRYNAME
+          IF        @EQUAL
+            PACK      WAHEALTH,QRYDATA,SP70
             GOTO      SETPAR99
           ENDIF
 .
@@ -14333,18 +14351,17 @@ CLRDCM99  RETURN
 .
 MHRI0000  CALL      IBACLOCK                * get TODAY's date
           PACK      TODAY,CCC,CYY,CMM,CDD
-          REP       " 0",TODAY
 .
           PACK      KEY24,URNUMBER,TODAY,SP70
           CALL      RSPTVIS2
 MHRI0100  CALL      RKPTVIS2
-          BRANCH    OVRCD,MHRI9999
+          BRANCH    OVRCD,MHRI1000
 .
           MATCH     URNUMBER,PVIURNO
-          GOTO      MHRI9999 IF NOT EQUAL
+          GOTO      MHRI1000 IF NOT EQUAL
 .
           COMPARE   THREE,PVITYPE
-          GOTO      MHRI0100 IF NOT EQUAL   * visit type is not inpatient
+          GOTO      MHRI0200 IF EQUAL   * visit type is inpatient
 .
 MHRI0200  PACK      KEY8,DPVIBILL,SP70
           CALL      RDPMVX11
@@ -14357,7 +14374,80 @@ MHRI0200  PACK      KEY8,DPVIBILL,SP70
           ENDIF
           GOTO      MHRI0100
 .
+MHRI1000  MATCH     "1",WAHEALTH
+          IF        @EQUAL
+            CALL      UPMHR000
+          ENDIF
+.
 MHRI9999  RETURN
++
+.------------------------------------------------------------------------------
+. UPMHR000 - Update My HR Consent for current & future OP appointments
+.------------------------------------------------------------------------------
+.
+UPMHR000  OPEN      OUTSITA3,"outsitaf"
+          OPEN      OUTARTA1,"outartaf"
+          OPEN      OUTBOKA3,"outbokaf"
+.
+UPMHR100  PACK      CURDTE8,CCC,CYY,CMM,CDD
+          REP       " 0",CURDTE8
+.
+          MOVE      SP70,SAVESITE
+.
+          PACK      KEY9,SP70
+          CALL      RDSSITA3               * Loop all site file prefixes
+UPMHR200  CALL      RDKSITA3
+          BRANCH    OVRCD,UPMHR900
+.
+          MATCH     SP70,SAVESITE
+          GOTO      UPMHR300 IF EQUAL
+.
+          MATCH     SAVESITE,OSTFILE
+          GOTO      UPMHR200 IF EQUAL
+.
+UPMHR300  MOVE      OSTFILE,SAVESITE       * Save current site file prefix
+.
+          MATCH     OSTFILE,CFILEPRE
+          IF        !@EQUAL
+            MOVE      OSTFILE,CFILEPRE     * Save current file prefix
+            CALL      OPNOUT00             * Open prefixed outpatient files
+          ENDIF
+.
+          PACK      KEY36,URNUMBER,CURDTE8,SP70
+          CALL      RDSBOKA3
+UPMHR400  CALL      RDKBOKA3
+          BRANCH    OVRCD,UPMHR200
+.
+          MATCH     OBAURNO,URNUMBER
+          GOTO      UPMHR200 IF NOT EQUAL
+.
+          COMPARE   ONE,OBASTAT
+          GOTO      UPMHR400 IF NOT EQUAL
+.
+          PACK      KEY8,DOBAOUTN,SP70
+          CALL      RDPMVX11
+.
+          MATCH     PMPXI110,Z70
+          IF        !@EQUAL
+            MOVE      PMPXI1100,PMVXUDF7
+            CALL      UPPMVX11
+          ENDIF
+          GOTO      UPMHR400
+.
+UPMHR900  MATCH     SP70,ADMISSNO
+          IF        @EQUAL
+            PACK      KEY8,ADMISSNO,SP70
+            CALL      RDPMVX11
+            IF        OVRCD=1
+              CALL      CLPMSVX1
+            ENDIF
+          ENDIF
+.
+          CLOSE     OUTSITA3
+          CLOSE     OUTARTA1
+          CLOSE     OUTBOKA3
+.
+UPMHR999  RETURN
 +
 .------------------------------------------------------------
 . DISC0000  Discharge emergency Visit           
@@ -21545,6 +21635,14 @@ WRTHIS40  MOVE      UPDTTYPE,EMHIUPT
           MOVE      EMVIDOCT,EMHIDOC
           MOVE      EMVIATNS,EMHINUR
           MOVE      EMVIUR04,EMHIODCD
+.
+          MOVE      SP70,EMHITHDR              . Telehealth Doctor Code
+          MOVE      SP70,EMHITHDD              . Telehealth Doctor Date
+          MOVE      SP70,EMHITHDT              . Telehealth Doctor Time
+          MOVE      SP70,EMHITHNR              . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMHITHND              . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMHITHNT              . Telehealth Nurse/Midwife Time
+.
           PACK      EMHISPA,SP70,SP70
           PACK      EMHIDSD,EMHIDSD,SP70
           PACK      EMHIDST,EMHIDST,SP70
@@ -31097,6 +31195,14 @@ WDHIST40  MOVE      "ALDOC",EMHIUPT
           MOVE      EMVILOCN,EMHILOC
           MOVE      EMVIMPRA,EMHIDOC       * Set doctor seen to MH practitioner
           MOVE      EMVIATNS,EMHINUR
+.
+          MOVE      SP70,EMHITHDR              . Telehealth Doctor Code
+          MOVE      SP70,EMHITHDD              . Telehealth Doctor Date
+          MOVE      SP70,EMHITHDT              . Telehealth Doctor Time
+          MOVE      SP70,EMHITHNR              . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMHITHND              . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMHITHNT              . Telehealth Nurse/Midwife Time
+.
           PACK      EMHISPA,SP70,SP70
           PACK      EMHIDSD,EMHIDSD,SP70
           PACK      EMHIDST,EMHIDST,SP70
@@ -37601,7 +37707,15 @@ LOCMGA00  PACK      KEY8,ADMISSNO,SP70
           MOVE      SP70,EMHIUDAT                * Date Updated
           MOVE      SP70,EMHIUTIM                * Time Update
           MOVE      SP70,EMHIUUID                * Web User Id Updated
-          MOVE      SP70,EMHISPA
+.
+          MOVE      SP70,EMHITHDR              . Telehealth Doctor Code
+          MOVE      SP70,EMHITHDD              . Telehealth Doctor Date
+          MOVE      SP70,EMHITHDT              . Telehealth Doctor Time
+          MOVE      SP70,EMHITHNR              . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMHITHND              . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMHITHNT              . Telehealth Nurse/Midwife Time
+.
+          PACK      EMHISPA,SP70,SP70
 .
           PACK      KEY22,EMHIVIS,EMHIDAT,EMHITIM,SP70
           CALL      RAEMHIS1
@@ -37841,7 +37955,15 @@ LOCMGU50  UNPACK    NLOCATIM,HOUR,D1,MIN,D1,SEC
           MOVE      SP70,EMHIUDAT                * Date Updated
           MOVE      SP70,EMHIUTIM                * Time Update
           MOVE      SP70,EMHIUUID                * Web User Id Updated
-          MOVE      SP70,EMHISPA
+.
+          MOVE      SP70,EMHITHDR              . Telehealth Doctor Code
+          MOVE      SP70,EMHITHDD              . Telehealth Doctor Date
+          MOVE      SP70,EMHITHDT              . Telehealth Doctor Time
+          MOVE      SP70,EMHITHNR              . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMHITHND              . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMHITHNT              . Telehealth Nurse/Midwife Time
+.
+          PACK      EMHISPA,SP70,SP70
 .
           PACK      KEY22,EMHIVIS,EMHIDAT,EMHITIM,SP70
           CALL      RAEMHIS1
@@ -38258,6 +38380,7 @@ UPDPRI99  CLOSE     VSCTTFIL,DELETE    * Delete temp file created by CLRVCM00
           INC       OBSMTXIO/INC            * Patient Medical Notes free text
           INC       OBSDETIO/INC
           INC       OPRNURIO/INC            * For Nurse details
+          INC       OUTARTIO/INC
           INC       OUTBOAIO/INC
           INC       OUTSITIO/INC
           INC       PATAK1IO/INC

@@ -5,6 +5,8 @@
 .
 . Modifications :
 .---------------------------------------------------------------------------
+.  V12.01.01 13/02/2026  Ebon Clements TSK 0972731
+.            Recompiled for PATWSRCH - Zero admissno number when no visits
 .  V12.00.02 15/10/2025  Thanh T       TSK 0968285 
 .            Added autosrch flag to determine if automatic searching is
 .            required 
@@ -756,7 +758,7 @@ SHOWBLHD  DIM       1        * Show LHD Search button
 .
 .-----------------------------------------------------------------------
 PRGID     INIT      "PATWEB90"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Patient Search Server"
 .-----------------------------------------------------------------------
 .

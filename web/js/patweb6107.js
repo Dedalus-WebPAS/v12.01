@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 // Program   : patweb6107.js
 //
@@ -19,12 +19,24 @@
 function ShowSpans(showoption) {
   if (showoption.value=="1") {                       
      InterfaceOptions1.innerHTML=AccommodationSpan.innerHTML;
+     InterfaceOptions2.innerHTML="";
   } else if (showoption.value=="3") {                        
      InterfaceOptions1.innerHTML=MiscItemSpan.innerHTML;
+     InterfaceOptions2.innerHTML="";
   } else if (showoption.value=="5") {                    
      InterfaceOptions1.innerHTML=JournalSpan.innerHTML;
+     InterfaceOptions2.innerHTML="";
   } else {
      InterfaceOptions1.innerHTML="";
+     InterfaceOptions2.innerHTML="";
+  }
+}
+function ShowJournalClaimCode(showoption,sebsection,jfee) {
+  if(showoption.value=="5" && sebsection.value ==  "2" && jfee.value == "1") {
+     document.getElementById("InterfaceOptions2").innerHTML =
+     document.getElementById("ShowClaimCodeFilter").innerHTML;
+  } else {
+     document.getElementById("InterfaceOptions2").innerHTML = "";
   }
 }
 //
@@ -110,11 +122,16 @@ function ProcessFormNoFMS(theForm) {
         Url="patweb61.pbl?reportno=7&template=2&sysgl001=5&subsectn=1" +
             "&sysgl015="+theForm.hospcode.value.replace(/ /g,"+")
       ViewInterface(Url);
+      document.getElementById("InterfaceOptions2").innerHTML="";
       return;
     }
 // Journal Codes List                          
     if (theForm.subsectn.value==2) {
-      theForm.sysgl002.value="";
+      if(theForm.ptcnjfee.value == "1" && theForm.filtclam != undefined) {
+        theForm.sysgl002.value=theForm.filtclam.value.substr(0,3);
+      } else {
+        theForm.sysgl002.value="";
+      }
       theForm.sysgl015.value=theForm.hospcode.value;
       theForm.submit();
       return;
@@ -589,4 +606,3 @@ function DisplayHosp() {
   }
  }
 }
-

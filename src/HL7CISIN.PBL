@@ -13,6 +13,16 @@
 .******************************************************************************
 .* Mods      :                                                                *
 .******************************************************************************
+.*       V12.01.06 16.02.2026  DA Sarkies     TSK 0875822                     *
+.*                 Recompiled HL7COMN, HL7CLRVR, HL7CISVR                     *
+.*       V12.01.05 13/02/2026  Alina Bhari    TSK 0960123                     *
+.*                 Send Date Entered Practice and Date Left Practice in the   *
+.*                 MFN^M02 PRA segment in HL7 messages (PRA008,PRA010) when   *
+.*                 PTCNPRDT prameter is turned on - GPRA0500                  *
+.*                 Added PRA007-PRA012 when PTCNPRDT prameter is turned on    *
+.*                 - WPRA8000 - WPRA85000                                     *
+.*       V12.01.04 11/02/2026  Alina Bhari    TSK 0958930                     *
+.*                 Recompiled for HL7COMN                                     *
 .*       V12.01.03 19/12/2025  Davin          TSK 0961944                     *
 .*                 Send NTE segment in M02 messages based on PTCNNTES         *
 .*                 (M02P0000/WNTE0000/GTTCO000)                               *
@@ -1681,7 +1691,7 @@ ZEROURNO  INIT      "       0"
 .-----------------------------------------------------------------------
 PRGID     INIT      "HL7CISIN"
 PRGNAM    INIT      "HL7 Broadcast Message Server"
-VERSION   INIT      "V12.01.03"
+VERSION   INIT      "V12.01.06"
 .-----------------------------------------------------------------------
 +
 .******************************************************************************
@@ -12351,12 +12361,43 @@ WPRA0000  MOVE      "PRA",SEGMENT
             APPEND    FIELDSTR,PRA006
           ENDIF
           RESET     PRA006
+          GOTO      WPRA8400
 .
-WPRA8000  PACK      SEGSTRNG,ANSP,ANSR,ANSA,PIPE:
+WPRA8000  MOVE      "PTCNPRDT",D8           * hospital parameter
+          COMPARE   ZERO,IBCNMHOS
+          GOTO      WPRA8100 IF EQUAL
+.
+          PACK      KEY11,H7CIHOSP,D8,SP70
+          CALL      RDCMPAR1                * Read system parameter
+          BRANCH    OVRCD,WPRA8100
+.
+          MATCH     "0",CMPAACTV
+          GOTO      WPRA8200 IF EQUAL       * found active data
+.
+.         Check parameter with blank hospital
+.
+WPRA8100  PACK      KEY11,SP3,D8,SP70
+          CALL      RDCMPAR1                * Read default system parameter
+          BRANCH    OVRCD,WPRA8400
+.
+          MATCH     "0",CMPAACTV
+          GOTO      WPRA8400 IF NOT EQUAL   * Not found active data
+.
+WPRA8200  MATCH     "1",CMPAVALU        * Sending Practice Date fields Parameter
+          GOTO      WPRA8400 IF NOT EQUAL
+.
+WPRA8300  PACK      SEGSTRNG,ANSP,ANSR,ANSA,PIPE:
+                               PRA001,PIPE,PRA002,PIPE,PRA003,PIPE,PRA004,PIPE:
+                               PRA005,PIPE,PRA006,PIPE,PRA007,PIPE,PRA008,PIPE:
+                               PRA009,PIPE,PRA010,PIPE,PRA011,PIPE,PRA012,PIPE:
+                               CRETURN
+          GOTO      WPRA8500
+.
+WPRA8400  PACK      SEGSTRNG,ANSP,ANSR,ANSA,PIPE:
                              PRA001,PIPE,PRA002,PIPE,PRA003,PIPE,PRA004,PIPE:
                              PRA005,PIPE,PRA006,CRETURN
 .
-          CALL      SENDM000                     * send message
+WPRA8500  CALL      SENDM000                     * send message
           BRANCH    EXIT,WPRA9100:               * connection lost
                          WPRA9200                * timeout
 .
@@ -16148,6 +16189,62 @@ GPRA0500  CALL      RKPMHCL1                     * read next record
             ENDSET    PRA006
           ENDIF
 .
+.          COMPARE     ONE,IBCNMHOS 
+.          GOTO        GPRA9000 IF NOT EQUAL
+.
+.         Add Date Entered Practice to PRA-08
+          MATCH     "1",PTCNSLPD                 * sending linked practice?
+          GOTO      GPRA9000 IF NOT EQUAL
+.
+          IF        COUNTER > 1         
+            APPEND    TILDA,PRA008
+          ENDIF
+          MATCH     SP10,PMHLJPDT              * Date Entered Practice Blank?
+          IF        @EQUAL
+            IF        COUNTER = 1
+              MOVE      BLANKSTR,PRA008        * yes
+            ELSE
+              APPEND    BLANKSTR,PRA008
+            ENDIF
+          ELSE
+            MOVE      PMHLJPDT,FIELDSTR        * no - load Date
+            CALL      SPCHR000                 * convert special characters
+            IF        COUNTER = 1
+              MOVE      FIELDSTR,PRA008
+            ELSE
+              APPEND    FIELDSTR,PRA008
+            ENDIF
+          ENDIF
+          IF        COUNTER = 1
+            ENDSET    PRA008
+          ENDIF
+.         Add Date Left Practice to PRA -10
+          MATCH     "1",PTCNSLPD                 * sending linked practice?
+          GOTO      GPRA9000 IF NOT EQUAL
+.
+          IF       COUNTER > 1
+            APPEND    TILDA,PRA010
+          ENDIF
+          MATCH     SP10,PMHLLPDT                * Date Left Practice blank ?
+          IF        @EQUAL
+            IF        COUNTER = 1
+              MOVE      BLANKSTR,PRA010          * yes
+            ELSE
+              APPEND    BLANKSTR,PRA010
+            ENDIF
+          ELSE
+            MOVE      PMHLLPDT,FIELDSTR          * no - Date Left Practice
+            CALL      SPCHR000                   * convert special characters
+            IF        COUNTER = 1
+              MOVE      FIELDSTR,PRA010
+            ELSE
+              APPEND    FIELDSTR,PRA010
+            ENDIF
+          ENDIF
+          IF        COUNTER = 1
+            ENDSET    PRA010
+          ENDIF
+.
 .         Stop looking for link records if STF010/STF011/PRA002 reach 1000 chars
 .
 GPRA9000  MOVELPTR  STF010,FORM4
@@ -16170,6 +16267,8 @@ GPRA9500  COMPARE   ZERO,COUNTER
           GOTO      GPRA9999 IF NOT EQUAL        * no
 .
           RESET     PRA006
+          RESET     PRA008
+          RESET     PRA010
 .
 GPRA9999  RETURN      
 +

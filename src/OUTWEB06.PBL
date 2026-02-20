@@ -5,6 +5,8 @@
 .
 . Modifications  :
 .---------------------------------------------------------------------------
+. V12.01.01 05/02/2025  Ebon Clements    TSK 0972339
+.           Added clear of DIFFURFL at PRETB000 and PRBTB000
 . V11.05.01 15/11/2042  Thanh T          TSK 0953878
 .           Changed PRETB600 and PRBTB600 to fix issue with infinitety
 .           looping when retrieving the pulling list
@@ -527,7 +529,7 @@ ENDFONT   INIT      "</font>"
 .
 .---------------------------------------------------------------------------
 PRGID     INIT      "OUTWEB06"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 PRGNAM    INIT      "Outpatients - Medical Records Movement Server"
 .---------------------------------------------------------------------------
 .
@@ -2812,6 +2814,7 @@ PRETB000  UNPACK    DIM127,D1,LINKPRG,DIM127
           MOVE      ZERO,NOMRFLAG
           MOVE      SP70,SAVEDOTY
           MOVE      SP70,HOMEHOSP
+          MOVE      ZERO,DIFFURFL
 .
           IF        IBCNMHOS=1
             PACK      KEY3,WBSEHOSP,SP70
@@ -2873,6 +2876,7 @@ PRETB100  CALL      RDKMISS3                * Reads Admission file
           MOVE      ZERO,FOUNDFLG
           MOVE      ZERO,NOMRFLAG
           MOVE      SP70,SAVEDOTY
+          MOVE      ZERO,DIFFURFL
 .
           PACK      KEY20,AURNO,Z70
 .
@@ -3279,6 +3283,7 @@ PRBTB000  MOVE      ZERO,FOUNDFLG
           MOVE      ZERO,NOMRFLAG
           MOVE      SP70,SAVEDOTY
           MOVE      SP70,HOMEHOSP
+          MOVE      ZERO,DIFFURFL
 .
           IF        IBCNMHOS=1
             PACK      KEY3,WBSEHOSP,SP70
@@ -3331,6 +3336,7 @@ PRBTB100  CALL      RKBKREC4                * Read Booking file
           MOVE      ZERO,FOUNDFLG
           MOVE      ZERO,NOMRFLAG
           MOVE      SP70,SAVEDOTY
+          MOVE      ZERO,DIFFURFL
 .
           PACK      KEY20,BKREURNO,Z70
 .

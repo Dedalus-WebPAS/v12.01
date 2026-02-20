@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.02
+//jsVersion  : V12.01.03
 //=============================================================================
 
 function ChkInv() {
@@ -8,7 +8,7 @@ function ChkInv() {
        return;
      } else {
        if (document.UpdateForm.caseinvc.value == "2") {
-         if (!confirm("Theatre Case has been invoiced. Item will not be billed. \n Ok to Continue ?")) {
+         if (!confirm("Warning: Theatre Case has been invoiced. Item will not be billed. \n Item will only be added to MBS Coding. \n Ok to Continue ?")) {
          return;
          }
        }

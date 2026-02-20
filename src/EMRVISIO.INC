@@ -52,7 +52,8 @@ RDEMVIS1  RESET     KEY8
                                   EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34: 
                                   EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA: 
                                   EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD: 
-                                  EMVIDRUG,EMVISPAR                             
+                                  EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                  EMVITHND,EMVITHNT,EMVISPAR                   
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -96,7 +97,8 @@ RKEMVIS1  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -140,7 +142,8 @@ RPEMVIS1  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -189,7 +192,8 @@ UPEMVIS1  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      UPDFLOCK IF LOCKED
           RETURN
 .
@@ -233,7 +237,8 @@ WREMVIS1  RESET     KEY8
                                   EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34: 
                                   EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA: 
                                   EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD: 
-                                  EMVIDRUG,EMVISPAR                             
+                                  EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                  EMVITHND,EMVITHNT,EMVISPAR                    
           RETURN
 .
 DEEMVIS1  RESET     KEY8                                                        
@@ -279,7 +284,8 @@ RLEMVIS1  RESET     KEY8
                                   EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34: 
                                   EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA: 
                                   EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD: 
-                                  EMVIDRUG,EMVISPAR                             
+                                  EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                  EMVITHND,EMVITHNT,EMVISPAR                   
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -324,7 +330,8 @@ KLEMVIS1  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                       
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -369,7 +376,8 @@ PLEMVIS1  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                      
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -429,7 +437,8 @@ RDEMVIS2  RESET     KEY9
                                   EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34: 
                                   EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA: 
                                   EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD: 
-                                  EMVIDRUG,EMVISPAR                             
+                                  EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                  EMVITHND,EMVITHNT,EMVISPAR                   
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -473,7 +482,8 @@ RKEMVIS2  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                       
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -517,7 +527,8 @@ RPEMVIS2  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                       
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -563,7 +574,8 @@ UPEMVIS2  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      UPDFLOCK IF LOCKED
           RETURN
 .
@@ -607,7 +619,8 @@ WREMVIS2  RESET     KEY9
                                   EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34: 
                                   EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA: 
                                   EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD: 
-                                  EMVIDRUG,EMVISPAR                             
+                                  EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                  EMVITHND,EMVITHNT,EMVISPAR                   
           RETURN
 .
 DEEMVIS2  RESET     KEY9                                                        
@@ -653,7 +666,8 @@ RLEMVIS2  RESET     KEY9
                                   EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34: 
                                   EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA: 
                                   EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD: 
-                                  EMVIDRUG,EMVISPAR                             
+                                  EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                  EMVITHND,EMVITHNT,EMVISPAR                   
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -698,7 +712,8 @@ KLEMVIS2  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                     
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -743,7 +758,8 @@ PLEMVIS2  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -803,7 +819,8 @@ RDEMVIS3  RESET     KEY16
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR                 
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -847,7 +864,8 @@ RKEMVIS3  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                      
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -891,7 +909,8 @@ RPEMVIS3  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -937,7 +956,8 @@ UPEMVIS3  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                      
           GOTO      UPDFLOCK IF LOCKED
           RETURN
 .
@@ -981,7 +1001,8 @@ WREMVIS3  RESET     KEY16
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR                
           RETURN
 .
 DEEMVIS3  RESET     KEY16                                                       
@@ -1027,7 +1048,8 @@ RLEMVIS3  RESET     KEY16
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR                 
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -1072,7 +1094,8 @@ KLEMVIS3  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                      
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -1117,7 +1140,8 @@ PLEMVIS3  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -1177,7 +1201,8 @@ RDEMVIS4  RESET     KEY24
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR                
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -1221,7 +1246,8 @@ RKEMVIS4  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -1265,7 +1291,8 @@ RPEMVIS4  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                      
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -1311,7 +1338,8 @@ UPEMVIS4  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      UPDFLOCK IF LOCKED
           RETURN
 .
@@ -1355,7 +1383,8 @@ WREMVIS4  RESET     KEY24
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR                   
           RETURN
 .
 DEEMVIS4  RESET     KEY24                                                       
@@ -1401,7 +1430,8 @@ RLEMVIS4  RESET     KEY24
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR              
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -1446,7 +1476,8 @@ KLEMVIS4  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                         
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -1491,7 +1522,8 @@ PLEMVIS4  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                      
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -1551,7 +1583,8 @@ RDEMVIS5  RESET     KEY12
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR             
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -1595,7 +1628,8 @@ RKEMVIS5  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -1639,7 +1673,8 @@ RPEMVIS5  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -1685,7 +1720,8 @@ UPEMVIS5  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      UPDFLOCK IF LOCKED
           RETURN
 .
@@ -1729,7 +1765,8 @@ WREMVIS5  RESET     KEY12
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR            
           RETURN
 .
 DEEMVIS5  RESET     KEY12                                                       
@@ -1775,7 +1812,8 @@ RLEMVIS5  RESET     KEY12
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR                
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -1820,7 +1858,8 @@ KLEMVIS5  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                      
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -1865,7 +1904,8 @@ PLEMVIS5  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -1925,7 +1965,8 @@ RDEMVIS6  RESET     KEY27
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR            
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -1969,7 +2010,8 @@ RKEMVIS6  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -2013,7 +2055,8 @@ RPEMVIS6  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -2059,7 +2102,8 @@ UPEMVIS6  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                         
           GOTO      UPDFLOCK IF LOCKED
           RETURN
 .
@@ -2103,7 +2147,8 @@ WREMVIS6  RESET     KEY27
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR           
           RETURN
 .
 DEEMVIS6  RESET     KEY27                                                       
@@ -2149,7 +2194,8 @@ RLEMVIS6  RESET     KEY27
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR                
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -2194,7 +2240,8 @@ KLEMVIS6  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                         
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -2239,7 +2286,8 @@ PLEMVIS6  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -2299,7 +2347,8 @@ RDEMVIS7  RESET     KEY11
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR                  
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -2343,7 +2392,8 @@ RKEMVIS7  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                       
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -2387,7 +2437,8 @@ RPEMVIS7  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                       
           GOTO      OVERCOND IF OVER
           MOVE      DEMVIADM,EMVIADMN                                           
           MOVE      DEMVISTA,EMVISTAT                                           
@@ -2433,7 +2484,8 @@ UPEMVIS7  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      UPDFLOCK IF LOCKED
           RETURN
 .
@@ -2477,7 +2529,8 @@ WREMVIS7  RESET     KEY11
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR                  
           RETURN
 .
 DEEMVIS7  RESET     KEY11                                                       
@@ -2523,7 +2576,8 @@ RLEMVIS7  RESET     KEY11
                                    EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:
                                    EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:
                                    EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:
-                                   EMVIDRUG,EMVISPAR                            
+                                   EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                                   EMVITHND,EMVITHNT,EMVISPAR               
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -2568,7 +2622,8 @@ KLEMVIS7  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                       
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           
@@ -2613,7 +2668,8 @@ PLEMVIS7  MOVE      ZERO,OVRCD
                              EMVIMDTM,EMVIUC31,EMVIUC32,EMVIUC33,EMVIUC34:      
                              EMVIUC35,EMVIREFP,EMVIREPM,EMVIREDT,EMVIBNAA:      
                              EMVIVSTY,EMVIVPLC,EMVIAHCP,EMVIAHST,EMVIDISD:      
-                             EMVIDRUG,EMVISPAR                                  
+                             EMVIDRUG,EMVITHDR,EMVITHDD,EMVITHDT,EMVITHNR:
+                             EMVITHND,EMVITHNT,EMVISPAR                        
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           MOVE      DEMVIADM,EMVIADMN                                           

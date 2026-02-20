@@ -5,6 +5,9 @@
 .
 . Modifications  : 
 .-------------------------------------------------------------------------------
+. V12.01.07 17/02/2026  Ebon Clements  TSK 0971780
+.           Changed HMLTLINK to HTMLLNK9 for table sort field 8 when time ready
+.           to depart recovery is blank - RECLST40 - default exit recovery time
 . V12.01.06 04/02/2026  Ebon Clements  TSK 0971780
 .           Added HMLTLINK to table sort field 8 when time ready to depart
 .           recovery is blank - RECLST40
@@ -2181,6 +2184,7 @@ TOTDTRA   FORM      3
 SLOTINDX  FORM      3                       * Index for Text boxes
 DEFTODEB  FORM      1
 DEFTODEC  FORM      1
+DEFTTIME  DIM       1
 DIM1A     DIM       1
 DIM1B     DIM       1
 DIM3      DIM       3
@@ -2199,6 +2203,7 @@ HTMLLNK5  DIM       200
 HTMLLNK6  DIM       200
 HTMLLNK7  DIM       200                     * T0869563
 HTMLLNK8  DIM       200
+HTMLLNK9  DIM       200
 DTRRE001  DIM       12                      * I CAR 40412
 PRACNAME  DIM       80
 PRACADD1  DIM       60
@@ -2355,7 +2360,7 @@ ISERASE   INIT      "iserase "
 .
 .******************************************************************************
 PRGID     INIT      "OPRWEB06"                                                *
-VERSION   INIT      "V12.01.06"
+VERSION   INIT      "V12.01.07"
 PRGNAM    INIT      "Theatre Information Server"                              *
 .******************************************************************************
           CALL      WEBINT00                * Initialise FIFO Etc.
@@ -3366,6 +3371,7 @@ CLRPAR00  CALL      CPOPSG00
           MOVE      ZERO,FHRPARIN
 .
           MOVE      ZERO,EXPCMTFL
+          MOVE      SP70,DEFTTIME
 .
 CLRPAR99  RETURN
 .******************************************************************************
@@ -4671,6 +4677,12 @@ SETPAR00  MATCH     "reportno=",QRYNAME
           MATCH     "fhrparin=",QRYNAME
           IF        @EQUAL
             MOVE      QRYDATA,FHRPARIN
+            GOTO      SETPAR99
+          ENDIF
+.
+          MATCH     "defttime=",QRYNAME
+          IF        @EQUAL
+            PACK      DEFTTIME,QRYDATA,SP70
             GOTO      SETPAR99
           ENDIF
 .
@@ -17956,7 +17968,8 @@ ASSG9999  RETURN
 OPRC0000  BRANCH    FLDITMNO,OPRC0100,OPRC0200,OPRC0300,OPRC0400,OPRC0500:
                              OPRC0600,OPRC0700,OPRC0800,OPRC0900,OPRC1000:
                              OPRC1100,OPRC1200,OPRC1300,OPRC1400,OPRC1500:
-                             OPRC1600,OPRC1700,OPRC1800,OPRC1900,OPRC2000
+                             OPRC1600,OPRC1700,OPRC1800,OPRC1900,OPRC2000:
+                             OPRC2100
 .
           WRITE     HTMLFILE;"Invalid Tag";
           GOTO      OPRC9999
@@ -18022,6 +18035,9 @@ OPRC1900  WRITE     HTMLFILE;SHOWADMT;
           GOTO      OPRC9999
 .
 OPRC2000  WRITE     HTMLFILE;DLYRSNRC; *Trigger Delay in recovery?
+          GOTO      OPRC9999
+.
+OPRC2100  WRITE     HTMLFILE;DEFTTIME; * Default time trigger
           GOTO      OPRC9999
 .
 OPRC9999  RETURN
@@ -18361,6 +18377,12 @@ RECLST40  CALL      SESDET00
                                "#"",KEY9,"#",";
 
           ELSE
+            CLEAR     HTMLLNK9
+            APPEND    "javascript:CaseLink('",HTMLLNK9
+            APPEND    CASEKEYS,HTMLLNK9
+            APPEND    "','1')",HTMLLNK9
+            RESET     HTMLLNK9
+.
             WRITE     HTMLFILE;"t.addRow(#"",PATFNAME,"#",":
                                "#"",PURNO,"#",":
                                "#"",OPERROOM,"#",":
@@ -18369,7 +18391,7 @@ RECLST40  CALL      SESDET00
                                "#"",HTMLLINK,"#",":
                                "#"",OPARTIDP,"#",":
                                "#"",OPARTETC,"#",":
-                               "#"",HTMLLINK,"#",":                  * 8
+                               "#"",HTMLLNK9,"#",":                  * 8
                                "#"",KEY7,"#",":
                                "#"",OPARUT11,"#",":
                                "#"",PATFLDER,"#",":

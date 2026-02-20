@@ -6,6 +6,8 @@
 . Modifications : 
 .
 .----------------------------------------------------------------------
+. V12.01.03 17/02/2026 Thanh T          TSK 0960621
+.           Changed WRTHIS40 to space out EMHITHDR to EMHITHNT fields
 . V12.01.02 04/12/2025 Nikitha Bhaskar TSK 0969804
 .           Modified at MISC1100 & MISC1200 to accomodate more than 9 alerts.
 . V12.01.01 03/12/2025 Don Nguyen      TSK 0970388
@@ -1389,7 +1391,7 @@ TZFILE    FILE      ASCII, FIXED=256
 .
 .------------------------------------------------------------
 PRGID     INIT      "CLIWEB06"
-VERSION   INIT      "V12.01.02"
+VERSION   INIT      "V12.01.03"
 PRGNAM    INIT      "Clinical Notes Server"
 .------------------------------------------------------------
 .
@@ -15064,6 +15066,14 @@ WRTHIS40  MOVE      HISTTYPE,EMHIUPT
           MOVE      EMVILOCN,EMHILOC
           MOVE      EMVIDOCT,EMHIDOC
           MOVE      EMVIATNS,EMHINUR
+.
+          MOVE      SP70,EMHITHDR              . Telehealth Doctor Code
+          MOVE      SP70,EMHITHDD              . Telehealth Doctor Date
+          MOVE      SP70,EMHITHDT              . Telehealth Doctor Time
+          MOVE      SP70,EMHITHNR              . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMHITHND              . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMHITHNT              . Telehealth Nurse/Midwife Time
+.
           PACK      EMHISPA,SP70,SP70
           PACK      EMHIDSD,EMHIDSD,SP70
           PACK      EMHIDST,EMHIDST,SP70

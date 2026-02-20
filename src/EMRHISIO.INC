@@ -19,7 +19,8 @@ RDEMHIS1  RESET     KEY22
                                    EMHILOC,EMHIDOC,EMHINUR,EMHIDSD,EMHIDST:     
                                    EMHINSD,EMHINST,EMHIRHND,EMHIDRBC,EMHIODCD:  
                                    EMHIODSD,EMHIODST,EMHICDAT,EMHICTIM,EMHICUID:
-                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHISPA           
+                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHITHDR,EMHITHDD:
+                                   EMHITHDT,EMHITHNR,EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -28,7 +29,8 @@ RKEMHIS1  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -37,7 +39,8 @@ RPEMHIS1  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -46,7 +49,8 @@ UPEMHIS1  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      UPDFLOCK IF LOCKED
           RETURN
 .
@@ -55,7 +59,8 @@ WREMHIS1  RESET     KEY22
                                    EMHILOC,EMHIDOC,EMHINUR,EMHIDSD,EMHIDST:     
                                    EMHINSD,EMHINST,EMHIRHND,EMHIDRBC,EMHIODCD:  
                                    EMHIODSD,EMHIODST,EMHICDAT,EMHICTIM,EMHICUID:
-                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHISPA           
+                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHITHDR,EMHITHDD:
+                                   EMHITHDT,EMHITHNR,EMHITHND,EMHITHNT,EMHISPA
           RETURN
 .
 DEEMHIS1  RESET     KEY22                                                       
@@ -68,7 +73,8 @@ RLEMHIS1  RESET     KEY22
                                    EMHILOC,EMHIDOC,EMHINUR,EMHIDSD,EMHIDST:     
                                    EMHINSD,EMHINST,EMHIRHND,EMHIDRBC,EMHIODCD:  
                                    EMHIODSD,EMHIODST,EMHICDAT,EMHICTIM,EMHICUID:
-                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHISPA           
+                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHITHDR,EMHITHDD:
+                                   EMHITHDT,EMHITHNR,EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           RETURN
@@ -78,7 +84,8 @@ KLEMHIS1  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           RETURN
@@ -88,7 +95,8 @@ PLEMHIS1  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           RETURN
@@ -113,7 +121,8 @@ RDEMHIS2  RESET     KEY32
                                    EMHILOC,EMHIDOC,EMHINUR,EMHIDSD,EMHIDST:     
                                    EMHINSD,EMHINST,EMHIRHND,EMHIDRBC,EMHIODCD:  
                                    EMHIODSD,EMHIODST,EMHICDAT,EMHICTIM,EMHICUID:
-                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHISPA           
+                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHITHDR,EMHITHDD:
+                                   EMHITHDT,EMHITHNR,EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -122,7 +131,8 @@ RKEMHIS2  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -131,7 +141,8 @@ RPEMHIS2  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -140,7 +151,8 @@ UPEMHIS2  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      UPDFLOCK IF LOCKED
           RETURN
 .
@@ -149,7 +161,8 @@ WREMHIS2  RESET     KEY32
                                    EMHILOC,EMHIDOC,EMHINUR,EMHIDSD,EMHIDST:     
                                    EMHINSD,EMHINST,EMHIRHND,EMHIDRBC,EMHIODCD:  
                                    EMHIODSD,EMHIODST,EMHICDAT,EMHICTIM,EMHICUID:
-                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHISPA           
+                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHITHDR,EMHITHDD:
+                                   EMHITHDT,EMHITHNR,EMHITHND,EMHITHNT,EMHISPA
           RETURN
 .
 DEEMHIS2  RESET     KEY32                                                       
@@ -162,7 +175,8 @@ RLEMHIS2  RESET     KEY32
                                    EMHILOC,EMHIDOC,EMHINUR,EMHIDSD,EMHIDST:     
                                    EMHINSD,EMHINST,EMHIRHND,EMHIDRBC,EMHIODCD:  
                                    EMHIODSD,EMHIODST,EMHICDAT,EMHICTIM,EMHICUID:
-                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHISPA           
+                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHITHDR,EMHITHDD:
+                                   EMHITHDT,EMHITHNR,EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           RETURN
@@ -172,7 +186,8 @@ KLEMHIS2  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           RETURN
@@ -182,7 +197,8 @@ PLEMHIS2  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           RETURN
@@ -207,7 +223,8 @@ RDEMHIS3  RESET     KEY38
                                    EMHILOC,EMHIDOC,EMHINUR,EMHIDSD,EMHIDST:     
                                    EMHINSD,EMHINST,EMHIRHND,EMHIDRBC,EMHIODCD:  
                                    EMHIODSD,EMHIODST,EMHICDAT,EMHICTIM,EMHICUID:
-                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHISPA           
+                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHITHDR,EMHITHDD:
+                                   EMHITHDT,EMHITHNR,EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -216,7 +233,8 @@ RKEMHIS3  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -225,7 +243,8 @@ RPEMHIS3  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -234,7 +253,8 @@ UPEMHIS3  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      UPDFLOCK IF LOCKED
           RETURN
 .
@@ -243,7 +263,8 @@ WREMHIS3  RESET     KEY38
                                    EMHILOC,EMHIDOC,EMHINUR,EMHIDSD,EMHIDST:     
                                    EMHINSD,EMHINST,EMHIRHND,EMHIDRBC,EMHIODCD:  
                                    EMHIODSD,EMHIODST,EMHICDAT,EMHICTIM,EMHICUID:
-                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHISPA           
+                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHITHDR,EMHITHDD:
+                                   EMHITHDT,EMHITHNR,EMHITHND,EMHITHNT,EMHISPA
           RETURN
 .
 DEEMHIS3  RESET     KEY38                                                       
@@ -256,7 +277,8 @@ RLEMHIS3  RESET     KEY38
                                    EMHILOC,EMHIDOC,EMHINUR,EMHIDSD,EMHIDST:     
                                    EMHINSD,EMHINST,EMHIRHND,EMHIDRBC,EMHIODCD:  
                                    EMHIODSD,EMHIODST,EMHICDAT,EMHICTIM,EMHICUID:
-                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHISPA           
+                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHITHDR,EMHITHDD:
+                                   EMHITHDT,EMHITHNR,EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           RETURN
@@ -266,7 +288,8 @@ KLEMHIS3  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           RETURN
@@ -276,7 +299,8 @@ PLEMHIS3  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           RETURN
@@ -301,7 +325,8 @@ RDEMHIS4  RESET     KEY38
                                    EMHILOC,EMHIDOC,EMHINUR,EMHIDSD,EMHIDST:     
                                    EMHINSD,EMHINST,EMHIRHND,EMHIDRBC,EMHIODCD:  
                                    EMHIODSD,EMHIODST,EMHICDAT,EMHICTIM,EMHICUID:
-                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHISPA           
+                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHITHDR,EMHITHDD:
+                                   EMHITHDT,EMHITHNR,EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -310,7 +335,8 @@ RKEMHIS4  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -319,7 +345,8 @@ RPEMHIS4  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -328,7 +355,8 @@ UPEMHIS4  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      UPDFLOCK IF LOCKED
           RETURN
 .
@@ -337,7 +365,8 @@ WREMHIS4  RESET     KEY38
                                    EMHILOC,EMHIDOC,EMHINUR,EMHIDSD,EMHIDST:     
                                    EMHINSD,EMHINST,EMHIRHND,EMHIDRBC,EMHIODCD:  
                                    EMHIODSD,EMHIODST,EMHICDAT,EMHICTIM,EMHICUID:
-                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHISPA           
+                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHITHDR,EMHITHDD:
+                                   EMHITHDT,EMHITHNR,EMHITHND,EMHITHNT,EMHISPA
           RETURN
 .
 DEEMHIS4  RESET     KEY38                                                       
@@ -350,7 +379,8 @@ RLEMHIS4  RESET     KEY38
                                    EMHILOC,EMHIDOC,EMHINUR,EMHIDSD,EMHIDST:     
                                    EMHINSD,EMHINST,EMHIRHND,EMHIDRBC,EMHIODCD:  
                                    EMHIODSD,EMHIODST,EMHICDAT,EMHICTIM,EMHICUID:
-                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHISPA           
+                                   EMHIUDAT,EMHIUTIM,EMHIUUID,EMHITHDR,EMHITHDD:
+                                   EMHITHDT,EMHITHNR,EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           RETURN
@@ -360,7 +390,8 @@ KLEMHIS4  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           RETURN
@@ -370,7 +401,8 @@ PLEMHIS4  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           GOTO      OVERLOCK IF LOCKED
           RETURN
@@ -426,7 +458,8 @@ AKEMHIS1  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -435,7 +468,8 @@ AUEMHIS1  UPDATE    EMRAUDHI;EMHIAUDD,EMHIAUDT,EMHIAUDP,EMHIAUDR,EMHIAUDS:
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           RETURN
 .
 AWEMHIS1  RESET     KEY19                                                       
@@ -444,7 +478,8 @@ AWEMHIS1  RESET     KEY19
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:   
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:      
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:      
-                             EMHIUUID,EMHISPA                                   
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           RETURN
 .
 ADEMHIS1  RESET     KEY19                                                       
@@ -461,7 +496,8 @@ APEMHIS2  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:
-                             EMHIUUID,EMHISPA
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -471,7 +507,8 @@ AKEMHIS2  MOVE      ZERO,OVRCD
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:
-                             EMHIUUID,EMHISPA
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           GOTO      OVERCOND IF OVER
           RETURN
 .
@@ -480,7 +517,8 @@ AUEMHIS2  UPDATE    EMRAUDH2;EMHIAUDD,EMHIAUDT,EMHIAUDP,EMHIAUDR,EMHIAUDS:
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:
-                             EMHIUUID,EMHISPA
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           RETURN
 .
 AWEMHIS2  RESET     KEY27
@@ -489,7 +527,8 @@ AWEMHIS2  RESET     KEY27
                              EMHIDOC,EMHINUR,EMHIDSD,EMHIDST,EMHINSD,EMHINST:
                              EMHIRHND,EMHIDRBC,EMHIODCD,EMHIODSD,EMHIODST:
                              EMHICDAT,EMHICTIM,EMHICUID,EMHIUDAT,EMHIUTIM:
-                             EMHIUUID,EMHISPA
+                             EMHIUUID,EMHITHDR,EMHITHDD,EMHITHDT,EMHITHNR:
+                             EMHITHND,EMHITHNT,EMHISPA
           RETURN
 .
 ADEMHIS2  RESET     KEY27

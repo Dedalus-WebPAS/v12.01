@@ -50,7 +50,8 @@ RDEMQUE1  RESET     KEY20
                                   EMVIDATM,EMVIPURC,EMVIMNCD,EMVIMNDT,EMVIMNTM:
                                   EMVIMDCD,EMVIMDDT,EMVIMDTM,EMVIUC31,EMVIUC32:
                                   EMVIUC33,EMVIUC34,EMVIUC35,EMVIREFP,EMVIREPM:
-                                  EMVIREDT,EMVIBNAA,EMQUSPAR
+                                  EMVIREDT,EMVIBNAA,EMVITHDR,EMVITHDD,EMVITHDT:
+                                  EMVITHNR,EMVITHND,EMVITHNT,EMQUSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DEMQUMES,EMQUMESI
           RETURN
@@ -92,7 +93,8 @@ RKEMQUE1  MOVE      ZERO,OVRCD
                                   EMVIDATM,EMVIPURC,EMVIMNCD,EMVIMNDT,EMVIMNTM:
                                   EMVIMDCD,EMVIMDDT,EMVIMDTM,EMVIUC31,EMVIUC32:
                                   EMVIUC33,EMVIUC34,EMVIUC35,EMVIREFP,EMVIREPM:
-                                  EMVIREDT,EMVIBNAA,EMQUSPAR
+                                  EMVIREDT,EMVIBNAA,EMVITHDR,EMVITHDD,EMVITHDT:
+                                  EMVITHNR,EMVITHND,EMVITHNT,EMQUSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DEMQUMES,EMQUMESI
           RETURN
@@ -134,7 +136,8 @@ RPEMQUE1  MOVE      ZERO,OVRCD
                                   EMVIDATM,EMVIPURC,EMVIMNCD,EMVIMNDT,EMVIMNTM:
                                   EMVIMDCD,EMVIMDDT,EMVIMDTM,EMVIUC31,EMVIUC32:
                                   EMVIUC33,EMVIUC34,EMVIUC35,EMVIREFP,EMVIREPM:
-                                  EMVIREDT,EMVIBNAA,EMQUSPAR
+                                  EMVIREDT,EMVIBNAA,EMVITHDR,EMVITHDD,EMVITHDT:
+                                  EMVITHNR,EMVITHND,EMVITHNT,EMQUSPAR
           GOTO      OVERCOND IF OVER
           MOVE      DEMQUMES,EMQUMESI
           RETURN
@@ -176,7 +179,8 @@ UPEMQUE1  MOVE      EMQUMESI,DEMQUMES
                                   EMVIDATM,EMVIPURC,EMVIMNCD,EMVIMNDT,EMVIMNTM:
                                   EMVIMDCD,EMVIMDDT,EMVIMDTM,EMVIUC31,EMVIUC32:
                                   EMVIUC33,EMVIUC34,EMVIUC35,EMVIREFP,EMVIREPM:
-                                  EMVIREDT,EMVIBNAA,EMQUSPAR
+                                  EMVIREDT,EMVIBNAA,EMVITHDR,EMVITHDD,EMVITHDT:
+                                  EMVITHNR,EMVITHND,EMVITHNT,EMQUSPAR
           RETURN
 .
 WREMQUE1  RESET     KEY20
@@ -217,7 +221,8 @@ WREMQUE1  RESET     KEY20
                                   EMVIDATM,EMVIPURC,EMVIMNCD,EMVIMNDT,EMVIMNTM:
                                   EMVIMDCD,EMVIMDDT,EMVIMDTM,EMVIUC31,EMVIUC32:
                                   EMVIUC33,EMVIUC34,EMVIUC35,EMVIREFP,EMVIREPM:
-                                  EMVIREDT,EMVIBNAA,EMQUSPAR
+                                  EMVIREDT,EMVIBNAA,EMVITHDR,EMVITHDD,EMVITHDT:
+                                  EMVITHNR,EMVITHND,EMVITHNT,EMQUSPAR
           RETURN
 .
 DEEMQUE1  RESET     KEY20

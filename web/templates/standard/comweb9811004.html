@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.01">
+<meta name="TemplateVersion" content="V12.01.02">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -342,12 +342,15 @@ function PostForm() {
     </td>
 </tr>
 <tr>
-    <td class=DataLabel>Printer for Medical Record Request Form</td>
-    <td class=DataItem><input type=text name=patcn689
-        title="Printer for Medical Record Request Form"
-        size=5 maxlength=3 value="%COMWEB98.11.299.589">
+    <td class=DataLabel>Printer for Medical Record Request</td>
+    <td class=DataItem><select id=patcn689 name=patcn689
+       title="Printer for Medical Record Request">
+      <option> </option>
+      %COMWEB98.11.006
+      </select>
     </td>
 </tr>
+
 <tr><td class=DataLabel>Using ranges for DOB searches</td>
     <td class=DataField>
       <input type=checkbox name=d_patcn690 value="1"
@@ -544,5 +547,11 @@ for (var i =0 ; i < document.UpdateForm.patcn688.length; i++) {
       document.UpdateForm.patcn688.selectedIndex=i;
   }
 }
-
+PrinterForMedicalRecordRequest="%COMWEB98.11.299.589";
+for (var i =0 ; i < document.UpdateForm.patcn689.length; i++) {
+  if (document.UpdateForm.patcn689.options[i].value==
+      PrinterForMedicalRecordRequest) {
+      document.UpdateForm.patcn689.selectedIndex=i;
+  }
+}
 </script>

@@ -1,5 +1,6 @@
-. V12.00.01 28/04/2025 TT C-0955096 Changed EMVIADMN from FORM(8) to DIM(8)
-. V11.04.01 04/12/2023 TT C-0936282 Changed EMVIHFMN size from 10 to 19        
+. V12.01.01 10/02/2026 TTI C-0960621 Added THDR THDD THDT THNR THND THNT        
+. V12.00.01 28/04/2025 TT C-0955096 Changed EMVIADMN from FORM(8) to DIM(8)     
+. V11.04.01 04/12/2023 TT C-0936282 Changed EMVIHFMN size from 10 to 19         
 . V11.01.01 01/03/2021 EC C-0873184 Added EMVIAHCP to EMVIDRUG                  
 . V10.14.01 13/03/2019 EC C-0868834 Added EMVIVSTY and EMVIVPLC                 
 . V10.13.07 17/01/2019 SA C-0858370 Updated description for EMVIUT07            
@@ -44,13 +45,13 @@
 .
 .Data File Definition
 .--------------------
-EMRVISA1   IFILE    SQL, FIXED=1629, KEY="U1-8"
-EMRVISA2   IFILE    SQL, FIXED=1629, KEY="U9-9,1-8"
-EMRVISA3   IFILE    SQL, FIXED=1629, KEY="U10-17,1-8"
-EMRVISA4   IFILE    SQL, FIXED=1629, KEY="U18-25,26-33,1-8"
-EMRVISA5   IFILE    SQL, FIXED=1629, KEY="U1001-1003,9-9,1-8"
-EMRVISA6   IFILE    SQL, FIXED=1629, KEY="U1001-1003,18-25,26-33,1-8"
-EMRVISA7   IFILE    SQL, FIXED=1629, KEY="U137-139,1-8"
+EMRVISA1   IFILE    SQL, FIXED=1740, KEY="U1-8"
+EMRVISA2   IFILE    SQL, FIXED=1740, KEY="U9-9,1-8"
+EMRVISA3   IFILE    SQL, FIXED=1740, KEY="U10-17,1-8"
+EMRVISA4   IFILE    SQL, FIXED=1740, KEY="U18-25,26-33,1-8"
+EMRVISA5   IFILE    SQL, FIXED=1740, KEY="U1001-1003,9-9,1-8"
+EMRVISA6   IFILE    SQL, FIXED=1740, KEY="U1001-1003,18-25,26-33,1-8"
+EMRVISA7   IFILE    SQL, FIXED=1740, KEY="U137-139,1-8"
 .
 .Name     Type      Length Physical Start Description
 .----     ----      ------ -------- ----- -----------
@@ -281,9 +282,15 @@ EMVIAHST  DIM       1      1        1583  Allied Health Status
 EMVIDISD  DIM       3      3        1584  Disposition Delay (Cat dd)         
 EMVIDRUG  DIM       1      1        1587  Drug / Alcohol Related             
 .                                         0 = No, 1 = Yes, 2 = Unknown         
-EMVISPAR  DIM       41     41       1588  Spare                              
+EMVITHDR  DIM       10     10       1588  Telehealth Doctor Code             
+EMVITHDD  DIM       8      8        1598  Telehealth Doctor Date (CCYYMMDD)  
+EMVITHDT  DIM       8      8        1606  Telehealth Doctor Time (HH:MM:SS)  
+EMVITHNR  DIM       10     10       1614  Telehealth Nurse/Midwife Code      
+EMVITHND  DIM       8      8        1624  Telehealth Nurse/Midwife Date      
+EMVITHNT  DIM       8      8        1632  Telehealth Nurse/Midwife Time      
+EMVISPAR  DIM       100    100      1640  Spare                              
 .
-.End of Record                      1629 
+.End of Record                      1740 
 .
 .Redefine Key Variables
 .----------------------

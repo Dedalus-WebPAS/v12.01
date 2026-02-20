@@ -10,6 +10,9 @@
 .*                                                                            *
 .* Modifications  :                                                           *
 .******************************************************************************
+.* V12.01.01 16/02/2026  Ebon CLements  TSK 0972180                           *
+.*           Report the language spoken at home from the PMI if it's not      *
+.*           recorded at the visit level - XLNGHOME                           *
 .* V12.00.01 16/05/2025 Thanh T         TSK 0955096                           *
 .*           Changed for alphanumeric visit number                            *
 .******************************************************************************
@@ -496,7 +499,7 @@ TASDLATR  DIM       3        Laterality         CAT LY  Pos 1
 .--------------------------------------------------------------------
 PRGID     INIT      "IBAINP83"
 PRGNAM    INIT      "Cancer Register Reports"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 .--------------------------------------------------------------------
 .
 .*********************************************************************
@@ -1655,10 +1658,19 @@ SETEXT00  MOVE     ZERO,DISC2018
             UNPACK   PTCDNHCP,XCNBIRTH      * Country of birth        *I-208570
           ENDIF
 .
-          PACK     KEY5,ANSL,ANSA,PMVXLNG1,SP70
-          CALL     RDCODE1
-          IF       OVRCD=0
-            PACK     XLNGHOME,PTCDNHCP      * Language                *I-283509
+          MATCH    SP70,PMVXLNG1
+          IF       @EQUAL
+            PACK     KEY5,ANSL,ANSA,PMPXLNG1,SP70     * Report PMI value
+            CALL     RDCODE1
+            IF       OVRCD=0
+              PACK     XLNGHOME,PTCDNHCP    * Language
+            ENDIF
+          ELSE
+            PACK     KEY5,ANSL,ANSA,PMVXLNG1,SP70
+            CALL     RDCODE1
+            IF       OVRCD=0
+              PACK     XLNGHOME,PTCDNHCP    * Language                *I-283509
+            ENDIF
           ENDIF
 .
           PACK     KEY6,ADOCTA              * attending doctor

@@ -3,6 +3,8 @@
 .
 . Modifications  :
 .------------------------------------------------------------------------------
+. V12.01.01  13/02/2026  Thanh T       TSK 0960621
+.            Added EMHITHDR to EMHITHNT fields       
 . V11.03.00 18/09/2023 Ebon Clements   TSK 0888624
 .           Created include
 .------------------------------------------------------------------------------
@@ -29,6 +31,14 @@ CLEMRHIS  MOVE      SP70,EMHIVIS   * Visit Number
           MOVE      SP70,EMHIUDAT  * Date Record Updated (ccyymmdd)
           MOVE      SP70,EMHIUTIM  * Time Record Updated (hh:mm:ss)
           MOVE      SP70,EMHIUUID  * Web User Id Updated (websecaf)
+.
+          MOVE      SP70,EMHITHDR      . Telehealth Doctor Code
+          MOVE      SP70,EMHITHDD      . Telehealth Doctor Date
+          MOVE      SP70,EMHITHDT      . Telehealth Doctor Time
+          MOVE      SP70,EMHITHNR      . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMHITHND      . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMHITHNT      . Telehealth Nurse/Midwife Time
+.
           MOVE      SP70,EMHISPA   * Spare Variable
 .
           RETURN

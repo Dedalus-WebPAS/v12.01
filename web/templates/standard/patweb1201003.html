@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -10,8 +10,8 @@ function UpdateSeq() {
   }
 }
 function DeleteSeq() {
-  if(confirm("Webpas would recommend setting 'Wards' view to zero to prevent" +
-             " them displaying rather than deleting them" +
+  if(confirm("webPAS recommends setting 'Sequence View' to zero to prevent" +
+             " it displaying rather than deleting it" +
              "\nClick OK to continue or cancel to abort")) {  
     document.UpdateForm.updttype.value="D";
     SubmitHidden(UpdateForm);

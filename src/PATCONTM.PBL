@@ -8,6 +8,8 @@
 .  *     Modifications:                                                       *
 .  *                                                                          *
 .  ****************************************************************************
+.  * V12.01.06 10/02/2026  Zumin Yu                TSK 0972111                *
+.  *           Added PATCN707/PTCNMPTR -Max No. of patients returned in search*
 .  * V12.01.05 04/02/2026  Thanh T                 TSK 0961944                *
 .  *           Added PATCN703/PTCNUMOP - If Home Phone is blank, use Mobile   *
 .  *                 Phone                                                    *
@@ -1746,6 +1748,7 @@ CPPT0000  MOVE      Z70,PATCN001
           MOVE      Z70,PATCN704
           MOVE      Z70,PATCN705
           MOVE      Z70,PATCN706
+          MOVE      Z70,PATCN707
 .
           MOVE      Z70,IBACN001
           MOVE      Z70,IBACN002
@@ -2228,7 +2231,7 @@ PTCO0000  BRANCH    FLDITMNO,PTCO0010,PTCO0020,PTCO0030,PTCO0040,PTCO0050:
                              PTCO5910,PTCO5920,PTCO5930,PTCO5940,PTCO5950: * 595
                              PTCO5960,PTCO5970,PTCO5980,PTCO5990,PTCO6000: * 600
                              PTCO6010,PTCO6020,PTCO6030,PTCO6040,PTCO6050: * 605
-                             PTCO6060
+                             PTCO6060,PTCO6070
 .
           WRITE     HTMLFILE;"Invalid IBA tag";
           GOTO      PTCO9999
@@ -4449,6 +4452,9 @@ PTCO6050  WRITE     HTMLFILE;PTCNPPNT;   * Populate Patient Notes(pttynote) with
 PTCO6060  WRITE     HTMLFILE;PTCNDIAD;   * Number of Days in advance to include
           GOTO      PTCO9999
 .
+PTCO6070  WRITE     HTMLFILE;PTCNMPTR;  * Max no. of patients returned in search
+          GOTO      PTCO9999
+.
 PTCO9999  RETURN
 +
 .------------------------------------------------------------
@@ -4867,7 +4873,7 @@ SPPAT000  MOVE      ZERO,EXIT
                        SPPAT691,SPPAT692,SPPAT693,SPPAT694,SPPAT695:
                        SPPAT696,SPPAT697,SPPAT698,SPPAT699,SPPAT700:    *700
                        SPPAT701,SPPAT702,SPPAT703,SPPAT704,SPPAT705:
-                       SPPAT706
+                       SPPAT706,SPPAT707
 .
           MOVE      ONE,EXIT
           GOTO      SPPAT999
@@ -7184,6 +7190,9 @@ SPPAT705  MOVE      QRYDATA,PATCN705
           GOTO      SPPAT999
 .
 SPPAT706  MOVE      QRYDATA,PATCN706
+          GOTO      SPPAT999
+.
+SPPAT707  MOVE      QRYDATA,PATCN707
           GOTO      SPPAT999
 .
 SPPAT999  RETURN
@@ -10801,13 +10810,17 @@ MVPT0000  MATCH     Z70,PATCN001
             MOVE      F3,PTCNDIAD        * Number of Days in advance to include
           ENDIF
 .
+          MATCH     Z70,PATCN707
+          IF        !@EQUAL
+            MOVE      PATCN707,PTCNMPTR * Max no. of patients returned in search
+          ENDIF
+.
           MATCH     Z70,IBACN001
           IF        !@EQUAL
             MOVE      IBACN001,IBCNMHOS  * Multi hospital
           ENDIF
 .
           MATCH     Z70,IBACN002
-
           IF        !@EQUAL
             MOVE      IBACN002,IBCNUMCI  * Medclaims Indicator
           ENDIF

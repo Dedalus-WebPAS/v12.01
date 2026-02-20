@@ -7,6 +7,10 @@
 .
 . Modifications :
 .----------------------------------------------------------------------
+. V12.01.03 09.02.2026  PJ Le Febour   TSK 0965884a
+.           EHCT0000 - LOOPCNTR reduce test from 250 to 100
+. V12.01.02 05.02.2026  PJ Le Febour   TSK 0965884
+.           EHCT0000 - LOOPCNTR reduce test from 500 to 250
 . V12.01.01 08/12/2025  Thanh T        TSK 0953127
 .           Recompiled for MRTAUCFD changes
 . V12.00.04 18.11.2025  DA Sarkies     TSK 0920925
@@ -63,6 +67,12 @@
 .           for JSON popup frame 
 . V11.03.01 05/09/2023  Thanh T.            0932841
 .           Changed ECCT1900, WBQP0000, WBOH0000, EHCT0000, WBHP0000,
+.           WBHE0000 to insert a new icon into the claim status field
+.           for switching to Json popup frame 
+.           WBHE0000 to insert a new icon into the claim status field
+.           for switching to Json popup frame 
+.           WBHE0000 to insert a new icon into the claim status field
+.           for switching to Json popup frame 
 .           WBHE0000 to insert a new icon into the claim status field
 .           for switching to Json popup frame 
 . V11.02.11 08/06/2022  Peter Vela          0918312
@@ -1271,7 +1281,7 @@ TILDA30   INIT      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 .
 .------------------------------------------------------------------------
 PRGID     INIT      "ECLWEB24"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.03"
 PRGNAM    INIT      "Webservices Claim Enquiries"
 .------------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -19939,7 +19949,7 @@ EHCT0500  CALL      RKWBIHB2
 .
           ADD       ONE,LOOPCNTR
 .
-          IF        (LOOPCNTR = 500)
+          IF        (LOOPCNTR = 100)
             WRITE     HTMLFILE;"// ",LOOPCNTR
             MOVE      ZERO,LOOPCNTR
           ENDIF
@@ -19958,7 +19968,7 @@ EHCT1000  CALL      RKWBIHC3
 .
           ADD       ONE,LOOPCNTR
 .
-          IF        (LOOPCNTR = 500)
+          IF        (LOOPCNTR = 100)
             WRITE     HTMLFILE;"// ",LOOPCNTR
             MOVE      ZERO,LOOPCNTR
           ENDIF
@@ -20281,7 +20291,7 @@ EHCT3000  CALL      RKWBIHC3
 .
           ADD       ONE,LOOPCNTR
 .
-          IF        (LOOPCNTR = 500)
+          IF        (LOOPCNTR = 100)
             WRITE     HTMLFILE;"// ",LOOPCNTR
             MOVE      ZERO,LOOPCNTR
           ENDIF

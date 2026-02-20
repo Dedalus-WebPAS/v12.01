@@ -31,6 +31,8 @@
 .
 .        VERSION  :
 . 
+.         V12.01.02 12/02/2026  J.Tan          TSK 0971245
+.                   Mod to kill tempfiles (Disc.Billing) - DLNE9000
 .         V12.01.01 24/10/2025  J.Tan          TSK 0946593
 .                   Fixed COPTION generating CP Theatre fee sort
 .         V12.00.05 10/10/2025  J.Tan          TSK 0946593
@@ -3196,8 +3198,13 @@ DLNE8990
           ENDIF
 .
           CALL      GMSC0000                * Processing items
+          GOTO      DLNE9200
 .
-DLNE9000  MOVE      ZERO,EXIT
+DLNE9000  CALL      KTMP0000
+          CALL      KLMV0000
+          CALL      KT2P0000
+.
+DLNE9200  MOVE      ZERO,EXIT
           GOTO      DLNE9999
 .
 DLNE9500  MOVE      ONE,EXIT

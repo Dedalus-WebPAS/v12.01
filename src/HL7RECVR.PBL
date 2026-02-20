@@ -95,6 +95,12 @@
 .***************************************************************************
 .*  Mod's     :                                                            *
 .***************************************************************************
+.*        V12.01.05 17/02/2026 Thanh T         TSK 0960621                 *
+.*                  Changed WTEMHS40 to space out EMHITHDR to EMHITHNT     *
+.*                  fields                                                 *
+.*        V12.01.04 12/02/2026  Davin          TSK 0961944                 *
+.*                  Added code to reject M02 if NTE.3 exceeds the 4000     *
+.*                  character limit (NTE00301/RNTE0302)                    *
 .*        V12.01.03 19/12/2025  Davin          TSK 0961944                 *
 .*                  Receive NTE segment in M02 messages based on PTCNNTES  *
 .*                  (VNTE0000/PTCO0000/WTCO0000/PHCP0000/WHCP0000/DHCP0000)*
@@ -2908,7 +2914,7 @@ NK1FOUND  FORM      1             * NK1 found flag
 .                                     1 = no NK1 segments received
 NTE00101  DIM       500
 NTE00201  DIM       500
-NTE00301  DIM       4000          * 0861257 limit ?
+NTE00301  DIM       4001          * 0861257 limit ? (error if 4000 is exceeded)
 NTE00401  DIM       500
 NTE00402  DIM       500
 NTE00403  DIM       500
@@ -5728,7 +5734,7 @@ DEC       INIT      "December"
 .-----------------------------------------------------------------------
 PRGID     INIT      "HL7RECVR"
 PRGNAM    INIT      "HL7 General Receiving Server"
-VERSION   INIT      "V12.01.03"
+VERSION   INIT      "V12.01.05"
 .-----------------------------------------------------------------------
 +
 .*************************************************************************
@@ -32110,6 +32116,12 @@ RNTE0300  BRANCH    COMPCNT,RNTE0301
           GOTO      RNTE9999
 .
 RNTE0301  RESET     NTE00301                     * Comment (FT)
+          MOVELPTR  NTE00301,F4
+          IF        F4 > 4000
+RNTE0302    MOVE      "NTE.3: Maximum field length is 4000 characters",ERRORDSC
+            MOVE      "207",ERRORNUM
+            CALL      EROR0000
+          ENDIF
           MOVE      NTE00301,OLDSTRNG
           CALL      CONV0000                     * convert any escape sequences
           MOVE      NEWSTRNG,NTE00301
@@ -48517,8 +48529,8 @@ VNTE0200  STRIP     NTE00201
 .         Load Comments (NTE.3)
 .
 VNTE0300  STRIP     NTE00301
-          MOVELPTR  NTE00301,FORM3
-          COMPARE   ZERO,FORM3                   * field populated ?
+          MOVELPTR  NTE00301,FORM4
+          COMPARE   ZERO,FORM4                   * field populated ?
           IF        @EQUAL
             PACK      NTE00301,SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100:
                                SP100,SP100,SP100,SP100,SP100,SP100,SP100,SP100:
@@ -71861,6 +71873,14 @@ WTEMHS40  MOVE      UPDTEMHI,EMHIUPT             * 0931586 / 0959732
           MOVE      EMVIDOCT,EMHIDOC
           MOVE      EMVIATNS,EMHINUR
           MOVE      EMVIUR04,EMHIODCD
+.
+          MOVE      SP70,EMHITHDR              . Telehealth Doctor Code
+          MOVE      SP70,EMHITHDD              . Telehealth Doctor Date
+          MOVE      SP70,EMHITHDT              . Telehealth Doctor Time
+          MOVE      SP70,EMHITHNR              . Telehealth Nurse/Midwife Code
+          MOVE      SP70,EMHITHND              . Telehealth Nurse/Midwife Date
+          MOVE      SP70,EMHITHNT              . Telehealth Nurse/Midwife Time
+.
           PACK      EMHISPA,SP70,SP70
           PACK      EMHIDSD,EMHIDSD,SP70
           PACK      EMHIDST,EMHIDST,SP70

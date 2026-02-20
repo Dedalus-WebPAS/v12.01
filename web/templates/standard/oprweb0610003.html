@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.00.02">
+<meta name="TemplateVersion" content="V12.01.03">
 <meta name="TemplateHome" content="standard">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -412,7 +412,8 @@ function TimeCheck(){
 function Get(el){return document.getElementById(el);}
 </script></head>
 <body onload="PageLoad(event);setTimeout('ChkReg()',100);
-      convertOvrnightToInteger();showDelayHEA2();showExitDelayHEA();">
+      convertOvrnightToInteger();showDelayHEA2();showExitDelayHEA();
+      DefaultExitComplexTime();">
 <span class=DFrameTitleBar>
 <img align="right" alt="Exit" class="MenuIcon"
  src="../images/ExitIcon.gif" onclick="DFrameExit();">
@@ -487,6 +488,7 @@ TheatreHeading="Theatre Case Recovery Details"
 <input type=hidden name=d_opsguy05 value="%OPRWEB06.10.374">
 <input type=hidden name="opcnsetr" id="opcnsetr"
  value="%STANDARD.01.025.113.057.0.2">
+<input type=hidden name="defttime" id="defttime" value="%OPRWEB06.10.521">
 
 <table border=0 cellpadding=2 cellspacing=0 width="100%" align=center >
 <tr><td class=DataLabel width=20%>Time in Recovery - Front </td>

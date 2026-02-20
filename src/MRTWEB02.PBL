@@ -5,6 +5,8 @@
 .
 . Modifications  :
 .------------------------------------------------------------------------------
+. V12.01.03 05/02/2026  Zumin Yu      TSK 0972419
+.           Updated PTCNMRPN to read from the new location
 . V12.01.02 16/01/2026  Ebon Clements TSK 0971243
 .           Added clear of GRPSWICH in CLRPAR00. Set GRPSWICH at SUMCOD40
 .           to set coding dates for the grouper
@@ -2543,7 +2545,7 @@ CCFLAG02  INIT      "AB - Care provided by hospital A and hospital"
 .
 .---------------------------------------------------------------------------
 PRGID     INIT      "MRTWEB02"
-VERSION   INIT      "V12.01.02"
+VERSION   INIT      "V12.01.03"
 PRGNAM    INIT      "Medical Record Coding"
 .---------------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -4182,7 +4184,7 @@ INIT0000  CALL      INTMAS00     * Open routine for PATMASTM
           READ      CONTROLF,TEN9;*212,CFEETYP
           READ      CONTROLF,HUND09;*195,PTCNACAS
           READ      CONTROLF,FORTY;*111,OPCNCLSU
-          READ      CONTROLF,FIFTY9;*63,CFFMORB,*85,CMORBDTM,*202,PTCNMRPN:
+          READ      CONTROLF,FIFTY9;*63,CFFMORB,*85,CMORBDTM:
                                     *218,PTMORBDT
           READ      CONTROLF,SIXTY;*84,MRCNHLOC,*151,MRCNDCDT
           READ      CONTROLF,SIXTY;*88,MRCNRCTY,*105,MRCNHMTY,*133,MRCNEPSC
@@ -4202,6 +4204,7 @@ INIT0000  CALL      INTMAS00     * Open routine for PATMASTM
           READ      CONTROLF,HUND25;*93,PTCNNSSI,*249,PTCNCODC
           READ      CONTROLF,HUND28;*105,PTCNUABF
           READ      CONTROLF,HUND03;*212,PTCNPFSN,PTCNPFGN
+          READ      CONTROLF,HUND30;*180,PTCNMRPN
           READ      CONTROLF,HUND31;*1,MRCNDCID
 .
           IF        IBCNMHOS=1

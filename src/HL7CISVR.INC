@@ -3,6 +3,10 @@
 .*    HL7 Variables for HL7CISIN & HL7CISRC                                  *
 .*                                                                           *
 .*    Mods:                                                                  *
+.*        16/02/2026  DA Sarkies       TSK 0875822                           *
+.*                    Added ZXP078 for MyHR Consent                          *
+.*        13/01/2026  Alina Bhari      TSK 0960123                           *
+.*                    Added PRA008,PRA009,PRA010,PRA011,PRA012               *
 .*        13/01/2026  Davin            TSK 0961944                           *
 .*                    Added NTE segment variables                            *
 .*        21/10/2025  Bella Turco      TSK 0960178                           *
@@ -945,7 +949,11 @@ PRA004    DIM       1
 PRA005    DIM       160
 PRA006    DIM       100
 PRA007    DIM       200
-PRA008    DIM       8
+PRA008    DIM       250
+PRA009    DIM       250
+PRA010    DIM       250
+PRA011    DIM       250
+PRA012    DIM       60
 PRD001    DIM       200
 PRD002    DIM       106
 PRD003    DIM       60
@@ -1335,6 +1343,7 @@ ZXP074    DIM       100
 ZXP075    DIM       100
 ZXP076    DIM       1
 ZXP077    DIM       1
+ZXP078    DIM       1
 .
 ZXV001    DIM       1
 ZXV002    DIM       100

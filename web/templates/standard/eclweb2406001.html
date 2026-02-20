@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.03">
 <meta name="TemplateHome" content="standard">
 <meta name="CrossBrowser" content="true">
 <meta name="HelpFileName" content="NoContextSet.html">
@@ -313,6 +313,7 @@ function FilterSubmit() {
 function InitTable(TableView) {
 switch (TableView) {
 case 0: {
+ ShowWaitScreen();
  t = new Table(1,0,2,"100%","center");
 // t.addColumn("Batch #","ImageText",0,0,"left","InvoiceIcon","10",50,11)
  t.addColumn("Batch&nbsp;#","String",17,17,"left","","",40)
@@ -329,9 +330,11 @@ case 0: {
  t.addColumn("Resubmit","String",14,14,"middle","","",40)
  t.addColumn("Delete","String",15,15,"middle","","",30)
  t.addColumn("Reset<br>Status","String",19,19,"middle","","",30)
+  
  AddTableRows()
  TableOutput(0,1);    // Order Column,Asc Dsc
- break; 
+ HideWaitScreen();
+ break;
   }
  }
 }
@@ -343,6 +346,14 @@ case 0: {
       onunload="document.cookie = 'EclipseClaimPath=' + 
                 escape(location.href) + ';'">
 
+<span id=WaitBoxDisplay class=WaitBox style="display:none">
+<img class=WaitImage src="../images/wait.gif">
+<p>Please Wait ...</p>
+</span>
+<div id=PageLayer class=DimmedLayer style="display:none"></div>
+<script type="text/javascript">
+ShowWaitScreen();
+</script>
 <div id=HeadingSection>
 <form name=SelectPeriod action=eclweb24.pbl method=get style="margin:0">
   <input type=hidden name=reportno value=6>
@@ -467,6 +478,11 @@ case 0: {
 </tr>
 </table>
 </form>
+
+<span id=WaitBoxDisplay class=WaitBox style="display:none">
+<img class=WaitImage src="../images/wait.gif">
+<p>Please Wait ...</p>
+</span>
 
 </div>
 <div id=TableLocation></div>

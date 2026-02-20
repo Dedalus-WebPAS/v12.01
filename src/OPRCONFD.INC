@@ -12,6 +12,8 @@
 .  *     File Name    : controlf.txt                                          *
 .  *                                                                          *
 .  *     Modifications:                                                       *
+.  *      V12.01.01 12/02/2026  Zumin Yu         TSK  0972112                 *
+.  *                Updated option details for OPCNR64A and OPCNR66A          *
 .  *      V12.00.01 10/09/2025  Bella Turco      Task 0956710                 *
 .  *                Added OPCNASOT - Anaesthetic Started must be AFTER Patient*
 .  *                Out of Theatre Previous Patient                           *
@@ -469,7 +471,6 @@ OPCNR66A  FORM      2        56        Report Format for IBAOPR66
 .                                        6 = layout 6
 .                                        7 = layout 7
 .                                        8 = layout 8     * Healthscope
-.                                        9 = layout 9     * Healthscope
 OPCNR63A  FORM      2        58       Report Format for IBAOPR63
 .                                        1 = layout 1
 .                                        2 = layout 2
@@ -477,6 +478,7 @@ OPCNR63A  FORM      2        58       Report Format for IBAOPR63
 .                                        4 = layout 4
 OPCNR64A  FORM      2        60        Report Format for IBAOPR64
 .                                        1 = layout 1
+.                                        2 = layout 2          
 OPCNUUU6  FORM      1        62       Using Operation Usage Field 6 ?
 OPCNUUM6  FORM      1        63       Mandatory ?
 OPCNUUU7  FORM      1        64       Using Operation Usage Field 7 ?

@@ -5,6 +5,11 @@
 .
 . Modifications  :
 .----------------------------------------------------------------------
+. V12.01.02 12/02/2026  PJ Le Febour   TSK 0965294a
+.           PATP0100 and PATP0200  change GOTO PATP9999 to GOTO PATP0150
+. V12.01.01 11/02/2026  PJ Le Febour   TSK 0965294
+.           PATP0000 PATP900 NOMORE00 - "No more records" at end of list
+.----------------------------------------------------------------------
 . V12.00.01 28/10/2025  Jacob Jackson  TSK 0963648
 .           Add functionality to remove QHAPDC run dates
 . V11.04.01 05/02/2024  DA Sarkies    TSK 0936282
@@ -446,7 +451,7 @@ REHABDS1  INIT      "First Rehab Admission"
 REHABDS2  INIT      "Re-adm. for Rehab"
 .----------------------------------------------------------------------
 PRGID     INIT      "PRSWEB01"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "PRS Extract Enquiries/Maintenance"
 .----------------------------------------------------------------------
           CALL      WEBINT00       * Initialise Fifo Etc.
@@ -3710,7 +3715,7 @@ PATP0000  MOVE      ZERO,CURFLAG
           MOVE      ZERO,DISNUMB
 .
           MATCH     SP70,PRSSDATE
-          GOTO      PATP9999 IF EQUAL
+          GOTO      PATP9000 IF EQUAL
 .
           READ      CONTROLF,EIGHTY8;*124,CHCSST,*132,CHCSED
           MATCH     "1",PTCNPRSM
@@ -3733,7 +3738,7 @@ PATP0100  CALL      RKPTPEI1
           BRANCH    OVRCD,PATP0150
 .
           MATCH     PTPESTDT,PRSSDATE
-          GOTO      PATP9999 IF NOT EQUAL
+          GOTO      PATP0150 IF NOT EQUAL
 .
           CALL      GETDET00
           BRANCH    EXIT,PATP0100
@@ -3750,16 +3755,16 @@ PATP0100  CALL      RKPTPEI1
           GOTO      PATP9999
 .
 PATP0150  IF        CURFLAG=0
-            GOTO      PATP9999
+            GOTO      PATP9000
           ENDIF
 .
           PACK      KEY16,SP70
           CALL      RSPTPEI1
 PATP0200  CALL      RKPTPEI1
-          BRANCH    OVRCD,PATP9999
+          BRANCH    OVRCD,PATP9000
 .
           MATCH     PTPESTDT,SP70
-          GOTO      PATP9999 IF NOT EQUAL
+          GOTO      PATP9000 IF NOT EQUAL
 .
           CALL      GETDET00
           BRANCH    EXIT,PATP0200
@@ -3773,6 +3778,9 @@ PATP0200  CALL      RKPTPEI1
           ADD       ONE,DISNUMB             * DISNUMB is the counter
           COMPARE   NORECORD,DISNUMB        * is the numb of recds to be disp
           GOTO      PATP0200 IF NOT EQUAL
+          GOTO      PATP9999                * page limit but more recs avail
+.
+PATP9000  CALL      NOMORE00      * Display No More Records Message
 .
 PATP9999  RETURN
 +

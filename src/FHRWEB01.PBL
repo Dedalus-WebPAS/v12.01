@@ -6,6 +6,8 @@
 . Modifications :
 .
 .----------------------------------------------------------------------
+. V12.01.02 05/02/2026  Zumin Yu       TSK 0972419
+.           Updated PTCNMRPN to read from the new location
 . V12.01.01 11/12/2025  Bella Turco    TSK 0949715
 .           Recompiled for UPDUR - added NZPMICHG
 . V12.00.01 30/05/2025  Jacob Jackson    TSK 0955096
@@ -677,7 +679,7 @@ ALRCOMM   DIM       100
 MULTILIN  FORM      1  
 .-------------------------------------------------------------------------------
 PRGID     INIT      "FHRWEB01"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.02"
 PRGNAM    INIT      "FHIR Patient Resource Inbound Server"
 .-------------------------------------------------------------------------------
 .
@@ -2420,7 +2422,7 @@ RDCTRL00  READ      CONTROLF,TEN;*25,PTCNVKCA,*42,PTCNDGAT,*53,CPCONT:
                                     *171,PTCNSTAU,*172,PTCNNUMM,*174,PTCNNDAT:
                                     *182,PTCNORNO,*192,PTCNURCF,*193,PTCNRQCF:
                                     *194,PTCNDPCF,*195,PTCNRLAY,*196,PTCNUCOD:
-                                    *202,PTCNMRPN,*209,PTCNDAYF,*216,PTPRVALS:
+                                    *209,PTCNDAYF,*216,PTPRVALS:
                                     *220,PTCNUADT,*226,CCARECL:
                                     *233,PTCNADOC
 .
@@ -2445,6 +2447,7 @@ RDCTRL00  READ      CONTROLF,TEN;*25,PTCNVKCA,*42,PTCNDGAT,*53,CPCONT:
           READ      CONTROLF,HUND10;*115,PTCNUEDI,*243,PTCNCOMF,*248,PTCNEPAY
           READ      CONTROLF,HUND28;*105,PTCNUABF
           READ      CONTROLF,HUND29;*61,PTCNWSIN,*71,PTCNOECW,*72,PTCNOECE
+          READ      CONTROLF,HUND30;*180,PTCNMRPN
 .
 RDCTRL99  RETURN
 +

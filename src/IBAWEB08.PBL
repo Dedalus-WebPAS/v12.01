@@ -12,6 +12,15 @@
 .*                                                                            *
 .* Modifications  :                                                           *
 *******************************************************************************
+.* V12.01.04 10/02/2026  Peter Vela         0939466                           *
+.*           Removed trailing spaces for veteranNumber                        *
+.* V12.01.03 09/02/2026  Peter Vela         0939466                           *
+.*           Commented bakc in the validations for CLMSEG05 = "P" in          *
+.*           PROC0000 and JSON0000                                            *
+.*           06/02/2026  Peter Vela         0939466                           *
+.*           Commented back in: Pathology validation for CLM.5.4              *
+.* V12.01.02 05/02/2026  Peter Vela         0939466                           *
+.*           Added "KM" validations to the service object                     *
 .* V12.01.01 02/02/2026  Peter Vela         0939466                           *
 .*           Added distance in kilometres to JSON output                      *
 .******************************************************************************
@@ -1008,7 +1017,7 @@ ERRORDSC  DIM       500
 .
 PRGID     INIT      "IBAWEB08"
 PRGNAM    INIT      "WebServices DVAW Claims Extract"
-VERSION   INIT      "V12.01.01"
+VERSION   INIT      "V12.01.04"
 +
 .******************************************************************************
 .*                                   MAIN0000                                 *
@@ -2245,10 +2254,10 @@ PROC0000  MOVE      SP10,SAVPRVBN
           IF        @EQUAL
             MOVE      "S",WBDWCTYP
           ENDIF
-.          MATCH     ANSP,CLMSEG05
-.          IF        @EQUAL
-.            MOVE      "P",WBDWCTYP
-.          ENDIF
+          MATCH     ANSP,CLMSEG05
+          IF        @EQUAL
+            MOVE      "P",WBDWCTYP
+          ENDIF
 .
           CALL      UPWBDVW1                     * update record
 .
@@ -3863,13 +3872,13 @@ WCLM6500  MATCH     SP3,PRHRSTCD                 * blank service type ?
           IF        !@EQUAL
             MATCH     ANSO,TCINDC1
             IF        !@EQUAL
-.              MATCH     ANSP,TCINDC1
-.              IF        !@EQUAL
+               MATCH     ANSP,TCINDC1
+               IF        !@EQUAL
                 MOVE      "CLM.5.4-ServiceTypeCde Indicator 1 not valid",ERRMSG
                 MOVE      SP9,DIM9
                 CALL      PERR0000
                 GOTO      WCLM8000
-.              ENDIF
+               ENDIF
             ENDIF
           ENDIF
 .
@@ -4118,7 +4127,10 @@ WVCH1500  MOVE      PSEX,KEY1
 .
 .         Load treatmentLocationCode
 .
-          MOVE      "H",VCHSEG15  
+          MATCH     ANSP,CLMSEG05
+          IF        !@EQUAL
+            MOVE      "H",VCHSEG15
+          ENDIF
 .
 .         Load acceptedDisability code
 .         (WAITING FOR JAYNE'S CONFIRMATION)
@@ -6041,16 +6053,16 @@ JSON0000  PACK      PROPFLNM,WBDWTRID,PROPLITR,SP70
             WRITE     PROPFILE,SEQ;PRPLABS2,PRPVAL02
             WRITE     PROPFILE,SEQ;PRPLABS3,PRPVAL03
           ELSE
-.            MATCH     "P",CLMSEG05 
-.            IF        @EQUAL
-.              WRITE     PROPFILE,SEQ;PRPLABP1,PRPVAL01
-.              WRITE     PROPFILE,SEQ;PRPLABP2,PRPVAL02
-.              WRITE     PROPFILE,SEQ;PRPLABP3,PRPVAL03
-.            ELSE
+            MATCH     "P",CLMSEG05 
+            IF        @EQUAL
+              WRITE     PROPFILE,SEQ;PRPLABP1,PRPVAL01
+              WRITE     PROPFILE,SEQ;PRPLABP2,PRPVAL02
+              WRITE     PROPFILE,SEQ;PRPLABP3,PRPVAL03
+            ELSE
               WRITE     PROPFILE,SEQ;PRPLABG1,PRPVAL01
               WRITE     PROPFILE,SEQ;PRPLABG2,PRPVAL02
               WRITE     PROPFILE,SEQ;PRPLABG3,PRPVAL03
-.            ENDIF
+            ENDIF
           ENDIF
 .
           CLOSE     PROPFILE
@@ -6165,13 +6177,16 @@ JSON0000  PACK      PROPFLNM,WBDWTRID,PROPLITR,SP70
 .
 .                           **** claim/medicalEvent/service/timeDuration ****
 .
-                            MATCH     SP70,DVWVAL49
+                            MATCH     "KM   ",DVWVAL39
                             IF        !@EQUAL
-                              MATCH     "000",DVWVAL49
+                              MATCH     SP70,DVWVAL49
                               IF        !@EQUAL
-                                WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB49:
-                                                               QUOTE,COLON:
-                                                 QUOTE,DVWVAL49,QUOTE,COMMA
+                                MATCH     "000",DVWVAL49
+                                IF        !@EQUAL
+                                  WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB49:
+                                                                 QUOTE,COLON:
+                                                   QUOTE,DVWVAL49,QUOTE,COMMA
+                                ENDIF
                               ENDIF
                             ENDIF
 .
@@ -6181,33 +6196,39 @@ JSON0000  PACK      PROPFLNM,WBDWTRID,PROPLITR,SP70
 .                                                                      COLON:
 .                                                  QUOTE,DVWVAL48,QUOTE,COMMA
 .
-                            MATCH     SP70,DVWVAL48
+                            MATCH     "KM   ",DVWVAL39
                             IF        !@EQUAL
-                              CLEAR     DIM100
-                              APPEND    SP12,DIM100
-                              APPEND    QUOTE,DIM100
-                              APPEND    DVWLAB48,DIM100
-                              APPEND    QUOTE,DIM100
-                              APPEND    COLON,DIM100
-                              APPEND    QUOTE,DIM100
-                              APPEND    DVWVAL48,DIM100
-                              RESET     DIM100
-                              STRIP     DIM100
-                              ENDSET    DIM100
-                              APPEND    QUOTE,DIM100
-                              APPEND    COMMA,DIM100
-                              RESET     DIM100
-                              WRITE     DVAWFILE,SEQ;DIM100
+                              MATCH     SP70,DVWVAL48
+                              IF        !@EQUAL
+                                CLEAR     DIM100
+                                APPEND    SP12,DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    DVWLAB48,DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    COLON,DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    DVWVAL48,DIM100
+                                RESET     DIM100
+                                STRIP     DIM100
+                                ENDSET    DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    COMMA,DIM100
+                                RESET     DIM100
+                                WRITE     DVAWFILE,SEQ;DIM100
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service
 .                                                  /selfDeemedCode ****
 .
-                            MATCH     SP70,DVWVAL47
+                            MATCH     "KM   ",DVWVAL39
                             IF        !@EQUAL
-                              WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB47,QUOTE:
-                                                                         COLON:
-                                                     QUOTE,DVWVAL47,QUOTE,COMMA
+                              MATCH     SP70,DVWVAL47
+                              IF        !@EQUAL
+                                WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB47,QUOTE:
+                                                                           COLON:
+                                                       QUOTE,DVWVAL47,QUOTE,COMMA
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service/scpId ****
@@ -6216,73 +6237,91 @@ JSON0000  PACK      PROPFLNM,WBDWTRID,PROPLITR,SP70
 .                                                                      COLON:
 .                                                  QUOTE,DVWVAL46,QUOTE,COMMA
 .
-                            MATCH     SP70,DVWVAL46
+                            MATCH     "KM   ",DVWVAL39
                             IF        !@EQUAL
-                              CLEAR     DIM100
-                              APPEND    SP12,DIM100
-                              APPEND    QUOTE,DIM100
-                              APPEND    DVWLAB46,DIM100
-                              APPEND    QUOTE,DIM100
-                              APPEND    COLON,DIM100
-                              APPEND    QUOTE,DIM100
-                              APPEND    DVWVAL46,DIM100
-                              RESET     DIM100
-                              STRIP     DIM100
-                              ENDSET    DIM100
-                              APPEND    QUOTE,DIM100
-                              APPEND    COMMA,DIM100
-                              RESET     DIM100
-                              WRITE     DVAWFILE,SEQ;DIM100
+                              MATCH     SP70,DVWVAL46
+                              IF        !@EQUAL
+                                CLEAR     DIM100
+                                APPEND    SP12,DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    DVWLAB46,DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    COLON,DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    DVWVAL46,DIM100
+                                RESET     DIM100
+                                STRIP     DIM100
+                                ENDSET    DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    COMMA,DIM100
+                                RESET     DIM100
+                                WRITE     DVAWFILE,SEQ;DIM100
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service
 .                                                  /s4b3ExemptInd ****
 .
-                            MATCH     "Y",DVWVAL45
-                            IF        @EQUAL
-                              WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB45,QUOTE:
-                                                                         COLON:
-                                                     QUOTE,DVWVAL45,QUOTE,COMMA
+                            MATCH     "KM   ",DVWVAL39
+                            IF        !@EQUAL
+                              MATCH     "Y",DVWVAL45
+                              IF        @EQUAL
+                                WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB45,QUOTE:
+                                                                           COLON:
+                                                       QUOTE,DVWVAL45,QUOTE,COMMA
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service
 .                                                  /rule3ExemptInd ****
 .
-                            MATCH     "Y",DVWVAL44
-                            IF        @EQUAL
-                              WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB44,QUOTE:
-                                                                         COLON:
-                                                     QUOTE,DVWVAL44,QUOTE,COMMA
+                            MATCH     "KM   ",DVWVAL39
+                            IF        !@EQUAL
+                              MATCH     "Y",DVWVAL44
+                              IF        @EQUAL
+                                WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB44,QUOTE:
+                                                                           COLON:
+                                                       QUOTE,DVWVAL44,QUOTE,COMMA
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service
 .                                                  /restrictiveOverrideCode ****
 .
-                            MATCH     SP70,DVWVAL43
+                            MATCH     "KM   ",DVWVAL39
                             IF        !@EQUAL
-                              WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB43,QUOTE:
-                                                                         COLON:
-                                                     QUOTE,DVWVAL43,QUOTE,COMMA
+                              MATCH     SP70,DVWVAL43
+                              IF        !@EQUAL
+                                WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB43,QUOTE:
+                                                                           COLON:
+                                                       QUOTE,DVWVAL43,QUOTE,COMMA
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service
 .                                                  /numberOfPatientsSeen ****
 .
-                            MATCH     SP70,DVWVAL42
+                            MATCH     "KM   ",DVWVAL39
                             IF        !@EQUAL
-                              WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB42,QUOTE:
-                                                                         COLON:
-                                                     QUOTE,DVWVAL42,QUOTE,COMMA
+                              MATCH     SP70,DVWVAL42
+                              IF        !@EQUAL
+                                WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB42,QUOTE:
+                                                                           COLON:
+                                                       QUOTE,DVWVAL42,QUOTE,COMMA
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service
 .                                  /multipleProcedureOverrideInd ****
 .
-                            MATCH     "Y",DVWVAL41
-                            IF        @EQUAL
-                              WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB41,QUOTE:
-                                                                         COLON:
-                                                     QUOTE,DVWVAL41,QUOTE,COMMA
+                            MATCH     "KM   ",DVWVAL39
+                            IF        !@EQUAL
+                              MATCH     "Y",DVWVAL41
+                              IF        @EQUAL
+                                WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB41,QUOTE:
+                                                                           COLON:
+                                                       QUOTE,DVWVAL41,QUOTE,COMMA
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service/lspNumber ****
@@ -6291,23 +6330,26 @@ JSON0000  PACK      PROPFLNM,WBDWTRID,PROPLITR,SP70
 .                                                                      COLON:
 .                                                  QUOTE,DVWVAL40,QUOTE,COMMA
 .
-                            MATCH     SP70,DVWVAL40
+                            MATCH     "KM   ",DVWVAL39
                             IF        !@EQUAL
-                              CLEAR     DIM100
-                              APPEND    SP12,DIM100
-                              APPEND    QUOTE,DIM100
-                              APPEND    DVWLAB40,DIM100
-                              APPEND    QUOTE,DIM100
-                              APPEND    COLON,DIM100
-                              APPEND    QUOTE,DIM100
-                              APPEND    DVWVAL40,DIM100
-                              RESET     DIM100
-                              STRIP     DIM100
-                              ENDSET    DIM100
-                              APPEND    QUOTE,DIM100
-                              APPEND    COMMA,DIM100
-                              RESET     DIM100
-                              WRITE     DVAWFILE,SEQ;DIM100
+                              MATCH     SP70,DVWVAL40
+                              IF        !@EQUAL
+                                CLEAR     DIM100
+                                APPEND    SP12,DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    DVWLAB40,DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    COLON,DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    DVWVAL40,DIM100
+                                RESET     DIM100
+                                STRIP     DIM100
+                                ENDSET    DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    COMMA,DIM100
+                                RESET     DIM100
+                                WRITE     DVAWFILE,SEQ;DIM100
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service/itemNumber ****
@@ -6335,47 +6377,56 @@ JSON0000  PACK      PROPFLNM,WBDWTRID,PROPLITR,SP70
 .                           **** claim/medicalEvent/service
 .                                                  /fieldQuantity ****
 .
-                            MATCH     SP70,DVWVAL38
+                            MATCH     "KM   ",DVWVAL39
                             IF        !@EQUAL
-.                             WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB38,QUOTE:
-.                                                                        COLON:
-.                                                    QUOTE,DVWVAL38,QUOTE,COMMA
-                             CLEAR     DIM100
-                             APPEND    SP12,DIM100
-                             APPEND    QUOTE,DIM100
-                             APPEND    DVWLAB38,DIM100
-                             APPEND    QUOTE,DIM100
-                             APPEND    COLON,DIM100
-                             APPEND    QUOTE,DIM100
-                             APPEND    DVWVAL38,DIM100
-                             RESET     DIM100
-                             STRIP     DIM100
-                             ENDSET    DIM100
-                             APPEND    QUOTE,DIM100
-                             APPEND    COMMA,DIM100
-                             RESET     DIM100
-                             WRITE     DVAWFILE,SEQ;DIM100
+                              MATCH     SP70,DVWVAL38
+                              IF        !@EQUAL
+.                               WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB38,QUOTE:
+.                                                                          COLON:
+.                                                      QUOTE,DVWVAL38,QUOTE,COMMA
+                               CLEAR     DIM100
+                               APPEND    SP12,DIM100
+                               APPEND    QUOTE,DIM100
+                               APPEND    DVWLAB38,DIM100
+                               APPEND    QUOTE,DIM100
+                               APPEND    COLON,DIM100
+                               APPEND    QUOTE,DIM100
+                               APPEND    DVWVAL38,DIM100
+                               RESET     DIM100
+                               STRIP     DIM100
+                               ENDSET    DIM100
+                               APPEND    QUOTE,DIM100
+                               APPEND    COMMA,DIM100
+                               RESET     DIM100
+                               WRITE     DVAWFILE,SEQ;DIM100
 .
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service
 .                                  /duplicateServiceOverrideInd ****
 .
-                            MATCH     "Y",DVWVAL37
-                            IF        @EQUAL
-                              WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB37,QUOTE:
-                                                                         COLON:
-                                                     QUOTE,DVWVAL37,QUOTE,COMMA
+                            MATCH     "KM   ",DVWVAL39
+                            IF        !@EQUAL
+                              MATCH     "Y",DVWVAL37
+                              IF        @EQUAL
+                                WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB37,QUOTE:
+                                                                           COLON:
+                                                       QUOTE,DVWVAL37,QUOTE,COMMA
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service
 .                                                  /collectionDateTime ****
 .
-                            MATCH     SP70,DVWVAL36
+                            MATCH     "KM   ",DVWVAL39
                             IF        !@EQUAL
-                              WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB36,QUOTE:
-                                                                         COLON:
-                                                     QUOTE,DVWVAL36,QUOTE,COMMA
+                              MATCH     SP70,DVWVAL36
+                              IF        !@EQUAL
+                                WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB36,QUOTE:
+                                                                           COLON:
+                                                       QUOTE,DVWVAL36,QUOTE,COMMA
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service/chargeAmount ****
@@ -6384,38 +6435,16 @@ JSON0000  PACK      PROPFLNM,WBDWTRID,PROPLITR,SP70
 .                                                                      COLON:
 .                                                  QUOTE,DVWVAL35,QUOTE,COMMA
 .
-                            CLEAR     DIM100
-                            APPEND    SP12,DIM100
-                            APPEND    QUOTE,DIM100
-                            APPEND    DVWLAB35,DIM100
-                            APPEND    QUOTE,DIM100
-                            APPEND    COLON,DIM100
-                            APPEND    QUOTE,DIM100
-                            APPEND    DVWVAL35,DIM100
-                            RESET     DIM100
-                            STRIP     DIM100
-                            ENDSET    DIM100
-                            APPEND    QUOTE,DIM100
-                            APPEND    COMMA,DIM100
-                            RESET     DIM100
-                            WRITE     DVAWFILE,SEQ;DIM100
-.
-.                           **** claim/medicalEvent/service/accountReferenceNumber ****
-.
-.                           WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB60,QUOTE:
-.                                                                      COLON:
-.                                                  QUOTE,DVWVAL60,QUOTE,COMMA
-.
-                            MATCH     SP70,DVWVAL60
+                            MATCH     "KM   ",DVWVAL39
                             IF        !@EQUAL
                               CLEAR     DIM100
                               APPEND    SP12,DIM100
                               APPEND    QUOTE,DIM100
-                              APPEND    DVWLAB60,DIM100
+                              APPEND    DVWLAB35,DIM100
                               APPEND    QUOTE,DIM100
                               APPEND    COLON,DIM100
                               APPEND    QUOTE,DIM100
-                              APPEND    DVWVAL60,DIM100
+                              APPEND    DVWVAL35,DIM100
                               RESET     DIM100
                               STRIP     DIM100
                               ENDSET    DIM100
@@ -6423,6 +6452,34 @@ JSON0000  PACK      PROPFLNM,WBDWTRID,PROPLITR,SP70
                               APPEND    COMMA,DIM100
                               RESET     DIM100
                               WRITE     DVAWFILE,SEQ;DIM100
+                            ENDIF
+.
+.                           **** claim/medicalEvent/service/accountReferenceNumber ****
+.
+.                           WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB60,QUOTE:
+.                                                                      COLON:
+.                                                  QUOTE,DVWVAL60,QUOTE,COMMA
+.
+                            MATCH     "KM   ",DVWVAL39
+                            IF        !@EQUAL
+                              MATCH     SP70,DVWVAL60
+                              IF        !@EQUAL
+                                CLEAR     DIM100
+                                APPEND    SP12,DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    DVWLAB60,DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    COLON,DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    DVWVAL60,DIM100
+                                RESET     DIM100
+                                STRIP     DIM100
+                                ENDSET    DIM100
+                                APPEND    QUOTE,DIM100
+                                APPEND    COMMA,DIM100
+                                RESET     DIM100
+                                WRITE     DVAWFILE,SEQ;DIM100
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service/distanceKilometres ****
@@ -6449,25 +6506,31 @@ JSON0000  PACK      PROPFLNM,WBDWTRID,PROPLITR,SP70
                               RESET     DIM100
                               WRITE     DVAWFILE,SEQ;DIM100
                             ENDIF
-.//TODO
+.
 .                           **** claim/medicalEvent/service
 .                                                  /aftercareOverrideInd ****
 .
-                            MATCH     "Y",DVWVAL34
-                            IF        @EQUAL
-                              WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB34,QUOTE:
-                                                                         COLON:
-                                                     QUOTE,DVWVAL34,QUOTE,COMMA
+                            MATCH     "KM   ",DVWVAL39
+                            IF        !@EQUAL
+                              MATCH     "Y",DVWVAL34
+                              IF        @EQUAL
+                                WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB34,QUOTE:
+                                                                           COLON:
+                                                       QUOTE,DVWVAL34,QUOTE,COMMA
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service
 .                                                  /accessionDateTime ****
 .
-                            MATCH     SP70,DVWVAL33
+                            MATCH     "KM   ",DVWVAL39
                             IF        !@EQUAL
-                              WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB33,QUOTE:
-                                                                         COLON:
-                                                     QUOTE,DVWVAL33,QUOTE,COMMA
+                              MATCH     SP70,DVWVAL33
+                              IF        !@EQUAL
+                                WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB33,QUOTE:
+                                                                           COLON:
+                                                       QUOTE,DVWVAL33,QUOTE,COMMA
+                              ENDIF
                             ENDIF
 .
 .                           **** claim/medicalEvent/service/id ****
@@ -6529,9 +6592,24 @@ JSON0000  PACK      PROPFLNM,WBDWTRID,PROPLITR,SP70
 .                       **** claim/medicalEvent/patient/veteranMembership
 .                                                      /veteranNumber ****
 .
-                       WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB58,QUOTE:
-                                                                  COLON:
-                                              QUOTE,DVWVAL58,QUOTE
+.                       WRITE     DVAWFILE,SEQ;SP12,QUOTE,DVWLAB58,QUOTE:
+.                                                                  COLON:
+.                                              QUOTE,DVWVAL58,QUOTE
+.
+                        CLEAR     DIM100
+                        APPEND    SP12,DIM100
+                        APPEND    QUOTE,DIM100
+                        APPEND    DVWLAB58,DIM100
+                        APPEND    QUOTE,DIM100
+                        APPEND    COLON,DIM100
+                        APPEND    QUOTE,DIM100
+                        APPEND    DVWVAL58,DIM100
+                        RESET     DIM100
+                        STRIP     DIM100
+                        ENDSET    DIM100
+                        APPEND    QUOTE,DIM100
+                        RESET     DIM100
+                        WRITE     DVAWFILE,SEQ;DIM100
 .
 .                     **** end claim/medicalEvent/patient/veteranMembership ****
 .

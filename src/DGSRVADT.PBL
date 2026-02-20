@@ -6,6 +6,8 @@
 .*  Mods      :                                                               *
 .*                                                                            *
 .******************************************************************************
+.*  V12.01.01 05/02/2026  Zumin Yu       TSK 0972419                          *
+.*            Updated PTCNMRPN to read from the new location                  *
 .*  V12.00.01 20/05/2025  Ebon Clements  TSK 0955096                          *
 .*            Alphanueric visit number changes                                *
 .*  V11.04.04 15/03/2024  J.Tan          TSK 0919335                          *
@@ -709,7 +711,7 @@ ZERO8     INIT      "0000    "
 .-----------------------------------------------------------------------
 PRGID     INIT      "DGSRVADT"
 PRGNAM    INIT      "Process Datagate Message Requests"
-VERSION   INIT      "V12.01.00"
+VERSION   INIT      "V12.01.01"
 .-----------------------------------------------------------------------
 +
 .*************************************************************************
@@ -951,8 +953,9 @@ DGINI000  DISPLAY   *P1:4,*EF
                                  *79,CYRESMAN,CBIRTHCN:
                                  *86,CDETENTE,*92,CDETPATH,*129,CCHGCMN,CADDLAB:
                                  *132,CALRDESC,CPIDCOD,*171,PTCNSTAU,PTCNNUMM:
-                                 *174,PTCNNDAT,*182,PTCNORNO,PTCNURCF,PTCNRQCF:
-                                 PTCNDPCF,PTCNRLAY,PTCNUCOD,PTCNMRPN: 
+                                 *174,PTCNNDAT,*182,PTCNORNO,*192,PTCNURCF:
+                                 *193,PTCNRQCF,*194,PTCNDPCF,*195,PTCNRLAY:
+                                 *196,PTCNUCOD:
                                  *208,PTWRDLAB,PTCNDAYF,*216,PTPRVALS:
                                  *220,PTCNUADT,*226,CCARECL:
                                  CADMCAT,*231,PTCNRGNS,*233,PTCNADOC:
@@ -972,6 +975,7 @@ DGINI000  DISPLAY   *P1:4,*EF
           READ      CONTROLF,EIGHTY8;*116,CHCSDTE
           READ      CONTROLF,HUND03;*220,PTCNDEES,*221,PTCNDDES
           READ      CONTROLF,HUND19;*182,PTCNEPIS
+          READ      CONTROLF,HUND30;*180,PTCNMRPN
 .
 . open files
 .

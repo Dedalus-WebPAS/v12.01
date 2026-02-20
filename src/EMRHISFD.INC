@@ -1,3 +1,4 @@
+. V12.01.01 10/02/2026 TTI C-0960621 Added THDR THDD THDT THNR THND THNT        
 . V11.03.01 28/03/2023 EC C-0888745 Added audit file - EMCNHISA                 
 . V11.00.01 15/04/2020 EC C-0888745 Added Created/Update By and Indexes         
 . V10.06.02 15/04/2015 DS C-314567 Added ODCD/ODSD/ODST                         
@@ -22,8 +23,8 @@
 .
 .Audit File Definition
 .--------------------
-EMRAUDHI   IFILE    SQL, FIXED=244, KEY="D1-8,9-16,17-18,19-19"                 
-EMRAUDH2   IFILE    SQL, FIXED=244, KEY="D26-33,1-8,9-16,17-18,19-19" 
+EMRAUDHI   IFILE    SQL, FIXED=346, KEY="D1-8,9-16,17-18,19-19"                 
+EMRAUDH2   IFILE    SQL, FIXED=346, KEY="D26-33,1-8,9-16,17-18,19-19"
 .
 .Name     Type      Length Physical Start Description
 .----     ----      ------ -------- ----- -----------
@@ -43,10 +44,10 @@ EMHIAUDO  DIM       4      4        22    Operator ID
 .
 .Data File Definition
 .--------------------
-EMRHISA1   IFILE    SQL, FIXED=219, KEY="U1-8,9-16,17-22"
-EMRHISA2   IFILE    SQL, FIXED=219, KEY="U1-8,41-50,9-16,17-22"
-EMRHISA3   IFILE    SQL, FIXED=219, KEY="U117-124,125-132,1-8,9-16,17-22"
-EMRHISA4   IFILE    SQL, FIXED=219, KEY="U143-150,151-158,1-8,9-16,17-22"
+EMRHISA1   IFILE    SQL, FIXED=321, KEY="U1-8,9-16,17-22"
+EMRHISA2   IFILE    SQL, FIXED=321, KEY="U1-8,41-50,9-16,17-22"
+EMRHISA3   IFILE    SQL, FIXED=321, KEY="U117-124,125-132,1-8,9-16,17-22"
+EMRHISA4   IFILE    SQL, FIXED=321, KEY="U143-150,151-158,1-8,9-16,17-22"
 .
 .Name     Type      Length Physical Start Description
 .----     ----      ------ -------- ----- -----------
@@ -76,7 +77,13 @@ EMHICUID  DIM       10     10       133   Web User Id Created (websecaf)
 EMHIUDAT  DIM       8      8        143   Date Record Updated (ccyymmdd)     
 EMHIUTIM  DIM       8      8        151   Time Record Updated (hh:mm:ss)     
 EMHIUUID  DIM       10     10       159   Web User Id Updated (websecaf)     
-EMHISPA   DIM       50     50       169   Spare Variable                     
+EMHITHDR  DIM       10     10       169   Telehealth Doctor Code             
+EMHITHDD  DIM       8      8        179   Telehealth Doctor Date (CCYYMMDD)  
+EMHITHDT  DIM       8      8        187   Telehealth Doctor Time (HH:MM:SS)  
+EMHITHNR  DIM       10     10       195   Telehealth Nurse/Midwife Code      
+EMHITHND  DIM       8      8        205   Telehealth Nurse/Midwife Date      
+EMHITHNT  DIM       8      8        213   Telehealth Nurse/Midwife Time      
+EMHISPA   DIM       100    100      221   Spare Variable                     
 .
-.End of Record                      219  
+.End of Record                      321  
 .

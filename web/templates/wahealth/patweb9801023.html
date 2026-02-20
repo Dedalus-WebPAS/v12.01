@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -44,6 +44,11 @@ InsertPatientHeader()
 <form name=DispForm method=post action=patweb98.pbl style="margin:0">
   <input type=hidden name=reportno value="1">
   <input type=hidden name=template value="023">
+  <input type=hidden name=d_mrcnunwa id=d_mrcnunwa
+   value="%STANDARD.01.025.061.240.0.1">
+  <input type=hidden name=d_mrcnenwa id=d_mrcnenwa
+   value="%STANDARD.01.025.061.241.0.8">
+  <input type=hidden name=discdate id=discdate value="%PATWEB98.01.638">
 
 <table cellspacing=0 cellpadding=0 border=1 width=100%>
   <tr><td>
@@ -60,7 +65,8 @@ InsertPatientHeader()
       <td class=DataField>%PATWEB98.01.627 </td>
       <td class=DataLabel>WADRG </td>
       <td class=DataField>%PATWEB98.01.628 - %PATWEB98.01.631.3 </td>
-      <td>WIES - %PATWEB98.01.623</td> 
+      <td class=DataLabel><div id="divWIESLabel" style="display:none"></div>
+      </td>
       <td>Coding Saved 
       <input type=checkbox name=medcd001 value="1" disabled></td>
       </tr>
@@ -123,11 +129,34 @@ InsertPatientHeader()
 <input type=hidden name=MenuType value="%PATWEB98.01.088">
 </form>
 
+<span id=WIESLabel style="display:none">WIES - %PATWEB98.01.623</span>
+<span id=NWAULabel style="display:none">NWAU - %PATWEB98.01.623</span>
+
 <script type="text/javascript">
 if ("%PATWEB98.01.603"=="1") {
   document.DispForm.medcd001.checked=1; }
 
 // PageBodySection.style.height=PageBodySection.clientHeight -
 //                              PageHeadingSection.clientHeight
+
+if(showNWAUTitle(DispForm.d_mrcnunwa,DispForm.d_mrcnenwa,
+  DispForm.discdate)) {
+  var divWIESLabel = document.getElementById('divWIESLabel');
+    divWIESLabel.innerHTML = document.getElementById('NWAULabel').innerHTML;
+    divWIESLabel.style.display = "";
+} else {
+  var divWIESLabel = document.getElementById('divWIESLabel');
+    divWIESLabel.innerHTML = document.getElementById('WIESLabel').innerHTML;
+    divWIESLabel.style.display = "";
+}
+function showNWAUTitle(usingNWAU,effdate,ddate) {
+  if(usingNWAU.value != "1") {
+    return false;
+  }
+  if(SetDateYYYYMMDD(ddate.value) < effdate.value) {
+     return false;
+  }
+  return true;
+}
 </script>
 

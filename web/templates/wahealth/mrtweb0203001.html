@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.01.00">
+<meta name="TemplateVersion" content="V12.01.01">
 <meta name="TemplateHome" content="wahealth">
 <meta name="HelpFileName" content="NoContextSet.html">
 <meta name="CrossBrowser" content="true">
@@ -135,6 +135,11 @@ InsertPatientHeader()
 <input type=hidden name=primclin value="%MRTWEB02.03.350">
 <input type=hidden name=psycflag value="%MRTWEB02.03.616">
 <input type=hidden name=mentlegl value="%MRTWEB02.03.615.1">
+<input type=hidden name=d_mrcnunwa id=d_mrcnunwa
+ value="%STANDARD.01.025.061.240.0.1">
+<input type=hidden name=d_mrcnenwa id=d_mrcnenwa
+ value="%STANDARD.01.025.061.241.0.8">
+<input type=hidden name=discdate id=discdate value="%MRTWEB02.03.201">
 <input type=hidden name=mrcnepsc value="%STANDARD.01.025.060.133.1.1">
 <input type="hidden" id="ucdschrg" name="ucdschrg" value="">
 <input type=hidden name=mrcngrup id=mrcngrup value="%STANDARD.01.025.097.145.1.1">
@@ -178,7 +183,8 @@ InsertPatientHeader()
 
 <tr><td class=DataLabel>%STANDARD.01.017.A </td>
     <td>%MRTWEB02.03.111.0</td>
-    <td>WIES  </td>
+    <td class=DataLabel><div id="divWIESLabel" style="display:none"></div>
+    </td>
     <td class=DataField>%MRTWEB02.03.519</td>
     <td width=5%><div id=divScoreLbl></div></td>
     <td class=DataField><div id=divScoreVal></div></td>
@@ -371,6 +377,9 @@ InsertPatientHeader()
 <p>Please Wait ...</p>
 </span>
 
+<span id=WIESLabel style="display:none">WIES</span>
+<span id=NWAULabel style="display:none">NWAU</span>
+
 <div id=PageLayer class=DimmedLayer style="display:none"></div>
 
 <script type="text/javascript">
@@ -425,8 +434,29 @@ if(GetContentCookie("UncodedDischargeList")!=='unknown')
  UpdateForm.ucdschrg.value="1";
 }
 
+if(showNWAUTitle(UpdateForm.d_mrcnunwa,UpdateForm.d_mrcnenwa,
+  UpdateForm.discdate)) {
+  var divWIESLabel = document.getElementById('divWIESLabel');
+    divWIESLabel.innerHTML = document.getElementById('NWAULabel').innerHTML;
+    divWIESLabel.style.display = "";
+} else {
+  var divWIESLabel = document.getElementById('divWIESLabel');
+    divWIESLabel.innerHTML = document.getElementById('WIESLabel').innerHTML;
+    divWIESLabel.style.display = "";
+}
+function showNWAUTitle(usingNWAU,effdate,ddate) {
+  if(usingNWAU.value != "1") {
+    return false;
+  }
+  if(SetDateYYYYMMDD(ddate.value) < effdate.value) {
+     return false;
+  }
+  return true;
+}
+
 var DispCodingDateTime = "%MRTWEB02.03.388.0";
 if (isWhitespace(DispCodingDateTime)) {
    document.getElementById('CodingDateTime').innerHTML="";
 }
+
 </script>

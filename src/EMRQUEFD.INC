@@ -12,6 +12,8 @@
 .  *                                                                      *
 .  *  Modifications     :                                                 *
 .  ************************************************************************
+.  * V12.01.01 11/02/2026 Thanh T     TSK 0960621                         *
+.  *           Added THDR THDD THDT THNR THND THNT fields                 *
 .  * V12.00.01 08/05/2025 Thanh T     TSK 0955096                         *
 .  *           Changed EMVIADMN from FORM(8) to DIM(8)                    *
 .  ************************************************************************
@@ -265,7 +267,13 @@ DEMQUMES   DIM       20     20       1     Message Id
 .EMVIBNAA  DIM       1      1        1587  Benefit Assignment Authorised
 .                                          0 or Blank - No
 .                                          1 - Yes
-EMQUSPAR  DIM       59     59       1588  Spare Variables                    
+.EMVITHDR  DIM       10     10       1588  Telehealth Doctor Code
+.EMVITHDD  DIM       8      8        1598  Telehealth Doctor Date (CCYYMMDD)
+.EMVITHDT  DIM       8      8        1606  Telehealth Doctor Time (HH:MM:SS)
+.EMVITHNR  DIM       10     10       1614  Telehealth Nurse/Midwife Code
+.EMVITHND  DIM       8      8        1624  Telehealth Nurse/Midwife Date
+.EMVITHNT  DIM       8      8        1632  Telehealth Nurse/Midwife Time
+EMQUSPAR  DIM       7      7        1640  Spare Variables                    
 .
 .End of Record                       1647 
 .

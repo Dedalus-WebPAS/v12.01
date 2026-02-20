@@ -1,4 +1,4 @@
-<meta name="TemplateVersion" content="V12.00.02">
+<meta name="TemplateVersion" content="V12.01.03">
 <meta name="HelpFileName"    content="NoContextSet.html">
 <meta name="TemplateHome" content="private">
 <meta name="CrossBrowser" content="true">
@@ -345,7 +345,7 @@ function SetNurseName(name) {
 </head>
 %START.OF.PAGE
 <body onload="PageLoad(event);setTimeout('ChkReg()',100);showDelayHEA2();
-              showExitDelayHEA();">
+              showExitDelayHEA();DefaultExitComplexTime();">
 <span class=DFrameTitleBar>
 <img align="right" alt="Exit" class="MenuIcon"
  src="../images/ExitIcon.gif" onclick="DFrameExit();">
@@ -419,6 +419,7 @@ TheatreHeading="Theatre Case Recovery Details"
        value="%STANDARD.01.025.113.051.0.1">
 <input type=hidden name="opcnsetr" id="opcnsetr"
  value="%STANDARD.01.025.113.057.0.2">
+<input type=hidden name="defttime" id="defttime" value="%OPRWEB06.10.521">
 
 <table border=0 cellpadding=2 cellspacing=0 width="100%" align=center >
 <tr><td class=DataLabel width=20%>Time in Recovery</td>

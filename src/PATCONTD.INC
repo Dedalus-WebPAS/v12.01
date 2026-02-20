@@ -10,6 +10,10 @@
 .  *     Modifications:                                                       *
 .  *                                                                          *
 .  ****************************************************************************
+.  * V12.01.06 10/02/2026  Zumin Yu                TSK 0972111                *
+.  *           Added PATCN707/PTCNMPTR -Max No. of patients returned in search*
+.  * V12.01.05 05/02/2026  Zumin Yu                TSK 0972419                *
+.  *           Updated PTCNMRPN to DIM 6                                      *
 .  * V12.01.04 04/02/2026  Thanh T                 TSK 0961944                *
 .  *           Added PATCN703 - If Home Phone is blank, use Mobile Phone      *
 .  *                 PATCN704 - Leave pttybedn blank                          *
@@ -1792,7 +1796,7 @@ PATCN686  DIM       1     * PTCNDPCF - Using Free Format for Department
 PATCN687  DIM       1     * PTCNRLAY - Medical Record Request Form Layout
 .                           0 = User Defined                            
 PATCN688  DIM       6     * PTCNUCOD - User Defined Stationery Code
-PATCN689  DIM       3     * PTCNMRPN - Printer for Medical Record Request Form
+PATCN689  DIM       6     * PTCNMRPN - Printer for Medical Record Request Form
 PATCN690  DIM       1     * PTCNUDRN - Using ranges for DOB searches
 .                           0 = No, 1 = Yes 
 PATCN691  DIM       1     * PTCECODE - Mandatory 'E' Code Check 
@@ -1816,7 +1820,8 @@ PATCN704  DIM       1     * Leave pttybedn blank
 PATCN705  DIM       1     * Populate Patient Notes (pttynote) with
 .                           Admission Date & Admission Diagnosis 
 .                           0 or blank = No, 1 = Yes 
-PATCN706  DIM       3     *  Number of Days in advance to include 
+PATCN706  DIM       3     *  Number of Days in advance to include
+PATCN707  DIM       2     * PTCNMPTR - Max Number of patients returned in search
 .
 IBACN001  DIM       1     * Multi hospital
 IBACN002  DIM       1     * Using Medclaims (0=No/1=Yes)

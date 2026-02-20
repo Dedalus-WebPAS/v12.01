@@ -1,4 +1,4 @@
-//jsVersion  : V12.01.00
+//jsVersion  : V12.01.01
 //========================================================================
 // Hospital level parameter options 
 // Usage:                               
@@ -116,6 +116,11 @@ function AddParameters(ListItem) {
  ListItem.options[ListItem.options.length]=
   new Option("A4 Bulk Label Sheet Layout",
       "PTCNA4TM|8|A4 Bulk Label Sheet Layout - PTCNA4TM|||");
+
+ ListItem.options[ListItem.options.length]=
+  new Option("Sending Practice Date fields in MFN^M02 PRA segment",
+      "PTCNPRDT|5|Sending Practice Date fields in MFN^M02 PRA segment - PTCNPRDT||0|");
+
 }
 //========================================================================
 // Set selection list options for type 8 parameters
